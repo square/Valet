@@ -11,9 +11,6 @@
 #import "ValetDefines.h"
 
 
-NSString *const VALKeychainIdentifierFormatString = @"VAL_%@_%@_%@_%@";
-
-
 NSString *VALStringForAccessibility(VALAccessibility accessibility)
 {
     switch (accessibility) {
@@ -168,8 +165,8 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return [@{
               // Valet only handles passwords.
               (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
-              // Treat the identifier as a keychain service.
-              (__bridge id)kSecAttrService : [NSString stringWithFormat:VALKeychainIdentifierFormatString, NSStringFromClass([self class]), NSStringFromSelector(initializer), identifier, VALStringForAccessibility(accessibility)],
+              // Use the identifier, Valet type and accessibility settings to create the keychain service name.
+              (__bridge id)kSecAttrService : [NSString stringWithFormat:@"VAL_%@_%@_%@_%@", NSStringFromClass([self class]), NSStringFromSelector(initializer), identifier, VALStringForAccessibility(accessibility)],
               // Set our accessibility.
               (__bridge id)kSecAttrAccessible : [self _secAccessibilityAttributeForAccessibility:accessibility],
               } mutableCopy];
