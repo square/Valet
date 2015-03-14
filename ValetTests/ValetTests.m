@@ -14,18 +14,21 @@
 
 @interface Valet (Testing)
 
-+ (NSDictionary *)_secItemFormatDictionaryWithPassword:(NSString *)password;
-+ (NSMutableDictionary *)_mutableQueryWithService:(NSString *)service username:(NSString *)username options:(NSDictionary *)options;
+- (NSString *)_sharedAccessGroupPrefix;
+- (NSDictionary *)_secItemFormatDictionaryWithKey:(NSString *)Key;
 
 @end
 
 
 @interface KeychainTests : XCTestCase
 
-@property (nonatomic, copy, readwrite) NSString *username;
-@property (nonatomic, copy, readwrite) NSString *service;
-@property (nonatomic, copy, readwrite) NSString *password;
-@property (nonatomic, copy, readwrite) NSString *secondaryPassword;
+@property (nonatomic, readwrite) Valet *valet;
+@property (nonatomic, readwrite) SynchronizableValet *synchronizableValet;
+@property (nonatomic, readwrite) SecureElementValet *secureElementValet;
+@property (nonatomic, copy, readwrite) NSString *key;
+@property (nonatomic, copy, readwrite) NSString *string;
+@property (nonatomic, copy, readwrite) NSString *secondaryString;
+@property (nonatomic, strong, readwrite) NSMutableArray *additionalValets;
 
 @end
 
@@ -38,16 +41,24 @@
 {
     [super setUp];
     
-    self.username = @"foo";
-    self.service = @"bar";
-    self.password = @"This is a password";
-    self.secondaryPassword = @"This is another password";
+    self.valet = [[Valet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
+    self.synchronizableValet = [[SynchronizableValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
+    self.secureElementValet = [[SecureElementValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly];
+    
+    self.key = @"foo";
+    self.string = @"bar";
+    self.secondaryString = @"bar2";
+    self.additionalValets = [NSMutableArray new];
 }
 
 - (void)tearDown;
 {
-    for (NSString *username in [Valet usernamesForService:self.service]) {
-        [Valet removeUsername:username service:self.service];
+    [self.valet removeAllData];
+    [self.synchronizableValet removeAllData];
+    [self.secureElementValet removeAllData];
+    
+    for (Valet *additionalValet in self.additionalValets) {
+        [additionalValet removeAllData];
     }
     
     [super tearDown];
@@ -55,200 +66,288 @@
 
 #pragma mark Tests
 
-- (void)test_passwordWithUsernameForService_retrievesPassword;
+- (void)test_initialization_invalidArgumentsCauseFailure;
 {
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service]);
-    
-    XCTAssertTrue([Valet setUsername:self.username password:self.password service:self.service]);
-    XCTAssertEqualObjects([Valet passwordWithUsername:self.username service:self.service], self.password);
+    XCTAssertNil([[Valet alloc] initWithIdentifier:@"" accessibility:VALAccessibleAlways]);
+    XCTAssertNil([[Valet alloc] initWithIdentifier:@"test" accessibility:0]);
+    XCTAssertNil([[SynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly]);
+    XCTAssertNil([[SecureElementValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenUnlockedThisDeviceOnly]);
 }
 
-- (void)test_passwordWithUsernameForService_invalidUsernameFailsToRetrievePassword;
+- (void)test_canAccessKeychain;
 {
-    NSString *password = [Valet passwordWithUsername:@"abcdefg" service:self.service];
-    XCTAssertNil(password, @"Expected password with username for non-existent user to be nil but instead it was %@", password);
+    // Testing environments should always be able to access the keychain.
+    XCTAssertTrue([self.valet canAccessKeychain]);
 }
 
-- (void)test_passwordWithUsernameForService_invalidServiceFailsToRetrievePassword;
+- (void)test_stringForKey_retrievesString;
 {
-    [Valet setUsername:self.username password:self.password service:self.service];
+    XCTAssertNil([self.valet stringForKey:self.key]);
     
-    NSString *password = [Valet passwordWithUsername:self.username service:@"abcdefg"];
-    XCTAssertNil(password, @"Expected password with username for incorrect service to be nil but instead it was %@", password);
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
 }
 
-- (void)test_setUsernameWithPasswordForService_invalidArgumentsCauseFailure;
+- (void)test_stringForKey_invalidKeyFailsToRetrieveString;
 {
-    XCTAssertFalse([Valet setUsername:self.username password:nil service:self.service]);
-    XCTAssertFalse([Valet setUsername:self.username password:@"" service:self.service]);
-    XCTAssertFalse([Valet setUsername:self.username password:self.password service:nil]);
-    XCTAssertFalse([Valet setUsername:nil password:self.password service:self.service]);
-    XCTAssertFalse([Valet setUsername:@"" password:nil service:self.service]);
+    NSString *string = [self.valet stringForKey:@"abcdefg"];
+    XCTAssertNil(string, @"Expected string with Key for non-existent user to be nil but instead it was %@", string);
 }
 
-- (void)test_setUsernameWithPasswordForService_successfullySetsAndUpdatesPassword;
+- (void)test_stringForKey_differentIdentifierFailsToRetrieveString;
 {
-    // Ensure the password doesn't already exist.
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service]);
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    Valet *otherValet = [[Valet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAlways];
+    [self.additionalValets addObject:otherValet];
     
-    // Set the password.
-    XCTAssertTrue([Valet setUsername:self.username password:self.password service:self.service]);
-    
-    // Verify the updated password is there.
-    XCTAssertEqualObjects([Valet passwordWithUsername:self.username service:self.service], self.password);
-    
-    // Setting the password a second time should update the existing record.
-    XCTAssertTrue([Valet setUsername:self.username password:self.secondaryPassword service:self.service]);
-    
-    // Verify the updated password is there.
-    XCTAssertEqualObjects([Valet passwordWithUsername:self.username service:self.service], self.secondaryPassword);
+    NSString *string = [otherValet stringForKey:self.key];
+    XCTAssertNil(string, @"Expected string with Key with different identifier to be nil but instead it was %@", string);
 }
 
-- (void)test_removeUsernameForService_failsWhenNoUsernameExists;
+- (void)test_stringForKey_differentAccessGroupFailsToRetrieveString;
 {
-    XCTAssertFalse([Valet removeUsername:@"gfdsa" service:self.service]);
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    Valet *otherValet = [[Valet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    [self.additionalValets addObject:otherValet];
+    
+    NSString *string = [otherValet stringForKey:self.key];
+    XCTAssertNil(string, @"Expected string with Key with different access group to be nil but instead it was %@", string);
 }
 
-- (void)test_removeUsernameForService_successfullyRemovesUsername;
+- (void)test_stringForKey_differentValetTypeFailsToRetrieveString;
 {
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service]);
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    Valet *otherValet = [[Valet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    [self.additionalValets addObject:otherValet];
     
-    XCTAssertTrue([Valet setUsername:self.username password:self.password service:self.service]);
-    XCTAssertTrue([Valet removeUsername:self.username service:self.service]);
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service], @"Expected no password to be retrieved after removing password");
+    NSString *string = [otherValet stringForKey:self.key];
+    XCTAssertNil(string, @"Expected string with Key with different Valet type to be nil but instead it was %@", string);
 }
 
-- (void)test_removeUsernameForService_incorrectCallsFail;
+- (void)test_setStringForKey_invalidArgumentsCauseFailure;
 {
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service]);
-    
-    XCTAssertTrue([Valet setUsername:self.username password:self.password service:self.service]);
-    XCTAssertFalse([Valet removeUsername:self.username service:@"abcdefg"], @"Expected removing username foo with incorrect service to fail");
-    XCTAssertFalse([Valet removeUsername:self.username service:@""], @"Expected removing username foo with empty service to fail");
+    XCTAssertFalse([self.valet setString:@"" forKey:self.key]);
+    XCTAssertFalse([self.valet setString:self.string forKey:@""]);
+    XCTAssertFalse([self.valet setString:@"" forKey:@""]);
 }
 
-- (void)test_usernamesForService_returnsNilWhenNoUsernamesPresent;
+- (void)test_setStringForKey_successfullySetsAndUpdatesString;
 {
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service]);
+    // Ensure the string doesn't already exist.
+    XCTAssertNil([self.valet stringForKey:self.key]);
     
-    XCTAssertNil([Valet usernamesForService:self.service]);
+    // Set the string.
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    
+    // Verify the updated string is there.
+    XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
+    
+    // Setting the string a second time should update the existing record.
+    XCTAssertTrue([self.valet setString:self.secondaryString forKey:self.key]);
+    
+    // Verify the updated string is there.
+    XCTAssertEqualObjects([self.valet stringForKey:self.key], self.secondaryString);
 }
 
-- (void)test_usernamesForService_returnsOneUsernameWhenOnlyOneUsername;
+- (void)test_setStringForKey_ValetsWithSameIdentifierButDifferentAccessibilityCanSetStringForSameKey;
 {
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service]);
+    Valet *otherValet = [[Valet alloc] initWithIdentifier:self.valet.identifier accessibility:self.valet.accessibility+1];
+    [self.additionalValets addObject:otherValet];
     
-    XCTAssertTrue([Valet setUsername:self.username password:self.password service:self.service]);
-    XCTAssertEqualObjects([Valet usernamesForService:self.service], [NSSet setWithObject:self.username]);
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertTrue([otherValet setString:self.secondaryString forKey:self.key]);
+    
+    XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
+    XCTAssertEqualObjects([otherValet stringForKey:self.key], self.secondaryString);
 }
 
-- (void)test_usernamesForService_returnsAllUsernames;
+- (void)test_setStringForKey_nonStringData;
 {
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service]);
-    
-    XCTAssertTrue([Valet setUsername:self.username password:self.password service:self.service]);
-    XCTAssertTrue([Valet setUsername:@"anotherfoo" password:self.password service:self.service]);
-    
-    NSSet *usernames = [NSSet setWithArray:@[ self.username, @"anotherfoo" ]];
-    XCTAssertEqualObjects([Valet usernamesForService:self.service], usernames);
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
 }
 
-- (void)test_usernamesForService_nonexistentServiceReturnsNil;
+- (void)test_removeDataForKey_failsWhenNoKeyExists;
 {
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service]);
-    
-    XCTAssertTrue([Valet setUsername:self.username password:self.password service:self.service]);
-    
-    NSSet *usernames = [Valet usernamesForService:@"abcdefg"];
-    XCTAssertNil(usernames, @"Expected username for service with non-existent service to be nil but instead it was %@", usernames);
+    XCTAssertFalse([self.valet removeDataForKey:@"gfdsa"]);
 }
 
-- (void)test_usernamesForService_emptyServiceFails;
+- (void)test_removeDataForKey_successfullyRemovesKey;
 {
-    XCTAssertFalse([Valet usernamesForService:@""], @"Expected usernames for service with empty service to fail");
+    XCTAssertNil([self.valet stringForKey:self.key]);
+    
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertTrue([self.valet removeDataForKey:self.key]);
+    XCTAssertNil([self.valet stringForKey:self.key], @"Expected no string to be retrieved after removing string");
 }
 
-- (void)test_setSynchronizableUsernameWithPasswordForService_setsSynchronizablePassword;
+- (void)test_removeDataForKey_incorrectCallsFail;
 {
-    if (![Valet supportsSynchronizableKeychainItems]) {
+    XCTAssertNil([self.valet stringForKey:self.key]);
+    
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    
+    Valet *otherValet = [[Valet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    XCTAssertFalse([otherValet removeDataForKey:self.key], @"Expected removing Key foo with different identifier to fail");
+}
+
+- (void)test_removeDataForKey_ValetsWithSameIdentifierButDifferentAccessibilityRemoveDistinctDataFromKeychain;
+{
+    Valet *otherValet = [[Valet alloc] initWithIdentifier:self.valet.identifier accessibility:self.valet.accessibility+1];
+    [self.additionalValets addObject:otherValet];
+    
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertTrue([otherValet setString:self.secondaryString forKey:self.key]);
+    
+    XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
+    XCTAssertEqualObjects([otherValet stringForKey:self.key], self.secondaryString);
+    
+    XCTAssertTrue([self.valet removeDataForKey:self.key]);
+    XCTAssertNil([self.valet stringForKey:self.key]);
+    XCTAssertEqualObjects([otherValet stringForKey:self.key], self.secondaryString);
+    
+    XCTAssertTrue([otherValet removeDataForKey:self.key]);
+    XCTAssertNil([otherValet stringForKey:self.key]);
+}
+
+- (void)test_removeDataForKey_ValetsWithSameIdentifierAndAccessibilityButDifferentClassTypeRemoveDistinctDataFromKeychain;
+{
+    if (self.synchronizableValet == nil) {
         return;
     }
     
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service]);
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertTrue([self.synchronizableValet setString:self.secondaryString forKey:self.key]);
     
-    XCTAssertTrue([Valet setSynchronizableUsername:self.username password:self.password service:self.service]);
-    XCTAssertEqualObjects(self.password, [Valet synchronizablePasswordWithUsername:self.username service:self.service]);
+    XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
+    XCTAssertEqualObjects([self.synchronizableValet stringForKey:self.key], self.secondaryString);
     
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service], @"Expected no non-synchronizable password to be found.");
+    XCTAssertTrue([self.valet removeDataForKey:self.key]);
+    XCTAssertNil([self.valet stringForKey:self.key]);
+    XCTAssertEqualObjects([self.synchronizableValet stringForKey:self.key], self.secondaryString);
+    
+    XCTAssertTrue([self.synchronizableValet removeDataForKey:self.key]);
+    XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
 }
 
-- (void)test_removeUsernameForService_removesSynchronizablePassword;
+- (void)test_hasKey_returnsYESWhenKeyExists;
 {
-    if (![Valet supportsSynchronizableKeychainItems]) {
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertTrue([self.valet hasKey:self.key]);
+}
+
+- (void)test_hasKey_returnsNOWhenKeyDoesNotExist;
+{
+    XCTAssertFalse([self.valet hasKey:self.key]);
+}
+
+- (void)test_hasKey_returnsYESWithoutPromptingUserOnSecureElementValet;
+{
+    if (self.secureElementValet == nil) {
         return;
     }
     
-    XCTAssertNil([Valet passwordWithUsername:self.username service:self.service]);
-    
-    XCTAssertTrue([Valet setSynchronizableUsername:self.username password:self.password service:self.service]);
-    XCTAssertEqualObjects(self.password, [Valet synchronizablePasswordWithUsername:self.username service:self.service]);
-    
-    XCTAssertTrue([Valet removeUsername:self.username service:self.service]);
-    XCTAssertNil([Valet synchronizablePasswordWithUsername:self.username service:self.service]);
+    XCTAssertTrue([self.secureElementValet setString:self.string forKey:self.key]);
+    XCTAssertTrue([self.valet hasKey:self.key]);
 }
 
-- (void)test_secItemFormatDictionaryWithPassword_passwordInDictionaryAsData;
+- (void)test_allKeys_returnsNilWhenNoAllKeysPresent;
 {
-    NSDictionary *passwordDictionary = [Valet _secItemFormatDictionaryWithPassword:self.password];
-    NSData *passwordData = [passwordDictionary objectForKey:(__bridge id)kSecValueData];
-    XCTAssertTrue([passwordData isKindOfClass:[NSData class]], @"Expected password to be in data format but instead it was a %@", NSStringFromClass([passwordData class]));
+    XCTAssertNil([self.valet stringForKey:self.key]);
+    XCTAssertNil([self.valet allKeys]);
 }
 
-- (void)test_mutableQueryWithServiceUsernameOptions_serviceIsCorrect;
+- (void)test_allKeys_returnsOneKeyWhenOnlyOneKey;
 {
-    NSString *service = self.service;
-    NSString *username = self.username;
-    NSMutableDictionary *query = [Valet _mutableQueryWithService:service username:username options:nil];
+    XCTAssertNil([self.valet stringForKey:self.key]);
     
-    NSString *serviceInQuery = [query objectForKey:(__bridge id)kSecAttrService];
-    XCTAssertEqualObjects(serviceInQuery, service, @"Expected query with service to contain service %@ but instead it has %@", service, serviceInQuery);
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertEqualObjects([self.valet allKeys], [NSSet setWithObject:self.key]);
 }
 
-- (void)test_mutableQueryWithServiceUsernameOptions_usernameIsCorrect;
+- (void)test_allKeys_returnsAllKeys;
 {
-    NSString *service = self.service;
-    NSString *username = self.username;
-    NSMutableDictionary *query = [Valet _mutableQueryWithService:service username:username options:nil];
+    XCTAssertNil([self.valet stringForKey:self.key]);
     
-    NSString *usernameInQuery = [query objectForKey:(__bridge id)kSecAttrAccount];
-    XCTAssertEqualObjects(usernameInQuery, username, @"Expected query with username to contain username %@ but instead it has %@", username, usernameInQuery);
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertTrue([self.valet setString:self.string forKey:@"anotherfoo"]);
+    
+    NSSet *allKeys = [NSSet setWithArray:@[ self.key, @"anotherfoo" ]];
+    XCTAssertEqualObjects([self.valet allKeys], allKeys);
 }
 
-- (void)test_mutableQueryWithServiceUsernameOptions_optionsArePreserved;
+- (void)test_allKeys_differentIdentifierReturnsNil;
 {
-    NSString *service = self.service;
-    NSString *username = self.username;
-    NSDictionary *options = @{@"Hey" : @"There", @"What" : @"Indeed", @"Option" : @YES};
-    NSMutableDictionary *query = [Valet _mutableQueryWithService:service username:username options:options];
+    XCTAssertNil([self.valet stringForKey:self.key]);
     
-    for (NSString *key in options.allKeys) {
-        XCTAssertEqualObjects(query[key], options[key]);
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    
+    Valet *otherValet = [[Valet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    [self.additionalValets addObject:otherValet];
+    
+    NSSet *allKeys = [otherValet allKeys];
+    XCTAssertNil(allKeys, @"Expected allKeys with different identifier to be nil but instead it was %@", allKeys);
+}
+
+- (void)test_setSynchronizableKeyString_setsSynchronizableString;
+{
+    if (self.synchronizableValet == nil) {
+        return;
     }
+    
+    XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
+    
+    XCTAssertTrue([self.synchronizableValet setString:self.string forKey:self.key]);
+    XCTAssertEqualObjects(self.string, [self.synchronizableValet stringForKey:self.key]);
+    
+    XCTAssertNil([self.synchronizableValet stringForKey:self.key], @"Expected no non-synchronizable string to be found.");
 }
 
-- (void)test_mutableQueryWithServiceUsernameOptions_queryHasExpectedSecItems;
+- (void)test_removeDataForKey_removesSynchronizableString;
 {
-    NSString *service = self.service;
-    NSString *username = self.username;
-    NSMutableDictionary *query = [Valet _mutableQueryWithService:service username:username options:nil];
+    if (self.synchronizableValet == nil) {
+        return;
+    }
     
-    XCTAssertNotNil(query[(__bridge id)kSecClass], @"Expected query to have a type class");
+    XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
+    
+    XCTAssertTrue([self.synchronizableValet setString:self.string forKey:self.key]);
+    XCTAssertEqualObjects(self.string, [self.synchronizableValet stringForKey:self.key]);
+    
+    XCTAssertTrue([self.synchronizableValet removeDataForKey:self.key]);
+    XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
 }
+
+- (void)test_secItemFormatDictionaryWithKey_stringInDictionaryAsData;
+{
+    NSDictionary *KeyDictionary = [self.valet _secItemFormatDictionaryWithKey:self.key];
+    XCTAssertEqualObjects(KeyDictionary[(__bridge id)kSecAttrAccount], self.key);
+}
+
+- (void)test_sharedAccessGroupPrefix_returnsValidValue;
+{
+    XCTAssertTrue([self.valet _sharedAccessGroupPrefix].length > 0);
+}
+
+#pragma mark - XCTestCase
 
 // These fail when running from the command line
-- (BOOL)onlyRunFromXcode;
+- (XCTestRun *)run;
 {
-    return YES;
+    if ([self _skipTestCase]) {
+        return [[XCTestRun alloc] initWithTest:self];
+    }
+    
+    return [super run];
+}
+
+#pragma mark - Private Methods
+
+- (BOOL)_skipTestCase;
+{
+    // When running tests from the command line, the process arguments do not have this parameter
+    BOOL isRunningFromCommandLine = [[NSProcessInfo processInfo].arguments indexOfObject:@"-ApplePersistenceIgnoreState"] == NSNotFound;
+    return isRunningFromCommandLine;
 }
 
 @end
