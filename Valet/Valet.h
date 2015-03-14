@@ -62,7 +62,7 @@ typedef NS_ENUM(NSUInteger, VALAccessibility) {
 @end
 
 
-/// Reads and writes keychain elements that are stored on the Secure Element (supported on iOS 8.0 or later) using accessibility attribute VALAccessibleWhenPasscodeSetThisDeviceOnly. Accessing these items will require the user to confirm their presence via Touch ID or passcode entry. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI. Users will be prompted when getting or modifying values on the Secure Element.
+/// Reads and writes keychain elements that are stored on the Secure Element (supported on iOS 8.0 or later) using accessibility attribute VALAccessibleWhenPasscodeSetThisDeviceOnly. Accessing or modifying these items will require the user to confirm their presence via Touch ID or passcode entry. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI.
 @interface SecureElementValet : Valet
 
 - (NSData *)valueForKey:(NSString *)key userPrompt:(NSString *)userPrompt __attribute__((nonnull(1)));
