@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 
-#import "VALValet.h"
+#import "Valet.h"
 
 
 @interface VALValet (Testing)
@@ -22,8 +22,8 @@
 @interface KeychainTests : XCTestCase
 
 @property (nonatomic, readwrite) VALValet *valet;
-@property (nonatomic, readwrite) SynchronizableValet *synchronizableValet;
-@property (nonatomic, readwrite) SecureElementValet *secureElementValet;
+@property (nonatomic, readwrite) VALSynchronizableValet *synchronizableValet;
+@property (nonatomic, readwrite) VALSecureElementValet *secureElementValet;
 @property (nonatomic, copy, readwrite) NSString *key;
 @property (nonatomic, copy, readwrite) NSString *string;
 @property (nonatomic, copy, readwrite) NSString *secondaryString;
@@ -41,8 +41,8 @@
     [super setUp];
     
     self.valet = [[VALValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
-    self.synchronizableValet = [[SynchronizableValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
-    self.secureElementValet = [[SecureElementValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly];
+    self.synchronizableValet = [[VALSynchronizableValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
+    self.secureElementValet = [[VALSecureElementValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly];
     
     self.key = @"foo";
     self.string = @"bar";
@@ -69,8 +69,8 @@
 {
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"" accessibility:VALAccessibleAlways]);
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"test" accessibility:0]);
-    XCTAssertNil([[SynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly]);
-    XCTAssertNil([[SecureElementValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenUnlockedThisDeviceOnly]);
+    XCTAssertNil([[VALSynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly]);
+    XCTAssertNil([[VALSecureElementValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenUnlockedThisDeviceOnly]);
 }
 
 - (void)test_canAccessKeychain;
@@ -166,9 +166,9 @@
     XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
 }
 
-- (void)test_removeObjectForKey_failsWhenNoKeyExists;
+- (void)test_removeObjectForKey_succeedsWhenNoKeyExists;
 {
-    XCTAssertFalse([self.valet removeObjectForKey:@"gfdsa"]);
+    XCTAssertTrue([self.valet removeObjectForKey:@"gfdsa"]);
 }
 
 - (void)test_removeObjectForKey_successfullyRemovesKey;
@@ -180,14 +180,14 @@
     XCTAssertNil([self.valet stringForKey:self.key], @"Expected no string to be retrieved after removing string");
 }
 
-- (void)test_removeObjectForKey_incorrectCallsFail;
+- (void)test_removeObjectForKey_wrongIdentifierSucceeds;
 {
     XCTAssertNil([self.valet stringForKey:self.key]);
     
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
     
     VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
-    XCTAssertFalse([otherValet removeObjectForKey:self.key], @"Expected removing Key foo with different identifier to fail");
+    XCTAssertTrue([otherValet removeObjectForKey:self.key], @"Expected removing Key foo with different identifier to succeed since the object is not in the keychain");
 }
 
 - (void)test_removeObjectForKey_ValetsWithSameIdentifierButDifferentAccessibilityRemoveDistinctDataFromKeychain;

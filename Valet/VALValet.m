@@ -1,14 +1,13 @@
 //
-//  Valet.m
+//  VALValet.m
 //  Valet
 //
-//  Created by Dan Federman on 1/21/15.
+//  Created by Dan Federman on 3/16/15.
 //  Copyright (c) 2015 Square, Inc. All rights reserved.
 //
 
-#import "Valet.h"
-
-#import "ValetDefines.h"
+#import "VALValet.h"
+#import "VALValet_Protected.h"
 
 
 NSString *VALStringForAccessibility(VALAccessibility accessibility)
@@ -50,10 +49,10 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 {
     VALCheckCondition(identifier.length > 0, nil, @"Valet requires a identifier");
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
-
+    
     self = [self init];
     if (self != nil) {
-        _baseQuery = [[self _mutableBaseQueryWithIdentifier:identifier initializer:_cmd accessibility:accessibility] copy];
+        _baseQuery = [[self mutableBaseQueryWithIdentifier:identifier initializer:_cmd accessibility:accessibility] copy];
         _identifier = [identifier copy];
         _sharedAcrossApplications = NO;
     }
@@ -65,10 +64,10 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 {
     VALCheckCondition(sharedAccessGroupIdentifier.length > 0, nil, @"Valet requires a sharedAccessGroupIdentifier");
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
-
+    
     self = [self init];
     if (self != nil) {
-        NSMutableDictionary *baseQuery = [self _mutableBaseQueryWithIdentifier:sharedAccessGroupIdentifier initializer:_cmd accessibility:accessibility];
+        NSMutableDictionary *baseQuery = [self mutableBaseQueryWithIdentifier:sharedAccessGroupIdentifier initializer:_cmd accessibility:accessibility];
         baseQuery[(__bridge id)kSecAttrAccessGroup] = [NSString stringWithFormat:@"%@.%@", [self _sharedAccessGroupPrefix], sharedAccessGroupIdentifier];
         
         _baseQuery = [baseQuery copy];
@@ -99,49 +98,49 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key;
 {
-    return [self _setObject:value forKey:key options:nil];
+    return [self setObject:value forKey:key options:nil];
 }
 
 - (NSData *)objectForKey:(NSString *)key;
 {
-    return [self _objectForKey:key options:nil];
+    return [self objectForKey:key options:nil];
 }
 
 - (BOOL)setString:(NSString *)string forKey:(NSString *)key;
 {
-    return [self _setString:string forKey:key options:nil];
+    return [self setString:string forKey:key options:nil];
 }
 
 - (NSString *)stringForKey:(NSString *)key;
 {
-    return [self _stringForKey:key options:nil];
+    return [self stringForKey:key options:nil];
 }
 
 - (BOOL)containsObjectForKey:(NSString *)key;
 {
-    OSStatus status = [self _containsObjectForKey:key options:nil];
+    OSStatus status = [self containsObjectForKey:key options:nil];
     BOOL keyAlreadyInKeychain = (status == errSecSuccess);
     return keyAlreadyInKeychain;
 }
 
 - (NSSet *)allKeys;
 {
-    return [self _allKeysWithOptions:nil];
+    return [self allKeysWithOptions:nil];
 }
 
 - (BOOL)removeObjectForKey:(NSString *)key;
 {
-    return [self _removeObjectForKey:key options:nil];
+    return [self removeObjectForKey:key options:nil];
 }
 
 - (BOOL)removeAllObjects;
 {
-    return [self _removeAllObjectsWithOptions:nil];
+    return [self removeAllObjectsWithOptions:nil];
 }
 
-#pragma mark Private Methods
+#pragma mark Protected Methods
 
-- (BOOL)_supportsSynchronizableKeychainItems;
+- (BOOL)supportsSynchronizableKeychainItems;
 {
 #if TARGET_IPHONE_SIMULATOR
     return NO;
@@ -150,7 +149,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 #endif
 }
 
-- (BOOL)_supportsLocalAuthentication;
+- (BOOL)supportsLocalAuthentication;
 {
 #if TARGET_IPHONE_SIMULATOR
     return NO;
@@ -159,7 +158,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 #endif
 }
 
-- (NSMutableDictionary *)_mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
+- (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
 {
     return [@{
               // Valet only handles passwords.
@@ -171,36 +170,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
               } mutableCopy];
 }
 
-/// Programatically grab the required prefix for the shared access group (i.e. Bundle Seed ID). The value for the kSecAttrAccessGroup key in queries for data that is shared between apps must be of the format bundleSeedID.sharedAccessGroup. For more information on the Bundle Seed ID, see https://developer.apple.com/library/ios/qa/qa1713/_index.html
-- (NSString *)_sharedAccessGroupPrefix;
-{
-    NSDictionary *query = @{ (__bridge NSString *)kSecClass : (__bridge NSString *)kSecClassGenericPassword,
-                             (__bridge id)kSecAttrAccount : @"SharedAccessGroupPrefixPlaceholder",
-                             (__bridge id)kSecReturnAttributes : @YES };
-    
-    CFTypeRef outTypeRef = NULL;
-    NSDictionary *queryResult = nil;
-    
-    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
-    queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
-    
-    if (status == errSecItemNotFound) {
-        status = SecItemAdd((__bridge CFDictionaryRef)query, &outTypeRef);
-        queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
-    }
-    
-    if (status == errSecSuccess) {
-        NSString *accessGroup = queryResult[(__bridge id)kSecAttrAccessGroup];
-        NSArray *components = [accessGroup componentsSeparatedByString:@"."];
-        NSString *bundleSeedID = components.firstObject;
-        
-        return bundleSeedID;
-    }
-    
-    return nil;
-}
-
-- (BOOL)_setObject:(NSData *)value forKey:(NSString *)key options:(NSDictionary *)options;
+- (BOOL)setObject:(NSData *)value forKey:(NSString *)key options:(NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, NO, @"Can not set a value with an empty key.");
     VALCheckCondition(value != nil, NO, @"Can not set nil value");
@@ -227,7 +197,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return (status == errSecSuccess);
 }
 
-- (NSData *)_objectForKey:(NSString *)key options:(NSDictionary *)options;
+- (NSData *)objectForKey:(NSString *)key options:(NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, nil, @"Can not retrieve value with empty key.");
     NSMutableDictionary *query = [self.baseQuery mutableCopy];
@@ -245,20 +215,20 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return (status == errSecSuccess) ? value : nil;
 }
 
-- (BOOL)_setString:(NSString *)string forKey:(NSString *)key options:(NSDictionary *)options;
+- (BOOL)setString:(NSString *)string forKey:(NSString *)key options:(NSDictionary *)options;
 {
     VALCheckCondition(string.length > 0, nil, @"Can not set empty string for key.");
     NSData *stringData = [string dataUsingEncoding:NSUTF8StringEncoding];
     if (stringData.length > 0) {
-        return [self _setObject:stringData forKey:key options:options];
+        return [self setObject:stringData forKey:key options:options];
     }
     
     return NO;
 }
 
-- (NSString *)_stringForKey:(NSString *)key options:(NSDictionary *)options;
+- (NSString *)stringForKey:(NSString *)key options:(NSDictionary *)options;
 {
-    NSData *stringData = [self _objectForKey:key options:options];
+    NSData *stringData = [self objectForKey:key options:options];
     if (stringData.length > 0) {
         return [[NSString alloc] initWithBytes:stringData.bytes length:stringData.length encoding:NSUTF8StringEncoding];
     }
@@ -266,7 +236,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return nil;
 }
 
-- (OSStatus)_containsObjectForKey:(NSString *)key options:(NSDictionary *)options;
+- (OSStatus)containsObjectForKey:(NSString *)key options:(NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, NO, @"Can not check if empty key exists in the keychain.");
     
@@ -280,7 +250,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return status;
 }
 
-- (NSSet *)_allKeysWithOptions:(NSDictionary *)options;
+- (NSSet *)allKeysWithOptions:(NSDictionary *)options;
 {
     NSSet *keys = nil;
     NSMutableDictionary *query = [self.baseQuery mutableCopy];
@@ -315,7 +285,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return keys;
 }
 
-- (BOOL)_removeObjectForKey:(NSString *)key options:(NSDictionary *)options;
+- (BOOL)removeObjectForKey:(NSString *)key options:(NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, NO, @"Can not remove object for empty key from the keychain.");
     
@@ -330,15 +300,46 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return (status != errSecInteractionNotAllowed);
 }
 
-- (BOOL)_removeAllObjectsWithOptions:(NSDictionary *)options;
+- (BOOL)removeAllObjectsWithOptions:(NSDictionary *)options;
 {
     for (NSString *key in [self allKeys]) {
-        if (![self _removeObjectForKey:key options:options]) {
+        if (![self removeObjectForKey:key options:options]) {
             return NO;
         }
     }
     
     return YES;
+}
+
+#pragma mark Private Methods
+
+/// Programatically grab the required prefix for the shared access group (i.e. Bundle Seed ID). The value for the kSecAttrAccessGroup key in queries for data that is shared between apps must be of the format bundleSeedID.sharedAccessGroup. For more information on the Bundle Seed ID, see https://developer.apple.com/library/ios/qa/qa1713/_index.html
+- (NSString *)_sharedAccessGroupPrefix;
+{
+    NSDictionary *query = @{ (__bridge NSString *)kSecClass : (__bridge NSString *)kSecClassGenericPassword,
+                             (__bridge id)kSecAttrAccount : @"SharedAccessGroupPrefixPlaceholder",
+                             (__bridge id)kSecReturnAttributes : @YES };
+    
+    CFTypeRef outTypeRef = NULL;
+    NSDictionary *queryResult = nil;
+    
+    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
+    queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
+    
+    if (status == errSecItemNotFound) {
+        status = SecItemAdd((__bridge CFDictionaryRef)query, &outTypeRef);
+        queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
+    }
+    
+    if (status == errSecSuccess) {
+        NSString *accessGroup = queryResult[(__bridge id)kSecAttrAccessGroup];
+        NSArray *components = [accessGroup componentsSeparatedByString:@"."];
+        NSString *bundleSeedID = components.firstObject;
+        
+        return bundleSeedID;
+    }
+    
+    return nil;
 }
 
 - (id)_secAccessibilityAttributeForAccessibility:(VALAccessibility)accessibility;
@@ -371,111 +372,6 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     }
     
     return @{};
-}
-
-@end
-
-
-#pragma mark - SynchronizableValet
-
-
-@implementation VALSynchronizableValet
-
-#pragma mark - Initialization
-
-- (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
-{
-    VALCheckCondition(accessibility == VALAccessibleWhenUnlocked || accessibility == VALAccessibleAfterFirstUnlock || accessibility == VALAccessibleAlways, nil, @"Accessibility must not be scoped to this device");
-    VALCheckCondition([self _supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
-    
-    return [super initWithIdentifier:identifier accessibility:accessibility];
-}
-
-- (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
-{
-    VALCheckCondition(accessibility == VALAccessibleWhenUnlocked || accessibility == VALAccessibleAfterFirstUnlock || accessibility == VALAccessibleAlways, nil, @"Accessibility must not be scoped to this device");
-    VALCheckCondition([self _supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
-    
-    return [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
-}
-
-#pragma mark - Private Methods
-
-- (NSMutableDictionary *)_mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
-{
-    NSMutableDictionary *mutableBaseQuery = [super _mutableBaseQueryWithIdentifier:identifier initializer:initializer accessibility:accessibility];
-    mutableBaseQuery[(__bridge id)kSecAttrSynchronizable] = @YES;
-    
-    return mutableBaseQuery;
-}
-
-@end
-
-
-#pragma mark - SecureElementValet
-
-@implementation VALSecureElementValet
-
-#pragma mark - Initialization
-
-- (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
-{
-    VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureElementValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
-    VALCheckCondition([self _supportsLocalAuthentication], nil, @"This device does not support storing data on the secure element.");
-    
-    return [super initWithIdentifier:identifier accessibility:accessibility];
-}
-
-- (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
-{
-    VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureElementValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
-    VALCheckCondition([self _supportsLocalAuthentication], nil, @"This device does not support storing data on the secure element.");
-    
-    return [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
-}
-
-#pragma mark - Public Methods
-
-- (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt
-{
-    return [self _setObject:value forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
-}
-
-- (NSData *)objectForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
-{
-    return [self _objectForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
-}
-
-- (BOOL)setString:(NSString *)string forKey:(NSString *)key userPrompt:(NSString *)userPrompt;
-{
-    return [self _setString:string forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
-}
-
-- (NSString *)stringForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
-{
-    return [self _stringForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
-}
-
-- (BOOL)containsObjectForKey:(NSString *)key;
-{
-    OSStatus status = [self _containsObjectForKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
-    BOOL keyAlreadyInKeychain = (status == errSecInteractionNotAllowed);
-    return keyAlreadyInKeychain;
-}
-
-- (NSSet *)allKeys;
-{
-    return [self _allKeysWithOptions:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
-}
-
-#pragma mark - Private Methods
-
-- (NSMutableDictionary *)_mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
-{
-    NSMutableDictionary *mutableBaseQuery = [super _mutableBaseQueryWithIdentifier:identifier initializer:initializer accessibility:accessibility];
-    mutableBaseQuery[(__bridge id)kSecAttrAccessControl] = (__bridge id)SecAccessControlCreateWithFlags(NULL, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlUserPresence, NULL);
-    
-    return mutableBaseQuery;
 }
 
 @end

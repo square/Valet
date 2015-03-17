@@ -8,9 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		EA1E1F871A8C46090067C991 /* Valet.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = EA1E1F861A8C46080067C991 /* Valet.h */; };
-		EA1E1F891A8C46090067C991 /* Valet.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1E1F881A8C46090067C991 /* Valet.m */; };
 		EA1E1F8F1A8C46090067C991 /* libValet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1E1F831A8C46080067C991 /* libValet.a */; };
 		EA1E1FA01A8C48560067C991 /* ValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1E1F9F1A8C48560067C991 /* ValetTests.m */; };
+		EAEEAC1A1AB7B83300EDB6E3 /* VALValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC191AB7B83300EDB6E3 /* VALValet.m */; };
+		EAEEAC1D1AB7B84000EDB6E3 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */; };
+		EAEEAC201AB7B84E00EDB6E3 /* VALSecureElementValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureElementValet.m */; };
+		EAEEAC271AB7BC5700EDB6E3 /* VALValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC231AB7BA0C00EDB6E3 /* VALValet_Protected.h */; };
+		EAEEAC281AB7BC5700EDB6E3 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */; };
+		EAEEAC2A1AB7BD4800EDB6E3 /* VALValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC181AB7B83300EDB6E3 /* VALValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAEEAC2B1AB7BD7400EDB6E3 /* VALSecureElementValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureElementValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAEEAC2C1AB7BD7900EDB6E3 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,11 +46,18 @@
 /* Begin PBXFileReference section */
 		EA1E1F831A8C46080067C991 /* libValet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libValet.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA1E1F861A8C46080067C991 /* Valet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Valet.h; sourceTree = "<group>"; };
-		EA1E1F881A8C46090067C991 /* Valet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Valet.m; sourceTree = "<group>"; };
 		EA1E1F8E1A8C46090067C991 /* ValetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ValetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA1E1F941A8C46090067C991 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EA1E1F9D1A8C46BA0067C991 /* ValetDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValetDefines.h; sourceTree = "<group>"; };
 		EA1E1F9F1A8C48560067C991 /* ValetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValetTests.m; sourceTree = "<group>"; };
+		EAEEAC181AB7B83300EDB6E3 /* VALValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALValet.h; sourceTree = "<group>"; };
+		EAEEAC191AB7B83300EDB6E3 /* VALValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALValet.m; sourceTree = "<group>"; };
+		EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALSynchronizableValet.h; sourceTree = "<group>"; };
+		EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALSynchronizableValet.m; sourceTree = "<group>"; };
+		EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureElementValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALSecureElementValet.h; sourceTree = "<group>"; };
+		EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureElementValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALSecureElementValet.m; sourceTree = "<group>"; };
+		EAEEAC231AB7BA0C00EDB6E3 /* VALValet_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALValet_Protected.h; sourceTree = "<group>"; };
+		EAEEAC241AB7BA7800EDB6E3 /* Valet-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Valet-Prefix.pch"; path = "Other/Valet-Prefix.pch"; sourceTree = "<group>"; };
+		EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ValetDefines.h; path = Other/ValetDefines.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +84,7 @@
 			children = (
 				EA1E1F851A8C46080067C991 /* Valet */,
 				EA1E1F921A8C46090067C991 /* ValetTests */,
+				EAEEAC221AB7B85D00EDB6E3 /* Other */,
 				EA1E1F841A8C46080067C991 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,8 +102,13 @@
 			isa = PBXGroup;
 			children = (
 				EA1E1F861A8C46080067C991 /* Valet.h */,
-				EA1E1F881A8C46090067C991 /* Valet.m */,
-				EA1E1F9D1A8C46BA0067C991 /* ValetDefines.h */,
+				EAEEAC181AB7B83300EDB6E3 /* VALValet.h */,
+				EAEEAC231AB7BA0C00EDB6E3 /* VALValet_Protected.h */,
+				EAEEAC191AB7B83300EDB6E3 /* VALValet.m */,
+				EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureElementValet.h */,
+				EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureElementValet.m */,
+				EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */,
+				EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */,
 			);
 			path = Valet;
 			sourceTree = "<group>";
@@ -110,7 +130,31 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		EAEEAC221AB7B85D00EDB6E3 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				EAEEAC241AB7BA7800EDB6E3 /* Valet-Prefix.pch */,
+				EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */,
+			);
+			name = Other;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		EAEEAC261AB7BC4B00EDB6E3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAEEAC2B1AB7BD7400EDB6E3 /* VALSecureElementValet.h in Headers */,
+				EAEEAC2C1AB7BD7900EDB6E3 /* VALSynchronizableValet.h in Headers */,
+				EAEEAC271AB7BC5700EDB6E3 /* VALValet_Protected.h in Headers */,
+				EAEEAC281AB7BC5700EDB6E3 /* ValetDefines.h in Headers */,
+				EAEEAC2A1AB7BD4800EDB6E3 /* VALValet.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		EA1E1F821A8C46080067C991 /* Valet */ = {
@@ -120,6 +164,7 @@
 				EA1E1F7F1A8C46080067C991 /* Sources */,
 				EA1E1F801A8C46080067C991 /* Frameworks */,
 				EA1E1F811A8C46080067C991 /* CopyFiles */,
+				EAEEAC261AB7BC4B00EDB6E3 /* Headers */,
 			);
 			buildRules = (
 			);
@@ -198,7 +243,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA1E1F891A8C46090067C991 /* Valet.m in Sources */,
+				EAEEAC1D1AB7B84000EDB6E3 /* VALSynchronizableValet.m in Sources */,
+				EAEEAC1A1AB7B83300EDB6E3 /* VALValet.m in Sources */,
+				EAEEAC201AB7B84E00EDB6E3 /* VALSecureElementValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,9 +345,12 @@
 		EA1E1F981A8C46090067C991 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "Other/Valet-Prefix.pch";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -308,9 +358,12 @@
 		EA1E1F991A8C46090067C991 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "Other/Valet-Prefix.pch";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
