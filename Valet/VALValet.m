@@ -93,6 +93,14 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return [NSString stringWithFormat:@"%@: %@ %@%@", [super description], self.identifier, (self.sharedAcrossApplications ? @"Shared " : @""), VALStringForAccessibility(self.accessibility)];
 }
 
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone;
+{
+    // We're immutable, so just return self.
+    return self;
+}
+
 #pragma mark - Public Methods
 
 - (BOOL)canAccessKeychain;

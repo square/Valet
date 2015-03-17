@@ -27,7 +27,7 @@ typedef NS_ENUM(NSUInteger, VALAccessibility) {
 
 
 /// Reads and writes keychain elements.
-@interface VALValet : NSObject
+@interface VALValet : NSObject <NSCopying>
 
 /// Creates a Valet that reads/writes keychain elements with the desired accessibility.
 - (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility __attribute__((nonnull(1)));
