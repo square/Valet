@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, VALAccessibility) {
 
 
 /// Reads and writes keychain elements.
-@interface Valet : NSObject
+@interface VALValet : NSObject
 
 /// Creates a Valet that reads/writes keychain elements with the desired accessibility.
 - (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility __attribute__((nonnull(1)));
@@ -41,32 +41,37 @@ typedef NS_ENUM(NSUInteger, VALAccessibility) {
 @property (readonly, getter=isSharedAcrossApplications) BOOL sharedAcrossApplications;
 @property (readonly) VALAccessibility accessibility;
 
+/// Checks whether the keychain is currently accessible by writing a value to the keychain and then reading it back out.
 - (BOOL)canAccessKeychain;
 
-- (BOOL)setValue:(NSData *)value forKey:(NSString *)key __attribute__((nonnull(1,2)));
-- (NSData *)valueForKey:(NSString *)key __attribute__((nonnull(1)));
+/// Inserts data into the keychain. Returns NO if the keychain is not accessible.
+- (BOOL)setObject:(NSData *)value forKey:(NSString *)key __attribute__((nonnull(1,2)));
+/// Retreives data from the keychain.
+- (NSData *)objectForKey:(NSString *)key __attribute__((nonnull(1)));
 
+/// Convenience method for adding a string to the keychain.
 - (BOOL)setString:(NSString *)string forKey:(NSString *)key __attribute__((nonnull(1,2)));
+/// Convenience method for retreiving a string from the keychain.
 - (NSString *)stringForKey:(NSString *)key __attribute__((nonnull(1)));
 
-- (BOOL)hasKey:(NSString *)key __attribute__((nonnull(1)));
+- (BOOL)containsObjectForKey:(NSString *)key __attribute__((nonnull(1)));
 - (NSSet *)allKeys;
-- (BOOL)removeDataForKey:(NSString *)username __attribute__((nonnull(1)));
-- (BOOL)removeAllData;
+- (BOOL)removeObjectForKey:(NSString *)username __attribute__((nonnull(1)));
+- (BOOL)removeAllObjects;
 
 @end
 
 
 /// Reads and writes keychain elements that are synchronized with iCloud (supported on devices on iOS 7.0.3 and later). Accessibility must not be scoped to this device.
-@interface SynchronizableValet : Valet
+@interface VALSynchronizableValet : VALValet
 @end
 
 
 /// Reads and writes keychain elements that are stored on the Secure Element (supported on iOS 8.0 or later) using accessibility attribute VALAccessibleWhenPasscodeSetThisDeviceOnly. Accessing or modifying these items will require the user to confirm their presence via Touch ID or passcode entry. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI.
-@interface SecureElementValet : Valet
+@interface VALSecureElementValet : VALValet
 
-- (NSData *)valueForKey:(NSString *)key userPrompt:(NSString *)userPrompt __attribute__((nonnull(1)));
-- (BOOL)setValue:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt __attribute__((nonnull(1,2)));
+- (NSData *)objectForKey:(NSString *)key userPrompt:(NSString *)userPrompt __attribute__((nonnull(1)));
+- (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt __attribute__((nonnull(1,2)));
 
 - (NSString *)stringForKey:(NSString *)key userPrompt:(NSString *)userPrompt __attribute__((nonnull(1)));
 - (BOOL)setString:(NSString *)string forKey:(NSString *)key userPrompt:(NSString *)userPrompt __attribute__((nonnull(1,2)));

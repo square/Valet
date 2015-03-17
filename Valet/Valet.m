@@ -35,14 +35,14 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 }
 
 
-@interface Valet ()
+@interface VALValet ()
 
 @property (copy, readonly) NSDictionary *baseQuery;
 
 @end
 
 
-@implementation Valet
+@implementation VALValet
 
 #pragma mark - Initialization
 
@@ -52,7 +52,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
 
     self = [self init];
-    if (self) {
+    if (self != nil) {
         _baseQuery = [[self _mutableBaseQueryWithIdentifier:identifier initializer:_cmd accessibility:accessibility] copy];
         _identifier = [identifier copy];
         _sharedAcrossApplications = NO;
@@ -67,7 +67,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
 
     self = [self init];
-    if (self) {
+    if (self != nil) {
         NSMutableDictionary *baseQuery = [self _mutableBaseQueryWithIdentifier:sharedAccessGroupIdentifier initializer:_cmd accessibility:accessibility];
         baseQuery[(__bridge id)kSecAttrAccessGroup] = [NSString stringWithFormat:@"%@.%@", [self _sharedAccessGroupPrefix], sharedAccessGroupIdentifier];
         
@@ -86,26 +86,25 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     NSString *canaryKey = @"VAL_KeychainCanaryUsername";
     NSString *canaryValue = @"VAL_KeychainCanaryPassword";
     
-    __block BOOL canaryIsInKeychain = YES;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if (![(NSString *)[self valueForKey:canaryKey] isEqualToString:canaryValue]) {
-            canaryIsInKeychain = [self setString:canaryValue forKey:canaryKey];
+        if (![[self objectForKey:canaryKey] isEqual:canaryValue]) {
+            [self setString:canaryValue forKey:canaryKey];
         }
     });
     
     NSString *const retrievedCanaryValue = [self stringForKey:canaryKey];
-    return (canaryIsInKeychain && [retrievedCanaryValue isEqualToString:canaryValue]);
+    return [retrievedCanaryValue isEqualToString:canaryValue];
 }
 
-- (BOOL)setValue:(NSData *)value forKey:(NSString *)key;
+- (BOOL)setObject:(NSData *)value forKey:(NSString *)key;
 {
-    return [self _setValue:value forKey:key options:nil];
+    return [self _setObject:value forKey:key options:nil];
 }
 
-- (NSData *)valueForKey:(NSString *)key;
+- (NSData *)objectForKey:(NSString *)key;
 {
-    return [self _valueForKey:key options:nil];
+    return [self _objectForKey:key options:nil];
 }
 
 - (BOOL)setString:(NSString *)string forKey:(NSString *)key;
@@ -118,9 +117,9 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return [self _stringForKey:key options:nil];
 }
 
-- (BOOL)hasKey:(NSString *)key;
+- (BOOL)containsObjectForKey:(NSString *)key;
 {
-    OSStatus status = [self _hasKey:key options:nil];
+    OSStatus status = [self _containsObjectForKey:key options:nil];
     BOOL keyAlreadyInKeychain = (status == errSecSuccess);
     return keyAlreadyInKeychain;
 }
@@ -130,14 +129,14 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return [self _allKeysWithOptions:nil];
 }
 
-- (BOOL)removeDataForKey:(NSString *)key;
+- (BOOL)removeObjectForKey:(NSString *)key;
 {
-    return [self _removeDataForKey:key options:nil];
+    return [self _removeObjectForKey:key options:nil];
 }
 
-- (BOOL)removeAllData;
+- (BOOL)removeAllObjects;
 {
-    return [self _removeAllDataWithOptions:nil];
+    return [self _removeAllObjectsWithOptions:nil];
 }
 
 #pragma mark Private Methods
@@ -201,7 +200,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return nil;
 }
 
-- (BOOL)_setValue:(NSData *)value forKey:(NSString *)key options:(NSDictionary *)options;
+- (BOOL)_setObject:(NSData *)value forKey:(NSString *)key options:(NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, NO, @"Can not set a value with an empty key.");
     VALCheckCondition(value != nil, NO, @"Can not set nil value");
@@ -213,7 +212,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         [query addEntriesFromDictionary:options];
     }
     
-    if ([self hasKey:key]) {
+    if ([self containsObjectForKey:key]) {
         // The item already exists, so just update it.
         status = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)@{ (__bridge id)kSecValueData : value });
         
@@ -228,7 +227,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return (status == errSecSuccess);
 }
 
-- (NSData *)_valueForKey:(NSString *)key options:(NSDictionary *)options;
+- (NSData *)_objectForKey:(NSString *)key options:(NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, nil, @"Can not retrieve value with empty key.");
     NSMutableDictionary *query = [self.baseQuery mutableCopy];
@@ -251,7 +250,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     VALCheckCondition(string.length > 0, nil, @"Can not set empty string for key.");
     NSData *stringData = [string dataUsingEncoding:NSUTF8StringEncoding];
     if (stringData.length > 0) {
-        return [self _setValue:stringData forKey:key options:options];
+        return [self _setObject:stringData forKey:key options:options];
     }
     
     return NO;
@@ -259,7 +258,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 
 - (NSString *)_stringForKey:(NSString *)key options:(NSDictionary *)options;
 {
-    NSData *stringData = [self _valueForKey:key options:options];
+    NSData *stringData = [self _objectForKey:key options:options];
     if (stringData.length > 0) {
         return [[NSString alloc] initWithBytes:stringData.bytes length:stringData.length encoding:NSUTF8StringEncoding];
     }
@@ -267,7 +266,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return nil;
 }
 
-- (OSStatus)_hasKey:(NSString *)key options:(NSDictionary *)options;
+- (OSStatus)_containsObjectForKey:(NSString *)key options:(NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, NO, @"Can not check if empty key exists in the keychain.");
     
@@ -316,7 +315,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return keys;
 }
 
-- (BOOL)_removeDataForKey:(NSString *)key options:(NSDictionary *)options;
+- (BOOL)_removeObjectForKey:(NSString *)key options:(NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, NO, @"Can not remove object for empty key from the keychain.");
     
@@ -327,13 +326,14 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     }
     
     OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
-    return (status == errSecSuccess);
+    // We succeeded as long as we can confirm that the item is not in the keychain.
+    return (status != errSecInteractionNotAllowed);
 }
 
-- (BOOL)_removeAllDataWithOptions:(NSDictionary *)options;
+- (BOOL)_removeAllObjectsWithOptions:(NSDictionary *)options;
 {
     for (NSString *key in [self allKeys]) {
-        if (![self _removeDataForKey:key options:options]) {
+        if (![self _removeObjectForKey:key options:options]) {
             return NO;
         }
     }
@@ -379,7 +379,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 #pragma mark - SynchronizableValet
 
 
-@implementation SynchronizableValet
+@implementation VALSynchronizableValet
 
 #pragma mark - Initialization
 
@@ -414,7 +414,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 
 #pragma mark - SecureElementValet
 
-@implementation SecureElementValet
+@implementation VALSecureElementValet
 
 #pragma mark - Initialization
 
@@ -436,14 +436,14 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 
 #pragma mark - Public Methods
 
-- (BOOL)setValue:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt
+- (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt
 {
-    return [self _setValue:value forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
+    return [self _setObject:value forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
 }
 
-- (NSData *)valueForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
+- (NSData *)objectForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
 {
-    return [self _valueForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
+    return [self _objectForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
 }
 
 - (BOOL)setString:(NSString *)string forKey:(NSString *)key userPrompt:(NSString *)userPrompt;
@@ -456,9 +456,9 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return [self _stringForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
 }
 
-- (BOOL)hasKey:(NSString *)key;
+- (BOOL)containsObjectForKey:(NSString *)key;
 {
-    OSStatus status = [self _hasKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
+    OSStatus status = [self _containsObjectForKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
     BOOL keyAlreadyInKeychain = (status == errSecInteractionNotAllowed);
     return keyAlreadyInKeychain;
 }

@@ -8,10 +8,10 @@
 
 #import <XCTest/XCTest.h>
 
-#import "Valet.h"
+#import "VALValet.h"
 
 
-@interface Valet (Testing)
+@interface VALValet (Testing)
 
 - (NSString *)_sharedAccessGroupPrefix;
 - (NSDictionary *)_secItemFormatDictionaryWithKey:(NSString *)Key;
@@ -21,7 +21,7 @@
 
 @interface KeychainTests : XCTestCase
 
-@property (nonatomic, readwrite) Valet *valet;
+@property (nonatomic, readwrite) VALValet *valet;
 @property (nonatomic, readwrite) SynchronizableValet *synchronizableValet;
 @property (nonatomic, readwrite) SecureElementValet *secureElementValet;
 @property (nonatomic, copy, readwrite) NSString *key;
@@ -40,7 +40,7 @@
 {
     [super setUp];
     
-    self.valet = [[Valet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
+    self.valet = [[VALValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
     self.synchronizableValet = [[SynchronizableValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
     self.secureElementValet = [[SecureElementValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly];
     
@@ -52,12 +52,12 @@
 
 - (void)tearDown;
 {
-    [self.valet removeAllData];
-    [self.synchronizableValet removeAllData];
-    [self.secureElementValet removeAllData];
+    [self.valet removeAllObjects];
+    [self.synchronizableValet removeAllObjects];
+    [self.secureElementValet removeAllObjects];
     
-    for (Valet *additionalValet in self.additionalValets) {
-        [additionalValet removeAllData];
+    for (VALValet *additionalValet in self.additionalValets) {
+        [additionalValet removeAllObjects];
     }
     
     [super tearDown];
@@ -67,8 +67,8 @@
 
 - (void)test_initialization_invalidArgumentsCauseFailure;
 {
-    XCTAssertNil([[Valet alloc] initWithIdentifier:@"" accessibility:VALAccessibleAlways]);
-    XCTAssertNil([[Valet alloc] initWithIdentifier:@"test" accessibility:0]);
+    XCTAssertNil([[VALValet alloc] initWithIdentifier:@"" accessibility:VALAccessibleAlways]);
+    XCTAssertNil([[VALValet alloc] initWithIdentifier:@"test" accessibility:0]);
     XCTAssertNil([[SynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly]);
     XCTAssertNil([[SecureElementValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenUnlockedThisDeviceOnly]);
 }
@@ -96,7 +96,7 @@
 - (void)test_stringForKey_differentIdentifierFailsToRetrieveString;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    Valet *otherValet = [[Valet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAlways];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAlways];
     [self.additionalValets addObject:otherValet];
     
     NSString *string = [otherValet stringForKey:self.key];
@@ -106,7 +106,7 @@
 - (void)test_stringForKey_differentAccessGroupFailsToRetrieveString;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    Valet *otherValet = [[Valet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
     [self.additionalValets addObject:otherValet];
     
     NSString *string = [otherValet stringForKey:self.key];
@@ -116,7 +116,7 @@
 - (void)test_stringForKey_differentValetTypeFailsToRetrieveString;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    Valet *otherValet = [[Valet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
     [self.additionalValets addObject:otherValet];
     
     NSString *string = [otherValet stringForKey:self.key];
@@ -150,7 +150,7 @@
 
 - (void)test_setStringForKey_ValetsWithSameIdentifierButDifferentAccessibilityCanSetStringForSameKey;
 {
-    Valet *otherValet = [[Valet alloc] initWithIdentifier:self.valet.identifier accessibility:self.valet.accessibility+1];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:self.valet.accessibility+1];
     [self.additionalValets addObject:otherValet];
     
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
@@ -166,33 +166,33 @@
     XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
 }
 
-- (void)test_removeDataForKey_failsWhenNoKeyExists;
+- (void)test_removeObjectForKey_failsWhenNoKeyExists;
 {
-    XCTAssertFalse([self.valet removeDataForKey:@"gfdsa"]);
+    XCTAssertFalse([self.valet removeObjectForKey:@"gfdsa"]);
 }
 
-- (void)test_removeDataForKey_successfullyRemovesKey;
+- (void)test_removeObjectForKey_successfullyRemovesKey;
 {
     XCTAssertNil([self.valet stringForKey:self.key]);
     
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    XCTAssertTrue([self.valet removeDataForKey:self.key]);
+    XCTAssertTrue([self.valet removeObjectForKey:self.key]);
     XCTAssertNil([self.valet stringForKey:self.key], @"Expected no string to be retrieved after removing string");
 }
 
-- (void)test_removeDataForKey_incorrectCallsFail;
+- (void)test_removeObjectForKey_incorrectCallsFail;
 {
     XCTAssertNil([self.valet stringForKey:self.key]);
     
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
     
-    Valet *otherValet = [[Valet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
-    XCTAssertFalse([otherValet removeDataForKey:self.key], @"Expected removing Key foo with different identifier to fail");
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    XCTAssertFalse([otherValet removeObjectForKey:self.key], @"Expected removing Key foo with different identifier to fail");
 }
 
-- (void)test_removeDataForKey_ValetsWithSameIdentifierButDifferentAccessibilityRemoveDistinctDataFromKeychain;
+- (void)test_removeObjectForKey_ValetsWithSameIdentifierButDifferentAccessibilityRemoveDistinctDataFromKeychain;
 {
-    Valet *otherValet = [[Valet alloc] initWithIdentifier:self.valet.identifier accessibility:self.valet.accessibility+1];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:self.valet.accessibility+1];
     [self.additionalValets addObject:otherValet];
     
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
@@ -201,15 +201,15 @@
     XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
     XCTAssertEqualObjects([otherValet stringForKey:self.key], self.secondaryString);
     
-    XCTAssertTrue([self.valet removeDataForKey:self.key]);
+    XCTAssertTrue([self.valet removeObjectForKey:self.key]);
     XCTAssertNil([self.valet stringForKey:self.key]);
     XCTAssertEqualObjects([otherValet stringForKey:self.key], self.secondaryString);
     
-    XCTAssertTrue([otherValet removeDataForKey:self.key]);
+    XCTAssertTrue([otherValet removeObjectForKey:self.key]);
     XCTAssertNil([otherValet stringForKey:self.key]);
 }
 
-- (void)test_removeDataForKey_ValetsWithSameIdentifierAndAccessibilityButDifferentClassTypeRemoveDistinctDataFromKeychain;
+- (void)test_removeObjectForKey_ValetsWithSameIdentifierAndAccessibilityButDifferentClassTypeRemoveDistinctDataFromKeychain;
 {
     if (self.synchronizableValet == nil) {
         return;
@@ -221,33 +221,33 @@
     XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
     XCTAssertEqualObjects([self.synchronizableValet stringForKey:self.key], self.secondaryString);
     
-    XCTAssertTrue([self.valet removeDataForKey:self.key]);
+    XCTAssertTrue([self.valet removeObjectForKey:self.key]);
     XCTAssertNil([self.valet stringForKey:self.key]);
     XCTAssertEqualObjects([self.synchronizableValet stringForKey:self.key], self.secondaryString);
     
-    XCTAssertTrue([self.synchronizableValet removeDataForKey:self.key]);
+    XCTAssertTrue([self.synchronizableValet removeObjectForKey:self.key]);
     XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
 }
 
-- (void)test_hasKey_returnsYESWhenKeyExists;
+- (void)test_containsObjectForKey_returnsYESWhenKeyExists;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    XCTAssertTrue([self.valet hasKey:self.key]);
+    XCTAssertTrue([self.valet containsObjectForKey:self.key]);
 }
 
-- (void)test_hasKey_returnsNOWhenKeyDoesNotExist;
+- (void)test_containsObjectForKey_returnsNOWhenKeyDoesNotExist;
 {
-    XCTAssertFalse([self.valet hasKey:self.key]);
+    XCTAssertFalse([self.valet containsObjectForKey:self.key]);
 }
 
-- (void)test_hasKey_returnsYESWithoutPromptingUserOnSecureElementValet;
+- (void)test_containsObjectForKey_returnsYESWithoutPromptingUserOnSecureElementValet;
 {
     if (self.secureElementValet == nil) {
         return;
     }
     
     XCTAssertTrue([self.secureElementValet setString:self.string forKey:self.key]);
-    XCTAssertTrue([self.valet hasKey:self.key]);
+    XCTAssertTrue([self.valet containsObjectForKey:self.key]);
 }
 
 - (void)test_allKeys_returnsNilWhenNoAllKeysPresent;
@@ -281,7 +281,7 @@
     
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
     
-    Valet *otherValet = [[Valet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
     [self.additionalValets addObject:otherValet];
     
     NSSet *allKeys = [otherValet allKeys];
@@ -302,7 +302,7 @@
     XCTAssertNil([self.synchronizableValet stringForKey:self.key], @"Expected no non-synchronizable string to be found.");
 }
 
-- (void)test_removeDataForKey_removesSynchronizableString;
+- (void)test_removeObjectForKey_removesSynchronizableString;
 {
     if (self.synchronizableValet == nil) {
         return;
@@ -313,7 +313,7 @@
     XCTAssertTrue([self.synchronizableValet setString:self.string forKey:self.key]);
     XCTAssertEqualObjects(self.string, [self.synchronizableValet stringForKey:self.key]);
     
-    XCTAssertTrue([self.synchronizableValet removeDataForKey:self.key]);
+    XCTAssertTrue([self.synchronizableValet removeObjectForKey:self.key]);
     XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
 }
 
