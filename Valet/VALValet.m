@@ -55,6 +55,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         _baseQuery = [[self mutableBaseQueryWithIdentifier:identifier initializer:_cmd accessibility:accessibility] copy];
         _identifier = [identifier copy];
         _sharedAcrossApplications = NO;
+        _accessibility = accessibility;
     }
     
     return self;
@@ -76,6 +77,14 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     }
     
     return self;
+}
+
+#pragma mark - NSObject
+
+- (BOOL)isEqual:(id)object;
+{
+    VALValet *otherValet = (VALValet *)object;
+    return [self isMemberOfClass:[object class]] && [self.baseQuery isEqualToDictionary:otherValet.baseQuery];
 }
 
 #pragma mark - Public Methods
