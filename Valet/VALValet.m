@@ -74,6 +74,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         _baseQuery = [baseQuery copy];
         _identifier = [sharedAccessGroupIdentifier copy];
         _sharedAcrossApplications = YES;
+        _accessibility = accessibility;
     }
     
     return self;
@@ -85,6 +86,11 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 {
     VALValet *otherValet = (VALValet *)object;
     return [self isMemberOfClass:[object class]] && [self.baseQuery isEqualToDictionary:otherValet.baseQuery];
+}
+
+- (NSString *)description;
+{
+    return [NSString stringWithFormat:@"%@: %@ %@%@", [super description], self.identifier, (self.sharedAcrossApplications ? @"Shared " : @""), VALStringForAccessibility(self.accessibility)];
 }
 
 #pragma mark - Public Methods

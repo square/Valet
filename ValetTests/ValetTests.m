@@ -50,14 +50,7 @@
     self.valet = [[VALValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
     self.testingValet = [[VALTestingValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
     
-    self.key = @"foo";
-    self.string = @"bar";
-    self.secondaryString = @"bar2";
-    self.additionalValets = [NSMutableArray new];
-}
-
-- (void)tearDown;
-{
+    // In case testing quit unexpectedly, clean up the keychain from last time.
     [self.valet removeAllObjects];
     [self.testingValet removeAllObjects];
     
@@ -65,9 +58,10 @@
         [additionalValet removeAllObjects];
     }
     
-    [self.additionalValets removeAllObjects];
-    
-    [super tearDown];
+    self.key = @"foo";
+    self.string = @"bar";
+    self.secondaryString = @"bar2";
+    self.additionalValets = [NSMutableArray new];
 }
 
 #pragma mark - Behavior Tests
