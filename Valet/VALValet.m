@@ -88,6 +88,11 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return [self isMemberOfClass:[object class]] && [self.baseQuery isEqualToDictionary:otherValet.baseQuery];
 }
 
+- (NSUInteger)hash;
+{
+    return self.baseQuery.hash;
+}
+
 - (NSString *)description;
 {
     return [NSString stringWithFormat:@"%@: %@ %@%@", [super description], self.identifier, (self.sharedAcrossApplications ? @"Shared " : @""), VALStringForAccessibility(self.accessibility)];
@@ -240,7 +245,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 
 - (BOOL)setString:(NSString *)string forKey:(NSString *)key options:(NSDictionary *)options;
 {
-    VALCheckCondition(string.length > 0, nil, @"Can not set empty string for key.");
+    VALCheckCondition(string.length > 0, NO, @"Can not set empty string for key.");
     NSData *stringData = [string dataUsingEncoding:NSUTF8StringEncoding];
     if (stringData.length > 0) {
         return [self setObject:stringData forKey:key options:options];
@@ -261,7 +266,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 
 - (OSStatus)containsObjectForKey:(NSString *)key options:(NSDictionary *)options;
 {
-    VALCheckCondition(key.length > 0, NO, @"Can not check if empty key exists in the keychain.");
+    VALCheckCondition(key.length > 0, errSecParam, @"Can not check if empty key exists in the keychain.");
     
     NSMutableDictionary *query = [self.baseQuery mutableCopy];
     [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:key]];

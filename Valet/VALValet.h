@@ -56,7 +56,7 @@ typedef NS_ENUM(NSUInteger, VALAccessibility) {
 - (NSSet *)allKeys;
 
 /// Removes a key/object pair from the keychain. Returns NO if the keychain is not accessible.
-- (BOOL)removeObjectForKey:(NSString *)username __attribute__((nonnull(1)));
+- (BOOL)removeObjectForKey:(NSString *)key __attribute__((nonnull(1)));
 /// Removes all key/object pairs accessible by this Valet instance from the keychain. Returns NO if the keychain is not accessible.
 - (BOOL)removeAllObjects;
 
