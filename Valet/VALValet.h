@@ -60,4 +60,9 @@ typedef NS_ENUM(NSUInteger, VALAccessibility) {
 /// Removes all key/object pairs accessible by this Valet instance from the keychain. Returns NO if the keychain is not accessible.
 - (BOOL)removeAllObjects;
 
+/// Migrates objects matching the secItemQuery into the receiving Valet instance. Returns NO if the passed-in query can not retrieve data, or if there is a conflict during migration. The keychain is not modified if a failure occurs.
+- (BOOL)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
+/// Migrates objects from the passed-in Valet into the receiving Valet instance.
+- (BOOL)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
+
 @end

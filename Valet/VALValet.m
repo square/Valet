@@ -166,30 +166,87 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return [self removeAllObjectsWithOptions:nil];
 }
 
+- (BOOL)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
+{
+    VALCheckCondition(secItemQuery.allKeys.count > 0, NO, @"Migration requires secItemQuery to contain values.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecMatchLimit] != (__bridge id)kSecMatchLimitOne, NO, @"Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnData] != (__bridge id)kCFBooleanFalse, NO, @"Migration requires kSecReturnData to be set to kCFBooleanTrue.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnAttributes] != (__bridge id)kCFBooleanFalse, NO, @"Migration requires kSecReturnAttributes to be set to kCFBooleanTrue.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnRef] != (__bridge id)kCFBooleanTrue, NO, @"kSecReturnRef is not supported in a migration query. Valet can only consume Data values.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnPersistentRef] != (__bridge id)kCFBooleanTrue, NO, @"kSecReturnPersistentRef is not supported in a migration query. Valet can only consume Data values.");
+    
+    NSMutableDictionary *query = [secItemQuery mutableCopy];
+    query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitAll;
+    query[(__bridge id)kSecReturnData] = @YES;
+    query[(__bridge id)kSecReturnAttributes] = @YES;
+    query[(__bridge id)kSecReturnRef] = @NO;
+    query[(__bridge id)kSecReturnPersistentRef] = @NO;
+    
+    CFTypeRef outTypeRef = NULL;
+    NSDictionary *queryResult = nil;
+    
+    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
+    queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
+    if (status == errSecSuccess) {
+        // First, sanity check that we are capable of migrating the data.
+        for (NSDictionary *keychainEntry in queryResult) {
+            NSString *key = keychainEntry[(__bridge id)kSecAttrAccount];
+            NSData *data = keychainEntry[(__bridge id)kSecValueData];
+            VALCheckCondition(key.length > 0, NO, @"Can not migrate keychain entry with no key");
+            VALCheckCondition(![self containsObjectForKey:key], NO, @"Can not migrate keychain entry for key %@ since %@ already exists in %@", key, key, self);
+            VALCheckCondition(data.length > 0, NO, @"Can not migrate keychain entry with no value data");
+        }
+        
+        // Second, if all went well, actually migrate.
+        NSMutableArray *alreadyMigratedKeys = [NSMutableArray new];
+        for (NSDictionary *keychainEntry in queryResult) {
+            NSString *key = keychainEntry[(__bridge id)kSecAttrAccount];
+            NSData *data = keychainEntry[(__bridge id)kSecValueData];
+            
+            if ([self setObject:data forKey:key]) {
+                [alreadyMigratedKeys addObject:key];
+                
+            } else {
+                // Something went wrong. Remove all migrated items.
+                for (NSString *key in alreadyMigratedKeys) {
+                    [self removeObjectForKey:key];
+                }
+                
+                return NO;
+            }
+        }
+        
+        // Finally, remove if successful.
+        if (remove) {
+            status = SecItemDelete((__bridge CFDictionaryRef)secItemQuery);
+            if (status != errSecSuccess) {
+                // Something went wrong. Remove all migrated items.
+                for (NSString *key in alreadyMigratedKeys) {
+                    [self removeObjectForKey:key];
+                }
+                
+                return NO;
+            }
+        }
+        
+        return YES;
+        
+    } else {
+        return NO;
+    }
+}
+
+- (BOOL)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
+{
+    return [self migrateObjectsMatchingQuery:valet.baseQuery removeOnCompletion:remove];
+}
+
 #pragma mark Protected Methods
-
-- (BOOL)supportsSynchronizableKeychainItems;
-{
-#if TARGET_IPHONE_SIMULATOR
-    return NO;
-#else
-    return (&kSecAttrSynchronizable != NULL && &kSecAttrSynchronizableAny != NULL);
-#endif
-}
-
-- (BOOL)supportsLocalAuthentication;
-{
-#if TARGET_IPHONE_SIMULATOR
-    return NO;
-#else
-    return (&kSecAttrAccessControl != NULL && &kSecUseOperationPrompt != NULL);
-#endif
-}
 
 - (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
 {
     return [@{
-              // Valet only handles passwords.
+              // Valet only handles generic passwords.
               (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
               // Use the identifier, Valet type and accessibility settings to create the keychain service name.
               (__bridge id)kSecAttrService : [NSString stringWithFormat:@"VAL_%@_%@_%@_%@", NSStringFromClass([self class]), NSStringFromSelector(initializer), identifier, VALStringForAccessibility(accessibility)],
@@ -201,7 +258,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key options:(NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, NO, @"Can not set a value with an empty key.");
-    VALCheckCondition(value != nil, NO, @"Can not set nil value");
+    VALCheckCondition(value.length > 0, NO, @"Can not set an empty value.");
     
     OSStatus status = errSecUnimplemented;
     NSMutableDictionary *query = [self.baseQuery mutableCopy];

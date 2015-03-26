@@ -226,53 +226,110 @@
     XCTAssertNil([self.testingValet stringForKey:self.key]);
 }
 
-- (void)test_containsObjectForKey_returnsYESWhenKeyExists;
+- (void)test_removeObjectForKey_ValetsWithSameIdentifierAndAccessibilityButDifferentSyncronizableTypeRemoveDistinctDataFromKeychain;
 {
-    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    XCTAssertTrue([self.valet containsObjectForKey:self.key]);
-}
-
-- (void)test_containsObjectForKey_returnsNOWhenKeyDoesNotExist;
-{
-    XCTAssertFalse([self.valet containsObjectForKey:self.key]);
-}
-
-- (void)test_allKeys_returnsNilWhenNoAllKeysPresent;
-{
-    XCTAssertNil([self.valet stringForKey:self.key]);
-    XCTAssertNil([self.valet allKeys]);
-}
-
-- (void)test_allKeys_returnsOneKeyWhenOnlyOneKey;
-{
-    XCTAssertNil([self.valet stringForKey:self.key]);
+    if (self.synchronizableValet == nil) {
+        return;
+    }
     
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    XCTAssertEqualObjects([self.valet allKeys], [NSSet setWithObject:self.key]);
+    XCTAssertTrue([self.synchronizableValet setString:self.secondaryString forKey:self.key]);
+    
+    XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
+    XCTAssertEqualObjects([self.synchronizableValet stringForKey:self.key], self.secondaryString);
+    
+    XCTAssertTrue([self.valet removeObjectForKey:self.key]);
+    XCTAssertNil([self.valet stringForKey:self.key]);
+    XCTAssertEqualObjects([self.synchronizableValet stringForKey:self.key], self.secondaryString);
+    
+    XCTAssertTrue([self.synchronizableValet removeObjectForKey:self.key]);
+    XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
 }
 
-- (void)test_allKeys_returnsAllKeys;
+- (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_failsIfNoItemsFoundMatchingQueryInput;
 {
-    XCTAssertNil([self.valet stringForKey:self.key]);
-    
-    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    XCTAssertTrue([self.valet setString:self.string forKey:@"anotherfoo"]);
-    
-    NSSet *allKeys = [NSSet setWithArray:@[ self.key, @"anotherfoo" ]];
-    XCTAssertEqualObjects([self.valet allKeys], allKeys);
+    NSDictionary *queryWithNoMathces = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrService : @"Valet_Does_Not_Exist" };
+    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:queryWithNoMathces removeOnCompletion:NO]);
+    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:queryWithNoMathces removeOnCompletion:YES]);
 }
 
-- (void)test_allKeys_differentIdentifierReturnsNil;
+- (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_failsOnBadQueryInput;
 {
-    XCTAssertNil([self.valet stringForKey:self.key]);
+    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:NO]);
+    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:YES]);
     
-    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecMatchLimit : (__bridge id)kSecMatchLimitOne } removeOnCompletion:NO]);
+    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnData : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO]);
+    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnAttributes : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO]);
+    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO]);
+    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO]);
+}
+
+- (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWithoutRemovingOnCompletion;
+{
+    NSString *const identifierToMigrate = @"Migrate_Me_To_Valet";
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:identifierToMigrate accessibility:VALAccessibleAfterFirstUnlock];
     [self.additionalValets addObject:otherValet];
     
-    NSSet *allKeys = [otherValet allKeys];
-    XCTAssertNil(allKeys, @"Expected allKeys with different identifier to be nil but instead it was %@", allKeys);
+    NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
+    }
+    
+    [self.valet migrateObjectsFromValet:otherValet removeOnCompletion:NO];
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
+        XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
+    }
+}
+
+- (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenRemovingOnCompletion;
+{
+    NSString *const identifierToMigrate = @"Migrate_Me_To_Valet";
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:identifierToMigrate accessibility:VALAccessibleAfterFirstUnlock];
+    [self.additionalValets addObject:otherValet];
+    
+    NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
+    }
+    
+    XCTAssertTrue([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES]);
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
+        XCTAssertEqualObjects([otherValet stringForKey:key], nil);
+    }
+}
+
+- (void)test_migrateObjectsFromValetRemoveOnCompletion_bailsOutAndLeavesKeychainUntouchedIfConflictExists;
+{
+    NSString *const identifierToMigrate = @"Migrate_Me_To_Valet";
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:identifierToMigrate accessibility:VALAccessibleAfterFirstUnlock];
+    [self.additionalValets addObject:otherValet];
+    
+    NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
+    }
+    
+    // Insert conflict.
+    NSString *conflictKey = keyStringPairToMigrateMap.allKeys.firstObject;
+    XCTAssertTrue([self.valet setString:keyStringPairToMigrateMap[conflictKey] forKey:conflictKey]);
+    NSSet *allValetKeysPreMigration = self.valet.allKeys;
+    
+    XCTAssertFalse([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES]);
+
+    XCTAssertEqualObjects(self.valet.allKeys, allValetKeysPreMigration);
+    XCTAssertEqualObjects([self.valet stringForKey:conflictKey], keyStringPairToMigrateMap[conflictKey]);
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
+    }
 }
 
 - (void)test_isEqual_equivalentValetsCanAccessSameData;
