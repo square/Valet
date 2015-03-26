@@ -31,6 +31,7 @@
 
 @property (nonatomic, readwrite) VALValet *valet;
 @property (nonatomic, readwrite) VALTestingValet *testingValet;
+@property (nonatomic, readwrite) VALSynchronizableValet *synchronizableValet;
 @property (nonatomic, copy, readwrite) NSString *key;
 @property (nonatomic, copy, readwrite) NSString *string;
 @property (nonatomic, copy, readwrite) NSString *secondaryString;
@@ -47,12 +48,14 @@
 {
     [super setUp];
     
-    self.valet = [[VALValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
-    self.testingValet = [[VALTestingValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleAlways];
+    self.valet = [[VALValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleWhenUnlocked];
+    self.testingValet = [[VALTestingValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleWhenUnlocked];
+    self.synchronizableValet = [[VALSynchronizableValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleWhenUnlocked];
     
     // In case testing quit unexpectedly, clean up the keychain from last time.
     [self.valet removeAllObjects];
     [self.testingValet removeAllObjects];
+    [self.synchronizableValet removeAllObjects];
     
     for (VALValet *additionalValet in self.additionalValets) {
         [additionalValet removeAllObjects];
@@ -161,10 +164,73 @@
     XCTAssertEqualObjects([otherValet stringForKey:self.key], self.secondaryString);
 }
 
+- (void)test_setStringForKey_setsSynchronizableString;
+{
+    if (self.synchronizableValet == nil) {
+        return;
+    }
+    
+    XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
+    
+    XCTAssertTrue([self.synchronizableValet setString:self.string forKey:self.key]);
+    XCTAssertEqualObjects(self.string, [self.synchronizableValet stringForKey:self.key]);
+    
+    XCTAssertNil([self.valet stringForKey:self.key], @"Expected no non-synchronizable string to be found.");
+}
+
 - (void)test_setStringForKey_nonStringData;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
     XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
+}
+
+- (void)test_containsObjectForKey_returnsYESWhenKeyExists;
+{
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertTrue([self.valet containsObjectForKey:self.key]);
+}
+
+- (void)test_containsObjectForKey_returnsNOWhenKeyDoesNotExist;
+{
+    XCTAssertFalse([self.valet containsObjectForKey:self.key]);
+}
+
+- (void)test_allKeys_returnsNilWhenNoAllKeysPresent;
+{
+    XCTAssertNil([self.valet stringForKey:self.key]);
+    XCTAssertNil([self.valet allKeys]);
+}
+
+- (void)test_allKeys_returnsOneKeyWhenOnlyOneKey;
+{
+    XCTAssertNil([self.valet stringForKey:self.key]);
+    
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertEqualObjects([self.valet allKeys], [NSSet setWithObject:self.key]);
+}
+
+- (void)test_allKeys_returnsAllKeys;
+{
+    XCTAssertNil([self.valet stringForKey:self.key]);
+    
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    XCTAssertTrue([self.valet setString:self.string forKey:@"anotherfoo"]);
+    
+    NSSet *allKeys = [NSSet setWithArray:@[ self.key, @"anotherfoo" ]];
+    XCTAssertEqualObjects([self.valet allKeys], allKeys);
+}
+
+- (void)test_allKeys_differentIdentifierReturnsNil;
+{
+    XCTAssertNil([self.valet stringForKey:self.key]);
+    
+    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+    
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    [self.additionalValets addObject:otherValet];
+    
+    NSSet *allKeys = [otherValet allKeys];
+    XCTAssertNil(allKeys, @"Expected allKeys with different identifier to be nil but instead it was %@", allKeys);
 }
 
 - (void)test_removeObjectForKey_succeedsWhenNoKeyExists;
@@ -179,6 +245,21 @@
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
     XCTAssertTrue([self.valet removeObjectForKey:self.key]);
     XCTAssertNil([self.valet stringForKey:self.key], @"Expected no string to be retrieved after removing string");
+}
+
+- (void)test_removeObjectForKey_successfullyRemovesSynchronizableKey;
+{
+    if (self.synchronizableValet == nil) {
+        return;
+    }
+    
+    XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
+    
+    XCTAssertTrue([self.synchronizableValet setString:self.string forKey:self.key]);
+    XCTAssertEqualObjects(self.string, [self.synchronizableValet stringForKey:self.key]);
+    
+    XCTAssertTrue([self.synchronizableValet removeObjectForKey:self.key]);
+    XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
 }
 
 - (void)test_removeObjectForKey_wrongIdentifierSucceeds;
