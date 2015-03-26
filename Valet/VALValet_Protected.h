@@ -11,8 +11,6 @@ extern NSString *VALStringForAccessibility(VALAccessibility accessibility);
 
 @interface VALValet ()
 
-- (BOOL)supportsSynchronizableKeychainItems;
-- (BOOL)supportsLocalAuthentication;
 - (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
 
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key options:(NSDictionary *)options;

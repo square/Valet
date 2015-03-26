@@ -40,4 +40,15 @@
     return mutableBaseQuery;
 }
 
+#pragma mark - Public Methods
+
+- (BOOL)supportsSynchronizableKeychainItems;
+{
+#if __IPHONE_8_2 || !TARGET_IPHONE_SIMULATOR
+    return (&kSecAttrSynchronizable != NULL && &kSecAttrSynchronizableAny != NULL);
+#else
+    return NO;
+#endif
+}
+
 @end

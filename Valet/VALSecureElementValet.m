@@ -17,7 +17,7 @@
 - (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureElementValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
-    VALCheckCondition([self supportsLocalAuthentication], nil, @"This device does not support storing data on the secure element.");
+    VALCheckCondition([self supportsSecureElementKeychainItems], nil, @"This device does not support storing data on the secure element.");
     
     return [super initWithIdentifier:identifier accessibility:accessibility];
 }
@@ -25,12 +25,21 @@
 - (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureElementValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
-    VALCheckCondition([self supportsLocalAuthentication], nil, @"This device does not support storing data on the secure element.");
+    VALCheckCondition([self supportsSecureElementKeychainItems], nil, @"This device does not support storing data on the secure element.");
     
     return [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
 }
 
 #pragma mark - Public Methods
+
+- (BOOL)supportsSecureElementKeychainItems;
+{
+#if TARGET_IPHONE_SIMULATOR
+    return NO;
+#else
+    return (&kSecAttrAccessControl != NULL && &kSecUseOperationPrompt != NULL);
+#endif
+}
 
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt
 {
