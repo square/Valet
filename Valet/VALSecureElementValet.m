@@ -70,7 +70,7 @@
 
 - (NSSet *)allKeys;
 {
-    return [self allKeysWithOptions:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
+    VALCheckCondition(NO, nil, @"All keys is not supported on %@", NSStringFromClass([self class]));
 }
 
 #pragma mark - Protected Methods
