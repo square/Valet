@@ -27,9 +27,6 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
             return @"AccessibleAfterFirstUnlockThisDeviceOnly";
         case VALAccessibleAlwaysThisDeviceOnly:
             return @"AccessibleAlwaysThisDeviceOnly";
-        default:
-            // Default to a secure option if we get something insane.
-            return @"Unknown";
     }
 }
 
@@ -47,10 +44,10 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 
 - (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
 {
-    VALCheckCondition(identifier.length > 0, nil, @"Valet requires a identifier");
+    VALCheckCondition(identifier.length > 0, nil, @"Valet requires an identifier");
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
     
-    self = [self init];
+    self = [super init];
     if (self != nil) {
         _baseQuery = [[self mutableBaseQueryWithIdentifier:identifier initializer:_cmd accessibility:accessibility] copy];
         _identifier = [identifier copy];
@@ -66,7 +63,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     VALCheckCondition(sharedAccessGroupIdentifier.length > 0, nil, @"Valet requires a sharedAccessGroupIdentifier");
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
     
-    self = [self init];
+    self = [super init];
     if (self != nil) {
         NSMutableDictionary *baseQuery = [self mutableBaseQueryWithIdentifier:sharedAccessGroupIdentifier initializer:_cmd accessibility:accessibility];
         baseQuery[(__bridge id)kSecAttrAccessGroup] = [NSString stringWithFormat:@"%@.%@", [self _sharedAccessGroupPrefix], sharedAccessGroupIdentifier];
@@ -90,7 +87,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 
 - (NSUInteger)hash;
 {
-    return self.baseQuery.hash;
+    return [self.baseQuery[(__bridge id)kSecAttrService] hash];
 }
 
 - (NSString *)description;
@@ -147,7 +144,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 - (BOOL)containsObjectForKey:(NSString *)key;
 {
     OSStatus status = [self containsObjectForKey:key options:nil];
-    BOOL keyAlreadyInKeychain = (status == errSecSuccess);
+    BOOL const keyAlreadyInKeychain = (status == errSecSuccess);
     return keyAlreadyInKeychain;
 }
 
@@ -188,16 +185,20 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
     queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
     if (status == errSecSuccess) {
-        // First, sanity check that we are capable of migrating the data.
+        // Sanity check that we are capable of migrating the data.
+        NSMutableSet *keysToMigrate = [NSMutableSet new];
         for (NSDictionary *keychainEntry in queryResult) {
             NSString *key = keychainEntry[(__bridge id)kSecAttrAccount];
             NSData *data = keychainEntry[(__bridge id)kSecValueData];
+            
             VALCheckCondition(key.length > 0, NO, @"Can not migrate keychain entry with no key");
             VALCheckCondition(![self containsObjectForKey:key], NO, @"Can not migrate keychain entry for key %@ since %@ already exists in %@", key, key, self);
+            VALCheckCondition(![keysToMigrate containsObject:key], NO, @"Can not migrate keychain entry for key %@ since there are multiple values for key %@ in query %@", key, key, secItemQuery);
             VALCheckCondition(data.length > 0, NO, @"Can not migrate keychain entry with no value data");
+            [keysToMigrate addObject:key];
         }
         
-        // Second, if all went well, actually migrate.
+        // If all looks good, actually migrate.
         NSMutableArray *alreadyMigratedKeys = [NSMutableArray new];
         for (NSDictionary *keychainEntry in queryResult) {
             NSString *key = keychainEntry[(__bridge id)kSecAttrAccount];
@@ -216,7 +217,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
             }
         }
         
-        // Finally, remove if successful.
+        // Remove data if requested.
         if (remove) {
             status = SecItemDelete((__bridge CFDictionaryRef)secItemQuery);
             if (status != errSecSuccess) {
@@ -241,7 +242,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return [self migrateObjectsMatchingQuery:valet.baseQuery removeOnCompletion:remove];
 }
 
-#pragma mark Protected Methods
+#pragma mark - Protected Methods
 
 - (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
 {
@@ -396,7 +397,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return YES;
 }
 
-#pragma mark Private Methods
+#pragma mark - Private Methods
 
 /// Programatically grab the required prefix for the shared access group (i.e. Bundle Seed ID). The value for the kSecAttrAccessGroup key in queries for data that is shared between apps must be of the format bundleSeedID.sharedAccessGroup. For more information on the Bundle Seed ID, see https://developer.apple.com/library/ios/qa/qa1713/_index.html
 - (NSString *)_sharedAccessGroupPrefix;
@@ -416,15 +417,13 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
     }
     
-    if (status == errSecSuccess) {
-        NSString *accessGroup = queryResult[(__bridge id)kSecAttrAccessGroup];
-        NSArray *components = [accessGroup componentsSeparatedByString:@"."];
-        NSString *bundleSeedID = components.firstObject;
-        
-        return bundleSeedID;
-    }
+    VALCheckCondition(status == errSecSuccess, nil, @"Could not find shared access group prefix.");
     
-    return nil;
+    NSString *accessGroup = queryResult[(__bridge id)kSecAttrAccessGroup];
+    NSArray *components = [accessGroup componentsSeparatedByString:@"."];
+    NSString *bundleSeedID = components.firstObject;
+    
+    return bundleSeedID;
 }
 
 - (id)_secAccessibilityAttributeForAccessibility:(VALAccessibility)accessibility;
@@ -444,19 +443,13 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
             return (__bridge id)kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly;
         case VALAccessibleAlwaysThisDeviceOnly:
             return (__bridge id)kSecAttrAccessibleAlwaysThisDeviceOnly;
-        default:
-            // Default to a secure option if we get something insane.
-            VALCheckCondition(NO, (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly, @"Unexpected accessibility option %@", @(accessibility));
     }
 }
 
 - (NSDictionary *)_secItemFormatDictionaryWithKey:(NSString *)key;
 {
-    if (key.length > 0) {
-        return @{ (__bridge id)kSecAttrAccount : key };
-    }
-    
-    return @{};
+    VALCheckCondition(key.length > 0, @{}, @"Must provide a valid key");
+    return @{ (__bridge id)kSecAttrAccount : key };
 }
 
 @end

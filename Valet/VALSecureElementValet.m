@@ -64,7 +64,7 @@
 - (BOOL)containsObjectForKey:(NSString *)key;
 {
     OSStatus status = [self containsObjectForKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
-    BOOL keyAlreadyInKeychain = (status == errSecInteractionNotAllowed);
+    BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed);
     return keyAlreadyInKeychain;
 }
 

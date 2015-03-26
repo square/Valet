@@ -14,7 +14,7 @@
 @interface VALValet (Testing)
 
 - (NSString *)_sharedAccessGroupPrefix;
-- (NSDictionary *)_secItemFormatDictionaryWithKey:(NSString *)Key;
+- (NSDictionary *)_secItemFormatDictionaryWithKey:(NSString *)key;
 
 @end
 
@@ -346,10 +346,23 @@
     XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO]);
 }
 
+- (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_bailsOutIfConflictExistsInMigrationQueryResult;
+{
+    VALValet *otherValet1 = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibleAfterFirstUnlock];
+    [self.additionalValets addObject:otherValet1];
+    XCTAssertTrue([otherValet1 setString:self.string forKey:self.key]);
+    
+    VALValet *otherValet2 = [[VALTestingValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibleAfterFirstUnlock];
+    [self.additionalValets addObject:otherValet2];
+    XCTAssertTrue([otherValet2 setString:self.string forKey:self.key]);
+    
+    NSDictionary *queryWithConflict = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrAccount : self.key };
+    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:queryWithConflict removeOnCompletion:NO]);
+}
+
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWithoutRemovingOnCompletion;
 {
-    NSString *const identifierToMigrate = @"Migrate_Me_To_Valet";
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:identifierToMigrate accessibility:VALAccessibleAfterFirstUnlock];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibleAfterFirstUnlock];
     [self.additionalValets addObject:otherValet];
     
     NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
@@ -368,8 +381,7 @@
 
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenRemovingOnCompletion;
 {
-    NSString *const identifierToMigrate = @"Migrate_Me_To_Valet";
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:identifierToMigrate accessibility:VALAccessibleAfterFirstUnlock];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibleAfterFirstUnlock];
     [self.additionalValets addObject:otherValet];
     
     NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
@@ -388,8 +400,7 @@
 
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_bailsOutAndLeavesKeychainUntouchedIfConflictExists;
 {
-    NSString *const identifierToMigrate = @"Migrate_Me_To_Valet";
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:identifierToMigrate accessibility:VALAccessibleAfterFirstUnlock];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibleAfterFirstUnlock];
     [self.additionalValets addObject:otherValet];
     
     NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
