@@ -10,6 +10,9 @@
 #import "VALValet_Protected.h"
 
 
+NSString * const VALMigrationErrorDomain = @"VALMigrationErrorDomain";
+
+
 NSString *VALStringForAccessibility(VALAccessibility accessibility)
 {
     switch (accessibility) {
@@ -163,14 +166,14 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     return [self removeAllObjectsWithOptions:nil];
 }
 
-- (BOOL)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
+- (NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 {
-    VALCheckCondition(secItemQuery.allKeys.count > 0, NO, @"Migration requires secItemQuery to contain values.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecMatchLimit] != (__bridge id)kSecMatchLimitOne, NO, @"Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnData] != (__bridge id)kCFBooleanFalse, NO, @"Migration requires kSecReturnData to be set to kCFBooleanTrue.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnAttributes] != (__bridge id)kCFBooleanFalse, NO, @"Migration requires kSecReturnAttributes to be set to kCFBooleanTrue.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnRef] != (__bridge id)kCFBooleanTrue, NO, @"kSecReturnRef is not supported in a migration query. Valet can only consume Data values.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnPersistentRef] != (__bridge id)kCFBooleanTrue, NO, @"kSecReturnPersistentRef is not supported in a migration query. Valet can only consume Data values.");
+    VALCheckCondition(secItemQuery.allKeys.count > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"Migration requires secItemQuery to contain values.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecMatchLimit] != (__bridge id)kSecMatchLimitOne, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnData] != (__bridge id)kCFBooleanFalse, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecReturnData to be set to kCFBooleanTrue.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnAttributes] != (__bridge id)kCFBooleanFalse, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecReturnAttributes to be set to kCFBooleanTrue.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnRef] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"kSecReturnRef is not supported in a migration query. Valet can only consume Data values.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnPersistentRef] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"kSecReturnPersistentRef is not supported in a migration query. Valet can only consume Data values.");
     
     NSMutableDictionary *query = [secItemQuery mutableCopy];
     query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitAll;
@@ -184,60 +187,58 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     
     OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
     queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
-    if (status == errSecSuccess) {
-        // Sanity check that we are capable of migrating the data.
-        NSMutableSet *keysToMigrate = [NSMutableSet new];
-        for (NSDictionary *keychainEntry in queryResult) {
-            NSString *key = keychainEntry[(__bridge id)kSecAttrAccount];
-            NSData *data = keychainEntry[(__bridge id)kSecValueData];
-            
-            VALCheckCondition(key.length > 0, NO, @"Can not migrate keychain entry with no key");
-            VALCheckCondition(![self containsObjectForKey:key], NO, @"Can not migrate keychain entry for key %@ since %@ already exists in %@", key, key, self);
-            VALCheckCondition(![keysToMigrate containsObject:key], NO, @"Can not migrate keychain entry for key %@ since there are multiple values for key %@ in query %@", key, key, secItemQuery);
-            VALCheckCondition(data.length > 0, NO, @"Can not migrate keychain entry with no value data");
-            [keysToMigrate addObject:key];
-        }
+    VALCheckCondition(status != errSecItemNotFound, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationNoItemsToMigrateFoundError userInfo:nil], @"No items items matching secItemQuery were found");
+    VALCheckCondition(status == errSecSuccess, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationCouldNotReadKeychainError userInfo:nil], @"Could not copy items matching secItemQuery");
+    
+    // Sanity check that we are capable of migrating the data.
+    NSMutableSet *keysToMigrate = [NSMutableSet new];
+    for (NSDictionary *keychainEntry in queryResult) {
+        NSString *key = keychainEntry[(__bridge id)kSecAttrAccount];
+        NSData *data = keychainEntry[(__bridge id)kSecValueData];
         
-        // If all looks good, actually migrate.
-        NSMutableArray *alreadyMigratedKeys = [NSMutableArray new];
-        for (NSDictionary *keychainEntry in queryResult) {
-            NSString *key = keychainEntry[(__bridge id)kSecAttrAccount];
-            NSData *data = keychainEntry[(__bridge id)kSecValueData];
-            
-            if ([self setObject:data forKey:key]) {
-                [alreadyMigratedKeys addObject:key];
-                
-            } else {
-                // Something went wrong. Remove all migrated items.
-                for (NSString *key in alreadyMigratedKeys) {
-                    [self removeObjectForKey:key];
-                }
-                
-                return NO;
-            }
-        }
-        
-        // Remove data if requested.
-        if (remove) {
-            status = SecItemDelete((__bridge CFDictionaryRef)secItemQuery);
-            if (status != errSecSuccess) {
-                // Something went wrong. Remove all migrated items.
-                for (NSString *key in alreadyMigratedKeys) {
-                    [self removeObjectForKey:key];
-                }
-                
-                return NO;
-            }
-        }
-        
-        return YES;
-        
-    } else {
-        return NO;
+        VALCheckCondition(key.length > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationKeyInQueryResultInvalidError userInfo:nil], @"Can not migrate keychain entry with no key");
+        VALCheckCondition(data.length > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationDataInQueryResultInvalidError userInfo:nil], @"Can not migrate keychain entry with no value data");
+        VALCheckCondition(![keysToMigrate containsObject:key], [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationDuplicateKeyInQueryResultError userInfo:nil], @"Can not migrate keychain entry for key %@ since there are multiple values for key %@ in query %@", key, key, secItemQuery);
+        VALCheckCondition(![self containsObjectForKey:key], [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationKeyInQueryResultAlreadyExistsInValetError userInfo:nil], @"Can not migrate keychain entry for key %@ since %@ already exists in %@", key, key, self);
+        [keysToMigrate addObject:key];
     }
+    
+    // If all looks good, actually migrate.
+    NSMutableArray *alreadyMigratedKeys = [NSMutableArray new];
+    for (NSDictionary *keychainEntry in queryResult) {
+        NSString *key = keychainEntry[(__bridge id)kSecAttrAccount];
+        NSData *data = keychainEntry[(__bridge id)kSecValueData];
+        
+        if ([self setObject:data forKey:key]) {
+            [alreadyMigratedKeys addObject:key];
+            
+        } else {
+            // Something went wrong. Remove all migrated items.
+            for (NSString *key in alreadyMigratedKeys) {
+                [self removeObjectForKey:key];
+            }
+            
+            return [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationCouldNotWriteToKeychainError userInfo:nil];
+        }
+    }
+    
+    // Remove data if requested.
+    if (remove) {
+        status = SecItemDelete((__bridge CFDictionaryRef)secItemQuery);
+        if (status != errSecSuccess) {
+            // Something went wrong. Remove all migrated items.
+            for (NSString *key in alreadyMigratedKeys) {
+                [self removeObjectForKey:key];
+            }
+            
+            return [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationRemovalFailedError userInfo:nil];
+        }
+    }
+    
+    return nil;
 }
 
-- (BOOL)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
+- (NSError *)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
 {
     return [self migrateObjectsMatchingQuery:valet.baseQuery removeOnCompletion:remove];
 }

@@ -330,20 +330,20 @@
 - (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_failsIfNoItemsFoundMatchingQueryInput;
 {
     NSDictionary *queryWithNoMathces = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrService : @"Valet_Does_Not_Exist" };
-    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:queryWithNoMathces removeOnCompletion:NO]);
-    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:queryWithNoMathces removeOnCompletion:YES]);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithNoMathces removeOnCompletion:NO].code, VALMigrationNoItemsToMigrateFoundError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithNoMathces removeOnCompletion:YES].code, VALMigrationNoItemsToMigrateFoundError);
 }
 
 - (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_failsOnBadQueryInput;
 {
-    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:NO]);
-    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:YES]);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:YES].code, VAlMigrationInvalidQueryError);
     
-    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecMatchLimit : (__bridge id)kSecMatchLimitOne } removeOnCompletion:NO]);
-    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnData : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO]);
-    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnAttributes : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO]);
-    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO]);
-    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO]);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecMatchLimit : (__bridge id)kSecMatchLimitOne } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnData : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnAttributes : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
 }
 
 - (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_bailsOutIfConflictExistsInMigrationQueryResult;
@@ -357,7 +357,7 @@
     XCTAssertTrue([otherValet2 setString:self.string forKey:self.key]);
     
     NSDictionary *queryWithConflict = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrAccount : self.key };
-    XCTAssertFalse([self.valet migrateObjectsMatchingQuery:queryWithConflict removeOnCompletion:NO]);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithConflict removeOnCompletion:NO].code, VAlMigrationDuplicateKeyInQueryResultError);
 }
 
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWithoutRemovingOnCompletion;
@@ -371,7 +371,7 @@
         XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
     }
     
-    [self.valet migrateObjectsFromValet:otherValet removeOnCompletion:NO];
+    XCTAssertNil([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:NO]);
     
     for (NSString *key in keyStringPairToMigrateMap) {
         XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
@@ -390,7 +390,7 @@
         XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
     }
     
-    XCTAssertTrue([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES]);
+    XCTAssertNil([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES]);
     
     for (NSString *key in keyStringPairToMigrateMap) {
         XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
@@ -414,7 +414,7 @@
     XCTAssertTrue([self.valet setString:keyStringPairToMigrateMap[conflictKey] forKey:conflictKey]);
     NSSet *allValetKeysPreMigration = self.valet.allKeys;
     
-    XCTAssertFalse([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES]);
+    XCTAssertEqual([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES].code, VAlMigrationKeyInQueryResultAlreadyExistsInValetError);
 
     XCTAssertEqualObjects(self.valet.allKeys, allValetKeysPreMigration);
     XCTAssertEqualObjects([self.valet stringForKey:conflictKey], keyStringPairToMigrateMap[conflictKey]);

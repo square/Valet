@@ -25,6 +25,29 @@ typedef NS_ENUM(NSUInteger, VALAccessibility) {
     VALAccessibleAlwaysThisDeviceOnly,
 };
 
+extern NSString *const VALMigrationErrorDomain;
+
+typedef NS_ENUM(NSUInteger, VALMigrationError) {
+    /// Migration failed because the keychain query was not valid.
+    VAlMigrationInvalidQueryError = 1,
+    /// Migration failed because no items to migrate were found.
+    VALMigrationNoItemsToMigrateFoundError,
+    /// Migration failed because the keychain could not be read.
+    VALMigrationCouldNotReadKeychainError,
+    /// Migraiton failed because a key in the query result could not be read.
+    VALMigrationKeyInQueryResultInvalidError,
+    /// Migraiton failed because some data in the query result could not be read.
+    VAlMigrationDataInQueryResultInvalidError,
+    /// Migraiton failed because two keys with the same value were found in the keychain.
+    VAlMigrationDuplicateKeyInQueryResultError,
+    /// Migraiton failed because a key in the keychain duplicates a key already managed by Valet.
+    VAlMigrationKeyInQueryResultAlreadyExistsInValetError,
+    /// Migraiton failed because writing to the keychain failed.
+    VAlMigrationCouldNotWriteToKeychainError,
+    /// Migration failed because removing the migrated data from the keychain failed.
+    VAlMigrationRemovalFailedError,
+};
+
 
 /// Reads and writes keychain elements.
 @interface VALValet : NSObject <NSCopying>
@@ -60,9 +83,9 @@ typedef NS_ENUM(NSUInteger, VALAccessibility) {
 /// Removes all key/object pairs accessible by this Valet instance from the keychain. Returns NO if the keychain is not accessible.
 - (BOOL)removeAllObjects;
 
-/// Migrates objects matching the secItemQuery into the receiving Valet instance. Returns NO if the passed-in query can not retrieve data, or if there is a conflict during migration. The keychain is not modified if a failure occurs.
-- (BOOL)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
+/// Migrates objects matching the secItemQuery into the receiving Valet instance. Error domain will be VALMigrationErrorDomain, and codes can will be from VALMigrationError. The keychain is not modified if a failure occurs.
+- (NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 /// Migrates objects from the passed-in Valet into the receiving Valet instance.
-- (BOOL)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
+- (NSError *)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
 
 @end
