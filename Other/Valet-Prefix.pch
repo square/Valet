@@ -1,0 +1,18 @@
+//
+// Prefix header for all source files of the 'Valet' target in the 'Valet' project
+//
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
+#ifdef __OBJC__
+#import <Foundation/Foundation.h>
+
+#import <Valet/ValetDefines.h>
+#endif
+    
+#ifdef __cplusplus
+};
+#endif
