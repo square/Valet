@@ -202,7 +202,10 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     
     OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
     queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
-    VALCheckCondition(status != errSecItemNotFound, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationNoItemsToMigrateFoundError userInfo:nil], @"No items items matching secItemQuery were found");
+    if (status == errSecItemNotFound) {
+        return [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationNoItemsToMigrateFoundError userInfo:nil];;
+    }
+    
     VALCheckCondition(status == errSecSuccess, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationCouldNotReadKeychainError userInfo:nil], @"Could not copy items matching secItemQuery");
     
     // Sanity check that we are capable of migrating the data.
