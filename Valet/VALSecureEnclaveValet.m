@@ -1,38 +1,50 @@
 //
-//  VALSecureElementValet.m
+//  VALSecureEnclaveValet.m
 //  Valet
 //
 //  Created by Dan Federman on 3/16/15.
-//  Copyright (c) 2015 Square, Inc. All rights reserved.
+//  Copyright 2015 Square, Inc.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
-#import "VALSecureElementValet.h"
+#import "VALSecureEnclaveValet.h"
 #import "VALValet_Protected.h"
 
 
-@implementation VALSecureElementValet
+@implementation VALSecureEnclaveValet
 
 #pragma mark - Initialization
 
 - (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
 {
-    VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureElementValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
-    VALCheckCondition([self supportsSecureElementKeychainItems], nil, @"This device does not support storing data on the secure element.");
+    VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
+    VALCheckCondition([self supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
     
     return [super initWithIdentifier:identifier accessibility:accessibility];
 }
 
 - (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
 {
-    VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureElementValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
-    VALCheckCondition([self supportsSecureElementKeychainItems], nil, @"This device does not support storing data on the secure element.");
+    VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
+    VALCheckCondition([self supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
     
     return [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
 }
 
 #pragma mark - Public Methods
 
-- (BOOL)supportsSecureElementKeychainItems;
+- (BOOL)supportsSecureEnclaveKeychainItems;
 {
 #if TARGET_IPHONE_SIMULATOR
     return NO;
@@ -70,7 +82,7 @@
 
 - (NSSet *)allKeys;
 {
-    VALCheckCondition(NO, nil, @"All keys is not supported on %@", NSStringFromClass([self class]));
+    VALCheckCondition(NO, nil, @"%s is not supported on %@", __PRETTY_FUNCTION__, NSStringFromClass([self class]));
 }
 
 #pragma mark - Protected Methods
