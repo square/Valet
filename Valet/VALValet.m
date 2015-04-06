@@ -186,7 +186,9 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     VALCheckCondition(secItemQuery[(__bridge id)kSecReturnAttributes] != (__bridge id)kCFBooleanFalse, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecReturnAttributes to be set to kCFBooleanTrue.");
     VALCheckCondition(secItemQuery[(__bridge id)kSecReturnRef] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"kSecReturnRef is not supported in a migration query. Valet can only consume Data values.");
     VALCheckCondition(secItemQuery[(__bridge id)kSecReturnPersistentRef] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"kSecReturnPersistentRef is not supported in a migration query. Valet can only consume Data values.");
+#if TARGET_OS_IPHONE && __IPHONE_8_0
     VALCheckCondition(secItemQuery[(__bridge id)kSecUseOperationPrompt] == nil, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"kSecUseOperationPrompt is not supported in a migration query. Keychain items can not be migrated en-mass from the Secure Enclave.");
+#endif
     
     NSMutableDictionary *query = [secItemQuery mutableCopy];
     query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitAll;

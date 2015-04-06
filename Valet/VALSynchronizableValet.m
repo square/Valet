@@ -47,7 +47,10 @@
 - (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
 {
     NSMutableDictionary *mutableBaseQuery = [super mutableBaseQueryWithIdentifier:identifier initializer:initializer accessibility:accessibility];
+    
+#if TARGET_OS_IPHONE && __IPHONE_7_0
     mutableBaseQuery[(__bridge id)kSecAttrSynchronizable] = @YES;
+#endif
     
     return mutableBaseQuery;
 }
@@ -56,7 +59,7 @@
 
 - (BOOL)supportsSynchronizableKeychainItems;
 {
-#if __IPHONE_8_2 || !TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_IPHONE && (__IPHONE_8_2 || (__IPHONE_7_0 && !TARGET_IPHONE_SIMULATOR))
     return (&kSecAttrSynchronizable != NULL && &kSecAttrSynchronizableAny != NULL);
 #else
     return NO;

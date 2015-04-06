@@ -46,38 +46,58 @@
 
 - (BOOL)supportsSecureEnclaveKeychainItems;
 {
-#if TARGET_IPHONE_SIMULATOR
-    return NO;
-#else
+#if TARGET_OS_IPHONE && __IPHONE_8_0 && !TARGET_IPHONE_SIMULATOR
     return (&kSecAttrAccessControl != NULL && &kSecUseOperationPrompt != NULL);
+#else
+    return NO;
 #endif
 }
 
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt
 {
+#if TARGET_OS_IPHONE && __IPHONE_8_0
     return [self setObject:value forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
+#else
+    return NO;
+#endif
 }
 
 - (NSData *)objectForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
 {
+#if TARGET_OS_IPHONE && __IPHONE_8_0
     return [self objectForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
+#else
+    return nil;
+#endif
 }
 
 - (BOOL)setString:(NSString *)string forKey:(NSString *)key userPrompt:(NSString *)userPrompt;
 {
+#if TARGET_OS_IPHONE && __IPHONE_8_0
     return [self setString:string forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
+#else
+    return NO;
+#endif
 }
 
 - (NSString *)stringForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
 {
+#if TARGET_OS_IPHONE && __IPHONE_8_0
     return [self stringForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
+#else
+    return nil;
+#endif
 }
 
 - (BOOL)containsObjectForKey:(NSString *)key;
 {
+#if TARGET_OS_IPHONE && __IPHONE_8_0
     OSStatus status = [self containsObjectForKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
     BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed);
     return keyAlreadyInKeychain;
+#else
+    return NO;
+#endif
 }
 
 - (NSSet *)allKeys;
@@ -89,10 +109,14 @@
 
 - (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
 {
+#if TARGET_OS_IPHONE && __IPHONE_8_0
     NSMutableDictionary *mutableBaseQuery = [super mutableBaseQueryWithIdentifier:identifier initializer:initializer accessibility:accessibility];
     mutableBaseQuery[(__bridge id)kSecAttrAccessControl] = (__bridge id)SecAccessControlCreateWithFlags(NULL, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlUserPresence, NULL);
     
     return mutableBaseQuery;
+#else
+    return nil;
+#endif
 }
 
 @end
