@@ -19,7 +19,7 @@
 //
 
 /**
- Throws a caught exception and returns "return_statement" if "condition" is false.
+ Throws a caught exception and returns "result" if "condition" is false.
  
  Example:
  VALCheckCondition(isProperlyConfigured, nil, @"Foo was not properly configured.");
@@ -30,7 +30,7 @@
         const BOOL conditionResult = !!(condition); \
         if (!conditionResult) { \
             @try { \
-                NSAssert(conditionResult, (desc), ##__VA_ARGS__); \
+                [NSException raise:@"Valet API Misuse" format:(desc), ##__VA_ARGS__]; \
             } @catch (NSException *exception) { \
                 NSLog(@"Valet API Misuse: %s %@", __PRETTY_FUNCTION__, exception.reason); \
                 return result;\
