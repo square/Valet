@@ -70,7 +70,7 @@
 
 - (NSSet *)allKeys;
 {
-    VALCheckCondition(NO, nil, @"All keys is not supported on %@", NSStringFromClass([self class]));
+    VALCheckCondition(NO, nil, @"%s is not supported on %@", __PRETTY_FUNCTION__, NSStringFromClass([self class]));
 }
 
 #pragma mark - Protected Methods
