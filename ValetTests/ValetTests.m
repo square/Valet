@@ -74,7 +74,7 @@
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"" accessibility:VALAccessibleAlways]);
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"test" accessibility:0]);
     XCTAssertNil([[VALSynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly]);
-    XCTAssertNil([[VALSecureElementValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenUnlockedThisDeviceOnly]);
+    XCTAssertNil([[VALSecureEnclaveValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenUnlockedThisDeviceOnly]);
 }
 
 - (void)test_canAccessKeychain;

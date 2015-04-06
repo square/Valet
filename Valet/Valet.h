@@ -7,5 +7,5 @@
 //
 
 #import <Valet/VALValet.h>
-#import <Valet/VALSecureElementValet.h>
+#import <Valet/VALSecureEnclaveValet.h>
 #import <Valet/VALSynchronizableValet.h>
