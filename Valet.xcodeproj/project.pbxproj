@@ -56,7 +56,6 @@
 		EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALSecureEnclaveValet.h; sourceTree = "<group>"; };
 		EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALSecureEnclaveValet.m; sourceTree = "<group>"; };
 		EAEEAC231AB7BA0C00EDB6E3 /* VALValet_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALValet_Protected.h; sourceTree = "<group>"; };
-		EAEEAC241AB7BA7800EDB6E3 /* Valet-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Valet-Prefix.pch"; path = "Other/Valet-Prefix.pch"; sourceTree = "<group>"; };
 		EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ValetDefines.h; path = Other/ValetDefines.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -133,7 +132,6 @@
 		EAEEAC221AB7B85D00EDB6E3 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				EAEEAC241AB7BA7800EDB6E3 /* Valet-Prefix.pch */,
 				EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */,
 			);
 			name = Other;
@@ -346,7 +344,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "Other/Valet-Prefix.pch";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -360,7 +357,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "Other/Valet-Prefix.pch";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

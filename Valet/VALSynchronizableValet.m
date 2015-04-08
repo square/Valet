@@ -21,6 +21,8 @@
 #import "VALSynchronizableValet.h"
 #import "VALValet_Protected.h"
 
+#import "ValetDefines.h"
+
 
 @implementation VALSynchronizableValet
 

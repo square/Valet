@@ -21,6 +21,8 @@
 #import "VALSecureEnclaveValet.h"
 #import "VALValet_Protected.h"
 
+#import "ValetDefines.h"
+
 
 @implementation VALSecureEnclaveValet
 

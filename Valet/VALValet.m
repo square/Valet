@@ -21,6 +21,8 @@
 #import "VALValet.h"
 #import "VALValet_Protected.h"
 
+#import "ValetDefines.h"
+
 
 NSString * const VALMigrationErrorDomain = @"VALMigrationErrorDomain";
 
