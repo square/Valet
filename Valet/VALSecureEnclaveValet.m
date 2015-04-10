@@ -26,27 +26,9 @@
 
 @implementation VALSecureEnclaveValet
 
-#pragma mark - Initialization
+#pragma mark - Class Methods
 
-- (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
-{
-    VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
-    VALCheckCondition([self supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
-    
-    return [super initWithIdentifier:identifier accessibility:accessibility];
-}
-
-- (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
-{
-    VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
-    VALCheckCondition([self supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
-    
-    return [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
-}
-
-#pragma mark - Public Methods
-
-- (BOOL)supportsSecureEnclaveKeychainItems;
++ (BOOL)supportsSecureEnclaveKeychainItems;
 {
 #if TARGET_OS_IPHONE && __IPHONE_8_0 && !TARGET_IPHONE_SIMULATOR
     return (&kSecAttrAccessControl != NULL && &kSecUseOperationPrompt != NULL);
@@ -54,6 +36,55 @@
     return NO;
 #endif
 }
+
+#pragma mark - Initialization
+
+- (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
+{
+    VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
+    VALCheckCondition([[self class] supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
+    
+    return [super initWithIdentifier:identifier accessibility:accessibility];
+}
+
+- (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
+{
+    VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
+    VALCheckCondition([[self class] supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
+    
+    return [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
+}
+
+#pragma mark - VALValet
+
+- (BOOL)containsObjectForKey:(NSString *)key;
+{
+#if TARGET_OS_IPHONE && __IPHONE_8_0
+    OSStatus status = [self containsObjectForKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
+    BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed);
+    return keyAlreadyInKeychain;
+#else
+    return NO;
+#endif
+}
+
+- (NSSet *)allKeys;
+{
+    VALCheckCondition(NO, nil, @"%s is not supported on %@", __PRETTY_FUNCTION__, NSStringFromClass([self class]));
+}
+
+- (NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
+{
+#if TARGET_OS_IPHONE && __IPHONE_8_0
+    if ([[self class] supportsSecureEnclaveKeychainItems]) {
+        VALCheckCondition(secItemQuery[(__bridge id)kSecUseOperationPrompt] == nil, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"kSecUseOperationPrompt is not supported in a migration query. Keychain items can not be migrated en-mass from the Secure Enclave.");
+    }
+#endif
+    
+    return [super migrateObjectsMatchingQuery:secItemQuery removeOnCompletion:remove];
+}
+
+#pragma mark - Public Methods
 
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt
 {
@@ -89,22 +120,6 @@
 #else
     return nil;
 #endif
-}
-
-- (BOOL)containsObjectForKey:(NSString *)key;
-{
-#if TARGET_OS_IPHONE && __IPHONE_8_0
-    OSStatus status = [self containsObjectForKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
-    BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed);
-    return keyAlreadyInKeychain;
-#else
-    return NO;
-#endif
-}
-
-- (NSSet *)allKeys;
-{
-    VALCheckCondition(NO, nil, @"%s is not supported on %@", __PRETTY_FUNCTION__, NSStringFromClass([self class]));
 }
 
 #pragma mark - Protected Methods

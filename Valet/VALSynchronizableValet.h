@@ -25,6 +25,6 @@
 @interface VALSynchronizableValet : VALValet
 
 /// Returns YES if iCloud syncronizable keychain is supported on the current iOS version (7.0.3 and later).
-- (BOOL)supportsSynchronizableKeychainItems;
++ (BOOL)supportsSynchronizableKeychainItems;
 
 @end
