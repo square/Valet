@@ -356,7 +356,10 @@
     XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnAttributes : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
     XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
     XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecUseOperationPrompt : @"Migration Prompt" } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
+    
+    if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
+        XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecUseOperationPrompt : @"Migration Prompt" } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
+    }
 }
 
 - (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_bailsOutIfConflictExistsInMigrationQueryResult;

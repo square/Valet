@@ -25,7 +25,7 @@
 @interface VALSecureEnclaveValet : VALValet
 
 /// Retuns YES if Secure Enclave storage is supported on the current iOS version (8.0 and later).
-- (BOOL)supportsSecureEnclaveKeychainItems;
++ (BOOL)supportsSecureEnclaveKeychainItems;
 
 /// Convenience method for inserting data into the keychain with a user prompt. The userPrompt is displayed to the user in Apple's Touch ID and passcode entry UI when updating a value.
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt __attribute__((nonnull(1,2)));

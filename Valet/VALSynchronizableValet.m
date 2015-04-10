@@ -26,12 +26,23 @@
 
 @implementation VALSynchronizableValet
 
+#pragma mark - Class Methods
+
++ (BOOL)supportsSynchronizableKeychainItems;
+{
+#if TARGET_OS_IPHONE && (__IPHONE_8_2 || (__IPHONE_7_0 && !TARGET_IPHONE_SIMULATOR))
+    return (&kSecAttrSynchronizable != NULL && &kSecAttrSynchronizableAny != NULL);
+#else
+    return NO;
+#endif
+}
+
 #pragma mark - Initialization
 
 - (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(accessibility == VALAccessibleWhenUnlocked || accessibility == VALAccessibleAfterFirstUnlock || accessibility == VALAccessibleAlways, nil, @"Accessibility must not be scoped to this device");
-    VALCheckCondition([self supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
+    VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
     
     return [super initWithIdentifier:identifier accessibility:accessibility];
 }
@@ -39,7 +50,7 @@
 - (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(accessibility == VALAccessibleWhenUnlocked || accessibility == VALAccessibleAfterFirstUnlock || accessibility == VALAccessibleAlways, nil, @"Accessibility must not be scoped to this device");
-    VALCheckCondition([self supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
+    VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
     
     return [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
 }
@@ -55,17 +66,6 @@
 #endif
     
     return mutableBaseQuery;
-}
-
-#pragma mark - Public Methods
-
-- (BOOL)supportsSynchronizableKeychainItems;
-{
-#if TARGET_OS_IPHONE && (__IPHONE_8_2 || (__IPHONE_7_0 && !TARGET_IPHONE_SIMULATOR))
-    return (&kSecAttrSynchronizable != NULL && &kSecAttrSynchronizableAny != NULL);
-#else
-    return NO;
-#endif
 }
 
 @end
