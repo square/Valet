@@ -30,11 +30,14 @@
 
 + (BOOL)supportsSynchronizableKeychainItems;
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
 #if TARGET_OS_IPHONE && (__IPHONE_8_2 || (__IPHONE_7_0 && !TARGET_IPHONE_SIMULATOR))
     return (&kSecAttrSynchronizable != NULL && &kSecAttrSynchronizableAny != NULL);
 #else
     return NO;
 #endif
+#pragma clang diagnostic pop
 }
 
 #pragma mark - Initialization

@@ -30,11 +30,14 @@
 
 + (BOOL)supportsSecureEnclaveKeychainItems;
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
 #if TARGET_OS_IPHONE && __IPHONE_8_0 && !TARGET_IPHONE_SIMULATOR
     return (&kSecAttrAccessControl != NULL && &kSecUseOperationPrompt != NULL);
 #else
     return NO;
 #endif
+#pragma clang diagnostic pop
 }
 
 #pragma mark - Initialization
