@@ -18,10 +18,24 @@
 		EAEEAC2A1AB7BD4800EDB6E3 /* VALValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC181AB7B83300EDB6E3 /* VALValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAEEAC2B1AB7BD7400EDB6E3 /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAEEAC2C1AB7BD7900EDB6E3 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAF894791B053E0500EDAD6C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF894781B053E0500EDAD6C /* main.m */; };
+		EAF8947C1B053E0500EDAD6C /* ValetSecureElementTestAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF8947B1B053E0500EDAD6C /* ValetSecureElementTestAppDelegate.m */; };
+		EAF8947F1B053E0500EDAD6C /* ValetSecureElementTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF8947E1B053E0500EDAD6C /* ValetSecureElementTestViewController.m */; };
+		EAF894841B053E0500EDAD6C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAF894831B053E0500EDAD6C /* Images.xcassets */; };
+		EAF8949E1B05420200EDAD6C /* ValetSecureElementTestMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EAF8949C1B05420200EDAD6C /* ValetSecureElementTestMain.storyboard */; };
+		EAF894A11B05420800EDAD6C /* ValetSecureElementTestLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAF8949F1B05420700EDAD6C /* ValetSecureElementTestLaunchScreen.xib */; };
+		EAF894A31B05439A00EDAD6C /* libValet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1E1F831A8C46080067C991 /* libValet.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		EA1E1F901A8C46090067C991 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EA1E1F821A8C46080067C991;
+			remoteInfo = Valet;
+		};
+		EAF8949A1B053FB300EDAD6C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
 			proxyType = 1;
@@ -57,6 +71,16 @@
 		EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALSecureEnclaveValet.m; sourceTree = "<group>"; };
 		EAEEAC231AB7BA0C00EDB6E3 /* VALValet_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALValet_Protected.h; sourceTree = "<group>"; };
 		EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ValetDefines.h; path = Other/ValetDefines.h; sourceTree = "<group>"; };
+		EAF894741B053E0500EDAD6C /* ValetTouchIDTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ValetTouchIDTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EAF894771B053E0500EDAD6C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EAF894781B053E0500EDAD6C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		EAF8947A1B053E0500EDAD6C /* ValetSecureElementTestAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ValetSecureElementTestAppDelegate.h; sourceTree = "<group>"; };
+		EAF8947B1B053E0500EDAD6C /* ValetSecureElementTestAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ValetSecureElementTestAppDelegate.m; sourceTree = "<group>"; };
+		EAF8947D1B053E0500EDAD6C /* ValetSecureElementTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ValetSecureElementTestViewController.h; sourceTree = "<group>"; };
+		EAF8947E1B053E0500EDAD6C /* ValetSecureElementTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ValetSecureElementTestViewController.m; sourceTree = "<group>"; };
+		EAF894831B053E0500EDAD6C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		EAF8949D1B05420200EDAD6C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ValetSecureElementTestMain.storyboard; sourceTree = "<group>"; };
+		EAF894A01B05420700EDAD6C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ValetSecureElementTestLaunchScreen.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +99,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EAF894711B053E0400EDAD6C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAF894A31B05439A00EDAD6C /* libValet.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -84,6 +116,7 @@
 				EA1E1F851A8C46080067C991 /* Valet */,
 				EA1E1F921A8C46090067C991 /* ValetTests */,
 				EAEEAC221AB7B85D00EDB6E3 /* Other */,
+				EAF894751B053E0500EDAD6C /* ValetTouchIDTest */,
 				EA1E1F841A8C46080067C991 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -93,6 +126,7 @@
 			children = (
 				EA1E1F831A8C46080067C991 /* libValet.a */,
 				EA1E1F8E1A8C46090067C991 /* ValetTests.xctest */,
+				EAF894741B053E0500EDAD6C /* ValetTouchIDTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,6 +169,30 @@
 				EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */,
 			);
 			name = Other;
+			sourceTree = "<group>";
+		};
+		EAF894751B053E0500EDAD6C /* ValetTouchIDTest */ = {
+			isa = PBXGroup;
+			children = (
+				EAF8947A1B053E0500EDAD6C /* ValetSecureElementTestAppDelegate.h */,
+				EAF8947B1B053E0500EDAD6C /* ValetSecureElementTestAppDelegate.m */,
+				EAF8947D1B053E0500EDAD6C /* ValetSecureElementTestViewController.h */,
+				EAF8947E1B053E0500EDAD6C /* ValetSecureElementTestViewController.m */,
+				EAF8949C1B05420200EDAD6C /* ValetSecureElementTestMain.storyboard */,
+				EAF894831B053E0500EDAD6C /* Images.xcassets */,
+				EAF8949F1B05420700EDAD6C /* ValetSecureElementTestLaunchScreen.xib */,
+				EAF894761B053E0500EDAD6C /* Supporting Files */,
+			);
+			path = ValetTouchIDTest;
+			sourceTree = "<group>";
+		};
+		EAF894761B053E0500EDAD6C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EAF894771B053E0500EDAD6C /* Info.plist */,
+				EAF894781B053E0500EDAD6C /* main.m */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -191,6 +249,24 @@
 			productReference = EA1E1F8E1A8C46090067C991 /* ValetTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		EAF894731B053E0400EDAD6C /* ValetTouchIDTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EAF894941B053E0700EDAD6C /* Build configuration list for PBXNativeTarget "ValetTouchIDTest" */;
+			buildPhases = (
+				EAF894701B053E0400EDAD6C /* Sources */,
+				EAF894711B053E0400EDAD6C /* Frameworks */,
+				EAF894721B053E0400EDAD6C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EAF8949B1B053FB300EDAD6C /* PBXTargetDependency */,
+			);
+			name = ValetTouchIDTest;
+			productName = ValetTouchIDTest;
+			productReference = EAF894741B053E0500EDAD6C /* ValetTouchIDTest.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -206,6 +282,9 @@
 					EA1E1F8D1A8C46090067C991 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
+					EAF894731B053E0400EDAD6C = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
 				};
 			};
 			buildConfigurationList = EA1E1F7E1A8C46080067C991 /* Build configuration list for PBXProject "Valet" */;
@@ -214,6 +293,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = EA1E1F7A1A8C46080067C991;
 			productRefGroup = EA1E1F841A8C46080067C991 /* Products */;
@@ -222,6 +302,7 @@
 			targets = (
 				EA1E1F821A8C46080067C991 /* Valet */,
 				EA1E1F8D1A8C46090067C991 /* ValetTests */,
+				EAF894731B053E0400EDAD6C /* ValetTouchIDTest */,
 			);
 		};
 /* End PBXProject section */
@@ -231,6 +312,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EAF894721B053E0400EDAD6C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAF894A11B05420800EDAD6C /* ValetSecureElementTestLaunchScreen.xib in Resources */,
+				EAF8949E1B05420200EDAD6C /* ValetSecureElementTestMain.storyboard in Resources */,
+				EAF894841B053E0500EDAD6C /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +346,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EAF894701B053E0400EDAD6C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAF8947F1B053E0500EDAD6C /* ValetSecureElementTestViewController.m in Sources */,
+				EAF8947C1B053E0500EDAD6C /* ValetSecureElementTestAppDelegate.m in Sources */,
+				EAF894791B053E0500EDAD6C /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -263,7 +364,31 @@
 			target = EA1E1F821A8C46080067C991 /* Valet */;
 			targetProxy = EA1E1F901A8C46090067C991 /* PBXContainerItemProxy */;
 		};
+		EAF8949B1B053FB300EDAD6C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EA1E1F821A8C46080067C991 /* Valet */;
+			targetProxy = EAF8949A1B053FB300EDAD6C /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		EAF8949C1B05420200EDAD6C /* ValetSecureElementTestMain.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EAF8949D1B05420200EDAD6C /* Base */,
+			);
+			name = ValetSecureElementTestMain.storyboard;
+			sourceTree = "<group>";
+		};
+		EAF8949F1B05420700EDAD6C /* ValetSecureElementTestLaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EAF894A01B05420700EDAD6C /* Base */,
+			);
+			name = ValetSecureElementTestLaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		EA1E1F951A8C46090067C991 /* Debug */ = {
@@ -394,6 +519,39 @@
 			};
 			name = Release;
 		};
+		EAF894951B053E0700EDAD6C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = ValetTouchIDTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		EAF894961B053E0700EDAD6C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = ValetTouchIDTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -423,6 +581,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		EAF894941B053E0700EDAD6C /* Build configuration list for PBXNativeTarget "ValetTouchIDTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EAF894951B053E0700EDAD6C /* Debug */,
+				EAF894961B053E0700EDAD6C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

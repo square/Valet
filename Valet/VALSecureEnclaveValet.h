@@ -27,6 +27,12 @@
 /// Retuns YES if Secure Enclave storage is supported on the current iOS version (8.0 and later).
 + (BOOL)supportsSecureEnclaveKeychainItems;
 
+/// Creates a Valet that reads/writes Secure Enclave keychain elements.
+- (instancetype)initWithIdentifier:(NSString *)identifier __attribute__((nonnull(1)));
+
+/// Creates a Valet that reads/writes Secure Enclave keychain elements that can be shared across applications written by the same development team. The sharedAccessGroupIdentifier must correspond with the value for keychain-access-groups in your Entitlements file.
+- (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier __attribute__((nonnull(1)));
+
 /// Convenience method for inserting data into the keychain with a user prompt. The userPrompt is displayed to the user in Apple's Touch ID and passcode entry UI when updating a value.
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt __attribute__((nonnull(1,2)));
 /// Convenience method for retreiving data from the keychain with a user prompt. The userPrompt is displayed to the user in Apple's Touch ID and passcode entry UI.

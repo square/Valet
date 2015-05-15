@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Valet Secure Element Test View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="ValetSecureElementTestViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
+                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qA9-Wb-ZwB">
+                                <rect key="frame" x="239" y="40" width="122" height="30"/>
+                                <state key="normal" title="Set / Update Item">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="setOrUpdateItem:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="b2V-qJ-PaJ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QAP-hZ-KqD">
+                                <rect key="frame" x="254" y="116" width="91" height="30"/>
+                                <state key="normal" title="Remove Item">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="removeItem:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Aqe-hG-4W2"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZQk-O3-Rdt">
+                                <rect key="frame" x="270" y="78" width="59" height="30"/>
+                                <state key="normal" title="Get Item">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="getItem:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="acb-zS-FOp"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ld-mY-LH3">
+                                <rect key="frame" x="16" y="162" width="568" height="438"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qA9-Wb-ZwB" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="20" id="5HK-3b-R62"/>
+                            <constraint firstItem="ZQk-O3-Rdt" firstAttribute="top" secondItem="qA9-Wb-ZwB" secondAttribute="bottom" constant="8" id="Eev-yE-RFc"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="2ld-mY-LH3" secondAttribute="bottom" id="PuW-TG-ua5"/>
+                            <constraint firstAttribute="centerX" secondItem="qA9-Wb-ZwB" secondAttribute="centerX" id="Sbp-WM-Dnp"/>
+                            <constraint firstItem="2ld-mY-LH3" firstAttribute="top" secondItem="QAP-hZ-KqD" secondAttribute="bottom" constant="16" id="T5y-Ub-0ZH"/>
+                            <constraint firstItem="ZQk-O3-Rdt" firstAttribute="centerX" secondItem="QAP-hZ-KqD" secondAttribute="centerX" id="VVo-AP-RdJ"/>
+                            <constraint firstItem="QAP-hZ-KqD" firstAttribute="top" secondItem="ZQk-O3-Rdt" secondAttribute="bottom" constant="8" id="gj0-GH-t1C"/>
+                            <constraint firstItem="2ld-mY-LH3" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="qBp-Fw-ZPV"/>
+                            <constraint firstItem="ZQk-O3-Rdt" firstAttribute="centerX" secondItem="qA9-Wb-ZwB" secondAttribute="centerX" id="rVy-u4-o0t"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="2ld-mY-LH3" secondAttribute="trailing" id="wwD-yW-UdN"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="textView" destination="2ld-mY-LH3" id="9nm-d5-K77"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>

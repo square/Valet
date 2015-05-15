@@ -42,12 +42,22 @@
 
 #pragma mark - Initialization
 
+- (instancetype)initWithIdentifier:(NSString *)identifier;
+{
+    return [self initWithIdentifier:identifier accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly];
+}
+
 - (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(accessibility == VALAccessibleWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibleWhenPasscodeSetThisDeviceOnly");
     VALCheckCondition([[self class] supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
     
     return [super initWithIdentifier:identifier accessibility:accessibility];
+}
+
+- (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier;
+{
+    return [self initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly];
 }
 
 - (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
@@ -131,7 +141,12 @@
 {
 #if TARGET_OS_IPHONE && __IPHONE_8_0
     NSMutableDictionary *mutableBaseQuery = [super mutableBaseQueryWithIdentifier:identifier initializer:initializer accessibility:accessibility];
+    
+    // Add the access control, which opts us in to Secure Element storage.
     mutableBaseQuery[(__bridge id)kSecAttrAccessControl] = (__bridge id)SecAccessControlCreateWithFlags(NULL, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlUserPresence, NULL);
+    
+    // kSecAttrAccessControl and kSecAttrAccessible are mutually exclusive, so remove kSecAttrAccessible from our query.
+    [mutableBaseQuery removeObjectForKey:(__bridge id)kSecAttrAccessible];
     
     return mutableBaseQuery;
 #else
