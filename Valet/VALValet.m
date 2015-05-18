@@ -50,7 +50,11 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
 
 @interface VALValet ()
 
+/// Stores the root query to be used in all SecItem queries.
 @property (copy, readonly) NSDictionary *baseQuery;
+
+/// Set and Remove must be atomic operations relative to one another to ensure that SecItemUpdate is never called on an item that has been removed from the keychain.
+@property (copy, readonly) NSLock *lockForSetAndRemoveOperations;
 
 @end
 
@@ -70,6 +74,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         _identifier = [identifier copy];
         _sharedAcrossApplications = NO;
         _accessibility = accessibility;
+        _lockForSetAndRemoveOperations = [NSLock new];
     }
     
     return self;
@@ -89,6 +94,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         _identifier = [sharedAccessGroupIdentifier copy];
         _sharedAcrossApplications = YES;
         _accessibility = accessibility;
+        _lockForSetAndRemoveOperations = [NSLock new];
     }
     
     return self;
@@ -286,17 +292,21 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         [query addEntriesFromDictionary:options];
     }
     
-    if ([self containsObjectForKey:key]) {
-        // The item already exists, so just update it.
-        status = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)@{ (__bridge id)kSecValueData : value });
-        
-    } else {
-        // No previous item found, add the new one.
-        NSMutableDictionary *keychainData = [query mutableCopy];
-        [keychainData addEntriesFromDictionary:@{ (__bridge id)kSecValueData : value }];
-        
-        status = SecItemAdd((__bridge CFDictionaryRef)keychainData, NULL);
+    [self.lockForSetAndRemoveOperations lock];
+    {
+        if ([self containsObjectForKey:key]) {
+            // The item already exists, so just update it.
+            status = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)@{ (__bridge id)kSecValueData : value });
+            
+        } else {
+            // No previous item found, add the new one.
+            NSMutableDictionary *keychainData = [query mutableCopy];
+            [keychainData addEntriesFromDictionary:@{ (__bridge id)kSecValueData : value }];
+            
+            status = SecItemAdd((__bridge CFDictionaryRef)keychainData, NULL);
+        }
     }
+    [self.lockForSetAndRemoveOperations unlock];
     
     return (status == errSecSuccess);
 }
@@ -399,7 +409,13 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         [query addEntriesFromDictionary:options];
     }
     
-    OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
+    OSStatus status = errSecUnimplemented;
+    [self.lockForSetAndRemoveOperations lock];
+    {
+        status = SecItemDelete((__bridge CFDictionaryRef)query);
+    }
+    [self.lockForSetAndRemoveOperations unlock];
+    
     // We succeeded as long as we can confirm that the item is not in the keychain.
     return (status != errSecInteractionNotAllowed);
 }
