@@ -47,10 +47,79 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     }
 }
 
+/// We can't be sure that SecItem calls are atomic, so ensure atomicity ourselves.
+void VALAtomicSecItemLock(dispatch_block_t block)
+{
+    VALCheckCondition(block != NULL, , @"Must pass in a block");
+    
+    static NSLock *sSecItemLock = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sSecItemLock = [NSLock new];
+    });
+    
+    [sSecItemLock lock];
+    block();
+    [sSecItemLock unlock];
+}
+
+OSStatus VALAtomicSecItemCopyMatching(CFDictionaryRef query, CFTypeRef *result)
+{
+    VALCheckCondition(CFDictionaryGetCount(query) > 0, errSecParam, @"Must provide a query with at least one item");
+    
+    __block OSStatus status = errSecNotAvailable;
+    VALAtomicSecItemLock(^{
+        status = SecItemCopyMatching(query, result);
+    });
+    
+    return status;
+}
+
+OSStatus VALAtomicSecItemAdd(CFDictionaryRef attributes, CFTypeRef *result)
+{
+    VALCheckCondition(CFDictionaryGetCount(attributes) > 0, errSecParam, @"Must provide attributes with at least one item");
+    
+    __block OSStatus status = errSecNotAvailable;
+    VALAtomicSecItemLock(^{
+        status = SecItemAdd(attributes, result);
+    });
+    
+    return status;
+}
+
+OSStatus VALAtomicSecItemUpdate(CFDictionaryRef query, CFDictionaryRef attributesToUpdate)
+{
+    VALCheckCondition(CFDictionaryGetCount(query) > 0, errSecParam, @"Must provide a query with at least one item");
+    VALCheckCondition(CFDictionaryGetCount(attributesToUpdate) > 0, errSecParam, @"Must provide a attributesToUpdate with at least one item");
+    
+    __block OSStatus status = errSecNotAvailable;
+    VALAtomicSecItemLock(^{
+        status = SecItemUpdate(query, attributesToUpdate);
+    });
+    
+    return status;
+}
+
+OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
+{
+    VALCheckCondition(CFDictionaryGetCount(query) > 0, errSecParam, @"Must provide a query with at least one item");
+    
+    __block OSStatus status = errSecNotAvailable;
+    VALAtomicSecItemLock(^{
+        status = SecItemDelete(query);
+    });
+    
+    return status;
+}
+
 
 @interface VALValet ()
 
+/// Stores the root query to be used in all SecItem queries.
 @property (copy, readonly) NSDictionary *baseQuery;
+
+/// Set and Remove must be atomic operations relative to one another to ensure that SecItemUpdate is never called on an item that has been removed from the keychain.
+@property (copy, readonly) NSLock *lockForSetAndRemoveOperations;
 
 @end
 
@@ -70,6 +139,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         _identifier = [identifier copy];
         _sharedAcrossApplications = NO;
         _accessibility = accessibility;
+        _lockForSetAndRemoveOperations = [NSLock new];
     }
     
     return self;
@@ -89,6 +159,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         _identifier = [sharedAccessGroupIdentifier copy];
         _sharedAcrossApplications = YES;
         _accessibility = accessibility;
+        _lockForSetAndRemoveOperations = [NSLock new];
     }
     
     return self;
@@ -199,7 +270,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     CFTypeRef outTypeRef = NULL;
     NSDictionary *queryResult = nil;
     
-    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
+    OSStatus status = VALAtomicSecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
     queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
     if (status == errSecItemNotFound) {
         return [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationNoItemsToMigrateFoundError userInfo:nil];;
@@ -241,7 +312,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     
     // Remove data if requested.
     if (remove) {
-        status = SecItemDelete((__bridge CFDictionaryRef)secItemQuery);
+        status = VALAtomicSecItemDelete((__bridge CFDictionaryRef)secItemQuery);
         if (status != errSecSuccess) {
             // Something went wrong. Remove all migrated items.
             for (NSString *key in alreadyMigratedKeys) {
@@ -279,24 +350,28 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     VALCheckCondition(key.length > 0, NO, @"Can not set a value with an empty key.");
     VALCheckCondition(value.length > 0, NO, @"Can not set an empty value.");
     
-    OSStatus status = errSecUnimplemented;
     NSMutableDictionary *query = [self.baseQuery mutableCopy];
     [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:key]];
     if (options.count > 0) {
         [query addEntriesFromDictionary:options];
     }
     
-    if ([self containsObjectForKey:key]) {
-        // The item already exists, so just update it.
-        status = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)@{ (__bridge id)kSecValueData : value });
-        
-    } else {
-        // No previous item found, add the new one.
-        NSMutableDictionary *keychainData = [query mutableCopy];
-        [keychainData addEntriesFromDictionary:@{ (__bridge id)kSecValueData : value }];
-        
-        status = SecItemAdd((__bridge CFDictionaryRef)keychainData, NULL);
+    OSStatus status = errSecNotAvailable;
+    [self.lockForSetAndRemoveOperations lock];
+    {
+        if ([self containsObjectForKey:key]) {
+            // The item already exists, so just update it.
+            status = VALAtomicSecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)@{ (__bridge id)kSecValueData : value });
+            
+        } else {
+            // No previous item found, add the new one.
+            NSMutableDictionary *keychainData = [query mutableCopy];
+            [keychainData addEntriesFromDictionary:@{ (__bridge id)kSecValueData : value }];
+            
+            status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)keychainData, NULL);
+        }
     }
+    [self.lockForSetAndRemoveOperations unlock];
     
     return (status == errSecSuccess);
 }
@@ -314,7 +389,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     
     CFTypeRef outTypeRef = NULL;
     
-    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
+    OSStatus status = VALAtomicSecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
     NSData *value = (__bridge_transfer NSData *)outTypeRef;
     return (status == errSecSuccess) ? value : nil;
 }
@@ -350,7 +425,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         [query addEntriesFromDictionary:options];
     }
     
-    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, NULL);
+    OSStatus status = VALAtomicSecItemCopyMatching((__bridge CFDictionaryRef)query, NULL);
     return status;
 }
 
@@ -367,7 +442,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     CFTypeRef outTypeRef = NULL;
     NSDictionary *queryResult = nil;
     
-    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
+    OSStatus status = VALAtomicSecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
     queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
     if (status == errSecSuccess) {
         if ([queryResult isKindOfClass:[NSArray class]]) {
@@ -399,7 +474,13 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
         [query addEntriesFromDictionary:options];
     }
     
-    OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
+    OSStatus status = errSecNotAvailable;
+    [self.lockForSetAndRemoveOperations lock];
+    {
+        status = VALAtomicSecItemDelete((__bridge CFDictionaryRef)query);
+    }
+    [self.lockForSetAndRemoveOperations unlock];
+    
     // We succeeded as long as we can confirm that the item is not in the keychain.
     return (status != errSecInteractionNotAllowed);
 }
@@ -427,11 +508,11 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     CFTypeRef outTypeRef = NULL;
     NSDictionary *queryResult = nil;
     
-    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
+    OSStatus status = VALAtomicSecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
     queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
     
     if (status == errSecItemNotFound) {
-        status = SecItemAdd((__bridge CFDictionaryRef)query, &outTypeRef);
+        status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)query, &outTypeRef);
         queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
     }
     

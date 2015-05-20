@@ -196,6 +196,36 @@
     XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
 }
 
+- (void)test_setStringForKey_successfullyUpdatesWhenRemoveObjectForKeyIsCalledConcurrently;
+{
+    dispatch_queue_t setStringQueue = dispatch_queue_create("Set String Queue", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_queue_t removeObjectQueue = dispatch_queue_create("Remove Object Queue", DISPATCH_QUEUE_CONCURRENT);
+    
+    for (NSUInteger testCount = 0; testCount < 50; testCount++) {
+        dispatch_async(setStringQueue, ^{
+            XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+        });
+        
+        dispatch_async(removeObjectQueue, ^{
+            XCTAssertTrue([self.valet removeObjectForKey:self.key]);
+        });
+    }
+    
+    // Now that we've enqueued 50 concurrent setString:forKey: and removeObjectForKey: calls, wait for them all to finish.
+    XCTestExpectation *expectationSetStringQueue = [self expectationWithDescription:@"Set String Queue"];
+    XCTestExpectation *expectationRemoveObjectQueue = [self expectationWithDescription:@"Remove Object Queue"];
+    
+    dispatch_barrier_async(setStringQueue, ^{
+        [expectationSetStringQueue fulfill];
+    });
+    
+    dispatch_barrier_async(removeObjectQueue, ^{
+        [expectationRemoveObjectQueue fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+}
+
 - (void)test_containsObjectForKey_returnsYESWhenKeyExists;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
