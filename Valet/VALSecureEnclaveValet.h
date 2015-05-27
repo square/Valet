@@ -46,6 +46,6 @@
 - (NSString *)stringForKey:(NSString *)key userPrompt:(NSString *)userPrompt __attribute__((nonnull(1)));
 
 /// This method is not supported on VALSecureEnclaveValet.
-- (NSSet *)allKeys;
+- (NSSet *)allKeys __attribute__((unavailable("VALSecureEnclaveValet does not support -allKeys")));
 
 @end
