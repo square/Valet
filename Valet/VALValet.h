@@ -76,6 +76,9 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
 @property (readonly, getter=isSharedAcrossApplications) BOOL sharedAcrossApplications;
 @property (readonly) VALAccessibility accessibility;
 
+/// Returns YES if otherValet reads from and writes to the same sandbox within keychain as the receiver.
+- (BOOL)isEqualToValet:(VALValet *)otherValet;
+
 /// Checks whether the keychain is currently accessible by writing a value to the keychain and then reading it back out.
 - (BOOL)canAccessKeychain;
 

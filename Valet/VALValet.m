@@ -170,7 +170,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 - (BOOL)isEqual:(id)object;
 {
     VALValet *otherValet = (VALValet *)object;
-    return [self isMemberOfClass:[object class]] && [self.baseQuery isEqualToDictionary:otherValet.baseQuery];
+    return [otherValet isKindOfClass:[VALValet class]] && [self isEqualToValet:otherValet];
 }
 
 - (NSUInteger)hash;
@@ -192,6 +192,11 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 }
 
 #pragma mark - Public Methods
+
+- (BOOL)isEqualToValet:(VALValet *)otherValet;
+{
+    return [self.baseQuery isEqualToDictionary:otherValet.baseQuery];
+}
 
 - (BOOL)canAccessKeychain;
 {
