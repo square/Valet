@@ -20,7 +20,7 @@
 
 #import <XCTest/XCTest.h>
 
-#import "Valet.h"
+#import <Valet/Valet.h>
 
 
 @interface VALValet (Testing)
