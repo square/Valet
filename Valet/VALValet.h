@@ -43,7 +43,7 @@ extern NSString *const VALMigrationErrorDomain;
 
 typedef NS_ENUM(NSUInteger, VALMigrationError) {
     /// Migration failed because the keychain query was not valid.
-    VAlMigrationInvalidQueryError = 1,
+    VALMigrationInvalidQueryError = 1,
     /// Migration failed because no items to migrate were found.
     VALMigrationNoItemsToMigrateFoundError,
     /// Migration failed because the keychain could not be read.
@@ -51,15 +51,15 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
     /// Migraiton failed because a key in the query result could not be read.
     VALMigrationKeyInQueryResultInvalidError,
     /// Migraiton failed because some data in the query result could not be read.
-    VAlMigrationDataInQueryResultInvalidError,
+    VALMigrationDataInQueryResultInvalidError,
     /// Migraiton failed because two keys with the same value were found in the keychain.
-    VAlMigrationDuplicateKeyInQueryResultError,
+    VALMigrationDuplicateKeyInQueryResultError,
     /// Migraiton failed because a key in the keychain duplicates a key already managed by Valet.
-    VAlMigrationKeyInQueryResultAlreadyExistsInValetError,
+    VALMigrationKeyInQueryResultAlreadyExistsInValetError,
     /// Migraiton failed because writing to the keychain failed.
-    VAlMigrationCouldNotWriteToKeychainError,
+    VALMigrationCouldNotWriteToKeychainError,
     /// Migration failed because removing the migrated data from the keychain failed.
-    VAlMigrationRemovalFailedError,
+    VALMigrationRemovalFailedError,
 };
 
 

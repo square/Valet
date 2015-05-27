@@ -253,12 +253,12 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 - (NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 {
-    VALCheckCondition(secItemQuery.allKeys.count > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"Migration requires secItemQuery to contain values.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecMatchLimit] != (__bridge id)kSecMatchLimitOne, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnData] != (__bridge id)kCFBooleanFalse, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecReturnData to be set to kCFBooleanTrue.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnAttributes] != (__bridge id)kCFBooleanFalse, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecReturnAttributes to be set to kCFBooleanTrue.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnRef] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"kSecReturnRef is not supported in a migration query. Valet can only consume Data values.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnPersistentRef] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"kSecReturnPersistentRef is not supported in a migration query. Valet can only consume Data values.");
+    VALCheckCondition(secItemQuery.allKeys.count > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"Migration requires secItemQuery to contain values.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecMatchLimit] != (__bridge id)kSecMatchLimitOne, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnData] != (__bridge id)kCFBooleanFalse, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecReturnData to be set to kCFBooleanTrue.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnAttributes] != (__bridge id)kCFBooleanFalse, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecReturnAttributes to be set to kCFBooleanTrue.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnRef] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"kSecReturnRef is not supported in a migration query. Valet can only consume Data values.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnPersistentRef] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"kSecReturnPersistentRef is not supported in a migration query. Valet can only consume Data values.");
     
     NSMutableDictionary *query = [secItemQuery mutableCopy];
     query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitAll;
@@ -285,9 +285,9 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         NSData *data = keychainEntry[(__bridge id)kSecValueData];
         
         VALCheckCondition(key.length > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationKeyInQueryResultInvalidError userInfo:nil], @"Can not migrate keychain entry with no key");
-        VALCheckCondition(data.length > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationDataInQueryResultInvalidError userInfo:nil], @"Can not migrate keychain entry with no value data");
-        VALCheckCondition(![keysToMigrate containsObject:key], [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationDuplicateKeyInQueryResultError userInfo:nil], @"Can not migrate keychain entry for key %@ since there are multiple values for key %@ in query %@", key, key, secItemQuery);
-        VALCheckCondition(![self containsObjectForKey:key], [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationKeyInQueryResultAlreadyExistsInValetError userInfo:nil], @"Can not migrate keychain entry for key %@ since %@ already exists in %@", key, key, self);
+        VALCheckCondition(data.length > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationDataInQueryResultInvalidError userInfo:nil], @"Can not migrate keychain entry with no value data");
+        VALCheckCondition(![keysToMigrate containsObject:key], [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationDuplicateKeyInQueryResultError userInfo:nil], @"Can not migrate keychain entry for key %@ since there are multiple values for key %@ in query %@", key, key, secItemQuery);
+        VALCheckCondition(![self containsObjectForKey:key], [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationKeyInQueryResultAlreadyExistsInValetError userInfo:nil], @"Can not migrate keychain entry for key %@ since %@ already exists in %@", key, key, self);
         [keysToMigrate addObject:key];
     }
     
@@ -306,7 +306,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
                 [self removeObjectForKey:key];
             }
             
-            return [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationCouldNotWriteToKeychainError userInfo:nil];
+            return [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationCouldNotWriteToKeychainError userInfo:nil];
         }
     }
     
@@ -319,7 +319,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
                 [self removeObjectForKey:key];
             }
             
-            return [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationRemovalFailedError userInfo:nil];
+            return [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationRemovalFailedError userInfo:nil];
         }
     }
     

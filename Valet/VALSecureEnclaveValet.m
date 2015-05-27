@@ -90,7 +90,7 @@
 {
 #if TARGET_OS_IPHONE && __IPHONE_8_0
     if ([[self class] supportsSecureEnclaveKeychainItems]) {
-        VALCheckCondition(secItemQuery[(__bridge id)kSecUseOperationPrompt] == nil, [NSError errorWithDomain:VALMigrationErrorDomain code:VAlMigrationInvalidQueryError userInfo:nil], @"kSecUseOperationPrompt is not supported in a migration query. Keychain items can not be migrated en-mass from the Secure Enclave.");
+        VALCheckCondition(secItemQuery[(__bridge id)kSecUseOperationPrompt] == nil, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"kSecUseOperationPrompt is not supported in a migration query. Keychain items can not be migrated en masse from the Secure Enclave.");
     }
 #endif
     
