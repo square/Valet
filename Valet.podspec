@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'Valet'
-  s.version  = '0.9.8'
+  s.version  = '0.9.9'
   s.license  = 'Apache'
   s.summary  = 'Valet lets you securely store data in the iOS or OS X Keychain without knowing a thing about how the Keychain works. It\'s easy. We promise.'
   s.homepage = 'https://stash.corp.squareup.com/projects/IOS/repos/valet/browse'
