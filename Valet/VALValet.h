@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, VALAccessibility) {
     VALAccessibleAlways,
     
     /// Valet data can only be accessed while the device is unlocked. This class is only available if a passcode is set on the device. This is recommended for items that only need to be accessible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device. No items can be stored in this class on devices without a passcode. Disabling the device passcode will cause all items in this class to be deleted.
-    VALAccessibleWhenPasscodeSetThisDeviceOnly,
+    VALAccessibleWhenPasscodeSetThisDeviceOnly __OSX_AVAILABLE_STARTING(__MAC_10_10, __IPHONE_8_0),
     /// Valet data can only be accessed while the device is unlocked. This is recommended for data that only needs to be accesible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
     VALAccessibleWhenUnlockedThisDeviceOnly,
     /// Valet data can only be accessed once the device has been unlocked after a restart. This is recommended for items that need to be accessible by background applications. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.

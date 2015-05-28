@@ -8,5 +8,5 @@ Pod::Spec.new do |s|
   s.source   = { :git => 'https://stash.corp.squareup.com/scm/ios/valet.git', :tag => s.version }
   s.source_files = 'Valet/*.{h,m}', 'Other/*.{h,m}'
   s.ios.deployment_target = '6.0'
-  s.osx.deployment_target = '10.6'
+  s.osx.deployment_target = '10.9'
 end

@@ -32,11 +32,16 @@
 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
-#if (TARGET_OS_MAC && __MAC_10_9) || (TARGET_OS_IPHONE && (__IPHONE_8_2 || (__IPHONE_7_0 && !TARGET_IPHONE_SIMULATOR)))
+    
+#define SUPPORTS_SYNCHRONIZABLE_KEYCHAIN_MAC (TARGET_OS_MAC && __MAC_10_9)
+#define SUPPORTS_SYNCHRONIZABLE_KEYCHAIN_IOS (TARGET_OS_IPHONE && (__IPHONE_8_2 || (__IPHONE_7_0 && !TARGET_IPHONE_SIMULATOR)))
+    
+#if SUPPORTS_SYNCHRONIZABLE_KEYCHAIN_MAC || SUPPORTS_SYNCHRONIZABLE_KEYCHAIN_IOS
     return (&kSecAttrSynchronizable != NULL && &kSecAttrSynchronizableAny != NULL);
 #else
     return NO;
 #endif
+    
 #pragma clang diagnostic pop
 }
 

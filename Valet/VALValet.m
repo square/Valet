@@ -260,32 +260,48 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 {
     VALCheckCondition(secItemQuery.allKeys.count > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"Migration requires secItemQuery to contain values.");
     VALCheckCondition(secItemQuery[(__bridge id)kSecMatchLimit] != (__bridge id)kSecMatchLimitOne, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnData] != (__bridge id)kCFBooleanFalse, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecReturnData to be set to kCFBooleanTrue.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnData] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"kSecReturnData is not supported in a migration query.");
     VALCheckCondition(secItemQuery[(__bridge id)kSecReturnAttributes] != (__bridge id)kCFBooleanFalse, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"Migration requires kSecReturnAttributes to be set to kCFBooleanTrue.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnRef] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"kSecReturnRef is not supported in a migration query. Valet can only consume Data values.");
-    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnPersistentRef] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"kSecReturnPersistentRef is not supported in a migration query. Valet can only consume Data values.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnRef] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"kSecReturnRef is not supported in a migration query.");
+    VALCheckCondition(secItemQuery[(__bridge id)kSecReturnPersistentRef] != (__bridge id)kCFBooleanFalse, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationInvalidQueryError userInfo:nil], @"Migration requires SecReturnPersistentRef to be set to kCFBooleanTrue.");
     
     NSMutableDictionary *query = [secItemQuery mutableCopy];
     query[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitAll;
-    query[(__bridge id)kSecReturnData] = @YES;
     query[(__bridge id)kSecReturnAttributes] = @YES;
+    query[(__bridge id)kSecReturnData] = @NO;
     query[(__bridge id)kSecReturnRef] = @NO;
-    query[(__bridge id)kSecReturnPersistentRef] = @NO;
+    query[(__bridge id)kSecReturnPersistentRef] = @YES;
     
     CFTypeRef outTypeRef = NULL;
-    NSDictionary *queryResult = nil;
+    NSArray *queryResult = nil;
     
     OSStatus status = VALAtomicSecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
-    queryResult = (__bridge_transfer NSDictionary *)outTypeRef;
+    queryResult = (__bridge_transfer NSArray *)outTypeRef;
     if (status == errSecItemNotFound) {
         return [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationNoItemsToMigrateFoundError userInfo:nil];;
     }
     
     VALCheckCondition(status == errSecSuccess, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationCouldNotReadKeychainError userInfo:nil], @"Could not copy items matching secItemQuery");
     
+    // Now that we have the persistent refs with attributes, get the data associated with each keychain entry.
+    NSMutableArray *queryResultWithData = [NSMutableArray new];
+    for (NSDictionary *keychainEntry in queryResult) {
+        CFTypeRef outValueRef = NULL;
+        status = VALAtomicSecItemCopyMatching((__bridge CFDictionaryRef)@{ (__bridge id)kSecValuePersistentRef : keychainEntry[(__bridge id)kSecValuePersistentRef], (__bridge id)kSecReturnData : @YES }, &outValueRef);
+        NSData *data = (__bridge_transfer NSData *)outValueRef;
+        
+        VALCheckCondition(status == errSecSuccess, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationCouldNotReadKeychainError userInfo:nil], @"Could not copy items matching secItemQuery");
+        VALCheckCondition(data.length > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationDataInQueryResultInvalidError userInfo:nil], @"Can not migrate keychain entry with no value data");
+        
+        NSMutableDictionary *keychainEntryWithData = [keychainEntry mutableCopy];
+        keychainEntryWithData[(__bridge id)kSecValueData] = data;
+        
+        [queryResultWithData addObject:keychainEntryWithData];
+    }
+    
     // Sanity check that we are capable of migrating the data.
     NSMutableSet *keysToMigrate = [NSMutableSet new];
-    for (NSDictionary *keychainEntry in queryResult) {
+    for (NSDictionary *keychainEntry in queryResultWithData) {
         NSString *key = keychainEntry[(__bridge id)kSecAttrAccount];
         NSData *data = keychainEntry[(__bridge id)kSecValueData];
         
@@ -298,7 +314,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     
     // If all looks good, actually migrate.
     NSMutableArray *alreadyMigratedKeys = [NSMutableArray new];
-    for (NSDictionary *keychainEntry in queryResult) {
+    for (NSDictionary *keychainEntry in queryResultWithData) {
         NSString *key = keychainEntry[(__bridge id)kSecAttrAccount];
         NSData *data = keychainEntry[(__bridge id)kSecValueData];
         
@@ -317,7 +333,13 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     
     // Remove data if requested.
     if (remove) {
-        status = VALAtomicSecItemDelete((__bridge CFDictionaryRef)secItemQuery);
+        NSMutableDictionary *removeQuery = [secItemQuery mutableCopy];
+#if !TARGET_OS_IPHONE
+        // This line must exist on OS X, but must not exist on iOS.
+        removeQuery[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitAll;
+#endif
+        
+        status = VALAtomicSecItemDelete((__bridge CFDictionaryRef)removeQuery);
         if (status != errSecSuccess) {
             // Something went wrong. Remove all migrated items.
             for (NSString *key in alreadyMigratedKeys) {
