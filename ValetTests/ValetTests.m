@@ -20,7 +20,11 @@
 
 #import <XCTest/XCTest.h>
 
-#import "Valet.h"
+#import <Valet/Valet.h>
+
+
+// The iPhone simulator fakes entitlements, allowing us to test the iCloud Keychain (VALSynchronizableValet) code without writing a signed host app.
+#define TARGET_HAS_ENTITLEMENTS TARGET_IPHONE_SIMULATOR
 
 
 @interface VALValet (Testing)
@@ -176,6 +180,7 @@
     XCTAssertEqualObjects([otherValet stringForKey:self.key], self.secondaryString);
 }
 
+#if TARGET_HAS_ENTITLEMENTS
 - (void)test_setStringForKey_setsSynchronizableString;
 {
     if (self.synchronizableValet == nil) {
@@ -189,6 +194,7 @@
     
     XCTAssertNil([self.valet stringForKey:self.key], @"Expected no non-synchronizable string to be found.");
 }
+#endif
 
 - (void)test_setStringForKey_nonStringData;
 {
@@ -223,7 +229,7 @@
         [expectationRemoveObjectQueue fulfill];
     });
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_containsObjectForKey_returnsYESWhenKeyExists;
@@ -289,6 +295,7 @@
     XCTAssertNil([self.valet stringForKey:self.key], @"Expected no string to be retrieved after removing string");
 }
 
+#if TARGET_HAS_ENTITLEMENTS
 - (void)test_removeObjectForKey_successfullyRemovesSynchronizableKey;
 {
     if (self.synchronizableValet == nil) {
@@ -303,6 +310,7 @@
     XCTAssertTrue([self.synchronizableValet removeObjectForKey:self.key]);
     XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
 }
+#endif
 
 - (void)test_removeObjectForKey_wrongIdentifierSucceeds;
 {
@@ -349,6 +357,7 @@
     XCTAssertNil([self.testingValet stringForKey:self.key]);
 }
 
+#if TARGET_HAS_ENTITLEMENTS
 - (void)test_removeObjectForKey_ValetsWithSameIdentifierAndAccessibilityButDifferentSyncronizableTypeRemoveDistinctDataFromKeychain;
 {
     if (self.synchronizableValet == nil) {
@@ -368,28 +377,32 @@
     XCTAssertTrue([self.synchronizableValet removeObjectForKey:self.key]);
     XCTAssertNil([self.synchronizableValet stringForKey:self.key]);
 }
+#endif
 
 - (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_failsIfNoItemsFoundMatchingQueryInput;
 {
-    NSDictionary *queryWithNoMathces = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrService : @"Valet_Does_Not_Exist" };
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithNoMathces removeOnCompletion:NO].code, VALMigrationNoItemsToMigrateFoundError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithNoMathces removeOnCompletion:YES].code, VALMigrationNoItemsToMigrateFoundError);
+    NSDictionary *queryWithNoMatches = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrService : @"Valet_Does_Not_Exist" };
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithNoMatches removeOnCompletion:NO].code, VALMigrationNoItemsToMigrateFoundError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithNoMatches removeOnCompletion:YES].code, VALMigrationNoItemsToMigrateFoundError);
 }
 
 - (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_failsOnBadQueryInput;
 {
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:YES].code, VAlMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:YES].code, VALMigrationInvalidQueryError);
     
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecMatchLimit : (__bridge id)kSecMatchLimitOne } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnData : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnAttributes : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecMatchLimit : (__bridge id)kSecMatchLimitOne } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnData : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnAttributes : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
     
+    // Only test VALSecureEnclaveValet on iOS
+#if TARGET_OS_IPHONE && __IPHONE_8_0
     if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
-        XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecUseOperationPrompt : @"Migration Prompt" } removeOnCompletion:NO].code, VAlMigrationInvalidQueryError);
+        XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecUseOperationPrompt : @"Migration Prompt" } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
     }
+#endif
 }
 
 - (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_bailsOutIfConflictExistsInMigrationQueryResult;
@@ -403,7 +416,7 @@
     XCTAssertTrue([otherValet2 setString:self.string forKey:self.key]);
     
     NSDictionary *queryWithConflict = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrAccount : self.key };
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithConflict removeOnCompletion:NO].code, VAlMigrationDuplicateKeyInQueryResultError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithConflict removeOnCompletion:NO].code, VALMigrationDuplicateKeyInQueryResultError);
 }
 
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWithoutRemovingOnCompletion;
@@ -460,7 +473,7 @@
     XCTAssertTrue([self.valet setString:keyStringPairToMigrateMap[conflictKey] forKey:conflictKey]);
     NSSet *allValetKeysPreMigration = self.valet.allKeys;
     
-    XCTAssertEqual([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES].code, VAlMigrationKeyInQueryResultAlreadyExistsInValetError);
+    XCTAssertEqual([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES].code, VALMigrationKeyInQueryResultAlreadyExistsInValetError);
 
     XCTAssertEqualObjects(self.valet.allKeys, allValetKeysPreMigration);
     XCTAssertEqualObjects([self.valet stringForKey:conflictKey], keyStringPairToMigrateMap[conflictKey]);
@@ -495,10 +508,12 @@
     XCTAssertEqualObjects(KeyDictionary[(__bridge id)kSecAttrAccount], self.key);
 }
 
+#if TARGET_HAS_ENTITLEMENTS
 - (void)test_sharedAccessGroupPrefix_returnsValidValue;
 {
     XCTAssertTrue([self.valet _sharedAccessGroupPrefix].length > 0);
 }
+#endif
 
 #pragma mark - XCTestCase
 
