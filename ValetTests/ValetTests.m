@@ -85,6 +85,27 @@
 
 #pragma mark - Behavior Tests
 
+- (void)test_initialization_twoValetsWithSameConfigurationHaveEqualPointers;
+{
+    // Attempting to initialize a second Valet with an equivalent configuration to one already in existance should return a shared instance.
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:self.valet.accessibility];
+    [self.additionalValets addObject:otherValet];
+    
+    XCTAssertEqual(self.valet, otherValet);
+    XCTAssertEqualObjects(self.valet, otherValet);
+    
+    // This should be true for subclasses, as well.
+    VALTestingValet *otherTestingValet = [[VALTestingValet alloc] initWithIdentifier:self.testingValet.identifier accessibility:self.testingValet.accessibility];
+    [self.additionalValets addObject:otherTestingValet];
+    
+    XCTAssertEqual(self.testingValet, otherTestingValet);
+    XCTAssertEqualObjects(self.testingValet, otherTestingValet);
+    
+    // Subclass instances should not be semantically equivalent to the parent class instances.
+    XCTAssertNotEqual(self.valet, otherTestingValet);
+    XCTAssertNotEqualObjects(self.valet, otherTestingValet);
+}
+
 - (void)test_initialization_invalidArgumentsCauseFailure;
 {
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"" accessibility:VALAccessibleAlways]);

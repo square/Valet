@@ -118,6 +118,9 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 /// Stores the root query to be used in all SecItem queries.
 @property (copy, readonly) NSDictionary *baseQuery;
 
+/// The service identifier within the baseQuery (kSecAttrService).
+@property (copy, readonly) NSString *secServiceIdentifier;
+
 /// Set and Remove must be atomic operations relative to one another to ensure that SecItemUpdate is never called on an item that has been removed from the keychain.
 @property (copy, readonly) NSLock *lockForSetAndRemoveOperations;
 
@@ -125,6 +128,28 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 
 @implementation VALValet
+
+#pragma mark - Private Class Methods
+
+/// Ensure the atomicity for set and remove operations by limiting ourselves to one instance per configuration.
++ (VALValet *)_sharedValetForValet:(VALValet *)valet;
+{
+    @synchronized(self) {
+        static NSMapTable *sServiceIdentifierToWeakValet = nil;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            sServiceIdentifierToWeakValet = [NSMapTable strongToWeakObjectsMapTable];
+        });
+        
+        VALValet *existingValet = [sServiceIdentifierToWeakValet objectForKey:valet.secServiceIdentifier];
+        if (existingValet != nil) {
+            return existingValet;
+        }
+        
+        [sServiceIdentifierToWeakValet setObject:valet forKey:valet.secServiceIdentifier];
+        return valet;
+    }
+}
 
 #pragma mark - Initialization
 
@@ -142,7 +167,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         _lockForSetAndRemoveOperations = [NSLock new];
     }
     
-    return self;
+    return [[self class] _sharedValetForValet:self];
 }
 
 - (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
@@ -162,7 +187,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         _lockForSetAndRemoveOperations = [NSLock new];
     }
     
-    return self;
+    return [[self class] _sharedValetForValet:self];
 }
 
 #pragma mark - NSObject
@@ -521,6 +546,13 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     }
     
     return YES;
+}
+
+#pragma mark - Properties
+
+- (NSString *)secServiceIdentifier;
+{
+    return self.baseQuery[(__bridge id)kSecAttrService];
 }
 
 #pragma mark - Private Methods
