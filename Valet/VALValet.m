@@ -228,15 +228,12 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     NSString *canaryKey = @"VAL_KeychainCanaryUsername";
     NSString *canaryValue = @"VAL_KeychainCanaryPassword";
     
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        if (![[self objectForKey:canaryKey] isEqual:canaryValue]) {
-            [self setString:canaryValue forKey:canaryKey];
-        }
-    });
+    NSMutableDictionary *query = [self.baseQuery mutableCopy];
+    [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:canaryKey]];
+    [query addEntriesFromDictionary:@{ (__bridge id)kSecValueData : canaryValue }];
     
-    NSString *const retrievedCanaryValue = [self stringForKey:canaryKey];
-    return [retrievedCanaryValue isEqualToString:canaryValue];
+    OSStatus status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)query, NULL);
+    return (status != errSecInteractionNotAllowed && status != errSecNotAvailable);
 }
 
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key;
