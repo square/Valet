@@ -154,4 +154,12 @@
 #endif
 }
 
+- (BOOL)setObject:(NSData *)value forKey:(NSString *)key options:(NSDictionary *)options;
+{
+    // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
+    [self removeObjectForKey:key];
+    
+    return [super setObject:value forKey:key options:options];
+}
+
 @end
