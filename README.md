@@ -28,7 +28,7 @@ Or manually checkout the submodule with `git submodule add git@github.com:Square
 ### Basic Initialization
 
 ```
-VALValet *myValet = [[VALValet alloc] initWithIdentifier:@"Druidia" accessibility:VALAccessibleWhenUnlocked];
+VALValet *myValet = [[VALValet alloc] initWithIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
 To begin storing data securely using Valet, you need to create a VALValet instance with:
@@ -40,7 +40,7 @@ This instance can be used to store and retrieve data securely, but only when the
 
 #### Choosing the Best Accessibility Value
 
-The VALAccessibility enum is used to determine when your secrets can be accessed. It’s a good idea to use the strictest accessibility possible that will allow your app to function. For example, if your app does not run in the background you will want to ensure the secrets can only be read when the phone is unlocked by using `VALAccessibleWhenUnlocked` or `VALAccessibleWhenUnlockedThisDeviceOnly`.
+The VALAccessibility enum is used to determine when your secrets can be accessed. It’s a good idea to use the strictest accessibility possible that will allow your app to function. For example, if your app does not run in the background you will want to ensure the secrets can only be read when the phone is unlocked by using `VALAccessibilityWhenUnlocked` or `VALAccessibilityWhenUnlockedThisDeviceOnly`.
 
 ### Reading and Writing
 
@@ -55,7 +55,7 @@ Valet’s API for securely reading and writing data is similar to that of an NSM
 ### Sharing Secrets Among Multiple Applications
 
 ```
-VALValet *mySharedValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:@"Druidia" accessibility:VALAccessibleWhenUnlocked];
+VALValet *mySharedValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
 This instance can be used to store and retrieve data securely across any app writen by the same developer with the value `Druidia` under the `keychain-access-groups` key in the app’s `Entitlements` file, when the device is unlocked. `myValet` and `mySharedValet` can not read or modify one another’s values because the two Valets were created with different initializers. You can use the `-initWithSharedAccessGroupIdentifier:accessibility:` initializer on any Valet class to allow for sharing secrets across applications written by the same developer.
@@ -63,7 +63,7 @@ This instance can be used to store and retrieve data securely across any app wri
 ### Sharing Secrets Across Devices with iCloud
 
 ```
-VALSynchronizableValet *mySynchronizableValet = [[VALSynchronizableValet alloc] initWithIdentifier:@"Druidia" accessibility:VALAccessibleWhenUnlocked];
+VALSynchronizableValet *mySynchronizableValet = [[VALSynchronizableValet alloc] initWithIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
 This instance can be used to store and retrieve data that can be retrieved by this app on other devices logged into the same iCloud account with iCloud Keychain enabled. `mySynchronizableValet` can not read or modify values in `myValet` or `mySharedValet` because `mySynchronizableValet` is of a different class type. If iCloud Keychain is not enabled on this device, secrets can still be read and written, but will not sync to other devices.
