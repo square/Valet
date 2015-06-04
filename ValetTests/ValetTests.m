@@ -64,9 +64,9 @@
 {
     [super setUp];
     
-    self.valet = [[VALValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleWhenUnlocked];
-    self.testingValet = [[VALTestingValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleWhenUnlocked];
-    self.synchronizableValet = [[VALSynchronizableValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibleWhenUnlocked];
+    self.valet = [[VALValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibilityWhenUnlocked];
+    self.testingValet = [[VALTestingValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibilityWhenUnlocked];
+    self.synchronizableValet = [[VALSynchronizableValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibilityWhenUnlocked];
     
     // In case testing quit unexpectedly, clean up the keychain from last time.
     [self.valet removeAllObjects];
@@ -108,10 +108,10 @@
 
 - (void)test_initialization_invalidArgumentsCauseFailure;
 {
-    XCTAssertNil([[VALValet alloc] initWithIdentifier:@"" accessibility:VALAccessibleAlways]);
+    XCTAssertNil([[VALValet alloc] initWithIdentifier:@"" accessibility:VALAccessibilityAlways]);
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"test" accessibility:0]);
-    XCTAssertNil([[VALSynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenPasscodeSetThisDeviceOnly]);
-    XCTAssertNil([[VALSecureEnclaveValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibleWhenUnlockedThisDeviceOnly]);
+    XCTAssertNil([[VALSynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly]);
+    XCTAssertNil([[VALSecureEnclaveValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenUnlockedThisDeviceOnly]);
 }
 
 - (void)test_canAccessKeychain;
@@ -137,7 +137,7 @@
 - (void)test_stringForKey_differentIdentifierFailsToRetrieveString;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAlways];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibilityAlways];
     [self.additionalValets addObject:otherValet];
     
     NSString *string = [otherValet stringForKey:self.key];
@@ -147,7 +147,7 @@
 - (void)test_stringForKey_differentAccessGroupFailsToRetrieveString;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibilityAfterFirstUnlockThisDeviceOnly];
     [self.additionalValets addObject:otherValet];
     
     NSString *string = [otherValet stringForKey:self.key];
@@ -157,7 +157,7 @@
 - (void)test_stringForKey_differentValetTypeFailsToRetrieveString;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibilityAfterFirstUnlockThisDeviceOnly];
     [self.additionalValets addObject:otherValet];
     
     NSString *string = [otherValet stringForKey:self.key];
@@ -295,7 +295,7 @@
     
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
     
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibilityAfterFirstUnlockThisDeviceOnly];
     [self.additionalValets addObject:otherValet];
     
     NSSet *allKeys = [otherValet allKeys];
@@ -339,7 +339,7 @@
     
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
     
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibleAfterFirstUnlockThisDeviceOnly];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:[self.valet.identifier stringByAppendingString:@"_different"] accessibility:VALAccessibilityAfterFirstUnlockThisDeviceOnly];
     XCTAssertTrue([otherValet removeObjectForKey:self.key], @"Expected removing Key foo with different identifier to succeed since the object is not in the keychain");
 }
 
@@ -403,46 +403,46 @@
 - (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_failsIfNoItemsFoundMatchingQueryInput;
 {
     NSDictionary *queryWithNoMatches = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrService : @"Valet_Does_Not_Exist" };
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithNoMatches removeOnCompletion:NO].code, VALMigrationNoItemsToMigrateFoundError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithNoMatches removeOnCompletion:YES].code, VALMigrationNoItemsToMigrateFoundError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithNoMatches removeOnCompletion:NO].code, VALMigrationErrorNoItemsToMigrateFound);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithNoMatches removeOnCompletion:YES].code, VALMigrationErrorNoItemsToMigrateFound);
 }
 
 - (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_failsOnBadQueryInput;
 {
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:YES].code, VALMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{} removeOnCompletion:YES].code, VALMigrationErrorInvalidQuery);
     
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecMatchLimit : (__bridge id)kSecMatchLimitOne } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnData : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnAttributes : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecMatchLimit : (__bridge id)kSecMatchLimitOne } removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnData : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnAttributes : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
     
     // Only test VALSecureEnclaveValet on iOS
 #if TARGET_OS_IPHONE && __IPHONE_8_0
     if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
-        XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecUseOperationPrompt : @"Migration Prompt" } removeOnCompletion:NO].code, VALMigrationInvalidQueryError);
+        XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecUseOperationPrompt : @"Migration Prompt" } removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
     }
 #endif
 }
 
 - (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_bailsOutIfConflictExistsInMigrationQueryResult;
 {
-    VALValet *otherValet1 = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibleAfterFirstUnlock];
+    VALValet *otherValet1 = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
     [self.additionalValets addObject:otherValet1];
     XCTAssertTrue([otherValet1 setString:self.string forKey:self.key]);
     
-    VALValet *otherValet2 = [[VALTestingValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibleAfterFirstUnlock];
+    VALValet *otherValet2 = [[VALTestingValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
     [self.additionalValets addObject:otherValet2];
     XCTAssertTrue([otherValet2 setString:self.string forKey:self.key]);
     
     NSDictionary *queryWithConflict = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrAccount : self.key };
-    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithConflict removeOnCompletion:NO].code, VALMigrationDuplicateKeyInQueryResultError);
+    XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithConflict removeOnCompletion:NO].code, VALMigrationErrorDuplicateKeyInQueryResult);
 }
 
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWithoutRemovingOnCompletion;
 {
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibleAfterFirstUnlock];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
     [self.additionalValets addObject:otherValet];
     
     NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
@@ -461,7 +461,7 @@
 
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenRemovingOnCompletion;
 {
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibleAfterFirstUnlock];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
     [self.additionalValets addObject:otherValet];
     
     NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
@@ -480,7 +480,7 @@
 
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_bailsOutAndLeavesKeychainUntouchedIfConflictExists;
 {
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibleAfterFirstUnlock];
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
     [self.additionalValets addObject:otherValet];
     
     NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
@@ -494,7 +494,7 @@
     XCTAssertTrue([self.valet setString:keyStringPairToMigrateMap[conflictKey] forKey:conflictKey]);
     NSSet *allValetKeysPreMigration = self.valet.allKeys;
     
-    XCTAssertEqual([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES].code, VALMigrationKeyInQueryResultAlreadyExistsInValetError);
+    XCTAssertEqual([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES].code, VALMigrationErrorKeyInQueryResultAlreadyExistsInValet);
 
     XCTAssertEqualObjects(self.valet.allKeys, allValetKeysPreMigration);
     XCTAssertEqualObjects([self.valet stringForKey:conflictKey], keyStringPairToMigrateMap[conflictKey]);

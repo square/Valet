@@ -23,43 +23,43 @@
 
 typedef NS_ENUM(NSUInteger, VALAccessibility) {
     /// Valet data can only be accessed while the device is unlocked. This attribute is recommended for data that only needs to be accesible while the application is in the foreground. Valet data with this accessibility will migrate to a new device when using encrypted backups.
-    VALAccessibleWhenUnlocked = 1,
+    VALAccessibilityWhenUnlocked = 1,
     /// Valet data can only be accessed once the device has been unlocked after a restart. This attribute is recommended for data that needs to be accesible by background applications. Valet data with this attribute will migrate to a new device when using encrypted backups.
-    VALAccessibleAfterFirstUnlock,
+    VALAccessibilityAfterFirstUnlock,
     /// Valet data can always be accessed regardless of the lock state of the device. This attribute is not recommended. Valet data with this attribute will migrate to a new device when using encrypted backups.
-    VALAccessibleAlways,
+    VALAccessibilityAlways,
     
     /// Valet data can only be accessed while the device is unlocked. This class is only available if a passcode is set on the device. This is recommended for items that only need to be accessible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device. No items can be stored in this class on devices without a passcode. Disabling the device passcode will cause all items in this class to be deleted.
-    VALAccessibleWhenPasscodeSetThisDeviceOnly __OSX_AVAILABLE_STARTING(__MAC_10_10, __IPHONE_8_0),
+    VALAccessibilityWhenPasscodeSetThisDeviceOnly __OSX_AVAILABLE_STARTING(__MAC_10_10, __IPHONE_8_0),
     /// Valet data can only be accessed while the device is unlocked. This is recommended for data that only needs to be accesible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
-    VALAccessibleWhenUnlockedThisDeviceOnly,
+    VALAccessibilityWhenUnlockedThisDeviceOnly,
     /// Valet data can only be accessed once the device has been unlocked after a restart. This is recommended for items that need to be accessible by background applications. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
-    VALAccessibleAfterFirstUnlockThisDeviceOnly,
+    VALAccessibilityAfterFirstUnlockThisDeviceOnly,
     /// Valet data can always be accessed regardless of the lock state of the device. This option is not recommended. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
-    VALAccessibleAlwaysThisDeviceOnly,
+    VALAccessibilityAlwaysThisDeviceOnly,
 };
 
 extern NSString *const VALMigrationErrorDomain;
 
 typedef NS_ENUM(NSUInteger, VALMigrationError) {
     /// Migration failed because the keychain query was not valid.
-    VALMigrationInvalidQueryError = 1,
+    VALMigrationErrorInvalidQuery = 1,
     /// Migration failed because no items to migrate were found.
-    VALMigrationNoItemsToMigrateFoundError,
+    VALMigrationErrorNoItemsToMigrateFound,
     /// Migration failed because the keychain could not be read.
-    VALMigrationCouldNotReadKeychainError,
+    VALMigrationErrorCouldNotReadKeychain,
     /// Migraiton failed because a key in the query result could not be read.
-    VALMigrationKeyInQueryResultInvalidError,
+    VALMigrationErrorKeyInQueryResultInvalid,
     /// Migraiton failed because some data in the query result could not be read.
-    VALMigrationDataInQueryResultInvalidError,
+    VALMigrationErrorDataInQueryResultInvalid,
     /// Migraiton failed because two keys with the same value were found in the keychain.
-    VALMigrationDuplicateKeyInQueryResultError,
+    VALMigrationErrorDuplicateKeyInQueryResult,
     /// Migraiton failed because a key in the keychain duplicates a key already managed by Valet.
-    VALMigrationKeyInQueryResultAlreadyExistsInValetError,
+    VALMigrationErrorKeyInQueryResultAlreadyExistsInValet,
     /// Migraiton failed because writing to the keychain failed.
-    VALMigrationCouldNotWriteToKeychainError,
+    VALMigrationErrorCouldNotWriteToKeychain,
     /// Migration failed because removing the migrated data from the keychain failed.
-    VALMigrationRemovalFailedError,
+    VALMigrationErrorRemovalFailed,
 };
 
 

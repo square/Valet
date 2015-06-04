@@ -49,7 +49,7 @@
 
 - (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
 {
-    VALCheckCondition(accessibility == VALAccessibleWhenUnlocked || accessibility == VALAccessibleAfterFirstUnlock || accessibility == VALAccessibleAlways, nil, @"Accessibility must not be scoped to this device");
+    VALCheckCondition(accessibility == VALAccessibilityWhenUnlocked || accessibility == VALAccessibilityAfterFirstUnlock || accessibility == VALAccessibilityAlways, nil, @"Accessibility must not be scoped to this device");
     VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
     
     return [super initWithIdentifier:identifier accessibility:accessibility];
@@ -57,7 +57,7 @@
 
 - (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
 {
-    VALCheckCondition(accessibility == VALAccessibleWhenUnlocked || accessibility == VALAccessibleAfterFirstUnlock || accessibility == VALAccessibleAlways, nil, @"Accessibility must not be scoped to this device");
+    VALCheckCondition(accessibility == VALAccessibilityWhenUnlocked || accessibility == VALAccessibilityAfterFirstUnlock || accessibility == VALAccessibilityAlways, nil, @"Accessibility must not be scoped to this device");
     VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
     
     return [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
