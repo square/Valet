@@ -110,8 +110,11 @@
 {
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"" accessibility:VALAccessibilityAlways]);
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"test" accessibility:0]);
-    XCTAssertNil([[VALSynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly]);
+    XCTAssertNil([[VALSynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenUnlockedThisDeviceOnly]);
+
+#if TARGET_OS_IPHONE && __IPHONE_8_0
     XCTAssertNil([[VALSecureEnclaveValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenUnlockedThisDeviceOnly]);
+#endif
 }
 
 - (void)test_canAccessKeychain;
