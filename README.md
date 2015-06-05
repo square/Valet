@@ -27,7 +27,7 @@ Or manually checkout the submodule with `git submodule add git@github.com:Square
 
 ### Basic Initialization
 
-```
+```objc
 VALValet *myValet = [[VALValet alloc] initWithIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
@@ -44,7 +44,7 @@ The VALAccessibility enum is used to determine when your secrets can be accessed
 
 ### Reading and Writing
 
-```
+```objc
 NSString *const username = @"Skroob";
 [myValet setString:@"12345" forKey:username];
 NSString *const myLuggageCombination = [myValet stringForKey:username];
@@ -62,7 +62,7 @@ This instance can be used to store and retrieve data securely across any app wri
 
 ### Sharing Secrets Across Devices with iCloud
 
-```
+```objc
 VALSynchronizableValet *mySynchronizableValet = [[VALSynchronizableValet alloc] initWithIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
@@ -70,7 +70,7 @@ This instance can be used to store and retrieve data that can be retrieved by th
 
 ### Protecting Secrets with Touch ID or iOS Passcode
 
-```
+```objc
 VALSecureEnclaveValet *mySecureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:@"Druidia"];
 ```
 
