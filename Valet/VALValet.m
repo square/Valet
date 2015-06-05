@@ -230,7 +230,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     
     NSMutableDictionary *query = [self.baseQuery mutableCopy];
     [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:canaryKey]];
-    [query addEntriesFromDictionary:@{ (__bridge id)kSecValueData : canaryValue }];
+    [query addEntriesFromDictionary:@{ (__bridge id)kSecValueData : [canaryValue dataUsingEncoding:NSUTF8StringEncoding] }];
     
     OSStatus status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)query, NULL);
     return (status != errSecInteractionNotAllowed && status != errSecNotAvailable);
