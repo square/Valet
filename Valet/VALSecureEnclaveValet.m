@@ -32,7 +32,7 @@
 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
-#if TARGET_OS_IPHONE && __IPHONE_8_0 && !TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_IPHONE && __IPHONE_8_0
     return (&kSecAttrAccessControl != NULL && &kSecUseOperationPrompt != NULL);
 #else
     return NO;
@@ -69,6 +69,19 @@
 }
 
 #pragma mark - VALValet
+
+- (BOOL)canAccessKeychain;
+{
+    // To avoid prompting the user for Touch ID or passcode, create a VALValet with our identifier and accessibility and ask it if it can access the keychain.
+    VALValet *noPromptValet = nil;
+    if ([self isSharedAcrossApplications]) {
+        noPromptValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:self.identifier accessibility:self.accessibility];
+    } else {
+        noPromptValet = [[VALValet alloc] initWithIdentifier:self.identifier accessibility:self.accessibility];
+    }
+    
+    return [noPromptValet canAccessKeychain];
+}
 
 - (BOOL)containsObjectForKey:(NSString *)key;
 {

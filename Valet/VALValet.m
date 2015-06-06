@@ -227,15 +227,25 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 - (BOOL)canAccessKeychain;
 {
-    NSString *canaryKey = @"VAL_KeychainCanaryUsername";
-    NSString *canaryValue = @"VAL_KeychainCanaryPassword";
+    BOOL canAccessKeychain = NO;
     
-    NSMutableDictionary *query = [self.baseQuery mutableCopy];
-    [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:canaryKey]];
-    [query addEntriesFromDictionary:@{ (__bridge id)kSecValueData : [canaryValue dataUsingEncoding:NSUTF8StringEncoding] }];
+    [self.lockForSetAndRemoveOperations lock];
+    {
+        NSString *const canaryKey = @"VAL_KeychainCanaryUsername";
+        NSString *const canaryValue = @"VAL_KeychainCanaryPassword";
+        
+        // Manually add the key to the keychain since we don't care about duplicates and are optimizing for speed.
+        NSMutableDictionary *query = [self.baseQuery mutableCopy];
+        [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:canaryKey]];
+        [query addEntriesFromDictionary:@{ (__bridge id)kSecValueData : [canaryValue dataUsingEncoding:NSUTF8StringEncoding] }];
+        (void)VALAtomicSecItemAdd((__bridge CFDictionaryRef)query, NULL);
+        
+        NSString *const retrievedCanaryValue = [self stringForKey:canaryKey];
+        canAccessKeychain = [canaryValue isEqualToString:retrievedCanaryValue];
+    }
+    [self.lockForSetAndRemoveOperations unlock];
     
-    OSStatus status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)query, NULL);
-    return (status != errSecInteractionNotAllowed && status != errSecNotAvailable);
+    return canAccessKeychain;
 }
 
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key;
