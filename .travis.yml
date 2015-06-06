@@ -1,0 +1,4 @@
+language: objective-c
+script:
+    - xcodebuild -project Valet.xcodeproj -scheme "Valet iOS" -sdk iphonesimulator -configuration Debug -PBXBuildsContinueAfterErrors=0 build test
+    - xcodebuild -project Valet.xcodeproj -scheme "Valet Mac" -sdk macosx -configuration Debug -destination "platform=OS X" -PBXBuildsContinueAfterErrors=0 build test
