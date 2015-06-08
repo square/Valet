@@ -247,7 +247,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         // Manually add the key to the keychain since we don't care about duplicates and are optimizing for speed.
         NSMutableDictionary *query = [self.baseQuery mutableCopy];
         [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:canaryKey]];
-        [query addEntriesFromDictionary:@{ (__bridge id)kSecValueData : [canaryValue dataUsingEncoding:NSUTF8StringEncoding] }];
+        query[(__bridge id)kSecValueData] = [canaryValue dataUsingEncoding:NSUTF8StringEncoding];
         (void)VALAtomicSecItemAdd((__bridge CFDictionaryRef)query, NULL);
         
         NSString *const retrievedCanaryValue = [self stringForKey:canaryKey];
@@ -435,7 +435,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         } else {
             // No previous item found, add the new one.
             NSMutableDictionary *keychainData = [query mutableCopy];
-            [keychainData addEntriesFromDictionary:@{ (__bridge id)kSecValueData : value }];
+            keychainData[(__bridge id)kSecValueData] = value;
             
             status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)keychainData, NULL);
         }
