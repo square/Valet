@@ -32,7 +32,7 @@
 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
-#if TARGET_OS_IPHONE && __IPHONE_8_0 && !TARGET_IPHONE_SIMULATOR
+#if VAL_IOS_8_OR_LATER
     return (&kSecAttrAccessControl != NULL && &kSecUseOperationPrompt != NULL);
 #else
     return NO;
@@ -70,9 +70,22 @@
 
 #pragma mark - VALValet
 
+- (BOOL)canAccessKeychain;
+{
+    // To avoid prompting the user for Touch ID or passcode, create a VALValet with our identifier and accessibility and ask it if it can access the keychain.
+    VALValet *noPromptValet = nil;
+    if ([self isSharedAcrossApplications]) {
+        noPromptValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:self.identifier accessibility:self.accessibility];
+    } else {
+        noPromptValet = [[VALValet alloc] initWithIdentifier:self.identifier accessibility:self.accessibility];
+    }
+    
+    return [noPromptValet canAccessKeychain];
+}
+
 - (BOOL)containsObjectForKey:(NSString *)key;
 {
-#if TARGET_OS_IPHONE && __IPHONE_8_0
+#if VAL_IOS_8_OR_LATER
     OSStatus status = [self containsObjectForKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
     BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed);
     return keyAlreadyInKeychain;
@@ -88,7 +101,7 @@
 
 - (NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 {
-#if TARGET_OS_IPHONE && __IPHONE_8_0
+#if VAL_IOS_8_OR_LATER
     if ([[self class] supportsSecureEnclaveKeychainItems]) {
         VALCheckCondition(secItemQuery[(__bridge id)kSecUseOperationPrompt] == nil, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationErrorInvalidQuery userInfo:nil], @"kSecUseOperationPrompt is not supported in a migration query. Keychain items can not be migrated en masse from the Secure Enclave.");
     }
@@ -101,7 +114,7 @@
 
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt
 {
-#if TARGET_OS_IPHONE && __IPHONE_8_0
+#if VAL_IOS_8_OR_LATER
     return [self setObject:value forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
 #else
     return NO;
@@ -110,7 +123,7 @@
 
 - (NSData *)objectForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
 {
-#if TARGET_OS_IPHONE && __IPHONE_8_0
+#if VAL_IOS_8_OR_LATER
     return [self objectForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
 #else
     return nil;
@@ -119,7 +132,7 @@
 
 - (BOOL)setString:(NSString *)string forKey:(NSString *)key userPrompt:(NSString *)userPrompt;
 {
-#if TARGET_OS_IPHONE && __IPHONE_8_0
+#if VAL_IOS_8_OR_LATER
     return [self setString:string forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
 #else
     return NO;
@@ -128,7 +141,7 @@
 
 - (NSString *)stringForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
 {
-#if TARGET_OS_IPHONE && __IPHONE_8_0
+#if VAL_IOS_8_OR_LATER
     return [self stringForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
 #else
     return nil;
@@ -139,7 +152,7 @@
 
 - (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
 {
-#if TARGET_OS_IPHONE && __IPHONE_8_0
+#if VAL_IOS_8_OR_LATER
     NSMutableDictionary *mutableBaseQuery = [super mutableBaseQueryWithIdentifier:identifier initializer:initializer accessibility:accessibility];
     
     // Add the access control, which opts us in to Secure Element storage.

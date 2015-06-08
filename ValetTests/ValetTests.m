@@ -21,6 +21,7 @@
 #import <XCTest/XCTest.h>
 
 #import <Valet/Valet.h>
+#import <Valet/ValetDefines.h>
 
 
 // The iPhone simulator fakes entitlements, allowing us to test the iCloud Keychain (VALSynchronizableValet) code without writing a signed host app.
@@ -48,6 +49,9 @@
 @property (nonatomic, readwrite) VALValet *valet;
 @property (nonatomic, readwrite) VALTestingValet *testingValet;
 @property (nonatomic, readwrite) VALSynchronizableValet *synchronizableValet;
+#if VAL_IOS_8_OR_LATER
+@property (nonatomic, readwrite) VALSecureEnclaveValet *secureEnclaveValet;
+#endif
 @property (nonatomic, copy, readwrite) NSString *key;
 @property (nonatomic, copy, readwrite) NSString *string;
 @property (nonatomic, copy, readwrite) NSString *secondaryString;
@@ -64,14 +68,21 @@
 {
     [super setUp];
     
-    self.valet = [[VALValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibilityWhenUnlocked];
-    self.testingValet = [[VALTestingValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibilityWhenUnlocked];
-    self.synchronizableValet = [[VALSynchronizableValet alloc] initWithIdentifier:@"valet_testing" accessibility:VALAccessibilityWhenUnlocked];
+    NSString *const valetTestingIdentifier = @"valet_testing";
+    self.valet = [[VALValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenUnlocked];
+    self.testingValet = [[VALTestingValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenUnlocked];
+    self.synchronizableValet = [[VALSynchronizableValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenUnlocked];
+#if VAL_IOS_8_OR_LATER
+    self.secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly];
+#endif
     
     // In case testing quit unexpectedly, clean up the keychain from last time.
     [self.valet removeAllObjects];
     [self.testingValet removeAllObjects];
     [self.synchronizableValet removeAllObjects];
+#if VAL_IOS_8_OR_LATER
+    [self.secureEnclaveValet removeAllObjects];
+#endif
     
     for (VALValet *additionalValet in self.additionalValets) {
         [additionalValet removeAllObjects];
@@ -112,7 +123,7 @@
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"test" accessibility:0]);
     XCTAssertNil([[VALSynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenUnlockedThisDeviceOnly]);
 
-#if TARGET_OS_IPHONE && __IPHONE_8_0
+#if VAL_IOS_8_OR_LATER
     XCTAssertNil([[VALSecureEnclaveValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenUnlockedThisDeviceOnly]);
 #endif
 }
@@ -121,6 +132,12 @@
 {
     // Testing environments should always be able to access the keychain.
     XCTAssertTrue([self.valet canAccessKeychain]);
+    
+#if VAL_IOS_8_OR_LATER
+    if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
+        XCTAssertTrue([self.secureEnclaveValet canAccessKeychain]);
+    }
+#endif
 }
 
 - (void)test_stringForKey_retrievesString;
@@ -421,10 +438,9 @@
     XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnRef : (__bridge id)kCFBooleanTrue } removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
     XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanFalse } removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
     
-    // Only test VALSecureEnclaveValet on iOS
-#if TARGET_OS_IPHONE && __IPHONE_8_0
+#if VAL_IOS_8_OR_LATER
     if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
-        XCTAssertEqual([self.valet migrateObjectsMatchingQuery:@{ (__bridge id)kSecUseOperationPrompt : @"Migration Prompt" } removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
+        XCTAssertEqual([self.secureEnclaveValet migrateObjectsMatchingQuery:@{ (__bridge id)kSecUseOperationPrompt : @"Migration Prompt" } removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
     }
 #endif
 }
@@ -506,6 +522,32 @@
         XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
     }
 }
+
+#if VAL_IOS_8_OR_LATER
+- (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenMigratingToSecureEnclave;
+{
+    if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
+        VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
+        [self.additionalValets addObject:otherValet];
+        
+        NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+        
+        for (NSString *key in keyStringPairToMigrateMap) {
+            XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
+        }
+        
+        for (NSString *key in keyStringPairToMigrateMap) {
+            XCTAssertFalse([self.secureEnclaveValet containsObjectForKey:key]);
+        }
+        
+        XCTAssertNil([self.secureEnclaveValet migrateObjectsFromValet:otherValet removeOnCompletion:NO]);
+        
+        for (NSString *key in keyStringPairToMigrateMap) {
+            XCTAssertTrue([self.secureEnclaveValet containsObjectForKey:key]);
+        }
+    }
+}
+#endif
 
 - (void)test_isEqual_equivalentValetsCanAccessSameData;
 {

@@ -36,7 +36,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
             return @"AccessibleAfterFirstUnlock";
         case VALAccessibilityAlways:
             return @"AccessibleAlways";
-#if __IPHONE_8_0 || __MAC_10_10
+#if VAL_IOS_8_OR_LATER || __MAC_10_10
         case VALAccessibilityWhenPasscodeSetThisDeviceOnly:
             return @"AccessibleWhenPasscodeSetThisDeviceOnly";
 #endif
@@ -46,6 +46,20 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
             return @"AccessibleAfterFirstUnlockThisDeviceOnly";
         case VALAccessibilityAlwaysThisDeviceOnly:
             return @"AccessibleAlwaysThisDeviceOnly";
+    }
+}
+
+void VALExecuteBlockInLock(dispatch_block_t block, NSLock *lock)
+{
+    VALCheckCondition(block != NULL, , @"Must pass in a block");
+    VALCheckCondition(lock != nil, , @"Must pass in a lock");
+    
+    [lock lock];
+    @try {
+        block();
+    }
+    @finally {
+        [lock unlock];
     }
 }
 
@@ -60,9 +74,7 @@ void VALAtomicSecItemLock(dispatch_block_t block)
         sSecItemLock = [NSLock new];
     });
     
-    [sSecItemLock lock];
-    block();
-    [sSecItemLock unlock];
+    VALExecuteBlockInLock(block, sSecItemLock);
 }
 
 OSStatus VALAtomicSecItemCopyMatching(CFDictionaryRef query, CFTypeRef *result)
@@ -227,15 +239,22 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 - (BOOL)canAccessKeychain;
 {
-    NSString *canaryKey = @"VAL_KeychainCanaryUsername";
-    NSString *canaryValue = @"VAL_KeychainCanaryPassword";
+    __block BOOL canAccessKeychain = NO;
+    VALExecuteBlockInLock(^{
+        NSString *const canaryKey = @"VAL_KeychainCanaryUsername";
+        NSString *const canaryValue = @"VAL_KeychainCanaryPassword";
+        
+        // Manually add the key to the keychain since we don't care about duplicates and are optimizing for speed.
+        NSMutableDictionary *query = [self.baseQuery mutableCopy];
+        [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:canaryKey]];
+        query[(__bridge id)kSecValueData] = [canaryValue dataUsingEncoding:NSUTF8StringEncoding];
+        (void)VALAtomicSecItemAdd((__bridge CFDictionaryRef)query, NULL);
+        
+        NSString *const retrievedCanaryValue = [self stringForKey:canaryKey];
+        canAccessKeychain = [canaryValue isEqualToString:retrievedCanaryValue];
+    }, self.lockForSetAndRemoveOperations);
     
-    NSMutableDictionary *query = [self.baseQuery mutableCopy];
-    [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:canaryKey]];
-    [query addEntriesFromDictionary:@{ (__bridge id)kSecValueData : [canaryValue dataUsingEncoding:NSUTF8StringEncoding] }];
-    
-    OSStatus status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)query, NULL);
-    return (status != errSecInteractionNotAllowed && status != errSecNotAvailable);
+    return canAccessKeychain;
 }
 
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key;
@@ -407,9 +426,8 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         [query addEntriesFromDictionary:options];
     }
     
-    OSStatus status = errSecNotAvailable;
-    [self.lockForSetAndRemoveOperations lock];
-    {
+    __block OSStatus status = errSecNotAvailable;
+    VALExecuteBlockInLock(^{
         if ([self containsObjectForKey:key]) {
             // The item already exists, so just update it.
             status = VALAtomicSecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)@{ (__bridge id)kSecValueData : value });
@@ -417,12 +435,11 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         } else {
             // No previous item found, add the new one.
             NSMutableDictionary *keychainData = [query mutableCopy];
-            [keychainData addEntriesFromDictionary:@{ (__bridge id)kSecValueData : value }];
+            keychainData[(__bridge id)kSecValueData] = value;
             
             status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)keychainData, NULL);
         }
-    }
-    [self.lockForSetAndRemoveOperations unlock];
+    }, self.lockForSetAndRemoveOperations);
     
     return (status == errSecSuccess);
 }
@@ -525,12 +542,10 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         [query addEntriesFromDictionary:options];
     }
     
-    OSStatus status = errSecNotAvailable;
-    [self.lockForSetAndRemoveOperations lock];
-    {
+    __block OSStatus status = errSecNotAvailable;
+    VALExecuteBlockInLock(^{
         status = VALAtomicSecItemDelete((__bridge CFDictionaryRef)query);
-    }
-    [self.lockForSetAndRemoveOperations unlock];
+    }, self.lockForSetAndRemoveOperations);
     
     // We succeeded as long as we can confirm that the item is not in the keychain.
     return (status != errSecInteractionNotAllowed);
@@ -592,7 +607,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
             return (__bridge id)kSecAttrAccessibleAfterFirstUnlock;
         case VALAccessibilityAlways:
             return (__bridge id)kSecAttrAccessibleAlways;
-#if __IPHONE_8_0 || __MAC_10_10
+#if VAL_IOS_8_OR_LATER || __MAC_10_10
         case VALAccessibilityWhenPasscodeSetThisDeviceOnly:
             return (__bridge id)kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly;
 #endif
