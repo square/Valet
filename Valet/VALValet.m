@@ -36,7 +36,7 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
             return @"AccessibleAfterFirstUnlock";
         case VALAccessibilityAlways:
             return @"AccessibleAlways";
-#if __IPHONE_8_0 || __MAC_10_10
+#if VAL_IOS_8_OR_LATER || __MAC_10_10
         case VALAccessibilityWhenPasscodeSetThisDeviceOnly:
             return @"AccessibleWhenPasscodeSetThisDeviceOnly";
 #endif
@@ -607,7 +607,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
             return (__bridge id)kSecAttrAccessibleAfterFirstUnlock;
         case VALAccessibilityAlways:
             return (__bridge id)kSecAttrAccessibleAlways;
-#if __IPHONE_8_0 || __MAC_10_10
+#if VAL_IOS_8_OR_LATER || __MAC_10_10
         case VALAccessibilityWhenPasscodeSetThisDeviceOnly:
             return (__bridge id)kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly;
 #endif

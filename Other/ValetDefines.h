@@ -37,3 +37,6 @@
             } \
         } \
     } while(0)
+
+/// Compile flag for building against iOS 8.
+#define VAL_IOS_8_OR_LATER (TARGET_OS_IPHONE && __IPHONE_8_0)
