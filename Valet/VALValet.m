@@ -49,6 +49,20 @@ NSString *VALStringForAccessibility(VALAccessibility accessibility)
     }
 }
 
+void VALExecuteBlockInLock(dispatch_block_t block, NSLock *lock)
+{
+    VALCheckCondition(block != NULL, , @"Must pass in a block");
+    VALCheckCondition(lock != nil, , @"Must pass in a lock");
+    
+    [lock lock];
+    @try {
+        block();
+    }
+    @finally {
+        [lock unlock];
+    }
+}
+
 /// We can't be sure that SecItem calls are atomic, so ensure atomicity ourselves.
 void VALAtomicSecItemLock(dispatch_block_t block)
 {
@@ -60,9 +74,7 @@ void VALAtomicSecItemLock(dispatch_block_t block)
         sSecItemLock = [NSLock new];
     });
     
-    [sSecItemLock lock];
-    block();
-    [sSecItemLock unlock];
+    VALExecuteBlockInLock(block, sSecItemLock);
 }
 
 OSStatus VALAtomicSecItemCopyMatching(CFDictionaryRef query, CFTypeRef *result)
@@ -227,10 +239,8 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 - (BOOL)canAccessKeychain;
 {
-    BOOL canAccessKeychain = NO;
-    
-    [self.lockForSetAndRemoveOperations lock];
-    {
+    __block BOOL canAccessKeychain = NO;
+    VALExecuteBlockInLock(^{
         NSString *const canaryKey = @"VAL_KeychainCanaryUsername";
         NSString *const canaryValue = @"VAL_KeychainCanaryPassword";
         
@@ -242,8 +252,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         
         NSString *const retrievedCanaryValue = [self stringForKey:canaryKey];
         canAccessKeychain = [canaryValue isEqualToString:retrievedCanaryValue];
-    }
-    [self.lockForSetAndRemoveOperations unlock];
+    }, self.lockForSetAndRemoveOperations);
     
     return canAccessKeychain;
 }
@@ -417,9 +426,8 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         [query addEntriesFromDictionary:options];
     }
     
-    OSStatus status = errSecNotAvailable;
-    [self.lockForSetAndRemoveOperations lock];
-    {
+    __block OSStatus status = errSecNotAvailable;
+    VALExecuteBlockInLock(^{
         if ([self containsObjectForKey:key]) {
             // The item already exists, so just update it.
             status = VALAtomicSecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)@{ (__bridge id)kSecValueData : value });
@@ -431,8 +439,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
             
             status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)keychainData, NULL);
         }
-    }
-    [self.lockForSetAndRemoveOperations unlock];
+    }, self.lockForSetAndRemoveOperations);
     
     return (status == errSecSuccess);
 }
@@ -535,12 +542,10 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         [query addEntriesFromDictionary:options];
     }
     
-    OSStatus status = errSecNotAvailable;
-    [self.lockForSetAndRemoveOperations lock];
-    {
+    __block OSStatus status = errSecNotAvailable;
+    VALExecuteBlockInLock(^{
         status = VALAtomicSecItemDelete((__bridge CFDictionaryRef)query);
-    }
-    [self.lockForSetAndRemoveOperations unlock];
+    }, self.lockForSetAndRemoveOperations);
     
     // We succeeded as long as we can confirm that the item is not in the keychain.
     return (status != errSecInteractionNotAllowed);
