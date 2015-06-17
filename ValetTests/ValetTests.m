@@ -80,9 +80,6 @@
     [self.valet removeAllObjects];
     [self.testingValet removeAllObjects];
     [self.synchronizableValet removeAllObjects];
-#if VAL_IOS_8_OR_LATER
-    [self.secureEnclaveValet removeAllObjects];
-#endif
     
     for (VALValet *additionalValet in self.additionalValets) {
         [additionalValet removeAllObjects];
@@ -544,6 +541,11 @@
         
         for (NSString *key in keyStringPairToMigrateMap) {
             XCTAssertTrue([self.secureEnclaveValet containsObjectForKey:key]);
+        }
+        
+        // Clean up items for next test run since Secure Enclave Valet does not support allKeys or removeAllObjects.
+        for (NSString *key in keyStringPairToMigrateMap) {
+            XCTAssertTrue([self.secureEnclaveValet removeObjectForKey:key]);
         }
     }
 }
