@@ -456,6 +456,25 @@
     XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithConflict removeOnCompletion:NO].code, VALMigrationErrorDuplicateKeyInQueryResult);
 }
 
+- (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesSingleKeyValuePairSuccessfully;
+{
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet_Single_Key" accessibility:VALAccessibilityAfterFirstUnlock];
+    [self.additionalValets addObject:otherValet];
+    
+    NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar" };
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
+    }
+    
+    XCTAssertNil([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:NO]);
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
+        XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
+    }
+}
+
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWithoutRemovingOnCompletion;
 {
     VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
