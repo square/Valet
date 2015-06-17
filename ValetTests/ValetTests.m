@@ -30,6 +30,8 @@
 
 @interface VALValet (Testing)
 
+@property (copy, readonly) NSDictionary *baseQuery;
+
 - (NSString *)_sharedAccessGroupPrefix;
 - (NSDictionary *)_secItemFormatDictionaryWithKey:(NSString *)key;
 
@@ -89,6 +91,15 @@
     self.string = @"bar";
     self.secondaryString = @"bar2";
     self.additionalValets = [NSMutableArray new];
+}
+
+- (void)tearDown;
+{
+    [super tearDown];
+    
+    for (VALValet *additionalValet in self.additionalValets) {
+        [additionalValet removeAllObjects];
+    }
 }
 
 #pragma mark - Behavior Tests
@@ -269,6 +280,72 @@
     
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
+
+#if !TARGET_OS_IPHONE
+- (void)test_setStringForKey_neutralizesMacOSAccessControlListVuln;
+{
+    // This test verifies that we are neutralizing the zero-day Mac OS X Access Control List vulnerability published here: https://drive.google.com/file/d/0BxxXk1d3yyuZOFlsdkNMSGswSGs/view
+    
+    NSOperatingSystemVersion version = [NSProcessInfo processInfo].operatingSystemVersion;
+    BOOL macOS1010OrLater = (version.majorVersion == 10 && version.minorVersion >= 10);
+    if (!macOS1010OrLater) {
+        // This test will fail before 10.10, since SecItemDelete does not actually delete keychain items that have kSecAttrAccess associated with them (bugs!). It is possible to delete the shared keychain item using SecKeychainItemDelete, but then all of Valet would need to be rewritten to support SecKeychainItemDelete on 10.9 because SecItem* and SecKeychainItem* APIs don't play nicely. So, if we're running this test on 10.9 or earlier, bail out.
+        return;
+    }
+    
+    VALValet *valet = [[VALValet alloc] initWithIdentifier:@"MacOSVulnTest" accessibility:VALAccessibilityWhenUnlocked];
+    [self.additionalValets addObject:valet];
+    
+    NSString *const vulnKey = @"AccessControlListVulnTestKey";
+    NSString *const vulnKeyValue = @"AccessControlListVulnTestValue";
+    
+    // Add an entry to the keychain with an access control list.
+    NSMutableDictionary *query = [valet.baseQuery mutableCopy];
+    [query addEntriesFromDictionary:[valet _secItemFormatDictionaryWithKey:vulnKey]];
+    
+    SecAccessRef accessList = NULL;
+    SecTrustedApplicationRef trustedAppSelf = NULL;
+    SecTrustedApplicationRef trustedAppFinder = NULL;
+    XCTAssertEqual(SecTrustedApplicationCreateFromPath(NULL, &trustedAppSelf), errSecSuccess);
+    XCTAssertEqual(SecTrustedApplicationCreateFromPath("/Applications/Finder.app", &trustedAppFinder), errSecSuccess);
+    XCTAssertEqual(SecAccessCreate((__bridge CFStringRef)@"Access Control List",
+                                   (__bridge CFArrayRef)@[ (__bridge id)trustedAppSelf, (__bridge id)trustedAppFinder ],
+                                   &accessList),
+                   errSecSuccess);
+    
+    NSMutableDictionary *keychainData = [query mutableCopy];
+    keychainData[(__bridge id)kSecAttrAccess] = (__bridge id)accessList;
+    keychainData[(__bridge id)kSecValueData] = [vulnKeyValue dataUsingEncoding:NSUTF8StringEncoding];
+    XCTAssertEqual(SecItemAdd((__bridge CFDictionaryRef)keychainData, NULL), errSecSuccess);
+    
+    // The potentially vulnerable keychain item should exist in our Valet now.
+    XCTAssertTrue([valet containsObjectForKey:vulnKey]);
+    
+    // Get a persistent reference to the vulnerable keychain entry.
+    query[(__bridge id)kSecReturnRef] = @YES;
+    query[(__bridge id)kSecReturnAttributes] = @YES;
+    CFTypeRef referenceOutTypeRef = NULL;
+    XCTAssertEqual(SecItemCopyMatching((__bridge CFDictionaryRef)query, &referenceOutTypeRef), errSecSuccess);
+    NSDictionary *keychainEntryWithReference = (__bridge_transfer NSDictionary *)referenceOutTypeRef;
+    
+    // Show that we can access the item via the ref.
+    NSDictionary *queryWithReference = @{ (__bridge id)kSecValueRef : keychainEntryWithReference[(__bridge id)kSecValueRef] };
+    XCTAssertEqual(SecItemCopyMatching((__bridge CFDictionaryRef)queryWithReference, NULL), errSecSuccess);
+    
+    // Update the vulnerable keychain value with Valet, and see that we have deleted the existing keychain item (rather than updating it) are therefore no longer vulnerable.
+    NSString *const vulnKeyOtherValue = @"AccessControlListVulnOtherTestValue";
+    [valet setString:vulnKeyOtherValue forKey:vulnKey];
+    
+    // We can no longer access the keychain item via the ref.
+    NSDictionary *queryWithReferenceAndAttributes = @{ (__bridge id)kSecValueRef : keychainEntryWithReference[(__bridge id)kSecValueRef], (__bridge id)kSecReturnAttributes : @YES };
+    XCTAssertEqual(SecItemCopyMatching((__bridge CFDictionaryRef)queryWithReferenceAndAttributes, NULL), errSecItemNotFound);
+    CFRelease(accessList);
+    CFRelease(trustedAppSelf);
+    CFRelease(trustedAppFinder);
+    
+    // If you manually inspect the keychain via Keychain.app and search for MacOSVulnTest, you'll see that the Access Control for the only item matching this query has only xctest in the Access Control list. You'll see that this is not the case if you remove the line `[valet setString:vulnKeyOtherValue forKey:vulnKey];`.
+}
+#endif
 
 - (void)test_containsObjectForKey_returnsYESWhenKeyExists;
 {
