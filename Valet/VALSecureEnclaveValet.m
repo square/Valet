@@ -87,7 +87,7 @@
 {
 #if VAL_IOS_8_OR_LATER
     OSStatus status = [self containsObjectForKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
-    BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed);
+    BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed || status == errSecSuccess);
     return keyAlreadyInKeychain;
 #else
     return NO;
