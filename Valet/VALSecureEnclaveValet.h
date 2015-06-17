@@ -47,4 +47,7 @@ NS_CLASS_AVAILABLE_IOS(8_0)
 /// This method is not supported on VALSecureEnclaveValet.
 - (NSSet *)allKeys __attribute__((unavailable("VALSecureEnclaveValet does not support -allKeys")));
 
+/// This method is not supported on VALSecureEnclaveValet.
+- (BOOL)removeAllObjects __attribute__((unavailable("VALSecureEnclaveValet does not support -removeAllObjects")));
+
 @end

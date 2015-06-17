@@ -16,7 +16,7 @@ pod 'Valet'
 on OS X:
 
 ```
-platform :osx, '10.9'
+platform :osx, '10.10'
 pod 'Valet'
 ```
 

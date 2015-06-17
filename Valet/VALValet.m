@@ -427,6 +427,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     }
     
     __block OSStatus status = errSecNotAvailable;
+#if TARGET_OS_IPHONE
     VALExecuteBlockInLock(^{
         if ([self containsObjectForKey:key]) {
             // The item already exists, so just update it.
@@ -440,6 +441,18 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
             status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)keychainData, NULL);
         }
     }, self.lockForSetAndRemoveOperations);
+#else
+    VALExecuteBlockInLock(^{
+        // Never update an existing keychain item on OS X, since the existing item could have unauthorized apps in the Access Control List. Fixes zero-day Keychain vuln found here: https://drive.google.com/file/d/0BxxXk1d3yyuZOFlsdkNMSGswSGs/view
+        (void)VALAtomicSecItemDelete((__bridge CFDictionaryRef)query);
+        
+        // If there were an entry in the keychain for this value, we just deleted it. So just add the new value.
+        NSMutableDictionary *keychainData = [query mutableCopy];
+        keychainData[(__bridge id)kSecValueData] = value;
+        
+        status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)keychainData, NULL);
+    }, self.lockForSetAndRemoveOperations);
+#endif
     
     return (status == errSecSuccess);
 }

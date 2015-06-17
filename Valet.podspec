@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'Valet'
-  s.version  = '1.1.3'
+  s.version  = '1.2'
   s.license  = 'Apache'
   s.summary  = 'Valet lets you securely store data in the iOS or OS X Keychain without knowing a thing about how the Keychain works. It\'s easy. We promise.'
   s.homepage = 'https://github.com/square/Valet'
@@ -9,5 +9,5 @@ Pod::Spec.new do |s|
   s.source_files = 'Valet/*.{h,m}', 'Other/*.{h,m}'
   s.frameworks = 'Security'
   s.ios.deployment_target = '6.0'
-  s.osx.deployment_target = '10.9'
+  s.osx.deployment_target = '10.10'
 end
