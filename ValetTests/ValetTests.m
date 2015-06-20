@@ -307,7 +307,7 @@
     SecTrustedApplicationRef trustedAppSelf = NULL;
     SecTrustedApplicationRef trustedAppFinder = NULL;
     XCTAssertEqual(SecTrustedApplicationCreateFromPath(NULL, &trustedAppSelf), errSecSuccess);
-    XCTAssertEqual(SecTrustedApplicationCreateFromPath("/Applications/Finder.app", &trustedAppFinder), errSecSuccess);
+    XCTAssertEqual(SecTrustedApplicationCreateFromPath("/System/Library/CoreServices/SystemUIServer.app", &trustedAppFinder), errSecSuccess);
     XCTAssertEqual(SecAccessCreate((__bridge CFStringRef)@"Access Control List",
                                    (__bridge CFArrayRef)@[ (__bridge id)trustedAppSelf, (__bridge id)trustedAppFinder ],
                                    &accessList),
@@ -321,7 +321,7 @@
     // The potentially vulnerable keychain item should exist in our Valet now.
     XCTAssertTrue([valet containsObjectForKey:vulnKey]);
     
-    // Get a persistent reference to the vulnerable keychain entry.
+    // Get a reference to the vulnerable keychain entry.
     query[(__bridge id)kSecReturnRef] = @YES;
     query[(__bridge id)kSecReturnAttributes] = @YES;
     CFTypeRef referenceOutTypeRef = NULL;
@@ -343,7 +343,7 @@
     CFRelease(trustedAppSelf);
     CFRelease(trustedAppFinder);
     
-    // If you manually inspect the keychain via Keychain.app and search for MacOSVulnTest, you'll see that the Access Control for the only item matching this query has only xctest in the Access Control list. You'll see that this is not the case if you remove the line `[valet setString:vulnKeyOtherValue forKey:vulnKey];`.
+    // If you add a breakpoint here and manually inspect the keychain via Keychain.app and search for MacOSVulnTest, you'll see that the Access Control for the only item matching this query has only xctest in the Access Control list. You'll see that this is not the case if you break above the line `[valet setString:vulnKeyOtherValue forKey:vulnKey];`.
 }
 #endif
 
