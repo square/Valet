@@ -281,6 +281,49 @@
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
+- (void)test_stringForKey_canReadDataWrittenToValetOnDifferentThread;
+{
+    dispatch_queue_t setStringQueue = dispatch_queue_create("Set String Queue", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_queue_t stringForKeyQueue = dispatch_queue_create("String For Key Queue", DISPATCH_QUEUE_CONCURRENT);
+    
+    XCTestExpectation *expectationStringForKeyQueue = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    dispatch_async(setStringQueue, ^{
+        XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
+        
+        dispatch_async(stringForKeyQueue, ^{
+            XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
+            [expectationStringForKeyQueue fulfill];
+        });
+    });
+    
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+}
+
+- (void)test_stringForKey_canReadDataWrittenToValetAllocatedOnDifferentThread;
+{
+    dispatch_queue_t setStringQueue = dispatch_queue_create("Set String Queue", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_queue_t stringForKeyQueue = dispatch_queue_create("String For Key Queue", DISPATCH_QUEUE_CONCURRENT);
+    
+    XCTestExpectation *expectationStringForKeyQueue = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    NSString *const valetConcurrencyTestingIdentifier = @"valet_testing_concurrency";
+    VALAccessibility valetConcurrencyTestingAccessibility = VALAccessibilityWhenUnlocked;
+    
+    dispatch_async(setStringQueue, ^{
+        VALValet *setStringValet = [[VALValet alloc] initWithIdentifier:valetConcurrencyTestingIdentifier accessibility:valetConcurrencyTestingAccessibility];
+        [self.additionalValets addObject:setStringValet];
+        XCTAssertTrue([setStringValet setString:self.string forKey:self.key]);
+        
+        dispatch_async(stringForKeyQueue, ^{
+            VALValet *stringForKeyValet = [[VALValet alloc] initWithIdentifier:valetConcurrencyTestingIdentifier accessibility:valetConcurrencyTestingAccessibility];
+            [self.additionalValets addObject:stringForKeyValet];
+            XCTAssertEqualObjects([stringForKeyValet stringForKey:self.key], self.string);
+            [expectationStringForKeyQueue fulfill];
+        });
+    });
+    
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+}
+
 #if !TARGET_OS_IPHONE
 - (void)test_setStringForKey_neutralizesMacOSAccessControlListVuln;
 {
