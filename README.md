@@ -80,6 +80,15 @@ This instance can be used to store and retrieve data in the Secure Enclave (supp
 
 Already using the Keychain and no longer want to maintain your own Keychain code? We feel you. That’s why we wrote `-migrateObjectsMatchingQuery:removeOnCompletion:`. This method allows you to migrate all your existing Keychain entries to a Valet instance in one line. Just pass in an NSDictionary with the `kSecClass`, `kSecAttrService`, and any other `kSecAttr*` attributes you use – we’ll migrate the data for you.
 
+### Debugging
+
+Valet guarantees it will never fail to write to or read from the keychain unless `canAccessKeychain` returns `NO`. There are only a few cases that can lead to the keychain being inaccessible:
+
+1. Using the wrong `VALAccessibility` for your use case. Examples of improper use include using `VALAccessibilityWhenPasscodeSetThisDeviceOnly` when there is no passcode set on the device, or using `VALAccessibilityWhenUnlocked` when running in the background.
+2. Initializing a Valet with `initWithSharedAccessGroupIdentifier:` when the shared access group identifier is not in your entitlements file.
+3. Using `VALSecureEnclaveValet` on an iOS device that doesn't have a Secure Enclave. The Secure Enclave was introduced with the [A7 chip](https://www.apple.com/business/docs/iOS_Security_Guide.pdf), which [first appeared](https://en.wikipedia.org/wiki/Apple_A7#Products_that_include_the_Apple_A7) in the iPhone 5S, iPad Air, and iPad Mini 2.
+4. Running your app in DEBUG from Xcode. Xcode sometimes does not properly sign your app, which causes a [failure to access keychain](https://github.com/square/Valet/issues/10#issuecomment-114408954) due to entitlements. If you run into this issue, just hit Run in Xcode again. This signing issue will not occur in properly signed (not DEBUG) builds.
+
 ## Contributing
 
 We’re glad you’re interested in Valet, and we’d love to see where you take it.
