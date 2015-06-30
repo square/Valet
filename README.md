@@ -1,5 +1,10 @@
 # Valet
 
+[![CI Status](http://img.shields.io/travis/square/Valet.svg?style=flat)](https://travis-ci.org/square/Valet)
+[![Version](https://img.shields.io/cocoapods/v/Valet.svg?style=flat)](http://cocoadocs.org/docsets/Valet)
+[![License](https://img.shields.io/cocoapods/l/Valet.svg?style=flat)](http://cocoadocs.org/docsets/Valet)
+[![Platform](https://img.shields.io/cocoapods/p/Valet.svg?style=flat)](http://cocoadocs.org/docsets/Valet)
+
 Valet lets you securely store data in the iOS or OS X Keychain without knowing a thing about how the Keychain works. It’s easy. We promise.
 
 ## Getting Started
