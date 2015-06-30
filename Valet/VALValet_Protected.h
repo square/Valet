@@ -1,5 +1,5 @@
 //
-//  Header.h
+//  VALValet_Protected.h
 //  Valet
 //
 //  Created by Dan Federman on 3/16/15.
@@ -18,6 +18,12 @@
 //  limitations under the License.
 //
 
+#import "VALValet.h"
+
+
+NS_ASSUME_NONNULL_BEGIN
+
+
 extern NSString *VALStringForAccessibility(VALAccessibility accessibility);
 
 
@@ -25,13 +31,16 @@ extern NSString *VALStringForAccessibility(VALAccessibility accessibility);
 
 - (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
 
-- (BOOL)setObject:(NSData *)value forKey:(NSString *)key options:(NSDictionary *)options;
-- (NSData *)objectForKey:(NSString *)key options:(NSDictionary *)options;
-- (BOOL)setString:(NSString *)string forKey:(NSString *)key options:(NSDictionary *)options;
-- (NSString *)stringForKey:(NSString *)key options:(NSDictionary *)options;
-- (OSStatus)containsObjectForKey:(NSString *)key options:(NSDictionary *)options;
-- (NSSet *)allKeysWithOptions:(NSDictionary *)options;
-- (BOOL)removeObjectForKey:(NSString *)key options:(NSDictionary *)options;
-- (BOOL)removeAllObjectsWithOptions:(NSDictionary *)options;
+- (BOOL)setObject:(NSData *)value forKey:(NSString *)key options:(nullable NSDictionary *)options;
+- (nullable NSData *)objectForKey:(NSString *)key options:(nullable NSDictionary *)options;
+- (BOOL)setString:(NSString *)string forKey:(NSString *)key options:(nullable NSDictionary *)options;
+- (nullable NSString *)stringForKey:(NSString *)key options:(nullable NSDictionary *)options;
+- (OSStatus)containsObjectForKey:(NSString *)key options:(nullable NSDictionary *)options;
+- (NSSet *)allKeysWithOptions:(nullable NSDictionary *)options;
+- (BOOL)removeObjectForKey:(NSString *)key options:(nullable NSDictionary *)options;
+- (BOOL)removeAllObjectsWithOptions:(nullable NSDictionary *)options;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

@@ -21,6 +21,9 @@
 #import <Foundation/Foundation.h>
 
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 typedef NS_ENUM(NSUInteger, VALAccessibility) {
     /// Valet data can only be accessed while the device is unlocked. This attribute is recommended for data that only needs to be accesible while the application is in the foreground. Valet data with this accessibility will migrate to a new device when using encrypted backups.
     VALAccessibilityWhenUnlocked = 1,
@@ -67,42 +70,48 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
 @interface VALValet : NSObject <NSCopying>
 
 /// Creates a Valet that reads/writes keychain elements with the desired accessibility.
-- (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility __attribute__((nonnull(1))) __attribute((objc_designated_initializer));
+- (nullable instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility __attribute((objc_designated_initializer));
 
 /// Creates a Valet that reads/writes keychain elements that can be shared across applications written by the same development team. The sharedAccessGroupIdentifier must correspond with the value for keychain-access-groups in your Entitlements file.
-- (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility __attribute__((nonnull(1))) __attribute((objc_designated_initializer));
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility __attribute((objc_designated_initializer));
 
 @property (copy, readonly) NSString *identifier;
 @property (readonly, getter=isSharedAcrossApplications) BOOL sharedAcrossApplications;
 @property (readonly) VALAccessibility accessibility;
 
-/// Returns YES if otherValet reads from and writes to the same sandbox within keychain as the receiver.
+/// @return YES if otherValet reads from and writes to the same sandbox within keychain as the receiver.
 - (BOOL)isEqualToValet:(VALValet *)otherValet;
 
 /// Checks whether the keychain is currently accessible by writing a value to the keychain and then reading it back out.
 - (BOOL)canAccessKeychain;
 
-/// Inserts data into the keychain. Returns NO if the keychain is not accessible.
-- (BOOL)setObject:(NSData *)value forKey:(NSString *)key __attribute__((nonnull(1,2)));
+/// Inserts data into the keychain.
+/// @return NO if the keychain is not accessible.
+- (BOOL)setObject:(NSData *)value forKey:(NSString *)key;
 /// Retreives data from the keychain.
-- (NSData *)objectForKey:(NSString *)key __attribute__((nonnull(1)));
+- (nullable NSData *)objectForKey:(NSString *)key;
 
 /// Convenience method for adding a string to the keychain.
-- (BOOL)setString:(NSString *)string forKey:(NSString *)key __attribute__((nonnull(1,2)));
-/// Convenience method for retreiving a string from the keychain.
-- (NSString *)stringForKey:(NSString *)key __attribute__((nonnull(1)));
+- (BOOL)setString:(NSString *)string forKey:(NSString *)key;
+/// Convenience method for retrieving a string from the keychain.
+- (nullable NSString *)stringForKey:(NSString *)key;
 
-- (BOOL)containsObjectForKey:(NSString *)key __attribute__((nonnull(1)));
+- (BOOL)containsObjectForKey:(NSString *)key;
 - (NSSet *)allKeys;
 
-/// Removes a key/object pair from the keychain. Returns NO if the keychain is not accessible.
-- (BOOL)removeObjectForKey:(NSString *)key __attribute__((nonnull(1)));
-/// Removes all key/object pairs accessible by this Valet instance from the keychain. Returns NO if the keychain is not accessible.
+/// Removes a key/object pair from the keychain.
+/// @return NO if the keychain is not accessible.
+- (BOOL)removeObjectForKey:(NSString *)key;
+/// Removes all key/object pairs accessible by this Valet instance from the keychain.
+/// @return NO if the keychain is not accessible.
 - (BOOL)removeAllObjects;
 
 /// Migrates objects matching the secItemQuery into the receiving Valet instance. Error domain will be VALMigrationErrorDomain, and codes can will be from VALMigrationError. The keychain is not modified if a failure occurs.
-- (NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
+- (nullable NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 /// Migrates objects from the passed-in Valet into the receiving Valet instance.
-- (NSError *)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
+- (nullable NSError *)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

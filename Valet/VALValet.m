@@ -512,7 +512,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 - (NSSet *)allKeysWithOptions:(NSDictionary *)options;
 {
-    NSSet *keys = nil;
+    NSSet *keys = [NSSet set];
     NSMutableDictionary *query = [self.baseQuery mutableCopy];
     [query addEntriesFromDictionary:@{ (__bridge id)kSecMatchLimit : (__bridge id)kSecMatchLimitAll,
                                        (__bridge id)kSecReturnAttributes : @YES }];
