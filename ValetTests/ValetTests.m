@@ -401,10 +401,10 @@
     XCTAssertFalse([self.valet containsObjectForKey:self.key]);
 }
 
-- (void)test_allKeys_returnsNilWhenNoAllKeysPresent;
+- (void)test_allKeys_returnsEmptySetWhenNoKeysArePresent;
 {
     XCTAssertNil([self.valet stringForKey:self.key]);
-    XCTAssertNil([self.valet allKeys]);
+    XCTAssertEqual(0, [self.valet allKeys].count);
 }
 
 - (void)test_allKeys_returnsOneKeyWhenOnlyOneKey;
@@ -436,7 +436,7 @@
     [self.additionalValets addObject:otherValet];
     
     NSSet *allKeys = [otherValet allKeys];
-    XCTAssertNil(allKeys, @"Expected allKeys with different identifier to be nil but instead it was %@", allKeys);
+    XCTAssertEqual(0, allKeys.count, @"Expected allKeys with different identifier to be an empty set but instead it was %@", allKeys);
 }
 
 - (void)test_removeObjectForKey_succeedsWhenNoKeyExists;
