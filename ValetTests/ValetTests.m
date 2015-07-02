@@ -130,7 +130,7 @@
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"" accessibility:VALAccessibilityAlways]);
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"test" accessibility:0]);
     XCTAssertNil([[VALSynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenUnlockedThisDeviceOnly]);
-
+    
 #if VAL_IOS_8_OR_LATER
     XCTAssertNil([[VALSecureEnclaveValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenUnlockedThisDeviceOnly]);
 #endif
@@ -348,11 +348,11 @@
     
     SecAccessRef accessList = NULL;
     SecTrustedApplicationRef trustedAppSelf = NULL;
-    SecTrustedApplicationRef trustedAppFinder = NULL;
+    SecTrustedApplicationRef trustedAppSystemUIServer = NULL;
     XCTAssertEqual(SecTrustedApplicationCreateFromPath(NULL, &trustedAppSelf), errSecSuccess);
-    XCTAssertEqual(SecTrustedApplicationCreateFromPath("/System/Library/CoreServices/SystemUIServer.app", &trustedAppFinder), errSecSuccess);
+    XCTAssertEqual(SecTrustedApplicationCreateFromPath("/System/Library/CoreServices/SystemUIServer.app", &trustedAppSystemUIServer), errSecSuccess);
     XCTAssertEqual(SecAccessCreate((__bridge CFStringRef)@"Access Control List",
-                                   (__bridge CFArrayRef)@[ (__bridge id)trustedAppSelf, (__bridge id)trustedAppFinder ],
+                                   (__bridge CFArrayRef)@[ (__bridge id)trustedAppSelf, (__bridge id)trustedAppSystemUIServer ],
                                    &accessList),
                    errSecSuccess);
     
@@ -384,7 +384,7 @@
     XCTAssertEqual(SecItemCopyMatching((__bridge CFDictionaryRef)queryWithReferenceAndAttributes, NULL), errSecItemNotFound);
     CFRelease(accessList);
     CFRelease(trustedAppSelf);
-    CFRelease(trustedAppFinder);
+    CFRelease(trustedAppSystemUIServer);
     
     // If you add a breakpoint here and manually inspect the keychain via Keychain.app and search for MacOSVulnTest, you'll see that the Access Control for the only item matching this query has only xctest in the Access Control list. You'll see that this is not the case if you break above the line `[valet setString:vulnKeyOtherValue forKey:vulnKey];`.
 }
@@ -650,7 +650,7 @@
     NSSet *allValetKeysPreMigration = self.valet.allKeys;
     
     XCTAssertEqual([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES].code, VALMigrationErrorKeyInQueryResultAlreadyExistsInValet);
-
+    
     XCTAssertEqualObjects(self.valet.allKeys, allValetKeysPreMigration);
     XCTAssertEqualObjects([self.valet stringForKey:conflictKey], keyStringPairToMigrateMap[conflictKey]);
     
