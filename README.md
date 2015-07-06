@@ -94,6 +94,12 @@ Valet guarantees it will never fail to write to or read from the keychain unless
 3. Using `VALSecureEnclaveValet` on an iOS device that doesn't have a Secure Enclave. The Secure Enclave was introduced with the [A7 chip](https://www.apple.com/business/docs/iOS_Security_Guide.pdf), which [first appeared](https://en.wikipedia.org/wiki/Apple_A7#Products_that_include_the_Apple_A7) in the iPhone 5S, iPad Air, and iPad Mini 2.
 4. Running your app in DEBUG from Xcode. Xcode sometimes does not properly sign your app, which causes a [failure to access keychain](https://github.com/square/Valet/issues/10#issuecomment-114408954) due to entitlements. If you run into this issue, just hit Run in Xcode again. This signing issue will not occur in properly signed (not DEBUG) builds.
 
+## Requirements
+
+* Xcode 6.3 or later. Earlier versions of Xcode require [Valet version 1.2.1](https://github.com/square/Valet/tree/1f587a82bed724e75c63f9254287016b51d31ced).
+* iOS 6 or later.
+* OS X 10.10 or later.
+
 ## Contributing
 
 We’re glad you’re interested in Valet, and we’d love to see where you take it.
