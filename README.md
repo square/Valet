@@ -63,7 +63,7 @@ Valet’s API for securely reading and writing data is similar to that of an NSM
 VALValet *mySharedValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
-This instance can be used to store and retrieve data securely across any app writen by the same developer with the value `Druidia` under the `keychain-access-groups` key in the app’s `Entitlements` file, when the device is unlocked. `myValet` and `mySharedValet` can not read or modify one another’s values because the two Valets were created with different initializers. You can use the `-initWithSharedAccessGroupIdentifier:accessibility:` initializer on any Valet class to allow for sharing secrets across applications written by the same developer.
+This instance can be used to store and retrieve data securely across any app written by the same developer with the value `Druidia` under the `keychain-access-groups` key in the app’s `Entitlements` file, when the device is unlocked. `myValet` and `mySharedValet` can not read or modify one another’s values because the two Valets were created with different initializers. You can use the `-initWithSharedAccessGroupIdentifier:accessibility:` initializer on any Valet class to allow for sharing secrets across applications written by the same developer.
 
 ### Sharing Secrets Across Devices with iCloud
 
