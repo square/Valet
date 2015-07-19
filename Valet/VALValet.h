@@ -51,15 +51,15 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
     VALMigrationErrorNoItemsToMigrateFound,
     /// Migration failed because the keychain could not be read.
     VALMigrationErrorCouldNotReadKeychain,
-    /// Migraiton failed because a key in the query result could not be read.
+    /// Migration failed because a key in the query result could not be read.
     VALMigrationErrorKeyInQueryResultInvalid,
-    /// Migraiton failed because some data in the query result could not be read.
+    /// Migration failed because some data in the query result could not be read.
     VALMigrationErrorDataInQueryResultInvalid,
-    /// Migraiton failed because two keys with the same value were found in the keychain.
+    /// Migration failed because two keys with the same value were found in the keychain.
     VALMigrationErrorDuplicateKeyInQueryResult,
-    /// Migraiton failed because a key in the keychain duplicates a key already managed by Valet.
+    /// Migration failed because a key in the keychain duplicates a key already managed by Valet.
     VALMigrationErrorKeyInQueryResultAlreadyExistsInValet,
-    /// Migraiton failed because writing to the keychain failed.
+    /// Migration failed because writing to the keychain failed.
     VALMigrationErrorCouldNotWriteToKeychain,
     /// Migration failed because removing the migrated data from the keychain failed.
     VALMigrationErrorRemovalFailed,
@@ -70,33 +70,41 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
 @interface VALValet : NSObject <NSCopying>
 
 /// Creates a Valet that reads/writes keychain elements with the desired accessibility.
+/// @see VALAccessibility
 - (nullable instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility __attribute((objc_designated_initializer));
 
-/// Creates a Valet that reads/writes keychain elements that can be shared across applications written by the same development team. The sharedAccessGroupIdentifier must correspond with the value for keychain-access-groups in your Entitlements file.
+/// Creates a Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
+/// @param sharedAccessGroupIdentifier This must correspond with the value for keychain-access-groups in your Entitlements file.
+/// @see VALAccessibility
 - (nullable instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility __attribute((objc_designated_initializer));
 
 @property (copy, readonly) NSString *identifier;
 @property (readonly, getter=isSharedAcrossApplications) BOOL sharedAcrossApplications;
 @property (readonly) VALAccessibility accessibility;
 
-/// @return YES if otherValet reads from and writes to the same sandbox within keychain as the receiver.
+/// @return YES if otherValet reads from and writes to the same sandbox within the keychain as the receiver.
 - (BOOL)isEqualToValet:(VALValet *)otherValet;
 
-/// Checks whether the keychain is currently accessible by writing a value to the keychain and then reading it back out.
+/// @return YES if the keychain is accessible for reading and writing, NO otherwise.
+/// @note Determined by writing a value to the keychain and then reading it back out.
 - (BOOL)canAccessKeychain;
 
-/// Inserts data into the keychain.
+/// @param value An NSData value to be inserted into the keychain.
 /// @return NO if the keychain is not accessible.
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key;
-/// Retreives data from the keychain.
+/// @return The data currently stored in the keychain for the provided key.
 - (nullable NSData *)objectForKey:(NSString *)key;
 
-/// Convenience method for adding a string to the keychain.
+/// @param string An NSString value to store in the keychain for the provided key.
+/// @return NO if the keychain is not accessible.
 - (BOOL)setString:(NSString *)string forKey:(NSString *)key;
-/// Convenience method for retrieving a string from the keychain.
+/// @return The string currently stored in the keychain for the provided key.
 - (nullable NSString *)stringForKey:(NSString *)key;
 
+/// @param key The key to look up in the keychain.
+/// @return YES if a value has been set for the given key, NO otherwise.
 - (BOOL)containsObjectForKey:(NSString *)key;
+/// @return The set of all (NSString) keys currently stored in this Valet instance.
 - (NSSet *)allKeys;
 
 /// Removes a key/object pair from the keychain.
@@ -106,9 +114,14 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
 /// @return NO if the keychain is not accessible.
 - (BOOL)removeAllObjects;
 
-/// Migrates objects matching the secItemQuery into the receiving Valet instance. Error domain will be VALMigrationErrorDomain, and codes can will be from VALMigrationError. The keychain is not modified if a failure occurs.
+/// Migrates objects matching the secItemQuery into the receiving Valet instance.
+/// @return An error if the operation failed. Error domain will be <code>VALMigrationErrorDomain</code>, and codes will be of type <code>VALMigrationError</code>
+/// @see VALMigrationError
+/// @note The keychain is not modified if a failure occurs.
 - (nullable NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 /// Migrates objects from the passed-in Valet into the receiving Valet instance.
+/// @return An error if the operation failed. Error domain will be <code>VALMigrationErrorDomain</code>, and codes will be of type <code>VALMigrationError</code>
+/// @see VALMigrationError
 - (nullable NSError *)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
 
 @end

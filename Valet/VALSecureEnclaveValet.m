@@ -74,7 +74,7 @@
 {
     // To avoid prompting the user for Touch ID or passcode, create a VALValet with our identifier and accessibility and ask it if it can access the keychain.
     VALValet *noPromptValet = nil;
-    if ([self isSharedAcrossApplications]) {
+    if (self.isSharedAcrossApplications) {
         noPromptValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:self.identifier accessibility:self.accessibility];
     } else {
         noPromptValet = [[VALValet alloc] initWithIdentifier:self.identifier accessibility:self.accessibility];

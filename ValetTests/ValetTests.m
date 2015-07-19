@@ -127,6 +127,8 @@
 
 - (void)test_initialization_invalidArgumentsCauseFailure;
 {
+    id nilValue = nil;
+    XCTAssertNil([[VALValet alloc] initWithIdentifier:nilValue accessibility:VALAccessibilityAlways]);
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"" accessibility:VALAccessibilityAlways]);
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"test" accessibility:0]);
     XCTAssertNil([[VALSynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenUnlockedThisDeviceOnly]);
@@ -194,6 +196,11 @@
 
 - (void)test_setStringForKey_invalidArgumentsCauseFailure;
 {
+    id nilValue = nil;
+    XCTAssertFalse([self.valet setString:nilValue forKey:self.key]);
+    XCTAssertFalse([self.valet setString:self.string forKey:nilValue]);
+    XCTAssertFalse([self.valet setString:nilValue forKey:nilValue]);
+
     XCTAssertFalse([self.valet setString:@"" forKey:self.key]);
     XCTAssertFalse([self.valet setString:self.string forKey:@""]);
     XCTAssertFalse([self.valet setString:@"" forKey:@""]);
@@ -437,6 +444,22 @@
     
     NSSet *allKeys = [otherValet allKeys];
     XCTAssertEqual(0, allKeys.count, @"Expected allKeys with different identifier to be an empty set but instead it was %@", allKeys);
+}
+
+- (void)test_setObjectForKey_invalidArgumentsCauseFailure;
+{
+    NSData *stringAsData = [self.string dataUsingEncoding:NSUTF8StringEncoding];
+    XCTAssertNotNil(stringAsData);
+
+    id nilValue = nil;
+    XCTAssertFalse([self.valet setObject:nilValue forKey:self.key]);
+    XCTAssertFalse([self.valet setObject:stringAsData forKey:nilValue]);
+    XCTAssertFalse([self.valet setObject:nilValue forKey:nilValue]);
+
+    NSData *emptyData = [NSData new];
+    XCTAssertFalse([self.valet setObject:emptyData forKey:self.key]);
+    XCTAssertFalse([self.valet setObject:stringAsData forKey:@""]);
+    XCTAssertFalse([self.valet setObject:emptyData forKey:@""]);
 }
 
 - (void)test_removeObjectForKey_succeedsWhenNoKeyExists;
