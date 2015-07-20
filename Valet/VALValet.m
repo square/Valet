@@ -214,7 +214,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 - (NSUInteger)hash;
 {
-    return [self.baseQuery[(__bridge id)kSecAttrService] hash];
+    return [self.secServiceIdentifier hash];
 }
 
 - (NSString *)description;
@@ -289,6 +289,8 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return [self allKeysWithOptions:nil];
 }
 
+#pragma mark - Public Methods - Removal
+
 - (BOOL)removeObjectForKey:(NSString *)key;
 {
     return [self removeObjectForKey:key options:nil];
@@ -298,6 +300,8 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 {
     return [self removeAllObjectsWithOptions:nil];
 }
+
+#pragma mark - Public Methods - Migration
 
 - (NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 {

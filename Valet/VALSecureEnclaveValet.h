@@ -34,17 +34,22 @@ NS_CLASS_AVAILABLE_IOS(8_0)
 /// Creates a Valet that reads/writes Secure Enclave keychain elements.
 - (nullable instancetype)initWithIdentifier:(NSString *)identifier;
 
-/// Creates a Valet that reads/writes Secure Enclave keychain elements that can be shared across applications written by the same development team. The sharedAccessGroupIdentifier must correspond with the value for keychain-access-groups in your Entitlements file.
+/// Creates a Valet that reads/writes Secure Enclave keychain elements that can be shared across applications written by the same development team.
+/// @param sharedAccessGroupIdentifier This must correspond with the value for keychain-access-groups in your Entitlements file.
 - (nullable instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier;
 
-/// Convenience method for inserting data into the keychain with a user prompt. The userPrompt is displayed to the user in Apple's Touch ID and passcode entry UI when updating a value.
+/// Convenience method for inserting data into the keychain with a user prompt.
+/// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI when updating a value.
 - (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt;
-/// Convenience method for retrieving data from the keychain with a user prompt. The userPrompt is displayed to the user in Apple's Touch ID and passcode entry UI.
+/// Convenience method for retrieving data from the keychain with a user prompt.
+/// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
 - (nullable NSData *)objectForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
 
-/// Convenience method for retrieving a string into the keychain with a user prompt. The userPrompt is displayed to the user in Apple's Touch ID and passcode entry UI when updating a value.
+/// Convenience method for inserting a string into the keychain with a user prompt.
+/// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI when updating a value.
 - (BOOL)setString:(NSString *)string forKey:(NSString *)key userPrompt:(NSString *)userPrompt;
-/// Convenience method for retrieving a string from the keychain with a user prompt. The userPrompt is displayed to the user in Apple's Touch ID and passcode entry UI.
+/// Convenience method for retrieving a string from the keychain with a user prompt.
+/// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
 - (nullable NSString *)stringForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
 
 /// This method is not supported on VALSecureEnclaveValet.
