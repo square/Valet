@@ -289,7 +289,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return [self allKeysWithOptions:nil];
 }
 
-#pragma mark - Removal
+#pragma mark - Public Methods - Removal
 
 - (BOOL)removeObjectForKey:(NSString *)key;
 {
@@ -301,7 +301,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return [self removeAllObjectsWithOptions:nil];
 }
 
-#pragma mark - Migration
+#pragma mark - Public Methods - Migration
 
 - (NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 {
