@@ -37,10 +37,12 @@ NS_CLASS_AVAILABLE_IOS(8_0)
 
 /// Convenience method for retrieving data from the keychain with a user prompt.
 /// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
+/// @return The object currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
 
 /// Convenience method for retrieving a string from the keychain with a user prompt.
 /// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
+/// @return The string currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
 
 /// This method is not supported on VALSecureEnclaveValet.

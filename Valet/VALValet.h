@@ -89,13 +89,13 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
 /// @param value An NSData value to be inserted into the keychain.
 /// @return NO if the keychain is not accessible.
 - (BOOL)setObject:(nonnull NSData *)value forKey:(nonnull NSString *)key;
-/// @return The data currently stored in the keychain for the provided key.
+/// @return The data currently stored in the keychain for the provided key. Returns nil if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
 - (nullable NSData *)objectForKey:(nonnull NSString *)key;
 
 /// @param string An NSString value to store in the keychain for the provided key.
 /// @return NO if the keychain is not accessible.
 - (BOOL)setString:(nonnull NSString *)string forKey:(nonnull NSString *)key;
-/// @return The string currently stored in the keychain for the provided key.
+/// @return The string currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
 - (nullable NSString *)stringForKey:(nonnull NSString *)key;
 
 /// @param key The key to look up in the keychain.
