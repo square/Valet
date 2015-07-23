@@ -117,16 +117,7 @@
 
 #pragma mark - Public Methods
 
-- (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt
-{
-#if VAL_IOS_8_OR_LATER
-    return [self setObject:value forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
-#else
-    return NO;
-#endif
-}
-
-- (NSData *)objectForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
 {
 #if VAL_IOS_8_OR_LATER
     return [self objectForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
@@ -135,16 +126,7 @@
 #endif
 }
 
-- (BOOL)setString:(NSString *)string forKey:(NSString *)key userPrompt:(NSString *)userPrompt;
-{
-#if VAL_IOS_8_OR_LATER
-    return [self setString:string forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
-#else
-    return NO;
-#endif
-}
-
-- (NSString *)stringForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
 {
 #if VAL_IOS_8_OR_LATER
     return [self stringForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
