@@ -172,7 +172,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     VALCheckCondition(NO, nil, @"Use a designated initializer");
 }
 
-- (nullable instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(identifier.length > 0, nil, @"Valet requires an identifier");
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
@@ -189,7 +189,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return [[self class] _sharedValetForValet:self];
 }
 
-- (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(sharedAccessGroupIdentifier.length > 0, nil, @"Valet requires a sharedAccessGroupIdentifier");
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
@@ -229,7 +229,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 #pragma mark - NSCopying
 
-- (instancetype)copyWithZone:(NSZone *)zone;
+- (nonnull instancetype)copyWithZone:(nullable NSZone *)zone;
 {
     // We're immutable, so just return self.
     return self;
@@ -237,7 +237,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 #pragma mark - Public Methods
 
-- (BOOL)isEqualToValet:(VALValet *)otherValet;
+- (BOOL)isEqualToValet:(nonnull VALValet *)otherValet;
 {
     return [self.baseQuery isEqualToDictionary:otherValet.baseQuery];
 }
@@ -262,34 +262,34 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return canAccessKeychain;
 }
 
-- (BOOL)setObject:(NSData *)value forKey:(NSString *)key;
+- (BOOL)setObject:(nonnull NSData *)value forKey:(nonnull NSString *)key;
 {
     return [self setObject:value forKey:key options:nil];
 }
 
-- (NSData *)objectForKey:(NSString *)key;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key;
 {
     return [self objectForKey:key options:nil];
 }
 
-- (BOOL)setString:(NSString *)string forKey:(NSString *)key;
+- (BOOL)setString:(nonnull NSString *)string forKey:(nonnull NSString *)key;
 {
     return [self setString:string forKey:key options:nil];
 }
 
-- (NSString *)stringForKey:(NSString *)key;
+- (nullable NSString *)stringForKey:(nonnull NSString *)key;
 {
     return [self stringForKey:key options:nil];
 }
 
-- (BOOL)containsObjectForKey:(NSString *)key;
+- (BOOL)containsObjectForKey:(nonnull NSString *)key;
 {
     OSStatus status = [self containsObjectForKey:key options:nil];
     BOOL const keyAlreadyInKeychain = (status == errSecSuccess);
     return keyAlreadyInKeychain;
 }
 
-- (NSSet *)allKeys;
+- (nonnull NSSet *)allKeys;
 {
     return [self allKeysWithOptions:nil];
 }
@@ -308,7 +308,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 #pragma mark - Public Methods - Migration
 
-- (NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
+- (nullable NSError *)migrateObjectsMatchingQuery:(nonnull NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 {
     VALCheckCondition(secItemQuery.allKeys.count > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationErrorInvalidQuery userInfo:nil], @"Migration requires secItemQuery to contain values.");
     VALCheckCondition(secItemQuery[(__bridge id)kSecMatchLimit] != (__bridge id)kSecMatchLimitOne, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationErrorInvalidQuery userInfo:nil], @"Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.");
@@ -405,15 +405,17 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return nil;
 }
 
-- (NSError *)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
+- (nullable NSError *)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
 {
     return [self migrateObjectsMatchingQuery:valet.baseQuery removeOnCompletion:remove];
 }
 
 #pragma mark - Protected Methods
 
-- (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
+- (nonnull NSMutableDictionary *)mutableBaseQueryWithIdentifier:(nonnull NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
 {
+    VALCheckCondition(identifier.length > 0, nil, @"Must provide a valid identifier");
+    
     return [@{
               // Valet only handles generic passwords.
               (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
@@ -424,7 +426,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
               } mutableCopy];
 }
 
-- (BOOL)setObject:(NSData *)value forKey:(NSString *)key options:(NSDictionary *)options;
+- (BOOL)setObject:(nonnull NSData *)value forKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, NO, @"Can not set a value with an empty key.");
     VALCheckCondition(value.length > 0, NO, @"Can not set an empty value.");
@@ -466,7 +468,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return (status == errSecSuccess);
 }
 
-- (NSData *)objectForKey:(NSString *)key options:(NSDictionary *)options;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, nil, @"Can not retrieve value with empty key.");
     NSMutableDictionary *query = [self.baseQuery mutableCopy];
@@ -484,7 +486,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return (status == errSecSuccess) ? value : nil;
 }
 
-- (BOOL)setString:(NSString *)string forKey:(NSString *)key options:(NSDictionary *)options;
+- (BOOL)setString:(nonnull NSString *)string forKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
 {
     VALCheckCondition(string.length > 0, NO, @"Can not set empty string for key.");
     NSData *stringData = [string dataUsingEncoding:NSUTF8StringEncoding];
@@ -495,7 +497,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return NO;
 }
 
-- (NSString *)stringForKey:(NSString *)key options:(NSDictionary *)options;
+- (nullable NSString *)stringForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
 {
     NSData *stringData = [self objectForKey:key options:options];
     if (stringData.length > 0) {
@@ -505,7 +507,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return nil;
 }
 
-- (OSStatus)containsObjectForKey:(NSString *)key options:(NSDictionary *)options;
+- (OSStatus)containsObjectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, errSecParam, @"Can not check if empty key exists in the keychain.");
     
@@ -519,7 +521,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return status;
 }
 
-- (NSSet *)allKeysWithOptions:(NSDictionary *)options;
+- (nonnull NSSet *)allKeysWithOptions:(nullable NSDictionary *)options;
 {
     NSSet *keys = [NSSet set];
     NSMutableDictionary *query = [self.baseQuery mutableCopy];
@@ -554,7 +556,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return keys;
 }
 
-- (BOOL)removeObjectForKey:(NSString *)key options:(NSDictionary *)options;
+- (BOOL)removeObjectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
 {
     VALCheckCondition(key.length > 0, NO, @"Can not remove object for empty key from the keychain.");
     
@@ -573,7 +575,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     return (status != errSecInteractionNotAllowed);
 }
 
-- (BOOL)removeAllObjectsWithOptions:(NSDictionary *)options;
+- (BOOL)removeAllObjectsWithOptions:(nullable NSDictionary *)options;
 {
     for (NSString *key in [self allKeys]) {
         if (![self removeObjectForKey:key options:options]) {
@@ -586,7 +588,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 #pragma mark - Properties
 
-- (NSString *)secServiceIdentifier;
+- (nonnull NSString *)secServiceIdentifier;
 {
     return self.baseQuery[(__bridge id)kSecAttrService];
 }
@@ -594,7 +596,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 #pragma mark - Private Methods
 
 /// Programatically grab the required prefix for the shared access group (i.e. Bundle Seed ID). The value for the kSecAttrAccessGroup key in queries for data that is shared between apps must be of the format bundleSeedID.sharedAccessGroup. For more information on the Bundle Seed ID, see https://developer.apple.com/library/ios/qa/qa1713/_index.html
-- (NSString *)_sharedAccessGroupPrefix;
+- (nullable NSString *)_sharedAccessGroupPrefix;
 {
     NSDictionary *query = @{ (__bridge NSString *)kSecClass : (__bridge NSString *)kSecClassGenericPassword,
                              (__bridge id)kSecAttrAccount : @"SharedAccessGroupPrefixPlaceholder",
@@ -642,7 +644,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     }
 }
 
-- (NSDictionary *)_secItemFormatDictionaryWithKey:(NSString *)key;
+- (nonnull NSDictionary *)_secItemFormatDictionaryWithKey:(nonnull NSString *)key;
 {
     VALCheckCondition(key.length > 0, @{}, @"Must provide a valid key");
     return @{ (__bridge id)kSecAttrAccount : key };

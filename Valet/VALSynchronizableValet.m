@@ -47,7 +47,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(accessibility == VALAccessibilityWhenUnlocked || accessibility == VALAccessibilityAfterFirstUnlock || accessibility == VALAccessibilityAlways, nil, @"Accessibility must not be scoped to this device");
     VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
@@ -55,7 +55,7 @@
     return [super initWithIdentifier:identifier accessibility:accessibility];
 }
 
-- (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(accessibility == VALAccessibilityWhenUnlocked || accessibility == VALAccessibilityAfterFirstUnlock || accessibility == VALAccessibilityAlways, nil, @"Accessibility must not be scoped to this device");
     VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
@@ -65,7 +65,7 @@
 
 #pragma mark - Protected Methods
 
-- (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
+- (nonnull NSMutableDictionary *)mutableBaseQueryWithIdentifier:(nonnull NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
 {
     NSMutableDictionary *mutableBaseQuery = [super mutableBaseQueryWithIdentifier:identifier initializer:initializer accessibility:accessibility];
     
