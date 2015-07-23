@@ -167,7 +167,12 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 #pragma mark - Initialization
 
-- (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)init NS_UNAVAILABLE;
+{
+    VALCheckCondition(NO, nil, @"Use a designated initializer");
+}
+
+- (nullable instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(identifier.length > 0, nil, @"Valet requires an identifier");
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
