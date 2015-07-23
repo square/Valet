@@ -143,7 +143,7 @@
     NSMutableDictionary *mutableBaseQuery = [super mutableBaseQueryWithIdentifier:identifier initializer:initializer accessibility:accessibility];
     
     // Add the access control, which opts us in to Secure Element storage.
-    mutableBaseQuery[(__bridge id)kSecAttrAccessControl] = (__bridge id)SecAccessControlCreateWithFlags(NULL, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlUserPresence, NULL);
+    mutableBaseQuery[(__bridge id)kSecAttrAccessControl] = (__bridge_transfer id)SecAccessControlCreateWithFlags(NULL, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlUserPresence, NULL);
     
     // kSecAttrAccessControl and kSecAttrAccessible are mutually exclusive, so remove kSecAttrAccessible from our query.
     [mutableBaseQuery removeObjectForKey:(__bridge id)kSecAttrAccessible];
