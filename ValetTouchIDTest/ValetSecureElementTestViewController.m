@@ -48,7 +48,7 @@
 
 - (IBAction)setOrUpdateItem:(id)sender;
 {
-    BOOL setOrUpdatedItem = [self.secureEnclaveValet setString:[NSString stringWithFormat:@"I am here! %@", [[NSUUID new] UUIDString]] forKey:self.username userPrompt:@"Use TouchID to update this password"];
+    BOOL setOrUpdatedItem = [self.secureEnclaveValet setString:[NSString stringWithFormat:@"I am here! %@", [[NSUUID new] UUIDString]] forKey:self.username];
     
     self.textView.text = [self.textView.text stringByAppendingFormat:@"\n%s %@", __PRETTY_FUNCTION__, (setOrUpdatedItem ? @"Success" : @"Failure")];
 }

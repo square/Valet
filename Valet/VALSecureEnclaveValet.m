@@ -42,12 +42,12 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithIdentifier:(NSString *)identifier;
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier;
 {
     return [self initWithIdentifier:identifier accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly];
 }
 
-- (instancetype)initWithIdentifier:(NSString *)identifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(accessibility == VALAccessibilityWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibilityWhenPasscodeSetThisDeviceOnly");
     VALCheckCondition([[self class] supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
@@ -55,12 +55,12 @@
     return [super initWithIdentifier:identifier accessibility:accessibility];
 }
 
-- (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier;
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier;
 {
     return [self initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly];
 }
 
-- (instancetype)initWithSharedAccessGroupIdentifier:(NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
 {
     VALCheckCondition(accessibility == VALAccessibilityWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibilityWhenPasscodeSetThisDeviceOnly");
     VALCheckCondition([[self class] supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
@@ -83,7 +83,7 @@
     return [noPromptValet canAccessKeychain];
 }
 
-- (BOOL)containsObjectForKey:(NSString *)key;
+- (BOOL)containsObjectForKey:(nonnull NSString *)key;
 {
 #if VAL_IOS_8_OR_LATER
     OSStatus status = [self containsObjectForKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
@@ -94,9 +94,9 @@
 #endif
 }
 
-- (NSSet *)allKeys;
+- (nonnull NSSet *)allKeys;
 {
-    VALCheckCondition(NO, nil, @"%s is not supported on %@", __PRETTY_FUNCTION__, NSStringFromClass([self class]));
+    VALCheckCondition(NO, [NSSet new], @"%s is not supported on %@", __PRETTY_FUNCTION__, NSStringFromClass([self class]));
 }
 
 - (BOOL)removeAllObjects;
@@ -104,7 +104,7 @@
     VALCheckCondition(NO, NO, @"%s is not supported on %@", __PRETTY_FUNCTION__, NSStringFromClass([self class]));
 }
 
-- (NSError *)migrateObjectsMatchingQuery:(NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
+- (nullable NSError *)migrateObjectsMatchingQuery:(nonnull NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 {
 #if VAL_IOS_8_OR_LATER
     if ([[self class] supportsSecureEnclaveKeychainItems]) {
@@ -117,16 +117,7 @@
 
 #pragma mark - Public Methods
 
-- (BOOL)setObject:(NSData *)value forKey:(NSString *)key userPrompt:(NSString *)userPrompt
-{
-#if VAL_IOS_8_OR_LATER
-    return [self setObject:value forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
-#else
-    return NO;
-#endif
-}
-
-- (NSData *)objectForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
 {
 #if VAL_IOS_8_OR_LATER
     return [self objectForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
@@ -135,16 +126,7 @@
 #endif
 }
 
-- (BOOL)setString:(NSString *)string forKey:(NSString *)key userPrompt:(NSString *)userPrompt;
-{
-#if VAL_IOS_8_OR_LATER
-    return [self setString:string forKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
-#else
-    return NO;
-#endif
-}
-
-- (NSString *)stringForKey:(NSString *)key userPrompt:(NSString *)userPrompt;
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
 {
 #if VAL_IOS_8_OR_LATER
     return [self stringForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
@@ -155,24 +137,24 @@
 
 #pragma mark - Protected Methods
 
-- (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
+- (nonnull NSMutableDictionary *)mutableBaseQueryWithIdentifier:(nonnull NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
 {
 #if VAL_IOS_8_OR_LATER
     NSMutableDictionary *mutableBaseQuery = [super mutableBaseQueryWithIdentifier:identifier initializer:initializer accessibility:accessibility];
     
     // Add the access control, which opts us in to Secure Element storage.
-    mutableBaseQuery[(__bridge id)kSecAttrAccessControl] = (__bridge id)SecAccessControlCreateWithFlags(NULL, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlUserPresence, NULL);
+    mutableBaseQuery[(__bridge id)kSecAttrAccessControl] = (__bridge_transfer id)SecAccessControlCreateWithFlags(NULL, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlUserPresence, NULL);
     
     // kSecAttrAccessControl and kSecAttrAccessible are mutually exclusive, so remove kSecAttrAccessible from our query.
     [mutableBaseQuery removeObjectForKey:(__bridge id)kSecAttrAccessible];
     
     return mutableBaseQuery;
 #else
-    return nil;
+    return [NSMutableDictionary new];
 #endif
 }
 
-- (BOOL)setObject:(NSData *)value forKey:(NSString *)key options:(NSDictionary *)options;
+- (BOOL)setObject:(nonnull NSData *)value forKey:(nonnull NSString *)key options:(NSDictionary *)options;
 {
     // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
     [self removeObjectForKey:key];
