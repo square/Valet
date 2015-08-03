@@ -75,6 +75,9 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
 /// @see VALAccessibility
 - (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility NS_DESIGNATED_INITIALIZER;
 
+- (nullable instancetype)init NS_UNAVAILABLE;
++ (nullable instancetype)new NS_UNAVAILABLE;
+
 @property (nonnull, copy, readonly) NSString *identifier;
 @property (readonly, getter=isSharedAcrossApplications) BOOL sharedAcrossApplications;
 @property (readonly) VALAccessibility accessibility;
