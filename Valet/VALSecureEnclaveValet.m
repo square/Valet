@@ -86,12 +86,23 @@
 - (BOOL)containsObjectForKey:(nonnull NSString *)key;
 {
 #if VAL_IOS_8_OR_LATER
-
+    NSDictionary *options = nil;
+    
 #if VAL_IOS_9_OR_LATER
-    OSStatus status = [self containsObjectForKey:key options:@{ (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIFail }];
+    if (&kSecUseAuthenticationUI != NULL) {
+        options = @{ (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIFail };
+    } else {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+        // kSecUseNoAuthenticationUI is deprecated in the iOS 9 SDK, but we still need it on iOS 8.
+        options = @{ (__bridge id)kSecUseNoAuthenticationUI : @YES };
+#pragma GCC diagnostic pop
+    }
 #else
-    OSStatus status = [self containsObjectForKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
+    options = @{ (__bridge id)kSecUseNoAuthenticationUI : @YES };
 #endif
+    
+    OSStatus status = [self containsObjectForKey:key options:options];
     
     BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed || status == errSecSuccess);
     return keyAlreadyInKeychain;
