@@ -86,9 +86,16 @@
 - (BOOL)containsObjectForKey:(nonnull NSString *)key;
 {
 #if VAL_IOS_8_OR_LATER
+
+#if VAL_IOS_9_OR_LATER
+    OSStatus status = [self containsObjectForKey:key options:@{ (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIFail }];
+#else
     OSStatus status = [self containsObjectForKey:key options:@{ (__bridge id)kSecUseNoAuthenticationUI : @YES }];
+#endif
+    
     BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed || status == errSecSuccess);
     return keyAlreadyInKeychain;
+    
 #else
     return NO;
 #endif
