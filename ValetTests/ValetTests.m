@@ -738,13 +738,6 @@
     XCTAssertEqualObjects(KeyDictionary[(__bridge id)kSecAttrAccount], self.key);
 }
 
-#if TARGET_HAS_ENTITLEMENTS
-- (void)test_sharedAccessGroupPrefix_returnsValidValue;
-{
-    XCTAssertTrue([self.valet _sharedAccessGroupPrefix].length > 0);
-}
-#endif
-
 #pragma mark - XCTestCase
 
 // These fail when running from the command line
