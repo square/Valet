@@ -19,6 +19,12 @@
 		26F06A5B1BA8B55500E039CD /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A5C1BA8B55D00E039CD /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */; };
 		26F06A5D1BA8B56000E039CD /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */; };
+		26F06A8D1BA8BC8F00E039CD /* VALValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC191AB7B83300EDB6E3 /* VALValet.m */; };
+		26F06A8E1BA8BC9000E039CD /* VALSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */; };
+		26F06A8F1BA8BC9200E039CD /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */; };
+		26F06A901BA8BC9400E039CD /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */; };
+		26F06A911BA8BC9500E039CD /* VALSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */; };
+		26F06A921BA8BC9700E039CD /* VALValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC191AB7B83300EDB6E3 /* VALValet.m */; };
 		EA1E1F8F1A8C46090067C991 /* libValet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1E1F831A8C46080067C991 /* libValet.a */; };
 		EA1E1FA01A8C48560067C991 /* ValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1E1F9F1A8C48560067C991 /* ValetTests.m */; };
 		EAEAA88D1B167A8700F7AA98 /* libValet.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EAEAA8821B167A8600F7AA98 /* libValet.dylib */; };
@@ -532,6 +538,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26F06A8D1BA8BC8F00E039CD /* VALValet.m in Sources */,
+				26F06A8E1BA8BC9000E039CD /* VALSecureEnclaveValet.m in Sources */,
+				26F06A8F1BA8BC9200E039CD /* VALSynchronizableValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +548,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26F06A921BA8BC9700E039CD /* VALValet.m in Sources */,
+				26F06A911BA8BC9500E039CD /* VALSecureEnclaveValet.m in Sources */,
+				26F06A901BA8BC9400E039CD /* VALSynchronizableValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
