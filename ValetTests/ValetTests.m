@@ -174,20 +174,20 @@
     XCTAssertNil(string, @"Expected string with Key with different identifier to be nil but instead it was %@", string);
 }
 
-- (void)test_stringForKey_differentAccessGroupFailsToRetrieveString;
+- (void)test_stringForKey_differentAccessibilityFailsToRetrieveString;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
     VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibilityAfterFirstUnlockThisDeviceOnly];
     [self.additionalValets addObject:otherValet];
     
     NSString *string = [otherValet stringForKey:self.key];
-    XCTAssertNil(string, @"Expected string with Key with different access group to be nil but instead it was %@", string);
+    XCTAssertNil(string, @"Expected string with Key with different accessibility to be nil but instead it was %@", string);
 }
 
 - (void)test_stringForKey_differentValetTypeFailsToRetrieveString;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:VALAccessibilityAfterFirstUnlockThisDeviceOnly];
+    VALValet *otherValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:self.valet.identifier accessibility:VALAccessibilityAlways];
     [self.additionalValets addObject:otherValet];
     
     NSString *string = [otherValet stringForKey:self.key];
