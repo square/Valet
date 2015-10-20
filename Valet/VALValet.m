@@ -310,6 +310,11 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 - (nullable NSError *)migrateObjectsMatchingQuery:(nonnull NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 {
+    return [self migrateObjectsMatchingQuery:secItemQuery keyMap:nil removeOnCompletion:remove];
+}
+
+- (nullable NSError *)migrateObjectsMatchingQuery:(nonnull NSDictionary *)secItemQuery keyMap:(nullable NSDictionary *)keyMap removeOnCompletion:(BOOL)remove;
+{
     VALCheckCondition(secItemQuery.allKeys.count > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationErrorInvalidQuery userInfo:nil], @"Migration requires secItemQuery to contain values.");
     VALCheckCondition(secItemQuery[(__bridge id)kSecMatchLimit] != (__bridge id)kSecMatchLimitOne, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationErrorInvalidQuery userInfo:nil], @"Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.");
     VALCheckCondition(secItemQuery[(__bridge id)kSecReturnData] != (__bridge id)kCFBooleanTrue, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationErrorInvalidQuery userInfo:nil], @"kSecReturnData is not supported in a migration query.");
@@ -370,6 +375,11 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         NSString *key = keychainEntry[(__bridge id)kSecAttrAccount];
         NSData *data = keychainEntry[(__bridge id)kSecValueData];
         
+        // map original key to new name
+        if (keyMap[key] != nil) {
+            key = keyMap[key];
+        }
+        
         if ([self setObject:data forKey:key]) {
             [alreadyMigratedKeys addObject:key];
             
@@ -407,7 +417,12 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 
 - (nullable NSError *)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
 {
-    return [self migrateObjectsMatchingQuery:valet.baseQuery removeOnCompletion:remove];
+    return [self migrateObjectsFromValet:valet keyMap:nil removeOnCompletion:remove];
+}
+
+- (nullable NSError *)migrateObjectsFromValet:(VALValet *)valet keyMap:(nullable NSDictionary *)keyMap removeOnCompletion:(BOOL)remove;
+{
+    return [self migrateObjectsMatchingQuery:valet.baseQuery keyMap:keyMap removeOnCompletion:remove];
 }
 
 #pragma mark - Protected Methods

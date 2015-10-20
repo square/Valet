@@ -119,9 +119,13 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
 /// @see VALMigrationError
 /// @note The keychain is not modified if a failure occurs.
 - (nullable NSError *)migrateObjectsMatchingQuery:(nonnull NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
+/// @param keyMap An optional <NSString, NSString> dictionary with string replacements for kSecAttrAccount values
+- (nullable NSError *)migrateObjectsMatchingQuery:(nonnull NSDictionary *)secItemQuery keyMap:(nullable NSDictionary *)keyMap removeOnCompletion:(BOOL)remove;
 /// Migrates objects from the passed-in Valet into the receiving Valet instance.
 /// @return An error if the operation failed. Error domain will be <code>VALMigrationErrorDomain</code>, and codes will be of type <code>VALMigrationError</code>
 /// @see VALMigrationError
 - (nullable NSError *)migrateObjectsFromValet:(nonnull VALValet *)valet removeOnCompletion:(BOOL)remove;
+/// @param keyMap An optional <NSString, NSString> dictionary with string replacements for kSecAttrAccount values
+- (nullable NSError *)migrateObjectsFromValet:(nonnull VALValet *)valet keyMap:(nullable NSDictionary *)keyMap removeOnCompletion:(BOOL)remove;
 
 @end
