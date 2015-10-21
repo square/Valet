@@ -187,7 +187,7 @@
 - (void)test_stringForKey_differentAccessGroupFailsToRetrieveString;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    VALValet *otherValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:self.valet.identifier accessibility:VALAccessibilityAlways];
+    VALValet *otherValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:self.valet.identifier accessibility:self.valet.accessibility];
     [self.additionalValets addObject:otherValet];
     
     NSString *string = [otherValet stringForKey:self.key];
