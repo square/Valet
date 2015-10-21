@@ -184,7 +184,7 @@
     XCTAssertNil(string, @"Expected string with Key with different accessibility to be nil but instead it was %@", string);
 }
 
-- (void)test_stringForKey_differentValetTypeFailsToRetrieveString;
+- (void)test_stringForKey_differentAccessGroupFailsToRetrieveString;
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
     VALValet *otherValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:self.valet.identifier accessibility:VALAccessibilityAlways];
