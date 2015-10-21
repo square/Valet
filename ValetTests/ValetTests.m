@@ -184,16 +184,6 @@
     XCTAssertNil(string, @"Expected string with Key with different accessibility to be nil but instead it was %@", string);
 }
 
-- (void)test_stringForKey_differentAccessGroupFailsToRetrieveString;
-{
-    XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
-    VALValet *otherValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:self.valet.identifier accessibility:self.valet.accessibility];
-    [self.additionalValets addObject:otherValet];
-    
-    NSString *string = [otherValet stringForKey:self.key];
-    XCTAssertNil(string, @"Expected string with Key with different access group to be nil but instead it was %@", string);
-}
-
 - (void)test_setStringForKey_invalidArgumentsCauseFailure;
 {
     id nilValue = nil;
