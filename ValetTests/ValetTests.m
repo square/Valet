@@ -191,7 +191,7 @@
     [self.additionalValets addObject:otherValet];
     
     NSString *string = [otherValet stringForKey:self.key];
-    XCTAssertNil(string, @"Expected string with Key with different Valet type to be nil but instead it was %@", string);
+    XCTAssertNil(string, @"Expected string with Key with different access group to be nil but instead it was %@", string);
 }
 
 - (void)test_setStringForKey_invalidArgumentsCauseFailure;
