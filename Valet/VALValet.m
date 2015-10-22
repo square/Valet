@@ -572,7 +572,7 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     }, self.lockForSetAndRemoveOperations);
     
     // We succeeded as long as we can confirm that the item is not in the keychain.
-    return (status != errSecInteractionNotAllowed);
+    return (status != errSecInteractionNotAllowed && status != errSecMissingEntitlement);
 }
 
 - (BOOL)removeAllObjectsWithOptions:(nullable NSDictionary *)options;
