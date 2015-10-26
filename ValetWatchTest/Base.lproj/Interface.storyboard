@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="8191" systemVersion="15B42" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="8092"/>
+    </dependencies>
+    <scenes>
+        <!--Valet-->
+        <scene sceneID="aou-V4-d1y">
+            <objects>
+                <controller title="Valet" id="AgC-eL-Hgc" customClass="InterfaceController">
+                    <items>
+                        <button width="1" alignment="left" title="SET or UPDATE" id="kqo-8Y-d06">
+                            <connections>
+                                <action selector="setOrUpdateRandomValue:" destination="AgC-eL-Hgc" id="Qw7-u8-IVa"/>
+                            </connections>
+                        </button>
+                        <button width="1" alignment="left" title="GET" id="SjG-0v-WTw">
+                            <connections>
+                                <action selector="getRandomValue:" destination="AgC-eL-Hgc" id="Jc2-cf-m2l"/>
+                            </connections>
+                        </button>
+                        <button width="1" alignment="left" title="REMOVE" id="e5c-QI-DV4">
+                            <connections>
+                                <action selector="removeRandomValue:" destination="AgC-eL-Hgc" id="vai-eL-U5X"/>
+                            </connections>
+                        </button>
+                    </items>
+                    <connections>
+                        <segue destination="5tm-MU-Trn" kind="relationship" relationship="nextPage" id="1YX-c8-Hbk"/>
+                    </connections>
+                </controller>
+            </objects>
+        </scene>
+        <!--Detail-->
+        <scene sceneID="zud-et-9J8">
+            <objects>
+                <controller identifier="DetailVC" title="Detail" hidesWhenLoading="NO" id="5tm-MU-Trn" customClass="DetailController">
+                    <items>
+                        <label width="136" height="153" alignment="left" text="Label" textAlignment="center" numberOfLines="6" id="s3v-ob-Kah"/>
+                    </items>
+                    <connections>
+                        <outlet property="lblResult" destination="s3v-ob-Kah" id="dzr-mL-lwS"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="618" y="357"/>
+        </scene>
+    </scenes>
+</document>
