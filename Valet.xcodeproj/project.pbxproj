@@ -7,6 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1BD5DE131BDE954000C4B918 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BD5DE111BDE954000C4B918 /* Interface.storyboard */; };
+		1BD5DE151BDE954000C4B918 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BD5DE141BDE954000C4B918 /* Assets.xcassets */; };
+		1BD5DE1C1BDE954000C4B918 /* ValetWatchTest Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 1BD5DE1B1BDE954000C4B918 /* ValetWatchTest Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1BD5DE221BDE954000C4B918 /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5DE211BDE954000C4B918 /* InterfaceController.m */; };
+		1BD5DE251BDE954000C4B918 /* ExtensionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5DE241BDE954000C4B918 /* ExtensionDelegate.m */; };
+		1BD5DE271BDE954000C4B918 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BD5DE261BDE954000C4B918 /* Assets.xcassets */; };
+		1BD5DE2B1BDE954000C4B918 /* ValetWatchTest.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 1BD5DE0F1BDE953F00C4B918 /* ValetWatchTest.app */; };
+		1BD5DE371BDEA09100C4B918 /* libValet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BD5DDCD1BDE939A00C4B918 /* libValet.a */; };
+		1BD5DE3A1BDEA19600C4B918 /* VALSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */; settings = {ASSET_TAGS = (); }; };
+		1BD5DE3B1BDEA1A300C4B918 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */; settings = {ASSET_TAGS = (); }; };
+		1BD5DE3C1BDEA1AC00C4B918 /* VALValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC191AB7B83300EDB6E3 /* VALValet.m */; settings = {ASSET_TAGS = (); }; };
+		1BD5DE3D1BDEA1AF00C4B918 /* VALValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC191AB7B83300EDB6E3 /* VALValet.m */; settings = {ASSET_TAGS = (); }; };
+		1BD5DE3E1BDEA1F800C4B918 /* VALSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */; };
+		1BD5DE3F1BDEA1FB00C4B918 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */; };
+		1BD5DE421BDEA51400C4B918 /* DetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5DE411BDEA51400C4B918 /* DetailController.m */; settings = {ASSET_TAGS = (); }; };
 		26E682841BA8B42100EFF4EA /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = EA1E1F861A8C46080067C991 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A531BA8B53100E039CD /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A541BA8B53C00E039CD /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -40,7 +55,7 @@
 		EAEEAC1A1AB7B83300EDB6E3 /* VALValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC191AB7B83300EDB6E3 /* VALValet.m */; };
 		EAEEAC1D1AB7B84000EDB6E3 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */; };
 		EAEEAC201AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */; };
-		EAEEAC271AB7BC5700EDB6E3 /* VALValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC231AB7BA0C00EDB6E3 /* VALValet_Protected.h */; };
+		EAEEAC271AB7BC5700EDB6E3 /* VALValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC231AB7BA0C00EDB6E3 /* VALValet_Protected.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAEEAC281AB7BC5700EDB6E3 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAEEAC2A1AB7BD4800EDB6E3 /* VALValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC181AB7B83300EDB6E3 /* VALValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAEEAC2B1AB7BD7400EDB6E3 /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -55,6 +70,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1BD5DE1D1BDE954000C4B918 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BD5DE1A1BDE954000C4B918;
+			remoteInfo = "ValetWatchTest Extension";
+		};
+		1BD5DE291BDE954000C4B918 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BD5DE0E1BDE953F00C4B918;
+			remoteInfo = ValetWatchTest;
+		};
 		EA1E1F901A8C46090067C991 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
@@ -78,7 +107,56 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		1BD5DDCB1BDE939A00C4B918 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BD5DE0C1BDE951400C4B918 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				1BD5DE2B1BDE954000C4B918 /* ValetWatchTest.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BD5DE2F1BDE954000C4B918 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				1BD5DE1C1BDE954000C4B918 /* ValetWatchTest Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		1BD5DDCD1BDE939A00C4B918 /* libValet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libValet.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BD5DDDB1BDE941000C4B918 /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BD5DE0F1BDE953F00C4B918 /* ValetWatchTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ValetWatchTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BD5DE121BDE954000C4B918 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		1BD5DE141BDE954000C4B918 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1BD5DE161BDE954000C4B918 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1BD5DE1B1BDE954000C4B918 /* ValetWatchTest Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ValetWatchTest Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BD5DE201BDE954000C4B918 /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
+		1BD5DE211BDE954000C4B918 /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
+		1BD5DE231BDE954000C4B918 /* ExtensionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtensionDelegate.h; sourceTree = "<group>"; };
+		1BD5DE241BDE954000C4B918 /* ExtensionDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtensionDelegate.m; sourceTree = "<group>"; };
+		1BD5DE261BDE954000C4B918 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1BD5DE281BDE954000C4B918 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1BD5DE401BDEA51400C4B918 /* DetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailController.h; sourceTree = "<group>"; };
+		1BD5DE411BDEA51400C4B918 /* DetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailController.m; sourceTree = "<group>"; };
 		26E6827C1BA8B3F900EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E6828A1BA8B4B200EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E682921BA8B4D200EFF4EA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -110,6 +188,28 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1BD5DDCA1BDE939A00C4B918 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BD5DDD71BDE941000C4B918 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BD5DE181BDE954000C4B918 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BD5DE371BDEA09100C4B918 /* libValet.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		26E682781BA8B3F900EFF4EA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -165,6 +265,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1BD5DE101BDE954000C4B918 /* ValetWatchTest */ = {
+			isa = PBXGroup;
+			children = (
+				1BD5DE111BDE954000C4B918 /* Interface.storyboard */,
+				1BD5DE141BDE954000C4B918 /* Assets.xcassets */,
+				1BD5DE161BDE954000C4B918 /* Info.plist */,
+			);
+			path = ValetWatchTest;
+			sourceTree = "<group>";
+		};
+		1BD5DE1F1BDE954000C4B918 /* ValetWatchTest Extension */ = {
+			isa = PBXGroup;
+			children = (
+				1BD5DE431BDEA51F00C4B918 /* Controller */,
+				1BD5DE231BDE954000C4B918 /* ExtensionDelegate.h */,
+				1BD5DE241BDE954000C4B918 /* ExtensionDelegate.m */,
+				1BD5DE261BDE954000C4B918 /* Assets.xcassets */,
+				1BD5DE281BDE954000C4B918 /* Info.plist */,
+			);
+			path = "ValetWatchTest Extension";
+			sourceTree = "<group>";
+		};
+		1BD5DE431BDEA51F00C4B918 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				1BD5DE201BDE954000C4B918 /* InterfaceController.h */,
+				1BD5DE211BDE954000C4B918 /* InterfaceController.m */,
+				1BD5DE401BDEA51400C4B918 /* DetailController.h */,
+				1BD5DE411BDEA51400C4B918 /* DetailController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
 		EA1E1F7A1A8C46080067C991 = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +305,8 @@
 				EA1E1F921A8C46090067C991 /* ValetTests */,
 				EAEEAC221AB7B85D00EDB6E3 /* Other */,
 				EAF894751B053E0500EDAD6C /* ValetTouchIDTest */,
+				1BD5DE101BDE954000C4B918 /* ValetWatchTest */,
+				1BD5DE1F1BDE954000C4B918 /* ValetWatchTest Extension */,
 				EA1E1F841A8C46080067C991 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -186,6 +321,10 @@
 				EAEAA88C1B167A8700F7AA98 /* Valet Mac Tests.xctest */,
 				26E6827C1BA8B3F900EFF4EA /* Valet.framework */,
 				26E6828A1BA8B4B200EFF4EA /* Valet.framework */,
+				1BD5DDCD1BDE939A00C4B918 /* libValet.a */,
+				1BD5DDDB1BDE941000C4B918 /* Valet.framework */,
+				1BD5DE0F1BDE953F00C4B918 /* ValetWatchTest.app */,
+				1BD5DE1B1BDE954000C4B918 /* ValetWatchTest Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -258,6 +397,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		1BD5DDD81BDE941000C4B918 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		26E682791BA8B3F900EFF4EA /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -304,14 +450,83 @@
 				EAEEAC2B1AB7BD7400EDB6E3 /* VALSecureEnclaveValet.h in Headers */,
 				EAEEAC2C1AB7BD7900EDB6E3 /* VALSynchronizableValet.h in Headers */,
 				EAEAA8AC1B16864D00F7AA98 /* Valet.h in Headers */,
-				EAEEAC271AB7BC5700EDB6E3 /* VALValet_Protected.h in Headers */,
 				EAEEAC281AB7BC5700EDB6E3 /* ValetDefines.h in Headers */,
+				EAEEAC271AB7BC5700EDB6E3 /* VALValet_Protected.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		1BD5DDCC1BDE939A00C4B918 /* Valet Watch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BD5DDD51BDE939A00C4B918 /* Build configuration list for PBXNativeTarget "Valet Watch" */;
+			buildPhases = (
+				1BD5DDC91BDE939A00C4B918 /* Sources */,
+				1BD5DDCA1BDE939A00C4B918 /* Frameworks */,
+				1BD5DDCB1BDE939A00C4B918 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Valet Watch";
+			productName = "Valet Watch";
+			productReference = 1BD5DDCD1BDE939A00C4B918 /* libValet.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		1BD5DDDA1BDE941000C4B918 /* Valet-Watch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BD5DDE01BDE941000C4B918 /* Build configuration list for PBXNativeTarget "Valet-Watch" */;
+			buildPhases = (
+				1BD5DDD61BDE941000C4B918 /* Sources */,
+				1BD5DDD71BDE941000C4B918 /* Frameworks */,
+				1BD5DDD81BDE941000C4B918 /* Headers */,
+				1BD5DDD91BDE941000C4B918 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Valet-Watch";
+			productName = "Valet-Watch";
+			productReference = 1BD5DDDB1BDE941000C4B918 /* Valet.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		1BD5DE0E1BDE953F00C4B918 /* ValetWatchTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BD5DE301BDE954000C4B918 /* Build configuration list for PBXNativeTarget "ValetWatchTest" */;
+			buildPhases = (
+				1BD5DE0D1BDE953F00C4B918 /* Resources */,
+				1BD5DE2F1BDE954000C4B918 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1BD5DE1E1BDE954000C4B918 /* PBXTargetDependency */,
+			);
+			name = ValetWatchTest;
+			productName = ValetWatchTest;
+			productReference = 1BD5DE0F1BDE953F00C4B918 /* ValetWatchTest.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		1BD5DE1A1BDE954000C4B918 /* ValetWatchTest Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BD5DE2C1BDE954000C4B918 /* Build configuration list for PBXNativeTarget "ValetWatchTest Extension" */;
+			buildPhases = (
+				1BD5DE171BDE954000C4B918 /* Sources */,
+				1BD5DE181BDE954000C4B918 /* Frameworks */,
+				1BD5DE191BDE954000C4B918 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ValetWatchTest Extension";
+			productName = "ValetWatchTest Extension";
+			productReference = 1BD5DE1B1BDE954000C4B918 /* ValetWatchTest Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
 		26E6827B1BA8B3F900EFF4EA /* Valet-iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 26E682831BA8B3F900EFF4EA /* Build configuration list for PBXNativeTarget "Valet-iOS" */;
@@ -425,11 +640,13 @@
 				EAF894701B053E0400EDAD6C /* Sources */,
 				EAF894711B053E0400EDAD6C /* Frameworks */,
 				EAF894721B053E0400EDAD6C /* Resources */,
+				1BD5DE0C1BDE951400C4B918 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				EAF8949B1B053FB300EDAD6C /* PBXTargetDependency */,
+				1BD5DE2A1BDE954000C4B918 /* PBXTargetDependency */,
 			);
 			name = ValetTouchIDTest;
 			productName = ValetTouchIDTest;
@@ -445,6 +662,18 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Square, Inc.";
 				TargetAttributes = {
+					1BD5DDCC1BDE939A00C4B918 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					1BD5DDDA1BDE941000C4B918 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					1BD5DE0E1BDE953F00C4B918 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					1BD5DE1A1BDE954000C4B918 = {
+						CreatedOnToolsVersion = 7.0;
+					};
 					26E6827B1BA8B3F900EFF4EA = {
 						CreatedOnToolsVersion = 7.0;
 					};
@@ -488,11 +717,39 @@
 				EAEAA88B1B167A8700F7AA98 /* Valet Mac Tests */,
 				26E6827B1BA8B3F900EFF4EA /* Valet-iOS */,
 				26E682891BA8B4B200EFF4EA /* Valet-Mac */,
+				1BD5DDCC1BDE939A00C4B918 /* Valet Watch */,
+				1BD5DDDA1BDE941000C4B918 /* Valet-Watch */,
+				1BD5DE0E1BDE953F00C4B918 /* ValetWatchTest */,
+				1BD5DE1A1BDE954000C4B918 /* ValetWatchTest Extension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1BD5DDD91BDE941000C4B918 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BD5DE0D1BDE953F00C4B918 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BD5DE151BDE954000C4B918 /* Assets.xcassets in Resources */,
+				1BD5DE131BDE954000C4B918 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BD5DE191BDE954000C4B918 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BD5DE271BDE954000C4B918 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		26E6827A1BA8B3F900EFF4EA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -534,6 +791,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1BD5DDC91BDE939A00C4B918 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BD5DE3D1BDEA1AF00C4B918 /* VALValet.m in Sources */,
+				1BD5DE3E1BDEA1F800C4B918 /* VALSecureEnclaveValet.m in Sources */,
+				1BD5DE3F1BDEA1FB00C4B918 /* VALSynchronizableValet.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BD5DDD61BDE941000C4B918 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BD5DE3A1BDEA19600C4B918 /* VALSecureEnclaveValet.m in Sources */,
+				1BD5DE3B1BDEA1A300C4B918 /* VALSynchronizableValet.m in Sources */,
+				1BD5DE3C1BDEA1AC00C4B918 /* VALValet.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1BD5DE171BDE954000C4B918 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BD5DE251BDE954000C4B918 /* ExtensionDelegate.m in Sources */,
+				1BD5DE221BDE954000C4B918 /* InterfaceController.m in Sources */,
+				1BD5DE421BDEA51400C4B918 /* DetailController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		26E682771BA8B3F900EFF4EA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -602,6 +889,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1BD5DE1E1BDE954000C4B918 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1BD5DE1A1BDE954000C4B918 /* ValetWatchTest Extension */;
+			targetProxy = 1BD5DE1D1BDE954000C4B918 /* PBXContainerItemProxy */;
+		};
+		1BD5DE2A1BDE954000C4B918 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1BD5DE0E1BDE953F00C4B918 /* ValetWatchTest */;
+			targetProxy = 1BD5DE291BDE954000C4B918 /* PBXContainerItemProxy */;
+		};
 		EA1E1F911A8C46090067C991 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EA1E1F821A8C46080067C991 /* Valet iOS */;
@@ -620,6 +917,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		1BD5DE111BDE954000C4B918 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1BD5DE121BDE954000C4B918 /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
 		EAF8949C1B05420200EDAD6C /* ValetSecureElementTestMain.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -639,6 +944,157 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1BD5DDD31BDE939A00C4B918 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = Valet;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s i386";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		1BD5DDD41BDE939A00C4B918 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = Valet;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		1BD5DDE11BDE941000C4B918 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = Valet/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "br.com.netshoes.Valet-Watch";
+				PRODUCT_NAME = Valet;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALID_ARCHS = "arm64 armv7 armv7s i386";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		1BD5DDE21BDE941000C4B918 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = Valet/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "br.com.netshoes.Valet-Watch";
+				PRODUCT_NAME = Valet;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		1BD5DE2D1BDE954000C4B918 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "ValetWatchTest Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTest.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		1BD5DE2E1BDE954000C4B918 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "ValetWatchTest Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTest.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		1BD5DE311BDE954000C4B918 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IBSC_MODULE = ValetWatchTest_Extension;
+				INFOPLIST_FILE = ValetWatchTest/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTest.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALID_ARCHS = "arm64 armv7 armv7s";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		1BD5DE321BDE954000C4B918 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				IBSC_MODULE = ValetWatchTest_Extension;
+				INFOPLIST_FILE = ValetWatchTest/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTest.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
 		26E682811BA8B3F900EFF4EA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -994,6 +1450,38 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1BD5DDD51BDE939A00C4B918 /* Build configuration list for PBXNativeTarget "Valet Watch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BD5DDD31BDE939A00C4B918 /* Debug */,
+				1BD5DDD41BDE939A00C4B918 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		1BD5DDE01BDE941000C4B918 /* Build configuration list for PBXNativeTarget "Valet-Watch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BD5DDE11BDE941000C4B918 /* Debug */,
+				1BD5DDE21BDE941000C4B918 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		1BD5DE2C1BDE954000C4B918 /* Build configuration list for PBXNativeTarget "ValetWatchTest Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BD5DE2D1BDE954000C4B918 /* Debug */,
+				1BD5DE2E1BDE954000C4B918 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		1BD5DE301BDE954000C4B918 /* Build configuration list for PBXNativeTarget "ValetWatchTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BD5DE311BDE954000C4B918 /* Debug */,
+				1BD5DE321BDE954000C4B918 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		26E682831BA8B3F900EFF4EA /* Build configuration list for PBXNativeTarget "Valet-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
