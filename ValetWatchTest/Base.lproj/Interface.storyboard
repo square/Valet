@@ -26,16 +26,13 @@
                             </connections>
                         </button>
                     </items>
-                    <connections>
-                        <segue destination="5tm-MU-Trn" kind="relationship" relationship="nextPage" id="1YX-c8-Hbk"/>
-                    </connections>
                 </controller>
             </objects>
         </scene>
-        <!--Detail-->
+        <!--Back-->
         <scene sceneID="zud-et-9J8">
             <objects>
-                <controller identifier="DetailVC" title="Detail" hidesWhenLoading="NO" id="5tm-MU-Trn" customClass="DetailController">
+                <controller identifier="DetailVC" title="Back" hidesWhenLoading="NO" id="5tm-MU-Trn" customClass="DetailController">
                     <items>
                         <label width="136" height="153" alignment="left" text="Label" textAlignment="center" numberOfLines="6" id="s3v-ob-Kah"/>
                     </items>
@@ -44,7 +41,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="618" y="357"/>
+            <point key="canvasLocation" x="609" y="415"/>
         </scene>
     </scenes>
 </document>

@@ -11,7 +11,6 @@
 		1BD5DE151BDE954000C4B918 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BD5DE141BDE954000C4B918 /* Assets.xcassets */; };
 		1BD5DE1C1BDE954000C4B918 /* ValetWatchTest Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 1BD5DE1B1BDE954000C4B918 /* ValetWatchTest Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1BD5DE221BDE954000C4B918 /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5DE211BDE954000C4B918 /* InterfaceController.m */; };
-		1BD5DE251BDE954000C4B918 /* ExtensionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5DE241BDE954000C4B918 /* ExtensionDelegate.m */; };
 		1BD5DE271BDE954000C4B918 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BD5DE261BDE954000C4B918 /* Assets.xcassets */; };
 		1BD5DE2B1BDE954000C4B918 /* ValetWatchTest.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 1BD5DE0F1BDE953F00C4B918 /* ValetWatchTest.app */; };
 		1BD5DE371BDEA09100C4B918 /* libValet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BD5DDCD1BDE939A00C4B918 /* libValet.a */; };
@@ -151,8 +150,6 @@
 		1BD5DE1B1BDE954000C4B918 /* ValetWatchTest Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ValetWatchTest Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD5DE201BDE954000C4B918 /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
 		1BD5DE211BDE954000C4B918 /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
-		1BD5DE231BDE954000C4B918 /* ExtensionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtensionDelegate.h; sourceTree = "<group>"; };
-		1BD5DE241BDE954000C4B918 /* ExtensionDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtensionDelegate.m; sourceTree = "<group>"; };
 		1BD5DE261BDE954000C4B918 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1BD5DE281BDE954000C4B918 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1BD5DE401BDEA51400C4B918 /* DetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailController.h; sourceTree = "<group>"; };
@@ -279,8 +276,6 @@
 			isa = PBXGroup;
 			children = (
 				1BD5DE431BDEA51F00C4B918 /* Controller */,
-				1BD5DE231BDE954000C4B918 /* ExtensionDelegate.h */,
-				1BD5DE241BDE954000C4B918 /* ExtensionDelegate.m */,
 				1BD5DE261BDE954000C4B918 /* Assets.xcassets */,
 				1BD5DE281BDE954000C4B918 /* Info.plist */,
 			);
@@ -815,7 +810,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BD5DE251BDE954000C4B918 /* ExtensionDelegate.m in Sources */,
 				1BD5DE221BDE954000C4B918 /* InterfaceController.m in Sources */,
 				1BD5DE421BDEA51400C4B918 /* DetailController.m in Sources */,
 			);
