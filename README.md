@@ -29,8 +29,6 @@ pod 'Valet'
 ```
 
 
-Or manually checkout the submodule with `git submodule add git@github.com:Square/Valet.git`, drag Valet.xcodeproj to your project, and add Valet as a build dependency.
-
 ### Carthage
 
 [Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
@@ -45,10 +43,14 @@ $ brew install carthage
 To integrate Valet into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "Square/Valet" ~> 2.0.3
+github "Square/Valet"
 ```
 
 Run `carthage` to build the framework and drag the built `Valet.framework` into your Xcode project.
+
+### Submodules
+
+Or manually checkout the submodule with `git submodule add git@github.com:Square/Valet.git`, drag Valet.xcodeproj to your project, and add Valet as a build dependency.
 
 ## Usage
 
