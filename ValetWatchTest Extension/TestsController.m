@@ -59,32 +59,15 @@
 
 - (void)test_initialization_twoValetsWithSameConfigurationHaveEqualPointers;
 {
-    BOOL isSuccess = NO;
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:self.valet.accessibility];
-    [self.additionalValets addObject:otherValet];
-    
-    if (self.valet != otherValet &&  ![self.valet isEqualToValet:otherValet]) {
-        
-    }
-    
-    // This should be true for subclasses, as well.
-    VALTestingValet *otherTestingValet = [[VALTestingValet alloc] initWithIdentifier:self.testingValet.identifier accessibility:self.testingValet.accessibility];
-    [self.additionalValets addObject:otherTestingValet];
-    
-    if (self.testingValet == otherTestingValet &&  [self.testingValet isEqualToValet:otherTestingValet]) {
-        isSuccess = YES;
-    }
-    
-    if (self.valet != otherTestingValet &&  ![self.valet isEqualToValet:otherTestingValet]) {
-        isSuccess = YES;
-    }
-    
-    if (isSuccess) {
-        
-    }
+    [self failTest:@"initialization_twoValetsWithSameConfigurationHaveEqualPointers"];
 }
 
+-(void) passedTest:(NSString *)testTitle {
+    NSLog(@"💚 👻 🙏  -> %@ : TEST PASSED \n ----------------------------------------------------------------------------------------------------------------------------------",testTitle);
+}
 
-
+-(void) failTest:(NSString *)testTitle {
+    NSLog(@"😓 ✋ 💔 -> %@ : TEST FAILED \n ----------------------------------------------------------------------------------------------------------------------------------",testTitle);
+}
 
 @end
