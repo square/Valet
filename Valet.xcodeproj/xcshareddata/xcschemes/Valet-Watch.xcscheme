@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1BD5DDDA1BDE941000C4B918"
-               BuildableName = "Valet-Watch.framework"
+               BuildableName = "Valet.framework"
                BlueprintName = "Valet-Watch"
                ReferencedContainer = "container:Valet.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1BD5DDDA1BDE941000C4B918"
-            BuildableName = "Valet-Watch.framework"
+            BuildableName = "Valet.framework"
             BlueprintName = "Valet-Watch"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1BD5DDDA1BDE941000C4B918"
-            BuildableName = "Valet-Watch.framework"
+            BuildableName = "Valet.framework"
             BlueprintName = "Valet-Watch"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>

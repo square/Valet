@@ -21,6 +21,7 @@
 		1BD5DE3E1BDEA1F800C4B918 /* VALSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */; };
 		1BD5DE3F1BDEA1FB00C4B918 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */; };
 		1BD5DE421BDEA51400C4B918 /* DetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5DE411BDEA51400C4B918 /* DetailController.m */; settings = {ASSET_TAGS = (); }; };
+		1BD5DE461BDEB92800C4B918 /* TestsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD5DE451BDEB92800C4B918 /* TestsController.m */; settings = {ASSET_TAGS = (); }; };
 		26E682841BA8B42100EFF4EA /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = EA1E1F861A8C46080067C991 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A531BA8B53100E039CD /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A541BA8B53C00E039CD /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -82,6 +83,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 1BD5DE0E1BDE953F00C4B918;
 			remoteInfo = ValetWatchTest;
+		};
+		1BD5DE481BDED79100C4B918 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EAF894731B053E0400EDAD6C;
+			remoteInfo = ValetTouchIDTest;
 		};
 		EA1E1F901A8C46090067C991 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -154,6 +162,8 @@
 		1BD5DE281BDE954000C4B918 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1BD5DE401BDEA51400C4B918 /* DetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailController.h; sourceTree = "<group>"; };
 		1BD5DE411BDEA51400C4B918 /* DetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailController.m; sourceTree = "<group>"; };
+		1BD5DE441BDEB92800C4B918 /* TestsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestsController.h; sourceTree = "<group>"; };
+		1BD5DE451BDEB92800C4B918 /* TestsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestsController.m; sourceTree = "<group>"; };
 		26E6827C1BA8B3F900EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E6828A1BA8B4B200EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E682921BA8B4D200EFF4EA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -289,6 +299,8 @@
 				1BD5DE211BDE954000C4B918 /* InterfaceController.m */,
 				1BD5DE401BDEA51400C4B918 /* DetailController.h */,
 				1BD5DE411BDEA51400C4B918 /* DetailController.m */,
+				1BD5DE441BDEB92800C4B918 /* TestsController.h */,
+				1BD5DE451BDEB92800C4B918 /* TestsController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -587,6 +599,7 @@
 			);
 			dependencies = (
 				EA1E1F911A8C46090067C991 /* PBXTargetDependency */,
+				1BD5DE491BDED79100C4B918 /* PBXTargetDependency */,
 			);
 			name = "Valet iOS Tests";
 			productName = ValetTests;
@@ -810,6 +823,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BD5DE461BDEB92800C4B918 /* TestsController.m in Sources */,
 				1BD5DE221BDE954000C4B918 /* InterfaceController.m in Sources */,
 				1BD5DE421BDEA51400C4B918 /* DetailController.m in Sources */,
 			);
@@ -892,6 +906,11 @@
 			isa = PBXTargetDependency;
 			target = 1BD5DE0E1BDE953F00C4B918 /* ValetWatchTest */;
 			targetProxy = 1BD5DE291BDE954000C4B918 /* PBXContainerItemProxy */;
+		};
+		1BD5DE491BDED79100C4B918 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EAF894731B053E0400EDAD6C /* ValetTouchIDTest */;
+			targetProxy = 1BD5DE481BDED79100C4B918 /* PBXContainerItemProxy */;
 		};
 		EA1E1F911A8C46090067C991 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

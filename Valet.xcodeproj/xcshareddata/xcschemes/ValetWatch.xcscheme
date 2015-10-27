@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1BD5DDCC1BDE939A00C4B918"
-               BuildableName = "libValet Watch.a"
+               BuildableName = "libValet.a"
                BlueprintName = "Valet Watch"
                ReferencedContainer = "container:Valet.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1BD5DDCC1BDE939A00C4B918"
-            BuildableName = "libValet Watch.a"
+            BuildableName = "libValet.a"
             BlueprintName = "Valet Watch"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1BD5DDCC1BDE939A00C4B918"
-            BuildableName = "libValet Watch.a"
+            BuildableName = "libValet.a"
             BlueprintName = "Valet Watch"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>

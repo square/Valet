@@ -25,6 +25,11 @@
                                 <action selector="removeRandomValue:" destination="AgC-eL-Hgc" id="vai-eL-U5X"/>
                             </connections>
                         </button>
+                        <button width="1" alignment="left" title="RUN TESTS" id="gV2-4g-MZt">
+                            <connections>
+                                <action selector="executeUnitTests:" destination="AgC-eL-Hgc" id="2QR-zy-fBn"/>
+                            </connections>
+                        </button>
                     </items>
                 </controller>
             </objects>
@@ -42,6 +47,19 @@
                 </controller>
             </objects>
             <point key="canvasLocation" x="609" y="415"/>
+        </scene>
+        <!--Tests-->
+        <scene sceneID="eaW-MO-kcG">
+            <objects>
+                <controller identifier="TestsVC" title="Tests" hidesWhenLoading="NO" id="P4R-yO-d6c" customClass="TestsController">
+                    <items>
+                        <label width="136" height="157" alignment="left" text="Label" textAlignment="center" numberOfLines="25" id="FYI-k2-HyL">
+                            <fontDescription key="font" type="system" pointSize="14"/>
+                        </label>
+                    </items>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="607" y="670"/>
         </scene>
     </scenes>
 </document>

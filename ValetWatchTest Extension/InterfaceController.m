@@ -5,6 +5,18 @@
 //  Created by Rodrigo de Souza Reis on 26/10/15.
 //  Copyright © 2015 Square, Inc. All rights reserved.
 //
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 
 #import "InterfaceController.h"
 #import <Valet/VALSecureEnclaveValet.h>
@@ -22,14 +34,12 @@
 - (void)awakeWithContext:(id)context {
     [super awakeWithContext:context];
 
-    // Configure interface objects here.
+    self.secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:@"UserPresence"];
+    self.username = @"CustomerPresentProof";
 }
 
 - (void)willActivate {
-    // This method is called when watch view controller is about to be visible to user
     [super willActivate];
-    self.secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:@"UserPresence"];
-    self.username = @"CustomerPresentProof";
 }
 
 - (void)didDeactivate {
@@ -57,6 +67,10 @@
     BOOL removedItem = [self.secureEnclaveValet removeObjectForKey:self.username];
     
     [self presentControllerWithName:@"DetailVC" context:@{@"segue":@"detail",@"data":[NSString stringWithFormat:@"%@\n %@", @"Delete:", (removedItem ? @"Success" : @"Failure")]}];
+}
+
+-(IBAction) executeUnitTests:(id)sender {
+    [self presentControllerWithName:@"TestsVC" context:@{@"segue":@"tests"}];
 }
 
 
