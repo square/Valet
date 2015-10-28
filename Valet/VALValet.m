@@ -450,6 +450,10 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
             keychainData[(__bridge id)kSecValueData] = value;
             
             status = VALAtomicSecItemAdd((__bridge CFDictionaryRef)keychainData, NULL);
+            
+            if (status == errSecMissingEntitlement) {
+                NSLog(@"A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743\n");
+            }
         }
     }, self.lockForSetAndRemoveOperations);
 #else
@@ -482,6 +486,11 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
     CFTypeRef outTypeRef = NULL;
     
     OSStatus status = VALAtomicSecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
+    
+    if (status == errSecMissingEntitlement) {
+        NSLog(@"A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743\n");
+    }
+    
     NSData *value = (__bridge_transfer NSData *)outTypeRef;
     return (status == errSecSuccess) ? value : nil;
 }
