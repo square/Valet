@@ -608,8 +608,9 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
 - (nullable NSString *)_sharedAccessGroupPrefix;
 {
     NSDictionary *query = @{ (__bridge NSString *)kSecClass : (__bridge NSString *)kSecClassGenericPassword,
-                             (__bridge id)kSecAttrAccount : @"SharedAccessGroupPrefixPlaceholder",
-                             (__bridge id)kSecReturnAttributes : @YES };
+                             (__bridge id)kSecAttrAccount : @"SharedAccessGroupAlwaysAccessiblePrefixPlaceholder",
+                             (__bridge id)kSecReturnAttributes : @YES,
+                             (__bridge id)kSecAttrAccessible : (__bridge id)kSecAttrAccessibleAlwaysThisDeviceOnly };
     
     CFTypeRef outTypeRef = NULL;
     NSDictionary *queryResult = nil;
