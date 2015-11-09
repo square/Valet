@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import "VALValet.h"
+#import <Valet/VALValet.h>
 
 
 NS_ASSUME_NONNULL_BEGIN

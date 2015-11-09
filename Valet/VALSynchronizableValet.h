@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import "VALValet.h"
+#import <Valet/VALValet.h>
 
 
 /// Reads and writes keychain elements that are synchronized with iCloud (supported on devices on iOS 7.0.3 and later). Accessibility must not be scoped to this device.
