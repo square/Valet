@@ -89,7 +89,10 @@
     NSDictionary *options = nil;
     
 #if VAL_IOS_9_OR_LATER
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtautological-compare"
     if (&kSecUseAuthenticationUI != NULL) {
+#pragma GCC diagnostic pop
         options = @{ (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIFail };
     } else {
 #pragma GCC diagnostic push
