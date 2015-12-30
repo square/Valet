@@ -150,6 +150,13 @@
 #endif
 }
 
+- (void)test_canAccessKeychain_performance;
+{
+    [self measureBlock:^{
+        [self.valet canAccessKeychain];
+    }];
+}
+
 - (void)test_stringForKey_retrievesString;
 {
     XCTAssertNil([self.valet stringForKey:self.key]);
