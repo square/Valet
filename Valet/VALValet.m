@@ -248,14 +248,21 @@ OSStatus VALAtomicSecItemDelete(CFDictionaryRef query)
         NSString *const canaryKey = @"VAL_KeychainCanaryUsername";
         NSString *const canaryValue = @"VAL_KeychainCanaryPassword";
         
-        // Manually add the key to the keychain since we don't care about duplicates and are optimizing for speed.
-        NSMutableDictionary *query = [self.baseQuery mutableCopy];
-        [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:canaryKey]];
-        query[(__bridge id)kSecValueData] = [canaryValue dataUsingEncoding:NSUTF8StringEncoding];
-        (void)VALAtomicSecItemAdd((__bridge CFDictionaryRef)query, NULL);
-        
         NSString *const retrievedCanaryValue = [self stringForKey:canaryKey];
-        canAccessKeychain = [canaryValue isEqualToString:retrievedCanaryValue];
+        if ([canaryValue isEqualToString:retrievedCanaryValue]) {
+            canAccessKeychain = YES;
+            
+        } else {
+            // Canary value can't be found. Manually add the value to see if we can pull it back out.
+            NSMutableDictionary *query = [self.baseQuery mutableCopy];
+            [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:canaryKey]];
+            query[(__bridge id)kSecValueData] = [canaryValue dataUsingEncoding:NSUTF8StringEncoding];
+            (void)VALAtomicSecItemAdd((__bridge CFDictionaryRef)query, NULL);
+            
+            NSString *const retrievedCanaryValueAfterAdding = [self stringForKey:canaryKey];
+            canAccessKeychain = [canaryValue isEqualToString:retrievedCanaryValueAfterAdding];
+        }
+        
     }, self.lockForSetAndRemoveOperations);
     
     return canAccessKeychain;
