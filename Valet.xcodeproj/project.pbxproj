@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1AA0832BDED78449C07C939B /* VALSecureEnclaveBiometricValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AA08F95D9944F0176CE19AF /* VALSecureEnclaveBiometricValet.m */; };
+		1AA08B596467D7533CD17C6E /* VALSecureEnclaveBiometricValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 1AA08330770D9270B7B37E4B /* VALSecureEnclaveBiometricValet.h */; };
 		26E682841BA8B42100EFF4EA /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = EA1E1F861A8C46080067C991 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A531BA8B53100E039CD /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A541BA8B53C00E039CD /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -79,6 +81,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1AA08330770D9270B7B37E4B /* VALSecureEnclaveBiometricValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALSecureEnclaveBiometricValet.h; sourceTree = "<group>"; };
+		1AA08F95D9944F0176CE19AF /* VALSecureEnclaveBiometricValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALSecureEnclaveBiometricValet.m; sourceTree = "<group>"; };
 		26E6827C1BA8B3F900EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E6828A1BA8B4B200EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E682921BA8B4D200EFF4EA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -202,6 +206,8 @@
 				EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */,
 				EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */,
 				EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */,
+				1AA08F95D9944F0176CE19AF /* VALSecureEnclaveBiometricValet.m */,
+				1AA08330770D9270B7B37E4B /* VALSecureEnclaveBiometricValet.h */,
 			);
 			path = Valet;
 			sourceTree = "<group>";
@@ -306,6 +312,7 @@
 				EAEAA8AC1B16864D00F7AA98 /* Valet.h in Headers */,
 				EAEEAC271AB7BC5700EDB6E3 /* VALValet_Protected.h in Headers */,
 				EAEEAC281AB7BC5700EDB6E3 /* ValetDefines.h in Headers */,
+				1AA08B596467D7533CD17C6E /* VALSecureEnclaveBiometricValet.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,6 +568,7 @@
 				EAEEAC1D1AB7B84000EDB6E3 /* VALSynchronizableValet.m in Sources */,
 				EAEEAC1A1AB7B83300EDB6E3 /* VALValet.m in Sources */,
 				EAEEAC201AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m in Sources */,
+				1AA0832BDED78449C07C939B /* VALSecureEnclaveBiometricValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
