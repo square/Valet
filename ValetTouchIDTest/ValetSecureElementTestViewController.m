@@ -21,6 +21,7 @@
 #import <Valet/VALSecureEnclaveValet.h>
 
 #import "ValetSecureElementTestViewController.h"
+#import "VALSecureEnclaveBiometricValet.h"
 
 
 @interface ValetSecureElementTestViewController ()
@@ -39,8 +40,12 @@
 - (void)viewDidLoad;
 {
     [super viewDidLoad];
-    
-    self.secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:@"UserPresence"];
+
+    //self.secureEnclaveValet = [[VALSecureEnclaveBiometricValet alloc] initWithIdentifier:@"UserPresence"];
+
+    //iOS 9 - restrict it ONLY the fingerprint, and invalidate if the set of prints change
+    self.secureEnclaveValet = [[VALSecureEnclaveBiometricValet alloc] initWithIdentifier:@"UserPresence" sensitivity:VALTouchIdFingerPrintCurrentSetOnly];
+
     self.username = @"CustomerPresentProof";
 }
 
