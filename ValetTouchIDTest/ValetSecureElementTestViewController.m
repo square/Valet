@@ -41,7 +41,7 @@
 {
     [super viewDidLoad];
 
-    self.secureEnclaveValet = [[VALSecureEnclaveBiometricValet alloc] initWithIdentifier:@"UserPresence"];
+    self.secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:@"UserPresence"];
 
     //iOS 9 - restrict it ONLY the fingerprint, and invalidate if the set of prints change
     //self.secureEnclaveValet = [[VALSecureEnclaveBiometricValet alloc] initWithIdentifier:@"UserPresence" sensitivity:VALTouchIdFingerPrintCurrentSetOnly];
