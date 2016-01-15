@@ -21,7 +21,6 @@
 #import <XCTest/XCTest.h>
 
 #import <Valet/Valet.h>
-#import <Valet/ValetDefines.h>
 
 
 // The iPhone simulator fakes entitlements, allowing us to test the iCloud Keychain (VALSynchronizableValet) code without writing a signed host app.
@@ -51,7 +50,7 @@
 @property (nonatomic, readwrite) VALValet *valet;
 @property (nonatomic, readwrite) VALTestingValet *testingValet;
 @property (nonatomic, readwrite) VALSynchronizableValet *synchronizableValet;
-#if VAL_IOS_8_OR_LATER
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
 @property (nonatomic, readwrite) VALSecureEnclaveValet *secureEnclaveValet;
 #endif
 @property (nonatomic, copy, readwrite) NSString *key;
@@ -74,8 +73,8 @@
     self.valet = [[VALValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenUnlocked];
     self.testingValet = [[VALTestingValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenUnlocked];
     self.synchronizableValet = [[VALSynchronizableValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenUnlocked];
-#if VAL_IOS_8_OR_LATER
-    self.secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly];
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
+    self.secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:valetTestingIdentifier accessControl:VALAccessControlUserPresence];
 #endif
     
     // In case testing quit unexpectedly, clean up the keychain from last time.
@@ -83,7 +82,7 @@
     [self.testingValet removeAllObjects];
     [self.synchronizableValet removeAllObjects];
     
-    for (VALValet *additionalValet in self.additionalValets) {
+    for (VALValet *const additionalValet in self.additionalValets) {
         [additionalValet removeAllObjects];
     }
     
@@ -97,7 +96,7 @@
 {
     [super tearDown];
     
-    for (VALValet *additionalValet in self.additionalValets) {
+    for (VALValet *const additionalValet in self.additionalValets) {
         [additionalValet removeAllObjects];
     }
 }
@@ -132,9 +131,50 @@
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"" accessibility:VALAccessibilityAlways]);
     XCTAssertNil([[VALValet alloc] initWithIdentifier:@"test" accessibility:0]);
     XCTAssertNil([[VALSynchronizableValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenUnlockedThisDeviceOnly]);
-    
-#if VAL_IOS_8_OR_LATER
-    XCTAssertNil([[VALSecureEnclaveValet alloc] initWithIdentifier:@"test" accessibility:VALAccessibilityWhenUnlockedThisDeviceOnly]);
+}
+
+- (void)test_initWithIdentifier_accessControl_isBackwardsCompatibleWithDeprecatedInitializer;
+{
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
+        NSString *const valetTestingIdentifier = @"valet_backwards_compatibility_testing";
+        
+        VALSecureEnclaveValet *const secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:valetTestingIdentifier accessControl:VALAccessControlUserPresence];
+        VALSecureEnclaveValet *const deprecatedSecureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:valetTestingIdentifier];
+        
+        XCTAssertEqual(secureEnclaveValet, deprecatedSecureEnclaveValet);
+        
+        NSString *const secretDeprecatedString = @"secret deprecated string";
+        NSString *const key = @"Backwards compatible key?";
+        
+        XCTAssertTrue([deprecatedSecureEnclaveValet setString:secretDeprecatedString forKey:key]);
+        XCTAssertEqualObjects([secureEnclaveValet stringForKey:key], secretDeprecatedString);
+    }
+#pragma GCC diagnostic pop
+#endif
+}
+
+- (void)test_initWithIdentifier_accessControl_canBeUsedTwiceWithNoSideEffects;
+{
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
+    if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
+        NSString *const valetTestingIdentifier = @"valet_shared_valet_testing";
+        
+        VALSecureEnclaveValet *const secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:valetTestingIdentifier accessControl:VALAccessControlUserPresence];
+        
+        NSString *const secretDeprecatedString = @"secret shared string";
+        NSString *const key = @"shared key?";
+        
+        XCTAssertTrue([secureEnclaveValet setString:secretDeprecatedString forKey:key]);
+        
+        VALSecureEnclaveValet *const sameSecureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:valetTestingIdentifier accessControl:VALAccessControlUserPresence];
+        
+        XCTAssertEqual(secureEnclaveValet, sameSecureEnclaveValet);
+        
+        XCTAssertEqualObjects([sameSecureEnclaveValet stringForKey:key], secretDeprecatedString);
+    }
 #endif
 }
 
@@ -143,7 +183,7 @@
     // Testing environments should always be able to access the keychain.
     XCTAssertTrue([self.valet canAccessKeychain]);
     
-#if VAL_IOS_8_OR_LATER
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
     if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
         XCTAssertTrue([self.secureEnclaveValet canAccessKeychain]);
     }
@@ -601,7 +641,7 @@
                       (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanFalse };
     XCTAssertEqual([self.valet migrateObjectsMatchingQuery:invalidQuery removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
     
-#if VAL_IOS_8_OR_LATER
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
     if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
         invalidQuery = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
                           (__bridge id)kSecUseOperationPrompt : @"Migration Prompt" };
@@ -631,13 +671,13 @@
     
     NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar" };
     
-    for (NSString *key in keyStringPairToMigrateMap) {
+    for (NSString *const key in keyStringPairToMigrateMap) {
         XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
     }
     
     XCTAssertNil([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:NO]);
     
-    for (NSString *key in keyStringPairToMigrateMap) {
+    for (NSString *const key in keyStringPairToMigrateMap) {
         XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
         XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
     }
@@ -650,13 +690,13 @@
     
     NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
     
-    for (NSString *key in keyStringPairToMigrateMap) {
+    for (NSString *const key in keyStringPairToMigrateMap) {
         XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
     }
     
     XCTAssertNil([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:NO]);
     
-    for (NSString *key in keyStringPairToMigrateMap) {
+    for (NSString *const key in keyStringPairToMigrateMap) {
         XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
         XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
     }
@@ -664,18 +704,18 @@
 
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenRemovingOnCompletion;
 {
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
+    VALValet *const otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
     [self.additionalValets addObject:otherValet];
     
-    NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+    NSDictionary *const keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
     
-    for (NSString *key in keyStringPairToMigrateMap) {
+    for (NSString *const key in keyStringPairToMigrateMap) {
         XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
     }
     
     XCTAssertNil([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES]);
     
-    for (NSString *key in keyStringPairToMigrateMap) {
+    for (NSString *const key in keyStringPairToMigrateMap) {
         XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
         XCTAssertEqualObjects([otherValet stringForKey:key], nil);
     }
@@ -683,55 +723,55 @@
 
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_bailsOutAndLeavesKeychainUntouchedIfConflictExists;
 {
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
+    VALValet *const otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
     [self.additionalValets addObject:otherValet];
     
-    NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+    NSDictionary *const keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
     
-    for (NSString *key in keyStringPairToMigrateMap) {
+    for (NSString *const key in keyStringPairToMigrateMap) {
         XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
     }
     
     // Insert conflict.
-    NSString *conflictKey = keyStringPairToMigrateMap.allKeys.firstObject;
+    NSString *const conflictKey = keyStringPairToMigrateMap.allKeys.firstObject;
     XCTAssertTrue([self.valet setString:keyStringPairToMigrateMap[conflictKey] forKey:conflictKey]);
-    NSSet *allValetKeysPreMigration = self.valet.allKeys;
+    NSSet *const allValetKeysPreMigration = self.valet.allKeys;
     
     XCTAssertEqual([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:YES].code, VALMigrationErrorKeyInQueryResultAlreadyExistsInValet);
     
     XCTAssertEqualObjects(self.valet.allKeys, allValetKeysPreMigration);
     XCTAssertEqualObjects([self.valet stringForKey:conflictKey], keyStringPairToMigrateMap[conflictKey]);
     
-    for (NSString *key in keyStringPairToMigrateMap) {
+    for (NSString *const key in keyStringPairToMigrateMap) {
         XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
     }
 }
 
-#if VAL_IOS_8_OR_LATER
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenMigratingToSecureEnclave;
 {
     if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
-        VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
+        VALValet *const otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
         [self.additionalValets addObject:otherValet];
         
-        NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+        NSDictionary *const keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
         
-        for (NSString *key in keyStringPairToMigrateMap) {
+        for (NSString *const key in keyStringPairToMigrateMap) {
             XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
         }
         
-        for (NSString *key in keyStringPairToMigrateMap) {
+        for (NSString *const key in keyStringPairToMigrateMap) {
             XCTAssertFalse([self.secureEnclaveValet containsObjectForKey:key]);
         }
         
         XCTAssertNil([self.secureEnclaveValet migrateObjectsFromValet:otherValet removeOnCompletion:NO]);
         
-        for (NSString *key in keyStringPairToMigrateMap) {
+        for (NSString *const key in keyStringPairToMigrateMap) {
             XCTAssertTrue([self.secureEnclaveValet containsObjectForKey:key]);
         }
         
         // Clean up items for next test run since Secure Enclave Valet does not support allKeys or removeAllObjects.
-        for (NSString *key in keyStringPairToMigrateMap) {
+        for (NSString *const key in keyStringPairToMigrateMap) {
             XCTAssertTrue([self.secureEnclaveValet removeObjectForKey:key]);
         }
     }
@@ -740,7 +780,7 @@
 
 - (void)test_isEqual_equivalentValetsCanAccessSameData;
 {
-    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:self.valet.accessibility];
+    VALValet *const otherValet = [[VALValet alloc] initWithIdentifier:self.valet.identifier accessibility:self.valet.accessibility];
     [self.additionalValets addObject:otherValet];
     XCTAssertTrue([self.valet isEqual:otherValet]);
     
@@ -759,8 +799,8 @@
 
 - (void)test_secItemFormatDictionaryWithKey_stringInDictionaryAsData;
 {
-    NSDictionary *KeyDictionary = [self.valet _secItemFormatDictionaryWithKey:self.key];
-    XCTAssertEqualObjects(KeyDictionary[(__bridge id)kSecAttrAccount], self.key);
+    NSDictionary *const secItemDictionary = [self.valet _secItemFormatDictionaryWithKey:self.key];
+    XCTAssertEqualObjects(secItemDictionary[(__bridge id)kSecAttrAccount], self.key);
 }
 
 #pragma mark - XCTestCase
@@ -780,7 +820,7 @@
 - (BOOL)_skipTestCase;
 {
     // When running tests from the command line, the process arguments do not have this parameter
-    BOOL isRunningFromCommandLine = [[NSProcessInfo processInfo].arguments indexOfObject:@"-ApplePersistenceIgnoreState"] == NSNotFound;
+    BOOL const isRunningFromCommandLine = [[NSProcessInfo processInfo].arguments indexOfObject:@"-ApplePersistenceIgnoreState"] == NSNotFound;
     return isRunningFromCommandLine;
 }
 
