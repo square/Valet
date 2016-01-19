@@ -67,4 +67,11 @@
     self.textView.text = [self.textView.text stringByAppendingFormat:@"\n%s %@", __PRETTY_FUNCTION__, (removedItem ? @"Success" : @"Failure")];
 }
 
+- (IBAction)containsItem:(id)sender;
+{
+    BOOL containsItem = [self.secureEnclaveValet containsObjectForKey:self.username];
+    
+    self.textView.text = [self.textView.text stringByAppendingFormat:@"\n%s %@", __PRETTY_FUNCTION__, (containsItem ? @"YES" : @"NO")];
+}
+
 @end
