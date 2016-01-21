@@ -48,21 +48,26 @@
 
 - (IBAction)setOrUpdateItem:(id)sender;
 {
-    BOOL setOrUpdatedItem = [self.secureEnclaveValet setString:[NSString stringWithFormat:@"I am here! %@", [[NSUUID new] UUIDString]] forKey:self.username];
+    BOOL const setOrUpdatedItem = [self.secureEnclaveValet setString:[NSString stringWithFormat:@"I am here! %@", [[NSUUID new] UUIDString]] forKey:self.username];
     
     self.textView.text = [self.textView.text stringByAppendingFormat:@"\n%s %@", __PRETTY_FUNCTION__, (setOrUpdatedItem ? @"Success" : @"Failure")];
 }
 
 - (IBAction)getItem:(id)sender;
 {
-    NSString *password = [self.secureEnclaveValet stringForKey:self.username userPrompt:@"Use TouchID to retreive password"];
+    BOOL userCancelled = NO;
+    NSString *const password = [self.secureEnclaveValet stringForKey:self.username userPrompt:@"Use TouchID to retrieve password" userCancelled:&userCancelled];
     
-    self.textView.text = [self.textView.text stringByAppendingFormat:@"\n%s %@", __PRETTY_FUNCTION__, password];
+    if (userCancelled) {
+        self.textView.text = [self.textView.text stringByAppendingFormat:@"\n%s user cancelled TouchID", __PRETTY_FUNCTION__];
+    } else {
+        self.textView.text = [self.textView.text stringByAppendingFormat:@"\n%s %@", __PRETTY_FUNCTION__, password];
+    }
 }
 
 - (IBAction)removeItem:(id)sender;
 {
-    BOOL removedItem = [self.secureEnclaveValet removeObjectForKey:self.username];
+    BOOL const removedItem = [self.secureEnclaveValet removeObjectForKey:self.username];
     
     self.textView.text = [self.textView.text stringByAppendingFormat:@"\n%s %@", __PRETTY_FUNCTION__, (removedItem ? @"Success" : @"Failure")];
 }

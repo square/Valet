@@ -65,12 +65,24 @@ typedef NS_ENUM(NSUInteger, VALAccessControl) {
 /// Convenience method for retrieving data from the keychain with a user prompt.
 /// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
 /// @return The object currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
-- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
+
+/// Convenience method for retrieving data from the keychain with a user prompt.
+/// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
+/// @param userCancelled A pointer to a BOOL which will be set to YES if the user cancels out of Touch ID or entering the device Passcode.
+/// @return The object currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 
 /// Convenience method for retrieving a string from the keychain with a user prompt.
 /// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
 /// @return The string currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
-- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
+
+/// Convenience method for retrieving a string from the keychain with a user prompt.
+/// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
+/// @param userCancelled A pointer to a BOOL which will be set to YES if the user cancels out of Touch ID or entering the device Passcode.
+/// @return The string currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 
 /// This method is not supported on VALSecureEnclaveValet.
 - (nonnull NSSet *)allKeys NS_UNAVAILABLE;

@@ -338,7 +338,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
 
 - (nullable NSData *)objectForKey:(nonnull NSString *)key;
 {
-    return [self objectForKey:key options:nil];
+    return [self objectForKey:key options:nil status:NULL];
 }
 
 - (BOOL)setString:(nonnull NSString *)string forKey:(nonnull NSString *)key;
@@ -348,7 +348,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
 
 - (nullable NSString *)stringForKey:(nonnull NSString *)key;
 {
-    return [self stringForKey:key options:nil];
+    return [self stringForKey:key options:nil status:NULL];
 }
 
 - (BOOL)containsObjectForKey:(nonnull NSString *)key;
@@ -528,7 +528,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     return (status == errSecSuccess);
 }
 
-- (nullable NSData *)objectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options status:(nullable inout OSStatus *)status;
 {
     VALCheckCondition(key.length > 0, nil, @"Can not retrieve value with empty key.");
     NSMutableDictionary *query = [self.baseQuery mutableCopy];
@@ -540,14 +540,17 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     }
     
     CFTypeRef outTypeRef = NULL;
-    
-    OSStatus const status = VALAtomicSecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
-    if (status == errSecMissingEntitlement) {
+    OSStatus const copyMatchingStatus = VALAtomicSecItemCopyMatching((__bridge CFDictionaryRef)query, &outTypeRef);
+    if (copyMatchingStatus == errSecMissingEntitlement) {
         NSLog(@"A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743\n");
     }
     
+    if (status != NULL) {
+        *status = copyMatchingStatus;
+    }
+    
     NSData *const value = (__bridge_transfer NSData *)outTypeRef;
-    return (status == errSecSuccess) ? value : nil;
+    return (copyMatchingStatus == errSecSuccess) ? value : nil;
 }
 
 - (BOOL)setString:(nonnull NSString *)string forKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
@@ -561,9 +564,9 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     return NO;
 }
 
-- (nullable NSString *)stringForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
+- (nullable NSString *)stringForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options  status:(nullable inout OSStatus *)status;
 {
-    NSData *const stringData = [self objectForKey:key options:options];
+    NSData *const stringData = [self objectForKey:key options:options status:status];
     if (stringData.length > 0) {
         return [[NSString alloc] initWithBytes:stringData.bytes length:stringData.length encoding:NSUTF8StringEncoding];
     }
