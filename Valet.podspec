@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source   = { :git => 'https://github.com/square/Valet.git', :tag => s.version }
   s.source_files = 'Valet/*.{h,m}', 'Other/*.{h,m}'
   s.public_header_files = 'Valet/*.h'
-  s.exclude_files = 'Valet/*_Protected.h'
+  s.private_header_files = 'Valet/*_Protected.h'
   s.frameworks = 'Security'
   s.ios.deployment_target = '6.0'
   s.osx.deployment_target = '10.10'
