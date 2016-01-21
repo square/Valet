@@ -24,7 +24,37 @@
 #import "ValetDefines.h"
 
 
+/// Compiler flag for building against an SDK where VALAccessControlTouchIDAnyFingerprint and VALAccessControlTouchIDCurrentFingerprintSet are available.
+#define VAL_ACCESS_CONTROL_TOUCH_ID_SDK_AVAILABLE (TARGET_OS_IPHONE && __IPHONE_9_0)
+
+/// Compiler flag for building against an SDK where VALAccessControlDevicePasscode is available.
+#define VAL_ACCESS_CONTROL_DEVICE_PASSCODE_SDK_AVAILABLE ((TARGET_OS_IPHONE && __IPHONE_9_0) || (TARGET_OS_MAC && __MAC_10_11))
+
+
+NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
+{
+    switch (accessControl) {
+        case VALAccessControlUserPresence:
+            return @"AccessControlUserPresence";
+            
+        case VALAccessControlTouchIDAnyFingerprint:
+            return @"AccessControlTouchIDAnyFingerprint";
+            
+        case VALAccessControlTouchIDCurrentFingerprintSet:
+            return @"AccessControlTouchIDCurrentFingerprintSet";
+            
+        case VALAccessControlDevicePasscode:
+            return @"AccessControlDevicePasscode";
+    }
+    
+    return @"AccessControlInvalid";
+}
+
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
+
 @implementation VALSecureEnclaveValet
+
+@synthesize baseQuery = _baseQuery;
 
 #pragma mark - Class Methods
 
@@ -32,40 +62,177 @@
 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wtautological-compare"
-#if VAL_IOS_8_OR_LATER
     return (&kSecAttrAccessControl != NULL && &kSecUseOperationPrompt != NULL);
+#pragma clang diagnostic pop
+}
+
+#pragma mark - Private Class Methods
+
++ (BOOL)_macOSElCapitanOrLater;
+{
+#if TARGET_OS_MAC && __MAC_10_11
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
+    return (&kSecUseAuthenticationUI != NULL);
+#pragma clang diagnostic pop
 #else
     return NO;
 #endif
+}
+
++ (BOOL)_iOS8OrLater;
+{
+#if TARGET_OS_IPHONE
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
+    return (&kSecUseOperationPrompt != NULL);
 #pragma clang diagnostic pop
+#else
+    return NO;
+#endif
+}
+
++ (BOOL)_iOS9OrLater;
+{
+#if TARGET_OS_IPHONE && __IPHONE_9_0
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
+    return (&kSecUseAuthenticationUI != NULL);
+#pragma clang diagnostic pop
+#else
+    return NO;
+#endif
+}
+
++ (BOOL)_currentOSSupportedForAccessControl:(VALAccessControl)accessControl;
+{
+    switch (accessControl) {
+        case VALAccessControlUserPresence:
+            return ([self _iOS8OrLater] || [self _macOSElCapitanOrLater]);
+            
+        case VALAccessControlTouchIDAnyFingerprint:
+        case VALAccessControlTouchIDCurrentFingerprintSet:
+            return [self _iOS9OrLater];
+            
+        case VALAccessControlDevicePasscode:
+            return ([self _iOS9OrLater] || [self _macOSElCapitanOrLater]);
+    }
+    
+    return NO;
+}
+
++ (void)_augmentBaseQuery:(nonnull NSMutableDictionary *)mutableBaseQuery accessControl:(VALAccessControl)accessControl;
+{
+    // Add the access control, which opts us in to Secure Element storage.
+    [mutableBaseQuery addEntriesFromDictionary:@{ (__bridge id)kSecAttrAccessControl : (__bridge_transfer id)SecAccessControlCreateWithFlags(NULL, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, ({
+        SecAccessControlCreateFlags accessControlFlag = 0;
+        
+        switch (accessControl) {
+            case VALAccessControlUserPresence:
+                accessControlFlag = kSecAccessControlUserPresence;
+                break;
+                
+#if VAL_ACCESS_CONTROL_TOUCH_ID_SDK_AVAILABLE
+            case VALAccessControlTouchIDAnyFingerprint:
+                accessControlFlag = kSecAccessControlTouchIDAny;
+                break;
+            case VALAccessControlTouchIDCurrentFingerprintSet:
+                accessControlFlag = kSecAccessControlTouchIDCurrentSet;
+                break;
+#else
+            case VALAccessControlTouchIDAnyFingerprint:
+            case VALAccessControlTouchIDCurrentFingerprintSet:
+                // This SDK does not support these access controls. But on this SDK we'll never reach this line, so just fake it.
+                break;
+#endif
+                
+#if VAL_ACCESS_CONTROL_DEVICE_PASSCODE_SDK_AVAILABLE
+            case VALAccessControlDevicePasscode:
+                accessControlFlag = kSecAccessControlDevicePasscode;
+                break;
+#else
+            case VALAccessControlDevicePasscode:
+                // This SDK does not support these access controls. But on this SDK we'll never reach this line, so just fake it.
+                break;
+#endif
+        }
+        
+        accessControlFlag;
+    }), NULL) }];
+    
+    // kSecAttrAccessControl and kSecAttrAccessible are mutually exclusive, so remove kSecAttrAccessible from our query.
+    [mutableBaseQuery removeObjectForKey:(__bridge id)kSecAttrAccessible];
+    
+    NSString *const service = mutableBaseQuery[(__bridge id)kSecAttrService];
+    NSString *const accessControlServiceSuffix = ({
+        NSString *accessControlServiceSuffix = @"";
+        
+        switch (accessControl) {
+            case VALAccessControlUserPresence:
+                /*
+                 VALSecureEnclaveValet v1.0-v2.0.7 used UserPresence without a suffix – the concept of a customizable AccessControl was added in v2.1.
+                 For backwards compatibility, do not append an access control suffix for UserPresence.
+                 */
+                break;
+                
+            case VALAccessControlTouchIDAnyFingerprint:
+            case VALAccessControlTouchIDCurrentFingerprintSet:
+            case VALAccessControlDevicePasscode:
+                accessControlServiceSuffix = [@"_" stringByAppendingString:VALStringForAccessControl(accessControl)];
+                break;
+        }
+        
+        accessControlServiceSuffix;
+    });
+    
+    if (service.length > 0 && accessControlServiceSuffix.length > 0) {
+        // Ensure that our service identifier includes our access control suffix.
+        mutableBaseQuery[(__bridge id)kSecAttrService] = [service stringByAppendingString:accessControlServiceSuffix];
+    }
 }
 
 #pragma mark - Initialization
 
-- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier;
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessControl:(VALAccessControl)accessControl;
 {
-    return [self initWithIdentifier:identifier accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly];
-}
-
-- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility;
-{
-    VALCheckCondition(accessibility == VALAccessibilityWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibilityWhenPasscodeSetThisDeviceOnly");
     VALCheckCondition([[self class] supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
+    VALCheckCondition([[self class] _currentOSSupportedForAccessControl:accessControl], nil, @"This device does not support %@", VALStringForAccessControl(accessControl));
     
-    return [super initWithIdentifier:identifier accessibility:accessibility];
+    VALAccessibility const accessibility = VALAccessibilityWhenPasscodeSetThisDeviceOnly;
+    self = [super initWithIdentifier:identifier accessibility:accessibility];
+    if (self != nil) {
+        SEL const backwardsCompatibleInitializer = @selector(initWithIdentifier:accessibility:);
+        NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithIdentifier:identifier
+                                                                              accessibility:accessibility
+                                                                                initializer:backwardsCompatibleInitializer];
+        [[self class] _augmentBaseQuery:baseQuery
+                          accessControl:accessControl];
+        _baseQuery = baseQuery;
+        _accessControl = accessControl;
+    }
+    
+    return [[self class] sharedValetForValet:self];
 }
 
-- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier;
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessControl:(VALAccessControl)accessControl
 {
-    return [self initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly];
-}
-
-- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
-{
-    VALCheckCondition(accessibility == VALAccessibilityWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibilityWhenPasscodeSetThisDeviceOnly");
     VALCheckCondition([[self class] supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
+    VALCheckCondition([[self class] _currentOSSupportedForAccessControl:accessControl], nil, @"This device does not support %@", VALStringForAccessControl(accessControl));
     
-    return [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
+    VALAccessibility const accessibility = VALAccessibilityWhenPasscodeSetThisDeviceOnly;
+    self = [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
+    if (self != nil) {
+        SEL const backwardsCompatibleInitializer = @selector(initWithSharedAccessGroupIdentifier:accessibility:);
+        NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier
+                                                                                               accessibility:accessibility
+                                                                                                 initializer:backwardsCompatibleInitializer];
+        [[self class] _augmentBaseQuery:baseQuery
+                          accessControl:accessControl];
+        _baseQuery = baseQuery;
+        _accessControl = accessControl;
+    }
+    
+    return [[self class] sharedValetForValet:self];
 }
 
 #pragma mark - VALValet
@@ -85,34 +252,29 @@
 
 - (BOOL)containsObjectForKey:(nonnull NSString *)key;
 {
-#if VAL_IOS_8_OR_LATER
     NSDictionary *options = nil;
     
-#if VAL_IOS_9_OR_LATER
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wtautological-compare"
-    if (&kSecUseAuthenticationUI != NULL) {
-#pragma GCC diagnostic pop
+    // iOS 9 and Mac OS 10.11 use kSecUseAuthenticationUI, not kSecUseNoAuthenticationUI.
+#if ((TARGET_OS_IPHONE && __IPHONE_9_0) || (TARGET_OS_MAC && __MAC_10_11))
+    if ([[self class] _iOS9OrLater] || [[self class] _macOSElCapitanOrLater]) {
         options = @{ (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIFail };
     } else {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         // kSecUseNoAuthenticationUI is deprecated in the iOS 9 SDK, but we still need it on iOS 8.
+#if (TARGET_OS_IPHONE && __IPHONE_9_0)
         options = @{ (__bridge id)kSecUseNoAuthenticationUI : @YES };
+#endif
 #pragma GCC diagnostic pop
     }
 #else
     options = @{ (__bridge id)kSecUseNoAuthenticationUI : @YES };
 #endif
     
-    OSStatus status = [self containsObjectForKey:key options:options];
+    OSStatus const status = [self containsObjectForKey:key options:options];
     
     BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed || status == errSecSuccess);
     return keyAlreadyInKeychain;
-    
-#else
-    return NO;
-#endif
 }
 
 - (nonnull NSSet *)allKeys;
@@ -127,11 +289,9 @@
 
 - (nullable NSError *)migrateObjectsMatchingQuery:(nonnull NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 {
-#if VAL_IOS_8_OR_LATER
     if ([[self class] supportsSecureEnclaveKeychainItems]) {
         VALCheckCondition(secItemQuery[(__bridge id)kSecUseOperationPrompt] == nil, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationErrorInvalidQuery userInfo:nil], @"kSecUseOperationPrompt is not supported in a migration query. Keychain items can not be migrated en masse from the Secure Enclave.");
     }
-#endif
     
     return [super migrateObjectsMatchingQuery:secItemQuery removeOnCompletion:remove];
 }
@@ -140,40 +300,15 @@
 
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
 {
-#if VAL_IOS_8_OR_LATER
     return [self objectForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
-#else
-    return nil;
-#endif
 }
 
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
 {
-#if VAL_IOS_8_OR_LATER
     return [self stringForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
-#else
-    return nil;
-#endif
 }
 
 #pragma mark - Protected Methods
-
-- (nonnull NSMutableDictionary *)mutableBaseQueryWithIdentifier:(nonnull NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
-{
-#if VAL_IOS_8_OR_LATER
-    NSMutableDictionary *mutableBaseQuery = [super mutableBaseQueryWithIdentifier:identifier initializer:initializer accessibility:accessibility];
-    
-    // Add the access control, which opts us in to Secure Element storage.
-    mutableBaseQuery[(__bridge id)kSecAttrAccessControl] = (__bridge_transfer id)SecAccessControlCreateWithFlags(NULL, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, kSecAccessControlUserPresence, NULL);
-    
-    // kSecAttrAccessControl and kSecAttrAccessible are mutually exclusive, so remove kSecAttrAccessible from our query.
-    [mutableBaseQuery removeObjectForKey:(__bridge id)kSecAttrAccessible];
-    
-    return mutableBaseQuery;
-#else
-    return [NSMutableDictionary new];
-#endif
-}
 
 - (BOOL)setObject:(nonnull NSData *)value forKey:(nonnull NSString *)key options:(NSDictionary *)options;
 {
@@ -184,3 +319,96 @@
 }
 
 @end
+
+
+#pragma mark - Deprecated Category
+
+
+@implementation VALSecureEnclaveValet (Deprecated)
+
+#pragma mark - Deprecated Initializers
+
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier;
+{
+    return [self initWithIdentifier:identifier accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly];
+}
+
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility;
+{
+    VALCheckCondition(accessibility == VALAccessibilityWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibilityWhenPasscodeSetThisDeviceOnly");
+    
+    return [self initWithIdentifier:identifier accessControl:VALAccessControlUserPresence];
+}
+
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier;
+{
+    return [self initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly];
+}
+
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
+{
+    VALCheckCondition(accessibility == VALAccessibilityWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibilityWhenPasscodeSetThisDeviceOnly");
+    
+    return [self initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessControl:VALAccessControlUserPresence];
+}
+
+@end
+
+#else // Below this line we're in !VAL_SECURE_ENCLAVE_SDK_AVAILABLE, meaning none of our API is actually usable. Return NO or nil everywhere.
+
+@implementation VALSecureEnclaveValet
+
++ (BOOL)supportsSecureEnclaveKeychainItems;
+{
+    VALCheckCondition(NO, NO, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessControl:(VALAccessControl)accessControl;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessControl:(VALAccessControl)accessControl;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+@end
+
+
+@implementation VALSecureEnclaveValet (Deprecated)
+
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+@end
+
+
+#endif // VAL_SECURE_ENCLAVE_SDK_AVAILABLE

@@ -6,5 +6,5 @@ script:
     - xcodebuild -project Valet.xcodeproj -scheme "Valet iOS" -sdk iphonesimulator -configuration Debug -PBXBuildsContinueAfterErrors=0 ACTIVE_ARCH_ONLY=0 build test
     - xcodebuild -project Valet.xcodeproj -scheme "Valet Mac" -sdk macosx10.10 -configuration Debug -destination "platform=OS X" -PBXBuildsContinueAfterErrors=0 build test
     - xcodebuild -project Valet.xcodeproj -scheme "Valet-iOS" -sdk iphonesimulator -configuration Debug -PBXBuildsContinueAfterErrors=0 ACTIVE_ARCH_ONLY=0 build
-    - xcodebuild -project Valet.xcodeproj -scheme "Valet-Mac" -sdk iphonesimulator -configuration Debug -PBXBuildsContinueAfterErrors=0 ACTIVE_ARCH_ONLY=0 build
+    - xcodebuild -project Valet.xcodeproj -scheme "Valet-Mac" -sdk macosx10.10 -configuration Debug -destination "platform=OS X" -PBXBuildsContinueAfterErrors=0 build
     - pod lib lint --verbose --fail-fast

@@ -26,6 +26,8 @@
 
 @implementation VALSynchronizableValet
 
+@synthesize baseQuery = _baseQuery;
+
 #pragma mark - Class Methods
 
 + (BOOL)supportsSynchronizableKeychainItems;
@@ -45,6 +47,15 @@
 #pragma clang diagnostic pop
 }
 
+#pragma mark - Private Class Methods
+
++ (void)_augmentBaseQuery:(nonnull NSMutableDictionary *)mutableBaseQuery;
+{
+#if SUPPORTS_SYNCHRONIZABLE_KEYCHAIN_MAC || SUPPORTS_SYNCHRONIZABLE_KEYCHAIN_IOS
+    mutableBaseQuery[(__bridge id)kSecAttrSynchronizable] = @YES;
+#endif
+}
+
 #pragma mark - Initialization
 
 - (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility;
@@ -52,7 +63,16 @@
     VALCheckCondition(accessibility == VALAccessibilityWhenUnlocked || accessibility == VALAccessibilityAfterFirstUnlock || accessibility == VALAccessibilityAlways, nil, @"Accessibility must not be scoped to this device");
     VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
     
-    return [super initWithIdentifier:identifier accessibility:accessibility];
+    self = [super initWithIdentifier:identifier accessibility:accessibility];
+    if (self != nil) {
+        NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithIdentifier:identifier
+                                                                              accessibility:accessibility
+                                                                                initializer:_cmd];
+        [[self class] _augmentBaseQuery:baseQuery];
+        _baseQuery = baseQuery;
+    }
+    
+    return [[self class] sharedValetForValet:self];
 }
 
 - (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
@@ -60,20 +80,16 @@
     VALCheckCondition(accessibility == VALAccessibilityWhenUnlocked || accessibility == VALAccessibilityAfterFirstUnlock || accessibility == VALAccessibilityAlways, nil, @"Accessibility must not be scoped to this device");
     VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
     
-    return [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
-}
-
-#pragma mark - Protected Methods
-
-- (nonnull NSMutableDictionary *)mutableBaseQueryWithIdentifier:(nonnull NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
-{
-    NSMutableDictionary *mutableBaseQuery = [super mutableBaseQueryWithIdentifier:identifier initializer:initializer accessibility:accessibility];
+    self = [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
+    if (self != nil) {
+        NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier
+                                                                                               accessibility:accessibility
+                                                                                                 initializer:_cmd];
+        [[self class] _augmentBaseQuery:baseQuery];
+        _baseQuery = baseQuery;
+    }
     
-#if (TARGET_OS_MAC && __MAC_10_9) || (TARGET_OS_IPHONE && __IPHONE_7_0)
-    mutableBaseQuery[(__bridge id)kSecAttrSynchronizable] = @YES;
-#endif
-    
-    return mutableBaseQuery;
+    return [[self class] sharedValetForValet:self];
 }
 
 @end

@@ -40,7 +40,7 @@
 {
     [super viewDidLoad];
     
-    self.secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:@"UserPresence"];
+    self.secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:@"UserPresence" accessControl:VALAccessControlUserPresence];
     self.username = @"CustomerPresentProof";
 }
 

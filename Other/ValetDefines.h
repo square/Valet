@@ -38,11 +38,6 @@
         } \
     } while(0)
 
-/// Compile flag for building against iOS 8.
-#define VAL_IOS_8_OR_LATER (TARGET_OS_IPHONE && __IPHONE_8_0)
-
-/// Compile flag for building against iOS 9.
-#define VAL_IOS_9_OR_LATER (TARGET_OS_IPHONE && __IPHONE_9_0)
 
 /// Error returned from Security API when the application is not entitled to perform the requested action.
 #define errSecMissingEntitlement -34018

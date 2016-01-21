@@ -21,26 +21,31 @@
 #import <Valet/VALValet.h>
 
 
-NS_ASSUME_NONNULL_BEGIN
-
-
-extern NSString *VALStringForAccessibility(VALAccessibility accessibility);
+extern NSString * __nonnull VALStringForAccessibility(VALAccessibility accessibility);
 
 
 @interface VALValet ()
 
-- (NSMutableDictionary *)mutableBaseQueryWithIdentifier:(NSString *)identifier initializer:(SEL)initializer accessibility:(VALAccessibility)accessibility;
+/// Ensures the atomicity for set and remove operations by limiting ourselves to one instance per configuration.
+/// @return An existing valet object with the same configuration as the valet provided if one exists, or the passed in valet.
++ (nonnull id)sharedValetForValet:(nonnull VALValet *)valet;
 
-- (BOOL)setObject:(NSData *)value forKey:(NSString *)key options:(nullable NSDictionary *)options;
-- (nullable NSData *)objectForKey:(NSString *)key options:(nullable NSDictionary *)options;
-- (BOOL)setString:(NSString *)string forKey:(NSString *)key options:(nullable NSDictionary *)options;
-- (nullable NSString *)stringForKey:(NSString *)key options:(nullable NSDictionary *)options;
-- (OSStatus)containsObjectForKey:(NSString *)key options:(nullable NSDictionary *)options;
-- (NSSet *)allKeysWithOptions:(nullable NSDictionary *)options;
-- (BOOL)removeObjectForKey:(NSString *)key options:(nullable NSDictionary *)options;
+/// Creates a base query given the injected properties. Do not override.
++ (nullable NSMutableDictionary *)mutableBaseQueryWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility initializer:(nonnull SEL)initializer;
+
+/// Creates a base query for shared access group Valets given the injected properties. Do not override.
++ (nullable NSMutableDictionary *)mutableBaseQueryWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility initializer:(nonnull SEL)initializer;
+
+/// Stores the root query to be used in all SecItem queries.
+@property (nonnull, copy, readonly) NSDictionary *baseQuery;
+
+- (BOOL)setObject:(nonnull NSData *)value forKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
+- (BOOL)setString:(nonnull NSString *)string forKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
+- (nullable NSString *)stringForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
+- (OSStatus)containsObjectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
+- (nonnull NSSet *)allKeysWithOptions:(nullable NSDictionary *)options;
+- (BOOL)removeObjectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
 - (BOOL)removeAllObjectsWithOptions:(nullable NSDictionary *)options;
 
 @end
-
-
-NS_ASSUME_NONNULL_END

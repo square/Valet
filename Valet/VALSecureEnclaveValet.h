@@ -21,19 +21,46 @@
 #import <Valet/VALValet.h>
 
 
-/// Reads and writes keychain elements that are stored on the Secure Enclave (supported on iOS 8.0 or later) using accessibility attribute VALAccessibilityWhenPasscodeSetThisDeviceOnly. Accessing or modifying these items will require the user to confirm their presence via Touch ID or passcode entry. If no passcode is set on the device, the below methods will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI.
-NS_CLASS_AVAILABLE_IOS(8_0)
+/// Compiler flag for building against an SDK where Secure Enclave is available.
+#define VAL_SECURE_ENCLAVE_SDK_AVAILABLE ((TARGET_OS_IPHONE && __IPHONE_8_0) || (TARGET_OS_MAC && __MAC_10_11))
+
+
+typedef NS_ENUM(NSUInteger, VALAccessControl) {
+    /// Access to keychain elements requires user presence verification via Touch ID or device Passcode. Keychain elements are still accessible by Touch ID even if fingers are added or removed. Touch ID does not have to be available or enrolled.
+    /// @version Available on iOS 8 or later, and Mac OS 10.11 or later.
+    VALAccessControlUserPresence = 1,
+    
+    /// Access to keychain elements requires user presence verification via any finger enrolled in Touch ID. Keychain elements are still accessible by Touch ID even if fingers are added or removed. Touch ID must be available and at least one finger must be enrolled.
+    /// @version Available on iOS 9 or later.
+    VALAccessControlTouchIDAnyFingerprint = 2,
+    
+    /// Access to keychain elements requires user presence verification via fingers currently enrolled in Touch ID. Previously written keychain elements become inaccessible when fingers are added or removed. Touch ID must be available and at least one finger must be enrolled.
+    /// @version Available on iOS 9 or later.
+    VALAccessControlTouchIDCurrentFingerprintSet = 3,
+    
+    /// Access to keychain elements requires user presence verification via device Passcode.
+    /// @version Available on iOS 9 or later, and Mac OS 10.11 or later.
+    VALAccessControlDevicePasscode = 4,
+};
+
+
+/// Reads and writes keychain elements that are stored on the Secure Enclave (available on iOS 8.0 and later and Mac OS 10.11 and later) using accessibility attribute VALAccessibilityWhenPasscodeSetThisDeviceOnly. Accessing or modifying these keychain elements will require the user to confirm their presence via Touch ID or passcode entry. If no passcode is set on the device, the below methods will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI.
+/// @version Available on iOS 8 or later, and Mac OS 10.11 or later.
 @interface VALSecureEnclaveValet : VALValet
 
 /// @return YES if Secure Enclave storage is supported on the current iOS version (8.0 and later).
 + (BOOL)supportsSecureEnclaveKeychainItems;
 
-/// Creates a Valet that reads/writes Secure Enclave keychain elements.
-- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier;
+/// Creates a Valet that reads/writes Secure Enclave keychain elements and the specified access control.
+/// @see VALAccessControl
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessControl:(VALAccessControl)accessControl;
 
 /// Creates a Valet that reads/writes Secure Enclave keychain elements that can be shared across applications written by the same development team.
 /// @param sharedAccessGroupIdentifier This must correspond with the value for keychain-access-groups in your Entitlements file.
-- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier;
+/// @see VALAccessControl
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessControl:(VALAccessControl)accessControl;
+
+@property (readonly) VALAccessControl accessControl;
 
 /// Convenience method for retrieving data from the keychain with a user prompt.
 /// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
@@ -50,5 +77,16 @@ NS_CLASS_AVAILABLE_IOS(8_0)
 
 /// This method is not supported on VALSecureEnclaveValet.
 - (BOOL)removeAllObjects NS_UNAVAILABLE;
+
+@end
+
+
+@interface VALSecureEnclaveValet (Deprecated)
+
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));
+
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));
 
 @end

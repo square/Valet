@@ -83,7 +83,7 @@ Valet’s API for securely reading and writing data is similar to that of an NSM
 
 ### Sharing Secrets Among Multiple Applications
 
-```
+```objc
 VALValet *mySharedValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
@@ -97,13 +97,13 @@ VALSynchronizableValet *mySynchronizableValet = [[VALSynchronizableValet alloc] 
 
 This instance can be used to store and retrieve data that can be retrieved by this app on other devices logged into the same iCloud account with iCloud Keychain enabled. `mySynchronizableValet` can not read or modify values in `myValet` or `mySharedValet` because `mySynchronizableValet` is of a different class type. If iCloud Keychain is not enabled on this device, secrets can still be read and written, but will not sync to other devices.
 
-### Protecting Secrets with Touch ID or iOS Passcode
+### Protecting Secrets with Touch ID or device Passcode
 
 ```objc
-VALSecureEnclaveValet *mySecureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:@"Druidia"];
+VALSecureEnclaveValet *mySecureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:@"Druidia" accessControl:VALAccessControlUserPresence];
 ```
 
-This instance can be used to store and retrieve data in the Secure Enclave (supported on iOS 8.0 or later). Reading or modifying items in this Valet will require the user to confirm their presence via Touch ID or by entering their iOS passcode. If no passcode is set on the device, this instance will be unable to access or store data. Data is removed from the Secure Enclave when the user removes a passcode from the device. Storing data using VALSecureEnclaveValet is the most secure way to store data on iOS.
+This instance can be used to store and retrieve data in the Secure Enclave (available on iOS 8.0 and later and Mac OS 10.11 and later). Reading or modifying items in this Valet will require the user to confirm their presence via Touch ID on iOS or by entering their device passcode. *If no passcode is set on the device, this instance will be unable to access or store data.* Data is removed from the Secure Enclave when the user removes a passcode from the device. Storing data using VALSecureEnclaveValet is the most secure way to store data on either iOS or Mac OS.
 
 ### Migrating Existing Keychain Values into Valet
 
