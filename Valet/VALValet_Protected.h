@@ -40,9 +40,9 @@ extern NSString * __nonnull VALStringForAccessibility(VALAccessibility accessibi
 @property (nonnull, copy, readonly) NSDictionary *baseQuery;
 
 - (BOOL)setObject:(nonnull NSData *)value forKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
-- (nullable NSData *)objectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options status:(nullable inout OSStatus *)status;
 - (BOOL)setString:(nonnull NSString *)string forKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
-- (nullable NSString *)stringForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
+- (nullable NSString *)stringForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options status:(nullable inout OSStatus *)status;
 - (OSStatus)containsObjectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
 - (nonnull NSSet *)allKeysWithOptions:(nullable NSDictionary *)options;
 - (BOOL)removeObjectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;

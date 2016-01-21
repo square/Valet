@@ -298,24 +298,58 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 
 #pragma mark - Public Methods
 
-- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
 {
-    return [self objectForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
+    return [self objectForKey:key userPrompt:userPrompt userCancelled:NULL];
 }
 
-- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 {
-    return [self stringForKey:key options:@{ (__bridge id)kSecUseOperationPrompt : userPrompt }];
+    OSStatus status = errSecSuccess;
+    NSData *const objectForKey = [self objectForKey:key options:[self _optionsDictionaryForUserPrompt:userPrompt] status:&status];
+    if (userCancelled != NULL) {
+        *userCancelled = (status == errSecUserCanceled);
+    }
+    
+    return objectForKey;
+}
+
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
+{
+    return [self stringForKey:key userPrompt:userPrompt userCancelled:NULL];
+}
+
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
+{
+    OSStatus status = errSecSuccess;
+    NSString *const stringForKey = [self stringForKey:key options:[self _optionsDictionaryForUserPrompt:userPrompt] status:&status];
+    if (userCancelled != NULL) {
+        *userCancelled = (status == errSecUserCanceled);
+    }
+    
+    return stringForKey;
 }
 
 #pragma mark - Protected Methods
 
-- (BOOL)setObject:(nonnull NSData *)value forKey:(nonnull NSString *)key options:(NSDictionary *)options;
+- (BOOL)setObject:(nonnull NSData *)value forKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
 {
     // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
     [self removeObjectForKey:key];
     
     return [super setObject:value forKey:key options:options];
+}
+
+#pragma mark - Private Methods
+
+- (nullable NSDictionary *)_optionsDictionaryForUserPrompt:(nullable NSString *)userPrompt;
+{
+    if (userPrompt.length == 0) {
+        return nil;
+        
+    } else {
+        return @{ (__bridge id)kSecUseOperationPrompt : userPrompt };
+    }
 }
 
 @end
@@ -373,12 +407,22 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
 }
 
-- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
 {
     VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
 }
 
-- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nonnull NSString *)userPrompt;
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 {
     VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
 }
