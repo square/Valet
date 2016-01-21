@@ -406,7 +406,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     VALCheckCondition(status == errSecSuccess, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationErrorCouldNotReadKeychain userInfo:nil], @"Could not copy items matching secItemQuery");
     
     // Now that we have the persistent refs with attributes, get the data associated with each keychain entry.
-    NSMutableArray *queryResultWithData = [NSMutableArray new];
+    NSMutableArray *const queryResultWithData = [NSMutableArray new];
     for (NSDictionary *const keychainEntry in queryResult) {
         CFTypeRef outValueRef = NULL;
         status = VALAtomicSecItemCopyMatching((__bridge CFDictionaryRef)@{ (__bridge id)kSecValuePersistentRef : keychainEntry[(__bridge id)kSecValuePersistentRef], (__bridge id)kSecReturnData : @YES }, &outValueRef);
@@ -415,7 +415,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
         VALCheckCondition(status == errSecSuccess, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationErrorCouldNotReadKeychain userInfo:nil], @"Could not copy items matching secItemQuery");
         VALCheckCondition(data.length > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationErrorDataInQueryResultInvalid userInfo:nil], @"Can not migrate keychain entry with no value data");
         
-        NSMutableDictionary *keychainEntryWithData = [keychainEntry mutableCopy];
+        NSMutableDictionary *const keychainEntryWithData = [keychainEntry mutableCopy];
         keychainEntryWithData[(__bridge id)kSecValueData] = data;
         
         [queryResultWithData addObject:keychainEntryWithData];
