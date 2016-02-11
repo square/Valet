@@ -56,10 +56,13 @@
 - (IBAction)getItem:(id)sender;
 {
     BOOL userCancelled = NO;
-    NSString *const password = [self.secureEnclaveValet stringForKey:self.username userPrompt:@"Use TouchID to retrieve password" userCancelled:&userCancelled];
+    BOOL objectFound = NO;
+    NSString *const password = [self.secureEnclaveValet stringForKey:self.username userPrompt:@"Use TouchID to retrieve password" userCancelled:&userCancelled objectFound:&objectFound];
     
     if (userCancelled) {
         self.textView.text = [self.textView.text stringByAppendingFormat:@"\n%s user cancelled TouchID", __PRETTY_FUNCTION__];
+    } else if (!objectFound) {
+        self.textView.text = [self.textView.text stringByAppendingFormat:@"\n%s object not found", __PRETTY_FUNCTION__];
     } else {
         self.textView.text = [self.textView.text stringByAppendingFormat:@"\n%s %@", __PRETTY_FUNCTION__, password];
     }

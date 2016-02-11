@@ -305,12 +305,20 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 {
+    return [self objectForKey:key userPrompt:userPrompt userCancelled:userCancelled objectFound:NULL];
+}
+
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled objectFound:(nullable inout BOOL *)objectFound;
+{
     OSStatus status = errSecSuccess;
     NSData *const objectForKey = [self objectForKey:key options:[self _optionsDictionaryForUserPrompt:userPrompt] status:&status];
     if (userCancelled != NULL) {
         *userCancelled = (status == errSecUserCanceled);
     }
-    
+    if (objectFound != NULL) {
+        *objectFound = !(status == errSecItemNotFound || status == errSecNotAvailable || status == errSecInteractionNotAllowed || status == errSecUserCanceled);
+    }
+
     return objectForKey;
 }
 
@@ -321,10 +329,18 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 {
+    return [self stringForKey:key userPrompt:userPrompt userCancelled:userCancelled objectFound:NULL];
+}
+
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled objectFound:(nullable inout BOOL *)objectFound;
+{
     OSStatus status = errSecSuccess;
     NSString *const stringForKey = [self stringForKey:key options:[self _optionsDictionaryForUserPrompt:userPrompt] status:&status];
     if (userCancelled != NULL) {
         *userCancelled = (status == errSecUserCanceled);
+    }
+    if (objectFound != NULL) {
+        *objectFound = !(status == errSecItemNotFound || status == errSecNotAvailable || status == errSecInteractionNotAllowed || status == errSecUserCanceled);
     }
     
     return stringForKey;
@@ -417,12 +433,22 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
 }
 
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled objectFound:(nullable inout BOOL *)objectFound;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
 {
     VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled objectFound:(nullable inout BOOL *)objectFound;
 {
     VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
 }
