@@ -63,26 +63,34 @@ typedef NS_ENUM(NSUInteger, VALAccessControl) {
 @property (readonly) VALAccessControl accessControl;
 
 /// Convenience method for retrieving data from the keychain with a user prompt.
-/// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
-/// @return The object currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
+/// @see -[VALSecureEnclave objectForKey:userPrompt:userCancelled:objectFound:]
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
+
+/// Convenience method for retrieving data from the keychain with a user prompt.
+/// @see -[VALSecureEnclave objectForKey:userPrompt:userCancelled:objectFound:]
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 
 /// Convenience method for retrieving data from the keychain with a user prompt.
 /// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
 /// @param userCancelled A pointer to a BOOL which will be set to YES if the user cancels out of Touch ID or entering the device Passcode.
-/// @return The object currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
-- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
+/// @param objectFound A pointer to a BOOL which will be set to YES if an object is found in the keychain for the provided key – will always be set to NO when userCancelled is YES.
+/// @return The string currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, if the keychain is inaccessible, or if authentication was cancelled.
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled objectFound:(nullable inout BOOL *)objectFound;
 
 /// Convenience method for retrieving a string from the keychain with a user prompt.
-/// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
-/// @return The string currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
+/// @see -[VALSecureEnclave stringForKey:userPrompt:userCancelled:objectFound:]
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
+
+/// Convenience method for retrieving a string from the keychain with a user prompt.
+/// @see -[VALSecureEnclave stringForKey:userPrompt:userCancelled:objectFound:]
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 
 /// Convenience method for retrieving a string from the keychain with a user prompt.
 /// @param userPrompt The prompt displayed to the user in Apple's Touch ID and passcode entry UI.
 /// @param userCancelled A pointer to a BOOL which will be set to YES if the user cancels out of Touch ID or entering the device Passcode.
-/// @return The string currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
-- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
+/// @param objectFound A pointer to a BOOL which will be set to YES if an object is found in the keychain for the provided key – will always be set to NO when userCancelled is YES.
+/// @return The string currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, if the keychain is inaccessible, or if authentication was cancelled.
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled objectFound:(nullable inout BOOL *)objectFound;
 
 /// This method is not supported on VALSecureEnclaveValet.
 - (nonnull NSSet *)allKeys NS_UNAVAILABLE;
