@@ -308,7 +308,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     OSStatus status = errSecSuccess;
     NSData *const objectForKey = [self objectForKey:key options:[self _optionsDictionaryForUserPrompt:userPrompt] status:&status];
     if (userCancelled != NULL) {
-        *userCancelled = (status == errSecUserCanceled);
+        *userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed);
     }
     
     return objectForKey;
@@ -324,7 +324,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     OSStatus status = errSecSuccess;
     NSString *const stringForKey = [self stringForKey:key options:[self _optionsDictionaryForUserPrompt:userPrompt] status:&status];
     if (userCancelled != NULL) {
-        *userCancelled = (status == errSecUserCanceled);
+        *userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed);
     }
     
     return stringForKey;
