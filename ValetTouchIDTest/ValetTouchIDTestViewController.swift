@@ -14,17 +14,31 @@ final class ValetTouchIDTestViewController : UIViewController
     // MARK: Properties
 
     @IBOutlet var textView : UITextView?
-    let secureEnclaveValet : VALSecureEnclaveValet = VALSecureEnclaveValet.init(identifier: "UserPresence", accessControl: VALAccessControl.UserPresence) as VALSecureEnclaveValet!
-    let username : String = "CustomerPresentProof"
+    let secureEnclaveValet : VALSecureEnclaveValet
+    let username = "CustomerPresentProof"
+
+
+    // MARK: Initializers
+
+    required init?(coder aDecoder: NSCoder)
+    {
+        if let valet = VALSecureEnclaveValet(identifier: "UserPresence", accessControl: VALAccessControl.UserPresence) {
+            self.secureEnclaveValet = valet
+        } else {
+            return nil;
+        }
+
+        super.init(coder: aDecoder)
+    }
 
 
     // MARK: Outlets
 
     @IBAction func setOrUpdateItem(sender: UIResponder)
     {
-        let stringToSet = "I am here! " + NSUUID.init().UUIDString
+        let stringToSet = "I am here! " + NSUUID().UUIDString
         let setOrUpdatedItem = secureEnclaveValet.setString(stringToSet, forKey: username)
-        updateTextView([#function, (setOrUpdatedItem ? "Success" : "Failure")])
+        updateTextView(#function, (setOrUpdatedItem ? "Success" : "Failure"))
     }
 
     @IBAction func getItem(sender: UIResponder)
@@ -41,25 +55,25 @@ final class ValetTouchIDTestViewController : UIViewController
             resultString = password as String!
         }
 
-        updateTextView([#function, resultString])
+        updateTextView(#function, resultString)
     }
 
     @IBAction func removeItem(sender: UIResponder)
     {
         let removedItem = secureEnclaveValet.removeObjectForKey(username)
-        updateTextView([#function, (removedItem ? "Success" : "Failure")])
+        updateTextView(#function, (removedItem ? "Success" : "Failure"))
     }
 
     @IBAction func containsItem(sender: UIResponder)
     {
         let containsItem = secureEnclaveValet.containsObjectForKey(username)
-        updateTextView([#function, (containsItem ? "YES" : "NO")])
+        updateTextView(#function, (containsItem ? "YES" : "NO"))
     }
 
 
     // MARK: Private
 
-    private func updateTextView(messageComponents: [String])
+    private func updateTextView(messageComponents: String...)
     {
         if let textView = textView as UITextView! {
             textView.text = textView.text.stringByAppendingFormat("\n%@", messageComponents.joinWithSeparator(" "))
