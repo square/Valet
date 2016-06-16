@@ -10,4 +10,4 @@ before_script:
     - brew info xctool
     - type xctool
 script:
-    - xctool -project Valet.xcodeproj -scheme "Valet iOS" -sdk iphonesimulator -configuration Debug -destination "platform=iOS Simulator,name=iPad Air 2,OS=9.3" test
+    - xctool -project Valet.xcodeproj -scheme "Valet iOS" -sdk iphonesimulator -configuration Debug -destination "platform=iOS Simulator,name=iPad Air 2,OS=9.3" test -only 'Valet iOS Tests:ValetSecureEnclaveTests'
