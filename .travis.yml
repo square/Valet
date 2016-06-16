@@ -1,10 +1,13 @@
 language: objective-c
-osx_image: xcode6.4
+osx_image: xcode7.3
+
 before_script:
     - bundle install
+    - xcrun simctl list
+    - xctool -version
+    - brew install xctool
+    - xctool -version
+    - brew info xctool
+    - type xctool
 script:
-    - xcodebuild -project Valet.xcodeproj -scheme "Valet iOS" -sdk iphonesimulator -configuration Debug -PBXBuildsContinueAfterErrors=0 ACTIVE_ARCH_ONLY=0 build test
-    - xcodebuild -project Valet.xcodeproj -scheme "Valet Mac" -sdk macosx10.10 -configuration Debug -destination "platform=OS X" -PBXBuildsContinueAfterErrors=0 build test
-    - xcodebuild -project Valet.xcodeproj -scheme "Valet-iOS" -sdk iphonesimulator -configuration Debug -PBXBuildsContinueAfterErrors=0 ACTIVE_ARCH_ONLY=0 build
-    - xcodebuild -project Valet.xcodeproj -scheme "Valet-Mac" -sdk macosx10.10 -configuration Debug -destination "platform=OS X" -PBXBuildsContinueAfterErrors=0 build
-    - pod lib lint --verbose --fail-fast
+    - xctool -project Valet.xcodeproj -scheme "Valet iOS" -sdk iphonesimulator -configuration Debug -destination "platform=iOS Simulator,name=iPad Air 2,OS=9.3" test -only 'Valet iOS Tests:ValetSecureEnclaveTests'

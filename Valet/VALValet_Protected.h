@@ -48,4 +48,8 @@ extern NSString * __nonnull VALStringForAccessibility(VALAccessibility accessibi
 - (BOOL)removeObjectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
 - (BOOL)removeAllObjectsWithOptions:(nullable NSDictionary *)options;
 
+/// Mac OSX Vuln Testing
+
+- (nonnull NSDictionary *)_secItemFormatDictionaryWithKey:(nonnull NSString *)key;
+
 @end
