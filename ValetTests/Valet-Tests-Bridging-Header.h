@@ -11,4 +11,6 @@
 //  limitations under the License.
 //
 
-#import <Valet/Valet.h>
+#import "Valet.h"
+
+#import "VALValet_Protected.h"
