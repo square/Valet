@@ -223,7 +223,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     self = [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
     if (self != nil) {
         SEL const backwardsCompatibleInitializer = @selector(initWithSharedAccessGroupIdentifier:accessibility:);
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_SIMULATOR
         /*
          Access groups do not work on the simulator because apps built for the simulator aren't signed.
          Using kSecAttrAccessGroup in the simulator will cause SecItem calls to return -25243 (errSecNoAccessForItem).

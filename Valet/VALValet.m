@@ -260,7 +260,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     
     self = [super init];
     if (self != nil) {
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_SIMULATOR
         /*
          Access groups do not work on the simulator because apps built for the simulator aren't signed.
          Using kSecAttrAccessGroup in the simulator will cause SecItem calls to return -25243 (errSecNoAccessForItem).

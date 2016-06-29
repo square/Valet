@@ -24,7 +24,7 @@
 
 
 // The iPhone simulator fakes entitlements, allowing us to test the iCloud Keychain (VALSynchronizableValet) code without writing a signed host app.
-#define TARGET_HAS_ENTITLEMENTS TARGET_IPHONE_SIMULATOR
+#define TARGET_HAS_ENTITLEMENTS (TARGET_IPHONE_SIMULATOR || TARGET_OS_SIMULATOR)
 
 
 @interface VALValet (Testing)
