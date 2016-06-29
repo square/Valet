@@ -260,7 +260,16 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     
     self = [super init];
     if (self != nil) {
+#if TARGET_IPHONE_SIMULATOR
+        /*
+         Access groups do not work on the simulator becuase apps built for the simulator aren't signed.
+         Using kSecAttrAccessGroup in the simulator will cause SecItem calls to return -25243 (errSecNoAccessForItem).
+         Dropping the kSecAttrAccessGroup key/value pair does not cause problems in development, since all apps can see all keychain items on the simulator.
+         */
+        _baseQuery = [[self class] mutableBaseQueryWithIdentifier:sharedAccessGroupIdentifier accessibility:accessibility initializer:_cmd];
+#else
         _baseQuery = [[self class] mutableBaseQueryWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility initializer:_cmd];
+#endif
         
         _identifier = [sharedAccessGroupIdentifier copy];
         _sharedAcrossApplications = YES;
