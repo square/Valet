@@ -24,6 +24,7 @@
 
 
 NSString * const VALMigrationErrorDomain = @"VALMigrationErrorDomain";
+NSString * const VALCanAccessKeychainCanaryKey = @"VAL_KeychainCanaryUsername";
 
 
 NSString *VALStringForAccessibility(VALAccessibility accessibility)
@@ -308,21 +309,20 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
 {
     __block BOOL canAccessKeychain = NO;
     VALExecuteBlockInLock(^{
-        NSString *const canaryKey = @"VAL_KeychainCanaryUsername";
         NSString *const canaryValue = @"VAL_KeychainCanaryPassword";
         
-        NSString *const retrievedCanaryValue = [self stringForKey:canaryKey];
+        NSString *const retrievedCanaryValue = [self stringForKey:VALCanAccessKeychainCanaryKey];
         if ([canaryValue isEqualToString:retrievedCanaryValue]) {
             canAccessKeychain = YES;
             
         } else {
             // Canary value can't be found. Manually add the value to see if we can pull it back out.
             NSMutableDictionary *query = [self.baseQuery mutableCopy];
-            [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:canaryKey]];
+            [query addEntriesFromDictionary:[self _secItemFormatDictionaryWithKey:VALCanAccessKeychainCanaryKey]];
             query[(__bridge id)kSecValueData] = [canaryValue dataUsingEncoding:NSUTF8StringEncoding];
             (void)VALAtomicSecItemAdd((__bridge CFDictionaryRef)query, NULL);
             
-            NSString *const retrievedCanaryValueAfterAdding = [self stringForKey:canaryKey];
+            NSString *const retrievedCanaryValueAfterAdding = [self stringForKey:VALCanAccessKeychainCanaryKey];
             canAccessKeychain = [canaryValue isEqualToString:retrievedCanaryValueAfterAdding];
         }
         
@@ -425,6 +425,11 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     NSMutableSet *const keysToMigrate = [NSMutableSet new];
     for (NSDictionary *const keychainEntry in queryResultWithData) {
         NSString *const key = keychainEntry[(__bridge id)kSecAttrAccount];
+        if ([key isEqualToString:VALCanAccessKeychainCanaryKey]) {
+            // We don't care about this key. Move along.
+            continue;
+        }
+        
         NSData *const data = keychainEntry[(__bridge id)kSecValueData];
         
         VALCheckCondition(key.length > 0, [NSError errorWithDomain:VALMigrationErrorDomain code:VALMigrationErrorKeyInQueryResultInvalid userInfo:nil], @"Can not migrate keychain entry with no key");
