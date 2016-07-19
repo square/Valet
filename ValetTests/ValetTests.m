@@ -747,6 +747,27 @@
     }
 }
 
+- (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenBothValetsHavePreviouslyCalled_canAccessKeychain;
+{
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
+    [self.additionalValets addObject:otherValet];
+    
+    NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+    
+    for (NSString *const key in keyStringPairToMigrateMap) {
+        XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
+    }
+    
+    XCTAssertTrue([self.valet canAccessKeychain]);
+    XCTAssertTrue([otherValet canAccessKeychain]);
+    XCTAssertNil([self.valet migrateObjectsFromValet:otherValet removeOnCompletion:NO]);
+    
+    for (NSString *const key in keyStringPairToMigrateMap) {
+        XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
+        XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
+    }
+}
+
 #if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenMigratingToSecureEnclave;
 {
