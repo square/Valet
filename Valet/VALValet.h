@@ -22,7 +22,7 @@
 
 
 typedef NS_ENUM(NSUInteger, VALAccessibility) {
-    /// Valet data can only be accessed while the device is unlocked. This attribute is recommended for data that only needs to be accessible while the application is in the foreground. Valet data with this accessibility will migrate to a new device when using encrypted backups.
+    /// Valet data can only be accessed while the device is unlocked. This attribute is recommended for data that only needs to be accessible while the application is in the foreground. Valet data with this attribute will migrate to a new device when using encrypted backups.
     VALAccessibilityWhenUnlocked = 1,
     /// Valet data can only be accessed once the device has been unlocked after a restart. This attribute is recommended for data that needs to be accessible by background applications. Valet data with this attribute will migrate to a new device when using encrypted backups.
     VALAccessibilityAfterFirstUnlock,
