@@ -200,16 +200,15 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     
     VALAccessibility const accessibility = VALAccessibilityWhenPasscodeSetThisDeviceOnly;
     self = [super initWithIdentifier:identifier accessibility:accessibility];
-    if (self != nil) {
-        SEL const backwardsCompatibleInitializer = @selector(initWithIdentifier:accessibility:);
-        NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithIdentifier:identifier
-                                                                              accessibility:accessibility
-                                                                                initializer:backwardsCompatibleInitializer];
-        [[self class] _augmentBaseQuery:baseQuery
-                          accessControl:accessControl];
-        _baseQuery = baseQuery;
-        _accessControl = accessControl;
-    }
+
+    SEL const backwardsCompatibleInitializer = @selector(initWithIdentifier:accessibility:);
+    NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithIdentifier:identifier
+                                                                          accessibility:accessibility
+                                                                            initializer:backwardsCompatibleInitializer];
+    [[self class] _augmentBaseQuery:baseQuery
+                      accessControl:accessControl];
+    _baseQuery = baseQuery;
+    _accessControl = accessControl;
     
     return [[self class] sharedValetForValet:self];
 }
@@ -221,16 +220,15 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     
     VALAccessibility const accessibility = VALAccessibilityWhenPasscodeSetThisDeviceOnly;
     self = [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
-    if (self != nil) {
-        SEL const backwardsCompatibleInitializer = @selector(initWithSharedAccessGroupIdentifier:accessibility:);
-        NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier
-                                                                                               accessibility:accessibility
-                                                                                                 initializer:backwardsCompatibleInitializer];
-        [[self class] _augmentBaseQuery:baseQuery
-                          accessControl:accessControl];
-        _baseQuery = baseQuery;
-        _accessControl = accessControl;
-    }
+
+    SEL const backwardsCompatibleInitializer = @selector(initWithSharedAccessGroupIdentifier:accessibility:);
+    NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier
+                                                                                           accessibility:accessibility
+                                                                                             initializer:backwardsCompatibleInitializer];
+    [[self class] _augmentBaseQuery:baseQuery
+                      accessControl:accessControl];
+    _baseQuery = baseQuery;
+    _accessControl = accessControl;
     
     return [[self class] sharedValetForValet:self];
 }

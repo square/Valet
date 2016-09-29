@@ -64,13 +64,12 @@
     VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
     
     self = [super initWithIdentifier:identifier accessibility:accessibility];
-    if (self != nil) {
-        NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithIdentifier:identifier
-                                                                              accessibility:accessibility
-                                                                                initializer:_cmd];
-        [[self class] _augmentBaseQuery:baseQuery];
-        _baseQuery = baseQuery;
-    }
+
+    NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithIdentifier:identifier
+                                                                          accessibility:accessibility
+                                                                            initializer:_cmd];
+    [[self class] _augmentBaseQuery:baseQuery];
+    _baseQuery = baseQuery;
     
     return [[self class] sharedValetForValet:self];
 }
@@ -81,13 +80,12 @@
     VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
     
     self = [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
-    if (self != nil) {
-        NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier
-                                                                                               accessibility:accessibility
-                                                                                                 initializer:_cmd];
-        [[self class] _augmentBaseQuery:baseQuery];
-        _baseQuery = baseQuery;
-    }
+
+    NSMutableDictionary *const baseQuery = [[self class] mutableBaseQueryWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier
+                                                                                           accessibility:accessibility
+                                                                                             initializer:_cmd];
+    [[self class] _augmentBaseQuery:baseQuery];
+    _baseQuery = baseQuery;
     
     return [[self class] sharedValetForValet:self];
 }

@@ -243,13 +243,12 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
     
     self = [super init];
-    if (self != nil) {
-        _baseQuery = [[self class] mutableBaseQueryWithIdentifier:identifier accessibility:accessibility initializer:_cmd];
-        _identifier = [identifier copy];
-        _sharedAcrossApplications = NO;
-        _accessibility = accessibility;
-        _lockForSetAndRemoveOperations = [NSLock new];
-    }
+
+    _baseQuery = [[self class] mutableBaseQueryWithIdentifier:identifier accessibility:accessibility initializer:_cmd];
+    _identifier = [identifier copy];
+    _sharedAcrossApplications = NO;
+    _accessibility = accessibility;
+    _lockForSetAndRemoveOperations = [NSLock new];
     
     return [[self class] sharedValetForValet:self];
 }
@@ -260,14 +259,13 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
     
     self = [super init];
-    if (self != nil) {
-        _baseQuery = [[self class] mutableBaseQueryWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility initializer:_cmd];
-        
-        _identifier = [sharedAccessGroupIdentifier copy];
-        _sharedAcrossApplications = YES;
-        _accessibility = accessibility;
-        _lockForSetAndRemoveOperations = [NSLock new];
-    }
+
+    _baseQuery = [[self class] mutableBaseQueryWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility initializer:_cmd];
+    
+    _identifier = [sharedAccessGroupIdentifier copy];
+    _sharedAcrossApplications = YES;
+    _accessibility = accessibility;
+    _lockForSetAndRemoveOperations = [NSLock new];
     
     return [[self class] sharedValetForValet:self];
 }
