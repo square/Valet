@@ -1,10 +1,13 @@
 language: objective-c
 osx_image: xcode6.4
-before_script:
-    - bundle install
 script:
     - xcodebuild -project Valet.xcodeproj -scheme "Valet iOS" -sdk iphonesimulator -configuration Debug -PBXBuildsContinueAfterErrors=0 ACTIVE_ARCH_ONLY=0 build test
     - xcodebuild -project Valet.xcodeproj -scheme "Valet Mac" -sdk macosx10.10 -configuration Debug -destination "platform=OS X" -PBXBuildsContinueAfterErrors=0 build test
     - xcodebuild -project Valet.xcodeproj -scheme "Valet-iOS" -sdk iphonesimulator -configuration Debug -PBXBuildsContinueAfterErrors=0 ACTIVE_ARCH_ONLY=0 build
     - xcodebuild -project Valet.xcodeproj -scheme "Valet-Mac" -sdk macosx10.10 -configuration Debug -destination "platform=OS X" -PBXBuildsContinueAfterErrors=0 build
-    - pod lib lint --verbose --fail-fast
+    - export BUNDLE_GEMFILE=depfile
+    - export RUBYOPT="-r $PWD/hackssl.rb"
+    - gem install bundler
+    - bundle install
+    - bundle -v
+    - bundle exec pod lib lint --verbose --fail-fast
