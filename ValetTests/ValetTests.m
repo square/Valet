@@ -23,7 +23,7 @@
 #import <Valet/Valet.h>
 
 
-// The iPhone simulator fakes entitlements, allowing us to test the iCloud Keychain (VALSynchronizableValet) code without writing a signed host app.
+// The iPhone simulator fakes entitlements, allowing us to test the iCloud Keychain (VALSynchronizableValet) and the secure enclave (VALSecureEnclaveValet) code without writing a signed host app.
 #define TARGET_HAS_ENTITLEMENTS TARGET_IPHONE_SIMULATOR
 
 
@@ -50,7 +50,7 @@
 @property (nonatomic, readwrite) VALValet *valet;
 @property (nonatomic, readwrite) VALTestingValet *testingValet;
 @property (nonatomic, readwrite) VALSynchronizableValet *synchronizableValet;
-#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE && TARGET_HAS_ENTITLEMENTS
 @property (nonatomic, readwrite) VALSecureEnclaveValet *secureEnclaveValet;
 #endif
 @property (nonatomic, copy, readwrite) NSString *key;
@@ -73,7 +73,7 @@
     self.valet = [[VALValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenUnlocked];
     self.testingValet = [[VALTestingValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenUnlocked];
     self.synchronizableValet = [[VALSynchronizableValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenUnlocked];
-#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE && TARGET_HAS_ENTITLEMENTS
     self.secureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:valetTestingIdentifier accessControl:VALAccessControlUserPresence];
 #endif
     
@@ -135,7 +135,7 @@
 
 - (void)test_initWithIdentifier_accessControl_isBackwardsCompatibleWithDeprecatedInitializer;
 {
-#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE && TARGET_HAS_ENTITLEMENTS
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
@@ -158,7 +158,7 @@
 
 - (void)test_initWithIdentifier_accessControl_canBeUsedTwiceWithNoSideEffects;
 {
-#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE && TARGET_HAS_ENTITLEMENTS
     if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
         NSString *const valetTestingIdentifier = @"valet_shared_valet_testing";
         
@@ -183,7 +183,7 @@
     // Testing environments should always be able to access the keychain.
     XCTAssertTrue([self.valet canAccessKeychain]);
     
-#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE && TARGET_HAS_ENTITLEMENTS
     if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
         XCTAssertTrue([self.secureEnclaveValet canAccessKeychain]);
     }
@@ -641,7 +641,7 @@
                       (__bridge id)kSecReturnPersistentRef : (__bridge id)kCFBooleanFalse };
     XCTAssertEqual([self.valet migrateObjectsMatchingQuery:invalidQuery removeOnCompletion:NO].code, VALMigrationErrorInvalidQuery);
     
-#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE && TARGET_HAS_ENTITLEMENTS
     if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
         invalidQuery = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
                           (__bridge id)kSecUseOperationPrompt : @"Migration Prompt" };
@@ -768,7 +768,7 @@
     }
 }
 
-#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
+#if VAL_SECURE_ENCLAVE_SDK_AVAILABLE && TARGET_HAS_ENTITLEMENTS
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenMigratingToSecureEnclave;
 {
     if ([VALSecureEnclaveValet supportsSecureEnclaveKeychainItems]) {
@@ -822,27 +822,6 @@
 {
     NSDictionary *const secItemDictionary = [self.valet _secItemFormatDictionaryWithKey:self.key];
     XCTAssertEqualObjects(secItemDictionary[(__bridge id)kSecAttrAccount], self.key);
-}
-
-#pragma mark - XCTestCase
-
-// These fail when running from the command line
-- (XCTestRun *)run;
-{
-    if ([self _skipTestCase]) {
-        return [[XCTestRun alloc] initWithTest:self];
-    }
-    
-    return [super run];
-}
-
-#pragma mark - Private Methods
-
-- (BOOL)_skipTestCase;
-{
-    // When running tests from the command line, the process arguments do not have this parameter
-    BOOL const isRunningFromCommandLine = [[NSProcessInfo processInfo].arguments indexOfObject:@"-ApplePersistenceIgnoreState"] == NSNotFound;
-    return isRunningFromCommandLine;
 }
 
 @end
