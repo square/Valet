@@ -371,7 +371,7 @@
 #if !TARGET_OS_IPHONE
 - (void)test_setStringForKey_neutralizesMacOSAccessControlListVuln;
 {
-    // This test verifies that we are neutralizing the zero-day Mac OS X Access Control List vulnerability published here: https://drive.google.com/file/d/0BxxXk1d3yyuZOFlsdkNMSGswSGs/view
+    // This test verifies that we are neutralizing the zero-day macOS Access Control List vulnerability published here: https://drive.google.com/file/d/0BxxXk1d3yyuZOFlsdkNMSGswSGs/view
     
     NSOperatingSystemVersion version = [NSProcessInfo processInfo].operatingSystemVersion;
     BOOL macOS1010OrLater = (version.majorVersion == 10 && version.minorVersion >= 10);

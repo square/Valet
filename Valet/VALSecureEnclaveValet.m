@@ -25,7 +25,7 @@
 
 
 /// Compiler flag for building against an SDK where VALAccessControlTouchIDAnyFingerprint and VALAccessControlTouchIDCurrentFingerprintSet are available.
-#define VAL_ACCESS_CONTROL_TOUCH_ID_SDK_AVAILABLE (TARGET_OS_IPHONE && __IPHONE_9_0)
+#define VAL_ACCESS_CONTROL_TOUCH_ID_SDK_AVAILABLE ((TARGET_OS_IPHONE && __IPHONE_9_0) || (TARGET_OS_MAC && __MAC_10_12))
 
 /// Compiler flag for building against an SDK where VALAccessControlDevicePasscode is available.
 #define VAL_ACCESS_CONTROL_DEVICE_PASSCODE_SDK_AVAILABLE ((TARGET_OS_IPHONE && __IPHONE_9_0) || (TARGET_OS_MAC && __MAC_10_11))
@@ -80,6 +80,18 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 #endif
 }
 
++ (BOOL)_macOSSierraOrLater;
+{
+#if TARGET_OS_MAC && __MAC_10_12
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
+    return (&kSecAttrTokenIDSecureEnclave != NULL);
+#pragma clang diagnostic pop
+#else
+    return NO;
+#endif
+}
+
 + (BOOL)_iOS8OrLater;
 {
 #if TARGET_OS_IPHONE
@@ -112,7 +124,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
             
         case VALAccessControlTouchIDAnyFingerprint:
         case VALAccessControlTouchIDCurrentFingerprintSet:
-            return [self _iOS9OrLater];
+            return [self _iOS9OrLater] || [self _macOSSierraOrLater];
             
         case VALAccessControlDevicePasscode:
             return ([self _iOS9OrLater] || [self _macOSElCapitanOrLater]);
@@ -252,7 +264,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 {
     NSDictionary *options = nil;
     
-    // iOS 9 and Mac OS 10.11 use kSecUseAuthenticationUI, not kSecUseNoAuthenticationUI.
+    // iOS 9 and macOS 10.11 use kSecUseAuthenticationUI, not kSecUseNoAuthenticationUI.
 #if ((TARGET_OS_IPHONE && __IPHONE_9_0) || (TARGET_OS_MAC && __MAC_10_11))
     if ([[self class] _iOS9OrLater] || [[self class] _macOSElCapitanOrLater]) {
         options = @{ (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIFail };

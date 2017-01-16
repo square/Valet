@@ -27,25 +27,25 @@
 
 typedef NS_ENUM(NSUInteger, VALAccessControl) {
     /// Access to keychain elements requires user presence verification via Touch ID or device Passcode. Keychain elements are still accessible by Touch ID even if fingers are added or removed. Touch ID does not have to be available or enrolled.
-    /// @version Available on iOS 8 or later, and Mac OS 10.11 or later.
+    /// @version Available on iOS 8 or later, and macOS 10.11 or later.
     VALAccessControlUserPresence = 1,
     
     /// Access to keychain elements requires user presence verification via any finger enrolled in Touch ID. Keychain elements are still accessible by Touch ID even if fingers are added or removed. Touch ID must be available and at least one finger must be enrolled.
-    /// @version Available on iOS 9 or later.
+    /// @version Available on iOS 9 or later, and macOS 10.12 or later.
     VALAccessControlTouchIDAnyFingerprint = 2,
     
     /// Access to keychain elements requires user presence verification via fingers currently enrolled in Touch ID. Previously written keychain elements become inaccessible when fingers are added or removed. Touch ID must be available and at least one finger must be enrolled.
-    /// @version Available on iOS 9 or later.
+    /// @version Available on iOS 9 or later, and macOS 10.12 or later.
     VALAccessControlTouchIDCurrentFingerprintSet = 3,
     
     /// Access to keychain elements requires user presence verification via device Passcode.
-    /// @version Available on iOS 9 or later, and Mac OS 10.11 or later.
+    /// @version Available on iOS 9 or later, and macOS 10.11 or later.
     VALAccessControlDevicePasscode = 4,
 };
 
 
-/// Reads and writes keychain elements that are stored on the Secure Enclave (available on iOS 8.0 and later and Mac OS 10.11 and later) using accessibility attribute VALAccessibilityWhenPasscodeSetThisDeviceOnly. Accessing or modifying these keychain elements will require the user to confirm their presence via Touch ID or passcode entry. If no passcode is set on the device, the below methods will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI.
-/// @version Available on iOS 8 or later, and Mac OS 10.11 or later.
+/// Reads and writes keychain elements that are stored on the Secure Enclave (available on iOS 8.0 and later and macOS 10.11 and later) using accessibility attribute VALAccessibilityWhenPasscodeSetThisDeviceOnly. Accessing or modifying these keychain elements will require the user to confirm their presence via Touch ID or passcode entry. If no passcode is set on the device, the below methods will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI.
+/// @version Available on iOS 8 or later, and macOS 10.11 or later.
 @interface VALSecureEnclaveValet : VALValet
 
 /// @return YES if Secure Enclave storage is supported on the current iOS version (8.0 and later).
