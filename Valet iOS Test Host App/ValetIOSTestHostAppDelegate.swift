@@ -1,9 +1,9 @@
 //
-//  ValetTouchIDTestAppDelegate.swift
-//  Valet
+//  AppDelegate.swift
+//  Valet iOS Test Host App
 //
-//  Created by Eric Muller on 4/20/16.
-//  Copyright © 2016 Square, Inc.
+//  Created by Dan Federman on 1/13/17.
+//  Copyright 2017 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import UIKit
 @UIApplicationMain
 
 
-final class ValetTouchIDTestAppDelegate : UIResponder, UIApplicationDelegate
+final class ValetIOSTestHostAppDelegate : UIResponder, UIApplicationDelegate
 {
     var window: UIWindow?
 }

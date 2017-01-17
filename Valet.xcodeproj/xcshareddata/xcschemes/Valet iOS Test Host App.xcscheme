@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAF894731B053E0400EDAD6C"
-               BuildableName = "ValetTouchIDTest.app"
-               BlueprintName = "ValetTouchIDTest"
+               BlueprintIdentifier = "371150A41E2962D8004A45D4"
+               BuildableName = "Valet iOS Test Host App.app"
+               BlueprintName = "Valet iOS Test Host App"
                ReferencedContainer = "container:Valet.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAF894731B053E0400EDAD6C"
-            BuildableName = "ValetTouchIDTest.app"
-            BlueprintName = "ValetTouchIDTest"
+            BlueprintIdentifier = "371150A41E2962D8004A45D4"
+            BuildableName = "Valet iOS Test Host App.app"
+            BlueprintName = "Valet iOS Test Host App"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAF894731B053E0400EDAD6C"
-            BuildableName = "ValetTouchIDTest.app"
-            BlueprintName = "ValetTouchIDTest"
+            BlueprintIdentifier = "371150A41E2962D8004A45D4"
+            BuildableName = "Valet iOS Test Host App.app"
+            BlueprintName = "Valet iOS Test Host App"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -74,9 +74,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAF894731B053E0400EDAD6C"
-            BuildableName = "ValetTouchIDTest.app"
-            BlueprintName = "ValetTouchIDTest"
+            BlueprintIdentifier = "371150A41E2962D8004A45D4"
+            BuildableName = "Valet iOS Test Host App.app"
+            BlueprintName = "Valet iOS Test Host App"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

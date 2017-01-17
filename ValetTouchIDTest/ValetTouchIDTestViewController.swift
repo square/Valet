@@ -3,7 +3,19 @@
 //  Valet
 //
 //  Created by Eric Muller on 4/20/16.
-//  Copyright © 2016 Square, Inc. All rights reserved.
+//  Copyright © 2016 Square, Inc.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import UIKit
@@ -22,7 +34,7 @@ final class ValetTouchIDTestViewController : UIViewController
 
     required init?(coder aDecoder: NSCoder)
     {
-        if let valet = VALSecureEnclaveValet(identifier: "UserPresence", accessControl: VALAccessControl.UserPresence) {
+        if let valet = VALSecureEnclaveValet(identifier: "UserPresence", accessControl: VALAccessControl.userPresence) {
             self.secureEnclaveValet = valet
         } else {
             return nil;
@@ -34,20 +46,22 @@ final class ValetTouchIDTestViewController : UIViewController
 
     // MARK: Outlets
 
+    @objc(setOrUpdateItem:)
     @IBAction func setOrUpdateItem(sender: UIResponder)
     {
-        let stringToSet = "I am here! " + NSUUID().UUIDString
+        let stringToSet = "I am here! " + NSUUID().uuidString
         let setOrUpdatedItem = secureEnclaveValet.setString(stringToSet, forKey: username)
-        updateTextView(#function, (setOrUpdatedItem ? "Success" : "Failure"))
+        updateTextView(messageComponents: #function, (setOrUpdatedItem ? "Success" : "Failure"))
     }
 
+    @objc(getItem:)
     @IBAction func getItem(sender: UIResponder)
     {
         var userCancelled: ObjCBool = false
-        let password = secureEnclaveValet.stringForKey(username, userPrompt: "Use TouchID to retrieve password", userCancelled:&userCancelled)
+        let password = secureEnclaveValet.string(forKey: username, userPrompt: "Use TouchID to retrieve password", userCancelled:&userCancelled)
 
         var resultString: String
-        if (userCancelled) {
+        if (userCancelled.boolValue) {
             resultString = "user cancelled TouchID"
         } else if (password == nil) {
             resultString = "object not found"
@@ -55,19 +69,21 @@ final class ValetTouchIDTestViewController : UIViewController
             resultString = password as String!
         }
 
-        updateTextView(#function, resultString)
+        updateTextView(messageComponents: #function, resultString)
     }
 
+    @objc(removeItem:)
     @IBAction func removeItem(sender: UIResponder)
     {
-        let removedItem = secureEnclaveValet.removeObjectForKey(username)
-        updateTextView(#function, (removedItem ? "Success" : "Failure"))
+        let removedItem = secureEnclaveValet.removeObject(forKey: username)
+        updateTextView(messageComponents: #function, (removedItem ? "Success" : "Failure"))
     }
 
+    @objc(containsItem:)
     @IBAction func containsItem(sender: UIResponder)
     {
-        let containsItem = secureEnclaveValet.containsObjectForKey(username)
-        updateTextView(#function, (containsItem ? "YES" : "NO"))
+        let containsItem = secureEnclaveValet.containsObject(forKey: username)
+        updateTextView(messageComponents: #function, (containsItem ? "YES" : "NO"))
     }
 
 
@@ -76,7 +92,7 @@ final class ValetTouchIDTestViewController : UIViewController
     private func updateTextView(messageComponents: String...)
     {
         if let textView = textView as UITextView! {
-            textView.text = textView.text.stringByAppendingFormat("\n%@", messageComponents.joinWithSeparator(" "))
+            textView.text = textView.text.appendingFormat("\n%@", messageComponents.joined(separator: " "))
         }
     }
 }
