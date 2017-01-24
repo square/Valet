@@ -44,11 +44,11 @@ typedef NS_ENUM(NSUInteger, VALAccessControl) {
 };
 
 
-/// Reads and writes keychain elements that are stored on the Secure Enclave (available on iOS 8.0 and later and macOS 10.11 and later) using accessibility attribute VALAccessibilityWhenPasscodeSetThisDeviceOnly. Accessing or modifying these keychain elements will require the user to confirm their presence via Touch ID or passcode entry. If no passcode is set on the device, the below methods will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI.
+/// Reads and writes keychain elements that are stored on the Secure Enclave (available on iOS 8.0 and later and macOS 10.11 and later) using accessibility attribute VALAccessibilityWhenPasscodeSetThisDeviceOnly. Accessing these keychain elements will require the user to confirm their presence via Touch ID or passcode entry. If no passcode is set on the device, the below methods will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI.
 /// @version Available on iOS 8 or later, and macOS 10.11 or later.
 @interface VALSecureEnclaveValet : VALValet
 
-/// @return YES if Secure Enclave storage is supported on the current iOS version (8.0 and later).
+/// @return YES if Secure Enclave storage is supported on the current iOS or macOS version (iOS 8.0 and macOS 10.11 and later).
 + (BOOL)supportsSecureEnclaveKeychainItems;
 
 /// Creates a Valet that reads/writes Secure Enclave keychain elements and the specified access control.
