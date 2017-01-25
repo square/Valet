@@ -26,7 +26,7 @@ final class ValetTouchIDTestViewController : UIViewController
     // MARK: Properties
 
     @IBOutlet var textView : UITextView?
-    let secureEnclaveValet : VALSecureEnclaveValet
+    var singlePromptSecureEnclaveValet : VALSinglePromptSecureEnclaveValet
     let username = "CustomerPresentProof"
 
 
@@ -34,8 +34,8 @@ final class ValetTouchIDTestViewController : UIViewController
 
     required init?(coder aDecoder: NSCoder)
     {
-        if let valet = VALSecureEnclaveValet(identifier: "UserPresence", accessControl: VALAccessControl.userPresence) {
-            self.secureEnclaveValet = valet
+        if let valet = VALSinglePromptSecureEnclaveValet(identifier: "UserPresence", accessControl: VALAccessControl.userPresence) {
+            self.singlePromptSecureEnclaveValet = valet
         } else {
             return nil;
         }
@@ -50,7 +50,7 @@ final class ValetTouchIDTestViewController : UIViewController
     @IBAction func setOrUpdateItem(sender: UIResponder)
     {
         let stringToSet = "I am here! " + NSUUID().uuidString
-        let setOrUpdatedItem = secureEnclaveValet.setString(stringToSet, forKey: username)
+        let setOrUpdatedItem = singlePromptSecureEnclaveValet.setString(stringToSet, forKey: username)
         updateTextView(messageComponents: #function, (setOrUpdatedItem ? "Success" : "Failure"))
     }
 
@@ -58,7 +58,7 @@ final class ValetTouchIDTestViewController : UIViewController
     @IBAction func getItem(sender: UIResponder)
     {
         var userCancelled: ObjCBool = false
-        let password = secureEnclaveValet.string(forKey: username, userPrompt: "Use TouchID to retrieve password", userCancelled:&userCancelled)
+        let password = singlePromptSecureEnclaveValet.string(forKey: username, userPrompt: "Use TouchID to retrieve password", userCancelled:&userCancelled)
 
         var resultString: String
         if (userCancelled.boolValue) {
@@ -75,18 +75,24 @@ final class ValetTouchIDTestViewController : UIViewController
     @objc(removeItem:)
     @IBAction func removeItem(sender: UIResponder)
     {
-        let removedItem = secureEnclaveValet.removeObject(forKey: username)
+        let removedItem = singlePromptSecureEnclaveValet.removeObject(forKey: username)
         updateTextView(messageComponents: #function, (removedItem ? "Success" : "Failure"))
     }
 
     @objc(containsItem:)
     @IBAction func containsItem(sender: UIResponder)
     {
-        let containsItem = secureEnclaveValet.containsObject(forKey: username)
+        let containsItem = singlePromptSecureEnclaveValet.containsObject(forKey: username)
         updateTextView(messageComponents: #function, (containsItem ? "YES" : "NO"))
     }
 
-
+    @objc(requirePrompt:)
+    @IBAction func requirePrompt(sender: UIResponder)
+    {
+        singlePromptSecureEnclaveValet.requirePromptOnNextAccess()
+        updateTextView(messageComponents: #function)
+    }
+    
     // MARK: Private
 
     private func updateTextView(messageComponents: String...)
