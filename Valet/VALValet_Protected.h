@@ -22,6 +22,7 @@
 
 
 extern NSString * __nonnull VALStringForAccessibility(VALAccessibility accessibility);
+extern void VALAtomicSecItemLock(__nonnull dispatch_block_t block);
 
 
 @interface VALValet ()

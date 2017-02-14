@@ -19,6 +19,7 @@
 //
 
 #import "VALSecureEnclaveValet.h"
+#import "VALSecureEnclaveValet_Protected.h"
 #import "VALValet_Protected.h"
 
 #import "ValetDefines.h"
@@ -262,27 +263,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 
 - (BOOL)containsObjectForKey:(nonnull NSString *)key;
 {
-    NSDictionary *options = nil;
-    
-    // iOS 9 and macOS 10.11 use kSecUseAuthenticationUI, not kSecUseNoAuthenticationUI.
-#if ((TARGET_OS_IPHONE && __IPHONE_9_0) || (TARGET_OS_MAC && __MAC_10_11))
-    if ([[self class] _iOS9OrLater] || [[self class] _macOSElCapitanOrLater]) {
-        options = @{ (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIFail };
-    } else {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-        // kSecUseNoAuthenticationUI is deprecated in the iOS 9 SDK, but we still need it on iOS 8.
-#if (TARGET_OS_IPHONE && __IPHONE_9_0)
-        options = @{ (__bridge id)kSecUseNoAuthenticationUI : @YES };
-#endif
-#pragma GCC diagnostic pop
-    }
-#else
-    options = @{ (__bridge id)kSecUseNoAuthenticationUI : @YES };
-#endif
-    
-    OSStatus const status = [self containsObjectForKey:key options:options];
-    
+    OSStatus const status = [self containsObjectForKey:key options:nil];
     BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed || status == errSecSuccess);
     return keyAlreadyInKeychain;
 }
@@ -315,13 +296,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 {
-    OSStatus status = errSecSuccess;
-    NSData *const objectForKey = [self objectForKey:key options:[self _optionsDictionaryForUserPrompt:userPrompt] status:&status];
-    if (userCancelled != NULL) {
-        *userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed);
-    }
-    
-    return objectForKey;
+    return [self objectForKey:key userPrompt:userPrompt userCancelled:userCancelled options:nil];
 }
 
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
@@ -331,16 +306,10 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 {
-    OSStatus status = errSecSuccess;
-    NSString *const stringForKey = [self stringForKey:key options:[self _optionsDictionaryForUserPrompt:userPrompt] status:&status];
-    if (userCancelled != NULL) {
-        *userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed);
-    }
-    
-    return stringForKey;
+    return [self stringForKey:key userPrompt:userPrompt userCancelled:userCancelled options:nil];
 }
 
-#pragma mark - Protected Methods
+#pragma mark - VALValet Protected Methods
 
 - (BOOL)setObject:(nonnull NSData *)value forKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
 {
@@ -348,6 +317,68 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     [self removeObjectForKey:key];
     
     return [super setObject:value forKey:key options:options];
+}
+
+- (OSStatus)containsObjectForKey:(nonnull NSString *)key options:(nullable NSDictionary *)options;
+{
+    NSDictionary *baseOptions = nil;
+    
+    // iOS 9 and macOS 10.11 use kSecUseAuthenticationUI, not kSecUseNoAuthenticationUI.
+#if ((TARGET_OS_IPHONE && __IPHONE_9_0) || (TARGET_OS_MAC && __MAC_10_11))
+    if ([[self class] _iOS9OrLater] || [[self class] _macOSElCapitanOrLater]) {
+        baseOptions = @{ (__bridge id)kSecUseAuthenticationUI : (__bridge id)kSecUseAuthenticationUIFail };
+    } else {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+        // kSecUseNoAuthenticationUI is deprecated in the iOS 9 SDK, but we still need it on iOS 8.
+#if (TARGET_OS_IPHONE && __IPHONE_9_0)
+        options = @{ (__bridge id)kSecUseNoAuthenticationUI : @YES };
+#endif
+#pragma GCC diagnostic pop
+    }
+#else
+    options = @{ (__bridge id)kSecUseNoAuthenticationUI : @YES };
+#endif
+    
+    NSMutableDictionary *const allOptions = [baseOptions mutableCopy];
+    [allOptions addEntriesFromDictionary:options];
+    return [super containsObjectForKey:key options:allOptions];
+}
+
+#pragma mark - VALSecureEnclaveValet Protected Methods
+
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled options:(nullable NSDictionary *)options;
+{
+    OSStatus status = errSecSuccess;
+    
+    NSMutableDictionary *const allOptions = [[self _optionsDictionaryForUserPrompt:userPrompt] mutableCopy];
+    if (options.count > 0) {
+        [allOptions addEntriesFromDictionary:options];
+    }
+    
+    NSData *const objectForKey = [self objectForKey:key options:allOptions status:&status];
+    if (userCancelled != NULL) {
+        *userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed);
+    }
+    
+    return objectForKey;
+}
+
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled options:(nullable NSDictionary *)options;
+{
+    OSStatus status = errSecSuccess;
+    
+    NSMutableDictionary *const allOptions = [[self _optionsDictionaryForUserPrompt:userPrompt] mutableCopy];
+    if (options.count > 0) {
+        [allOptions addEntriesFromDictionary:options];
+    }
+    
+    NSString *const stringForKey = [self stringForKey:key options:allOptions status:&status];
+    if (userCancelled != NULL) {
+        *userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed);
+    }
+    
+    return stringForKey;
 }
 
 #pragma mark - Private Methods
@@ -433,6 +464,16 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 }
 
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled options:(nullable NSDictionary *)options;
+{
+    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+}
+
+- (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled options:(nullable NSDictionary *)options;
 {
     VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
 }

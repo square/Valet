@@ -30,6 +30,18 @@
 		371150AD1E2962D8004A45D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150AB1E2962D8004A45D4 /* Main.storyboard */; };
 		371150AF1E2962D8004A45D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 371150AE1E2962D8004A45D4 /* Assets.xcassets */; };
 		371150B21E2962D8004A45D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150B01E2962D8004A45D4 /* LaunchScreen.storyboard */; };
+		371E38081E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E38071E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h */; };
+		371E38091E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E38071E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h */; };
+		371E380A1E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E38071E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h */; };
+		371E380B1E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E38071E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h */; };
+		371E380E1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E380C1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		371E380F1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E380C1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		371E38101E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E380C1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		371E38111E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E380C1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		371E38121E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 371E380D1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m */; };
+		371E38131E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 371E380D1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m */; };
+		371E38141E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 371E380D1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m */; };
+		371E38151E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 371E380D1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m */; };
 		AC89A3EC1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */; };
 		AC89A3EE1CC82738009A7121 /* ValetTouchIDTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3ED1CC82738009A7121 /* ValetTouchIDTestViewController.swift */; };
 		EA1E1F8F1A8C46090067C991 /* libValet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1E1F831A8C46080067C991 /* libValet.a */; };
@@ -102,6 +114,9 @@
 		371150AE1E2962D8004A45D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		371150B11E2962D8004A45D4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		371150B31E2962D8004A45D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		371E38071E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALSecureEnclaveValet_Protected.h; sourceTree = "<group>"; };
+		371E380C1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALSinglePromptSecureEnclaveValet.h; sourceTree = "<group>"; };
+		371E380D1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALSinglePromptSecureEnclaveValet.m; sourceTree = "<group>"; };
 		37250B1D1E2DD55D008B4777 /* Valet iOS Test Host App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Valet iOS Test Host App.entitlements"; sourceTree = "<group>"; };
 		AC89A3EA1CC82426009A7121 /* ValetTouchIDTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ValetTouchIDTest-Bridging-Header.h"; sourceTree = "<group>"; };
 		AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetTouchIDTestAppDelegate.swift; sourceTree = "<group>"; };
@@ -241,7 +256,10 @@
 				EAEEAC231AB7BA0C00EDB6E3 /* VALValet_Protected.h */,
 				EAEEAC191AB7B83300EDB6E3 /* VALValet.m */,
 				EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */,
+				371E38071E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h */,
 				EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */,
+				371E380C1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h */,
+				371E380D1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m */,
 				EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */,
 				EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */,
 			);
@@ -303,9 +321,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				26E682841BA8B42100EFF4EA /* Valet.h in Headers */,
+				371E38101E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */,
 				26F06A551BA8B53F00E039CD /* VALValet.h in Headers */,
 				26F06A541BA8B53C00E039CD /* VALSecureEnclaveValet.h in Headers */,
 				26F06A531BA8B53100E039CD /* VALSynchronizableValet.h in Headers */,
+				371E380A1E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */,
 				26F06A5C1BA8B55D00E039CD /* ValetDefines.h in Headers */,
 				26F06A561BA8B54400E039CD /* VALValet_Protected.h in Headers */,
 			);
@@ -316,9 +336,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				26F06A571BA8B54E00E039CD /* Valet.h in Headers */,
+				371E38111E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */,
 				26F06A581BA8B55000E039CD /* VALValet.h in Headers */,
 				26F06A5A1BA8B55300E039CD /* VALSecureEnclaveValet.h in Headers */,
 				26F06A5B1BA8B55500E039CD /* VALSynchronizableValet.h in Headers */,
+				371E380B1E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */,
 				26F06A591BA8B55100E039CD /* VALValet_Protected.h in Headers */,
 				26F06A5D1BA8B56000E039CD /* ValetDefines.h in Headers */,
 			);
@@ -329,9 +351,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				EAEAA89E1B16818400F7AA98 /* Valet.h in Headers */,
+				371E380F1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */,
 				EA7756041C487783009C5C92 /* VALSecureEnclaveValet.h in Headers */,
 				EAEAA8A21B16818E00F7AA98 /* VALValet_Protected.h in Headers */,
 				EAEAA8A11B16818400F7AA98 /* VALSynchronizableValet.h in Headers */,
+				371E38091E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */,
 				EAEAA8A31B1681F400F7AA98 /* ValetDefines.h in Headers */,
 				EAEAA89F1B16818400F7AA98 /* VALValet.h in Headers */,
 			);
@@ -342,9 +366,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				EAEEAC2A1AB7BD4800EDB6E3 /* VALValet.h in Headers */,
+				371E380E1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */,
 				EAEEAC2B1AB7BD7400EDB6E3 /* VALSecureEnclaveValet.h in Headers */,
 				EAEEAC2C1AB7BD7900EDB6E3 /* VALSynchronizableValet.h in Headers */,
 				EAEAA8AC1B16864D00F7AA98 /* Valet.h in Headers */,
+				371E38081E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */,
 				EAEEAC271AB7BC5700EDB6E3 /* VALValet_Protected.h in Headers */,
 				EAEEAC281AB7BC5700EDB6E3 /* ValetDefines.h in Headers */,
 			);
@@ -627,6 +653,7 @@
 			files = (
 				26F06A8D1BA8BC8F00E039CD /* VALValet.m in Sources */,
 				26F06A8E1BA8BC9000E039CD /* VALSecureEnclaveValet.m in Sources */,
+				371E38141E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
 				26F06A8F1BA8BC9200E039CD /* VALSynchronizableValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -637,6 +664,7 @@
 			files = (
 				26F06A921BA8BC9700E039CD /* VALValet.m in Sources */,
 				26F06A911BA8BC9500E039CD /* VALSecureEnclaveValet.m in Sources */,
+				371E38151E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
 				26F06A901BA8BC9400E039CD /* VALSynchronizableValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -656,6 +684,7 @@
 			files = (
 				EAEEAC1D1AB7B84000EDB6E3 /* VALSynchronizableValet.m in Sources */,
 				EAEEAC1A1AB7B83300EDB6E3 /* VALValet.m in Sources */,
+				371E38121E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
 				EAEEAC201AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -674,6 +703,7 @@
 			files = (
 				EAEAA8A61B16821D00F7AA98 /* VALSynchronizableValet.m in Sources */,
 				EA7756051C4877A3009C5C92 /* VALSecureEnclaveValet.m in Sources */,
+				371E38131E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
 				EAEAA8A41B16821D00F7AA98 /* VALValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

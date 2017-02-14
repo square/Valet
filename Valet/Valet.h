@@ -21,3 +21,4 @@
 #import <Valet/VALValet.h>
 #import <Valet/VALSecureEnclaveValet.h>
 #import <Valet/VALSynchronizableValet.h>
+#import <Valet/VALSinglePromptSecureEnclaveValet.h>
