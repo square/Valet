@@ -270,6 +270,48 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     return [[self class] sharedValetForValet:self];
 }
 
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility serviceAttribute:(nonnull NSString *)serviceAttribute;
+{
+    VALCheckCondition(identifier.length > 0, nil, @"Valet requires an identifier");
+    VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
+    VALCheckCondition(serviceAttribute.length > 0, nil, @"Valet requires a valid serviceAttribute");
+
+    self = [super init];
+    if (self != nil) {
+        NSMutableDictionary *baseQuery = [self mutableBaseQueryWithIdentifier:@"tmp" initializer:_cmd accessibility:accessibility];
+        baseQuery[(__bridge id)kSecAttrService] = serviceAttribute;
+        
+        _baseQuery = [baseQuery copy];
+        _identifier = [identifier copy];
+        _sharedAcrossApplications = NO;
+        _accessibility = accessibility;
+        _lockForSetAndRemoveOperations = [NSLock new];
+    }
+    
+    return [[self class] _sharedValetForValet:self];
+}
+
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility serviceAttribute:(nonnull NSString *)serviceAttribute;
+{
+    VALCheckCondition(sharedAccessGroupIdentifier.length > 0, nil, @"Valet requires a sharedAccessGroupIdentifier");
+    VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
+    
+    self = [super init];
+    if (self != nil) {
+        NSMutableDictionary *baseQuery = [self mutableBaseQueryWithIdentifier:sharedAccessGroupIdentifier initializer:_cmd accessibility:accessibility];
+        baseQuery[(__bridge id)kSecAttrAccessGroup] = [NSString stringWithFormat:@"%@.%@", [self _sharedAccessGroupPrefix], sharedAccessGroupIdentifier];
+        baseQuery[(__bridge id)kSecAttrService] = serviceAttribute;
+        
+        _baseQuery = [baseQuery copy];
+        _identifier = [sharedAccessGroupIdentifier copy];
+        _sharedAcrossApplications = YES;
+        _accessibility = accessibility;
+        _lockForSetAndRemoveOperations = [NSLock new];
+    }
+    
+    return [[self class] _sharedValetForValet:self];
+}
+
 #pragma mark - NSObject
 
 - (BOOL)isEqual:(id)object;
@@ -285,7 +327,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
 
 - (nonnull NSString *)description;
 {
-    return [NSString stringWithFormat:@"%@: %@ %@%@", [super description], self.identifier, (self.sharedAcrossApplications ? @"Shared " : @""), VALStringForAccessibility(self.accessibility)];
+    return [NSString stringWithFormat:@"%@: %@ %@%@ %@", [super description], self.identifier, (self.sharedAcrossApplications ? @"Shared " : @""), VALStringForAccessibility(self.accessibility), self.secServiceIdentifier];
 }
 
 #pragma mark - NSCopying

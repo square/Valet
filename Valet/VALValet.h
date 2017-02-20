@@ -70,10 +70,13 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
 /// @see VALAccessibility
 - (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility NS_DESIGNATED_INITIALIZER;
 
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility serviceAttribute:(nonnull NSString *)serviceAttribute NS_DESIGNATED_INITIALIZER;
+
 /// Creates a Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
 /// @param sharedAccessGroupIdentifier This must correspond with the value for keychain-access-groups in your Entitlements file.
 /// @see VALAccessibility
 - (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility serviceAttribute:(nonnull NSString *)serviceAttribute NS_DESIGNATED_INITIALIZER;
 
 - (nonnull instancetype)init NS_UNAVAILABLE;
 + (nonnull instancetype)new NS_UNAVAILABLE;
