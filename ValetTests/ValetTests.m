@@ -664,7 +664,7 @@
     XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithConflict removeOnCompletion:NO].code, VALMigrationErrorDuplicateKeyInQueryResult);
 }
 
-- (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesSingleKeyValuePairSuccessfully;
+- (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesSingleKeyValuePairSuccessfullyWithoutRemovingOnCompletion;
 {
     VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet_Single_Key" accessibility:VALAccessibilityAfterFirstUnlock];
     [self.additionalValets addObject:otherValet];
@@ -679,6 +679,27 @@
     
     for (NSString *const key in keyStringPairToMigrateMap) {
         XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
+        XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
+    }
+}
+
+- (void)test_migrateObjectsFromValetMappingKeysRemoveOnCompletion_migratesSingleKeyValuePairSuccessfullyWithoutRemovingOnCompletion;
+{
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet_Single_Key" accessibility:VALAccessibilityAfterFirstUnlock];
+    [self.additionalValets addObject:otherValet];
+    
+    NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar" };
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
+    }
+    
+    NSDictionary *keyMap = @{ @"foo" : @"buzz" };
+    
+    XCTAssertNil([self.valet migrateObjectsFromValet:otherValet keyMap:keyMap removeOnCompletion:NO]);
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertEqualObjects([self.valet stringForKey:keyMap[key]], keyStringPairToMigrateMap[key]);
         XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
     }
 }
@@ -702,6 +723,55 @@
     }
 }
 
+- (void)test_migrateObjectsFromValetMappingKeysRemoveOnCompletion_migratesDataSuccessfullyWithoutRemovingOnCompletion;
+{
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
+    [self.additionalValets addObject:otherValet];
+    
+    NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
+    }
+    
+    NSDictionary *keyMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+
+    XCTAssertNil([self.valet migrateObjectsFromValet:otherValet keyMap:keyMap removeOnCompletion:NO]);
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertEqualObjects([self.valet stringForKey:keyMap[key]], keyStringPairToMigrateMap[key]);
+        XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
+    }
+}
+
+- (void)test_migrateObjectsFromValetMappingKeysRemoveOnCompletion_migratesDataSuccessfullyPartiallyRemappingKeysWithoutRemovingOnCompletion;
+{
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
+    [self.additionalValets addObject:otherValet];
+    
+    NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
+    }
+    
+    NSDictionary *partialKeyMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite" };
+
+    XCTAssertNil([self.valet migrateObjectsFromValet:otherValet keyMap:partialKeyMap removeOnCompletion:NO]);
+    
+    for (NSString *key in partialKeyMap) {
+        XCTAssertEqualObjects([self.valet stringForKey:partialKeyMap[key]], keyStringPairToMigrateMap[key]);
+        XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
+    }
+    
+    NSMutableDictionary *unmappedKeyStringPair = [keyStringPairToMigrateMap mutableCopy];
+    [unmappedKeyStringPair removeObjectsForKeys:partialKeyMap.allKeys];
+    for (NSString *key in unmappedKeyStringPair) {
+        XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
+        XCTAssertEqualObjects([otherValet stringForKey:key], keyStringPairToMigrateMap[key]);
+    }
+}
+
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenRemovingOnCompletion;
 {
     VALValet *const otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
@@ -717,6 +787,28 @@
     
     for (NSString *const key in keyStringPairToMigrateMap) {
         XCTAssertEqualObjects([self.valet stringForKey:key], keyStringPairToMigrateMap[key]);
+        XCTAssertEqualObjects([otherValet stringForKey:key], nil);
+    }
+}
+
+
+- (void)test_migrateObjectsFromValetMappingKeysRemoveOnCompletion_migratesDataSuccessfullyWhenRemovingOnCompletion;
+{
+    VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet" accessibility:VALAccessibilityAfterFirstUnlock];
+    [self.additionalValets addObject:otherValet];
+    
+    NSDictionary *keyStringPairToMigrateMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertTrue([otherValet setString:keyStringPairToMigrateMap[key] forKey:key]);
+    }
+    
+    NSDictionary *keyMap = @{ @"foo" : @"bar", @"testing" : @"migration", @"is" : @"quite", @"entertaining" : @"if", @"you" : @"don't", @"screw" : @"up" };
+    
+    XCTAssertNil([self.valet migrateObjectsFromValet:otherValet keyMap:keyMap removeOnCompletion:YES]);
+    
+    for (NSString *key in keyStringPairToMigrateMap) {
+        XCTAssertEqualObjects([self.valet stringForKey:keyMap[key]], keyStringPairToMigrateMap[key]);
         XCTAssertEqualObjects([otherValet stringForKey:key], nil);
     }
 }
