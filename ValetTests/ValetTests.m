@@ -664,6 +664,34 @@
     XCTAssertEqual([self.valet migrateObjectsMatchingQuery:queryWithConflict removeOnCompletion:NO].code, VALMigrationErrorDuplicateKeyInQueryResult);
 }
 
+- (void)test_migrateObjectsMatchingQueryRemoveOnCompletion_withExistingAccountNameNSDataKeychainEntry_doesNotRaiseException;
+{
+    NSString *identifier = @"Keychain_With_Account_Name_As_NSData";
+
+    NSData *dataBlob = [@"foo" dataUsingEncoding:NSUTF8StringEncoding];
+
+    // kSecAttrAccount entry is expected to be a CFString, but a CFDataRef can also be stored as a value.
+    NSDictionary *keychainData = @{ (__bridge id)kSecAttrService : identifier, (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrAccount : dataBlob, (__bridge id)kSecValueData : dataBlob };
+
+    SecItemDelete((__bridge CFDictionaryRef)keychainData);
+    OSStatus status = SecItemAdd((__bridge CFDictionaryRef)keychainData, NULL);
+
+    XCTAssertEqual(status, errSecSuccess); // Insert Succeeded
+
+    NSDictionary *query = @{ (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrService : identifier };
+
+    NSError *error = [self.valet migrateObjectsMatchingQuery:query removeOnCompletion:NO];
+
+# if TARGET_OS_IPHONE
+    XCTAssertNil(error);
+# elif TARGET_OS_MAC
+    // iOS allows kSecAttrAccount NSData entries, while OSX sets the value to nil for any non-string entry.
+    XCTAssertEqual(error.code, VALMigrationErrorKeyInQueryResultInvalid);
+# else
+    [NSException raise:@"UnsupportedOperatingSystem" format:@"Only OSX and iOS are supported"];
+# endif
+}
+
 - (void)test_migrateObjectsFromValetRemoveOnCompletion_migratesSingleKeyValuePairSuccessfully;
 {
     VALValet *otherValet = [[VALValet alloc] initWithIdentifier:@"Migrate_Me_To_Valet_Single_Key" accessibility:VALAccessibilityAfterFirstUnlock];

@@ -423,7 +423,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     NSMutableSet *const keysToMigrate = [NSMutableSet new];
     for (NSDictionary *const keychainEntry in queryResultWithData) {
         NSString *const key = keychainEntry[(__bridge id)kSecAttrAccount];
-        if ([key isEqualToString:VALCanAccessKeychainCanaryKey]) {
+        if ([key isKindOfClass:[NSString class]] && [key isEqualToString:VALCanAccessKeychainCanaryKey]) {
             // We don't care about this key. Move along.
             continue;
         }
