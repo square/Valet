@@ -20,21 +20,11 @@
 
 #import <XCTest/XCTest.h>
 
-#import <Valet/Valet.h>
-
+#import "ValetTests.h"
 
 // The iPhone simulator fakes entitlements, allowing us to test the iCloud Keychain (VALSynchronizableValet) and the secure enclave (VALSecureEnclaveValet) code without writing a signed host app.
 #define TARGET_HAS_ENTITLEMENTS TARGET_IPHONE_SIMULATOR
 
-
-@interface VALValet (Testing)
-
-@property (copy, readonly) NSDictionary *baseQuery;
-
-- (NSString *)_sharedAccessGroupPrefix;
-- (NSDictionary *)_secItemFormatDictionaryWithKey:(NSString *)key;
-
-@end
 
 
 @interface VALTestingValet : VALValet

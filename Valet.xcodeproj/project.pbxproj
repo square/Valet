@@ -30,46 +30,21 @@
 		371150AD1E2962D8004A45D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150AB1E2962D8004A45D4 /* Main.storyboard */; };
 		371150AF1E2962D8004A45D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 371150AE1E2962D8004A45D4 /* Assets.xcassets */; };
 		371150B21E2962D8004A45D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150B01E2962D8004A45D4 /* LaunchScreen.storyboard */; };
-		371E38081E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E38071E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h */; };
-		371E38091E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E38071E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h */; };
 		371E380A1E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E38071E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h */; };
 		371E380B1E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E38071E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h */; };
-		371E380E1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E380C1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		371E380F1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E380C1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		371E38101E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E380C1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		371E38111E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 371E380C1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		371E38121E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 371E380D1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m */; };
-		371E38131E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 371E380D1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m */; };
 		371E38141E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 371E380D1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m */; };
 		371E38151E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 371E380D1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m */; };
+		AC2986F31F6DA7BC00BE78F3 /* ValetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2986F21F6DA7BB00BE78F3 /* ValetTests.swift */; };
+		AC80E09F1F6DAB410091D04D /* ValetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2986F21F6DA7BB00BE78F3 /* ValetTests.swift */; };
 		AC89A3EC1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */; };
 		AC89A3EE1CC82738009A7121 /* ValetTouchIDTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3ED1CC82738009A7121 /* ValetTouchIDTestViewController.swift */; };
-		EA1E1F8F1A8C46090067C991 /* libValet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1E1F831A8C46080067C991 /* libValet.a */; };
 		EA1E1FA01A8C48560067C991 /* ValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1E1F9F1A8C48560067C991 /* ValetTests.m */; };
-		EA7756041C487783009C5C92 /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EA7756051C4877A3009C5C92 /* VALSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */; };
-		EAEAA88D1B167A8700F7AA98 /* libValet.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EAEAA8821B167A8600F7AA98 /* libValet.dylib */; };
 		EAEAA8991B16813100F7AA98 /* ValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA1E1F9F1A8C48560067C991 /* ValetTests.m */; };
-		EAEAA89E1B16818400F7AA98 /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = EA1E1F861A8C46080067C991 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAEAA89F1B16818400F7AA98 /* VALValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC181AB7B83300EDB6E3 /* VALValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAEAA8A11B16818400F7AA98 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAEAA8A21B16818E00F7AA98 /* VALValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC231AB7BA0C00EDB6E3 /* VALValet_Protected.h */; };
-		EAEAA8A31B1681F400F7AA98 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */; };
-		EAEAA8A41B16821D00F7AA98 /* VALValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC191AB7B83300EDB6E3 /* VALValet.m */; };
-		EAEAA8A61B16821D00F7AA98 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */; };
-		EAEAA8AC1B16864D00F7AA98 /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = EA1E1F861A8C46080067C991 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAEEAC1A1AB7B83300EDB6E3 /* VALValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC191AB7B83300EDB6E3 /* VALValet.m */; };
-		EAEEAC1D1AB7B84000EDB6E3 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1C1AB7B84000EDB6E3 /* VALSynchronizableValet.m */; };
-		EAEEAC201AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEEAC1F1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m */; };
-		EAEEAC271AB7BC5700EDB6E3 /* VALValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC231AB7BA0C00EDB6E3 /* VALValet_Protected.h */; };
-		EAEEAC281AB7BC5700EDB6E3 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC251AB7BA9800EDB6E3 /* ValetDefines.h */; };
-		EAEEAC2A1AB7BD4800EDB6E3 /* VALValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC181AB7B83300EDB6E3 /* VALValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAEEAC2B1AB7BD7400EDB6E3 /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAEEAC2C1AB7BD7900EDB6E3 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAF894841B053E0500EDAD6C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAF894831B053E0500EDAD6C /* Images.xcassets */; };
 		EAF8949E1B05420200EDAD6C /* ValetSecureElementTestMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EAF8949C1B05420200EDAD6C /* ValetSecureElementTestMain.storyboard */; };
 		EAF894A11B05420800EDAD6C /* ValetSecureElementTestLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAF8949F1B05420700EDAD6C /* ValetSecureElementTestLaunchScreen.xib */; };
-		EAF894A31B05439A00EDAD6C /* libValet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1E1F831A8C46080067C991 /* libValet.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,26 +55,19 @@
 			remoteGlobalIDString = 371150A41E2962D8004A45D4;
 			remoteInfo = "Valet iOS Test Host App";
 		};
-		EA1E1F901A8C46090067C991 /* PBXContainerItemProxy */ = {
+		AC80E0A01F6DABB80091D04D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = EA1E1F821A8C46080067C991;
-			remoteInfo = Valet;
+			remoteGlobalIDString = 26E6827B1BA8B3F900EFF4EA;
+			remoteInfo = "Valet-iOS";
 		};
-		EAEAA88E1B167A8700F7AA98 /* PBXContainerItemProxy */ = {
+		AC80E0A21F6DABC90091D04D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = EAEAA8811B167A8600F7AA98;
-			remoteInfo = "Valet Mac";
-		};
-		EAF8949A1B053FB300EDAD6C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = EA1E1F821A8C46080067C991;
-			remoteInfo = Valet;
+			remoteGlobalIDString = 26E682891BA8B4B200EFF4EA;
+			remoteInfo = "Valet-Mac";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -118,15 +86,16 @@
 		371E380C1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALSinglePromptSecureEnclaveValet.h; sourceTree = "<group>"; };
 		371E380D1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALSinglePromptSecureEnclaveValet.m; sourceTree = "<group>"; };
 		37250B1D1E2DD55D008B4777 /* Valet iOS Test Host App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Valet iOS Test Host App.entitlements"; sourceTree = "<group>"; };
+		AC2986F21F6DA7BB00BE78F3 /* ValetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValetTests.swift; sourceTree = "<group>"; };
+		AC59EF021F6DB539008BD6AF /* ValetTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ValetTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		AC59EF031F6DB5DA008BD6AF /* ValetTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ValetTests.h; sourceTree = "<group>"; };
 		AC89A3EA1CC82426009A7121 /* ValetTouchIDTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ValetTouchIDTest-Bridging-Header.h"; sourceTree = "<group>"; };
 		AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetTouchIDTestAppDelegate.swift; sourceTree = "<group>"; };
 		AC89A3ED1CC82738009A7121 /* ValetTouchIDTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetTouchIDTestViewController.swift; sourceTree = "<group>"; };
-		EA1E1F831A8C46080067C991 /* libValet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libValet.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA1E1F861A8C46080067C991 /* Valet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Valet.h; sourceTree = "<group>"; };
 		EA1E1F8E1A8C46090067C991 /* Valet iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Valet iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA1E1F941A8C46090067C991 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EA1E1F9F1A8C48560067C991 /* ValetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValetTests.m; sourceTree = "<group>"; };
-		EAEAA8821B167A8600F7AA98 /* libValet.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libValet.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAEAA88C1B167A8700F7AA98 /* Valet Mac Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Valet Mac Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAEEAC181AB7B83300EDB6E3 /* VALValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VALValet.h; sourceTree = "<group>"; };
 		EAEEAC191AB7B83300EDB6E3 /* VALValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALValet.m; sourceTree = "<group>"; };
@@ -165,22 +134,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EA1E1F801A8C46080067C991 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		EA1E1F8B1A8C46090067C991 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EA1E1F8F1A8C46090067C991 /* libValet.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EAEAA87F1B167A8600F7AA98 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -191,7 +145,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EAEAA88D1B167A8700F7AA98 /* libValet.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,7 +152,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EAF894A31B05439A00EDAD6C /* libValet.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,10 +187,8 @@
 		EA1E1F841A8C46080067C991 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EA1E1F831A8C46080067C991 /* libValet.a */,
 				EA1E1F8E1A8C46090067C991 /* Valet iOS Tests.xctest */,
 				EAF894741B053E0500EDAD6C /* ValetTouchIDTest.app */,
-				EAEAA8821B167A8600F7AA98 /* libValet.dylib */,
 				EAEAA88C1B167A8700F7AA98 /* Valet Mac Tests.xctest */,
 				26E6827C1BA8B3F900EFF4EA /* Valet.framework */,
 				26E6828A1BA8B4B200EFF4EA /* Valet.framework */,
@@ -269,7 +219,10 @@
 		EA1E1F921A8C46090067C991 /* ValetTests */ = {
 			isa = PBXGroup;
 			children = (
+				AC59EF031F6DB5DA008BD6AF /* ValetTests.h */,
 				EA1E1F9F1A8C48560067C991 /* ValetTests.m */,
+				AC2986F21F6DA7BB00BE78F3 /* ValetTests.swift */,
+				AC59EF021F6DB539008BD6AF /* ValetTests-Bridging-Header.h */,
 				EA1E1F931A8C46090067C991 /* Supporting Files */,
 			);
 			path = ValetTests;
@@ -346,36 +299,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EAEAA8801B167A8600F7AA98 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EAEAA89E1B16818400F7AA98 /* Valet.h in Headers */,
-				371E380F1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */,
-				EA7756041C487783009C5C92 /* VALSecureEnclaveValet.h in Headers */,
-				EAEAA8A21B16818E00F7AA98 /* VALValet_Protected.h in Headers */,
-				EAEAA8A11B16818400F7AA98 /* VALSynchronizableValet.h in Headers */,
-				371E38091E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */,
-				EAEAA8A31B1681F400F7AA98 /* ValetDefines.h in Headers */,
-				EAEAA89F1B16818400F7AA98 /* VALValet.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EAEEAC261AB7BC4B00EDB6E3 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EAEEAC2A1AB7BD4800EDB6E3 /* VALValet.h in Headers */,
-				371E380E1E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.h in Headers */,
-				EAEEAC2B1AB7BD7400EDB6E3 /* VALSecureEnclaveValet.h in Headers */,
-				EAEEAC2C1AB7BD7900EDB6E3 /* VALSynchronizableValet.h in Headers */,
-				EAEAA8AC1B16864D00F7AA98 /* Valet.h in Headers */,
-				371E38081E3713CB008A1C62 /* VALSecureEnclaveValet_Protected.h in Headers */,
-				EAEEAC271AB7BC5700EDB6E3 /* VALValet_Protected.h in Headers */,
-				EAEEAC281AB7BC5700EDB6E3 /* ValetDefines.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -432,23 +355,6 @@
 			productReference = 371150A51E2962D8004A45D4 /* Valet iOS Test Host App.app */;
 			productType = "com.apple.product-type.application";
 		};
-		EA1E1F821A8C46080067C991 /* Valet iOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = EA1E1F971A8C46090067C991 /* Build configuration list for PBXNativeTarget "Valet iOS" */;
-			buildPhases = (
-				EA1E1F7F1A8C46080067C991 /* Sources */,
-				EA1E1F801A8C46080067C991 /* Frameworks */,
-				EAEEAC261AB7BC4B00EDB6E3 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Valet iOS";
-			productName = Valet;
-			productReference = EA1E1F831A8C46080067C991 /* libValet.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		EA1E1F8D1A8C46090067C991 /* Valet iOS Tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EA1E1F9A1A8C46090067C991 /* Build configuration list for PBXNativeTarget "Valet iOS Tests" */;
@@ -460,30 +366,13 @@
 			buildRules = (
 			);
 			dependencies = (
-				EA1E1F911A8C46090067C991 /* PBXTargetDependency */,
+				AC80E0A11F6DABB80091D04D /* PBXTargetDependency */,
 				371150B91E2962FC004A45D4 /* PBXTargetDependency */,
 			);
 			name = "Valet iOS Tests";
 			productName = ValetTests;
 			productReference = EA1E1F8E1A8C46090067C991 /* Valet iOS Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		EAEAA8811B167A8600F7AA98 /* Valet Mac */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = EAEAA8971B167A8700F7AA98 /* Build configuration list for PBXNativeTarget "Valet Mac" */;
-			buildPhases = (
-				EAEAA87E1B167A8600F7AA98 /* Sources */,
-				EAEAA87F1B167A8600F7AA98 /* Frameworks */,
-				EAEAA8801B167A8600F7AA98 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Valet Mac";
-			productName = "Valet Mac";
-			productReference = EAEAA8821B167A8600F7AA98 /* libValet.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
 		};
 		EAEAA88B1B167A8700F7AA98 /* Valet Mac Tests */ = {
 			isa = PBXNativeTarget;
@@ -496,7 +385,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				EAEAA88F1B167A8700F7AA98 /* PBXTargetDependency */,
+				AC80E0A31F6DABC90091D04D /* PBXTargetDependency */,
 			);
 			name = "Valet Mac Tests";
 			productName = "Valet MacTests";
@@ -514,7 +403,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				EAF8949B1B053FB300EDAD6C /* PBXTargetDependency */,
 			);
 			name = ValetTouchIDTest;
 			productName = ValetTouchIDTest;
@@ -548,21 +436,16 @@
 							};
 						};
 					};
-					EA1E1F821A8C46080067C991 = {
-						CreatedOnToolsVersion = 6.1.1;
-					};
 					EA1E1F8D1A8C46090067C991 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 9XUJ7M53NG;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 371150A41E2962D8004A45D4;
 					};
-					EAEAA8811B167A8600F7AA98 = {
-						CreatedOnToolsVersion = 6.3.2;
-						ProvisioningStyle = Automatic;
-					};
 					EAEAA88B1B167A8700F7AA98 = {
 						CreatedOnToolsVersion = 6.3.2;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					EAF894731B053E0400EDAD6C = {
@@ -583,10 +466,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EA1E1F821A8C46080067C991 /* Valet iOS */,
 				EA1E1F8D1A8C46090067C991 /* Valet iOS Tests */,
 				EAF894731B053E0400EDAD6C /* ValetTouchIDTest */,
-				EAEAA8811B167A8600F7AA98 /* Valet Mac */,
 				EAEAA88B1B167A8700F7AA98 /* Valet Mac Tests */,
 				26E6827B1BA8B3F900EFF4EA /* Valet-iOS */,
 				26E682891BA8B4B200EFF4EA /* Valet-Mac */,
@@ -678,33 +559,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EA1E1F7F1A8C46080067C991 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EAEEAC1D1AB7B84000EDB6E3 /* VALSynchronizableValet.m in Sources */,
-				EAEEAC1A1AB7B83300EDB6E3 /* VALValet.m in Sources */,
-				371E38121E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
-				EAEEAC201AB7B84E00EDB6E3 /* VALSecureEnclaveValet.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		EA1E1F8A1A8C46090067C991 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC80E09F1F6DAB410091D04D /* ValetTests.swift in Sources */,
 				EA1E1FA01A8C48560067C991 /* ValetTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EAEAA87E1B167A8600F7AA98 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EAEAA8A61B16821D00F7AA98 /* VALSynchronizableValet.m in Sources */,
-				EA7756051C4877A3009C5C92 /* VALSecureEnclaveValet.m in Sources */,
-				371E38131E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
-				EAEAA8A41B16821D00F7AA98 /* VALValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -712,6 +572,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC2986F31F6DA7BC00BE78F3 /* ValetTests.swift in Sources */,
 				EAEAA8991B16813100F7AA98 /* ValetTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -733,20 +594,15 @@
 			target = 371150A41E2962D8004A45D4 /* Valet iOS Test Host App */;
 			targetProxy = 371150B81E2962FC004A45D4 /* PBXContainerItemProxy */;
 		};
-		EA1E1F911A8C46090067C991 /* PBXTargetDependency */ = {
+		AC80E0A11F6DABB80091D04D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EA1E1F821A8C46080067C991 /* Valet iOS */;
-			targetProxy = EA1E1F901A8C46090067C991 /* PBXContainerItemProxy */;
+			target = 26E6827B1BA8B3F900EFF4EA /* Valet-iOS */;
+			targetProxy = AC80E0A01F6DABB80091D04D /* PBXContainerItemProxy */;
 		};
-		EAEAA88F1B167A8700F7AA98 /* PBXTargetDependency */ = {
+		AC80E0A31F6DABC90091D04D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EAEAA8811B167A8600F7AA98 /* Valet Mac */;
-			targetProxy = EAEAA88E1B167A8700F7AA98 /* PBXContainerItemProxy */;
-		};
-		EAF8949B1B053FB300EDAD6C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = EA1E1F821A8C46080067C991 /* Valet iOS */;
-			targetProxy = EAF8949A1B053FB300EDAD6C /* PBXContainerItemProxy */;
+			target = 26E682891BA8B4B200EFF4EA /* Valet-Mac */;
+			targetProxy = AC80E0A21F6DABC90091D04D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -841,6 +697,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -867,6 +724,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -959,6 +817,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1005,6 +864,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1022,36 +882,11 @@
 			};
 			name = Release;
 		};
-		EA1E1F981A8C46090067C991 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = Valet;
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		EA1E1F991A8C46090067C991 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = Valet;
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
 		EA1E1F9B1A8C46090067C991 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 9XUJ7M53NG;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1060,8 +895,12 @@
 				);
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = ValetTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ValetTests/ValetTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Valet iOS Test Host App.app/Valet iOS Test Host App";
 			};
 			name = Debug;
@@ -1070,52 +909,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 9XUJ7M53NG;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = ValetTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ValetTests/ValetTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Valet iOS Test Host App.app/Valet iOS Test Host App";
-			};
-			name = Release;
-		};
-		EAEAA8931B167A8700F7AA98 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_NAME = Valet;
-				SDKROOT = macosx;
-			};
-			name = Debug;
-		};
-		EAEAA8941B167A8700F7AA98 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_NAME = Valet;
-				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -1123,6 +927,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1141,6 +946,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "ValetTests/ValetTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1148,6 +956,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1163,6 +972,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "ValetTests/ValetTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1249,29 +1060,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EA1E1F971A8C46090067C991 /* Build configuration list for PBXNativeTarget "Valet iOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				EA1E1F981A8C46090067C991 /* Debug */,
-				EA1E1F991A8C46090067C991 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		EA1E1F9A1A8C46090067C991 /* Build configuration list for PBXNativeTarget "Valet iOS Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EA1E1F9B1A8C46090067C991 /* Debug */,
 				EA1E1F9C1A8C46090067C991 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		EAEAA8971B167A8700F7AA98 /* Build configuration list for PBXNativeTarget "Valet Mac" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				EAEAA8931B167A8700F7AA98 /* Debug */,
-				EAEAA8941B167A8700F7AA98 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
