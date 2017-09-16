@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EA1E1F821A8C46080067C991"
-               BuildableName = "libValet.a"
+               BlueprintIdentifier = "26E6827B1BA8B3F900EFF4EA"
+               BuildableName = "Valet.framework"
                BlueprintName = "Valet iOS"
-               ReferencedContainer = "container:Valet.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EA1E1F8D1A8C46090067C991"
-               BuildableName = "Valet iOS Tests.xctest"
-               BlueprintName = "Valet iOS Tests"
                ReferencedContainer = "container:Valet.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -57,8 +43,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EA1E1F821A8C46080067C991"
-            BuildableName = "libValet.a"
+            BlueprintIdentifier = "26E6827B1BA8B3F900EFF4EA"
+            BuildableName = "Valet.framework"
             BlueprintName = "Valet iOS"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
@@ -80,8 +66,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EA1E1F821A8C46080067C991"
-            BuildableName = "libValet.a"
+            BlueprintIdentifier = "26E6827B1BA8B3F900EFF4EA"
+            BuildableName = "Valet.framework"
             BlueprintName = "Valet iOS"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
@@ -98,8 +84,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EA1E1F821A8C46080067C991"
-            BuildableName = "libValet.a"
+            BlueprintIdentifier = "26E6827B1BA8B3F900EFF4EA"
+            BuildableName = "Valet.framework"
             BlueprintName = "Valet iOS"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>

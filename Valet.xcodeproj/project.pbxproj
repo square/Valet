@@ -309,9 +309,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		26E6827B1BA8B3F900EFF4EA /* Valet-iOS */ = {
+		26E6827B1BA8B3F900EFF4EA /* Valet iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 26E682831BA8B3F900EFF4EA /* Build configuration list for PBXNativeTarget "Valet-iOS" */;
+			buildConfigurationList = 26E682831BA8B3F900EFF4EA /* Build configuration list for PBXNativeTarget "Valet iOS" */;
 			buildPhases = (
 				26E682771BA8B3F900EFF4EA /* Sources */,
 				26E682781BA8B3F900EFF4EA /* Frameworks */,
@@ -322,14 +322,14 @@
 			);
 			dependencies = (
 			);
-			name = "Valet-iOS";
+			name = "Valet iOS";
 			productName = "Valet-iOS";
 			productReference = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		26E682891BA8B4B200EFF4EA /* Valet-Mac */ = {
+		26E682891BA8B4B200EFF4EA /* Valet Mac */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 26E6828F1BA8B4B200EFF4EA /* Build configuration list for PBXNativeTarget "Valet-Mac" */;
+			buildConfigurationList = 26E6828F1BA8B4B200EFF4EA /* Build configuration list for PBXNativeTarget "Valet Mac" */;
 			buildPhases = (
 				26E682851BA8B4B200EFF4EA /* Sources */,
 				26E682861BA8B4B200EFF4EA /* Frameworks */,
@@ -340,7 +340,7 @@
 			);
 			dependencies = (
 			);
-			name = "Valet-Mac";
+			name = "Valet Mac";
 			productName = "Valet-Mac";
 			productReference = 26E6828A1BA8B4B200EFF4EA /* Valet.framework */;
 			productType = "com.apple.product-type.framework";
@@ -480,8 +480,8 @@
 				EA1E1F8D1A8C46090067C991 /* Valet iOS Tests */,
 				EAF894731B053E0400EDAD6C /* ValetTouchIDTest */,
 				EAEAA88B1B167A8700F7AA98 /* Valet Mac Tests */,
-				26E6827B1BA8B3F900EFF4EA /* Valet-iOS */,
-				26E682891BA8B4B200EFF4EA /* Valet-Mac */,
+				26E6827B1BA8B3F900EFF4EA /* Valet iOS */,
+				26E682891BA8B4B200EFF4EA /* Valet Mac */,
 				371150A41E2962D8004A45D4 /* Valet iOS Test Host App */,
 			);
 		};
@@ -602,7 +602,7 @@
 /* Begin PBXTargetDependency section */
 		16B428501F6DD4290052680B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 26E6827B1BA8B3F900EFF4EA /* Valet-iOS */;
+			target = 26E6827B1BA8B3F900EFF4EA /* Valet iOS */;
 			targetProxy = 16B4284F1F6DD4290052680B /* PBXContainerItemProxy */;
 		};
 		371150B91E2962FC004A45D4 /* PBXTargetDependency */ = {
@@ -612,12 +612,12 @@
 		};
 		AC80E0A11F6DABB80091D04D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 26E6827B1BA8B3F900EFF4EA /* Valet-iOS */;
+			target = 26E6827B1BA8B3F900EFF4EA /* Valet iOS */;
 			targetProxy = AC80E0A01F6DABB80091D04D /* PBXContainerItemProxy */;
 		};
 		AC80E0A31F6DABC90091D04D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 26E682891BA8B4B200EFF4EA /* Valet-Mac */;
+			target = 26E682891BA8B4B200EFF4EA /* Valet Mac */;
 			targetProxy = AC80E0A21F6DABC90091D04D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1066,7 +1066,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		26E682831BA8B3F900EFF4EA /* Build configuration list for PBXNativeTarget "Valet-iOS" */ = {
+		26E682831BA8B3F900EFF4EA /* Build configuration list for PBXNativeTarget "Valet iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				26E682811BA8B3F900EFF4EA /* Debug */,
@@ -1075,7 +1075,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		26E6828F1BA8B4B200EFF4EA /* Build configuration list for PBXNativeTarget "Valet-Mac" */ = {
+		26E6828F1BA8B4B200EFF4EA /* Build configuration list for PBXNativeTarget "Valet Mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				26E682901BA8B4B200EFF4EA /* Debug */,
