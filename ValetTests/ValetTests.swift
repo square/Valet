@@ -183,7 +183,8 @@ class ValetTests: XCTestCase
     func test_stringForKey_withDifferingIdentifier_isNil()
     {
         XCTAssertTrue(valet.setString(passcode, forKey: key))
-
+        XCTAssertEqual(passcode, valet.string(forKey: key))
+        
         let differingIdentifier = VALValet(identifier: "wat", accessibility: valet.accessibility)!
         XCTAssertNil(differingIdentifier.string(forKey: key))
     }
@@ -191,7 +192,8 @@ class ValetTests: XCTestCase
     func test_stringForKey_withDifferingAccessibility_isNil()
     {
         XCTAssertTrue(valet.setString(passcode, forKey: key))
-
+        XCTAssertEqual(passcode, valet.string(forKey: key))
+        
         let differingAccessibility = VALValet(identifier: valet.identifier, accessibility: .afterFirstUnlockThisDeviceOnly)!
         XCTAssertNil(differingAccessibility.string(forKey: key))
     }
@@ -199,6 +201,8 @@ class ValetTests: XCTestCase
     func test_stringForKey_withEquivalentConfigurationButDifferingSubclass_isNil()
     {
         XCTAssertTrue(valet.setString("monster", forKey: "cookie"))
+        XCTAssertEqual("monster", valet.string(forKey: "cookie"))
+
         XCTAssertNil(subclassValet.string(forKey: "cookie"))
     }
 
@@ -412,6 +416,42 @@ class ValetTests: XCTestCase
         XCTAssertEqual(VALMigrationError.duplicateKeyInQueryResult, migrationValet.migrateObjects(matchingQuery: conflictingQuery, removeOnCompletion: false)?.valetMigrationError)
     }
 
+    func test_migrateObjectsMatchingQuery_withAccountNameAsData_doesNotRaiseException()
+    {
+        let identifier = "Keychain_With_Account_Name_As_NSData"
+        guard let dataBlob = "foo".data(using: .utf8) else {
+            XCTFail()
+            return
+        }
+        
+        // kSecAttrAccount entry is expected to be a CFString, but a CFDataRef can also be stored as a value.
+        let keychainData = [
+            kSecAttrService: identifier,
+            kSecClass : kSecClassGenericPassword,
+            kSecAttrAccount: dataBlob,
+            kSecValueData: dataBlob
+            ] as CFDictionary
+        
+        SecItemDelete(keychainData)
+        let status = SecItemAdd(keychainData, nil)
+        XCTAssertEqual(status, errSecSuccess)
+        
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: identifier
+        ]
+        let error = valet.migrateObjects(matchingQuery: query, removeOnCompletion: false)
+        
+        #if os(iOS)
+            XCTAssertNil(error)
+        #elseif os(macOS)
+            XCTAssertEqual(error?.valetMigrationError, .keyInQueryResultInvalid)
+        #else
+            XCTFail("Unsupported/undefined OS")
+        #endif
+        
+    }
+    
     // MARK: Migration - Valet
 
     func test_migrateObjectsFromValet_migratesSingleKeyValuePairSuccessfully()
@@ -644,6 +684,31 @@ class ValetSecureEnclaveTests: XCTestCase
         }
     }
 
+    func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() {
+        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainTests else {
+            return
+        }
+        
+        let otherValet = VALValet(identifier: "Migrate_Me_To_Valet", accessibility: .afterFirstUnlock)!
+
+        // Clean up any dangling keychain items before we start this tests.
+        otherValet.removeAllObjects()
+
+        let keyStringPairToMigrateMap = ["foo" : "bar", "testing" : "migration", "is" : "quite", "entertaining" : "if", "you" : "don't", "screw" : "up"]
+        for (key, value) in keyStringPairToMigrateMap {
+            XCTAssertTrue(otherValet.setString(value, forKey: key))
+        }
+
+        XCTAssertTrue(valet.canAccessKeychain())
+        XCTAssertTrue(otherValet.canAccessKeychain())
+        XCTAssertNil(valet.migrateObjects(from: otherValet, removeOnCompletion: false))
+
+        for (key, value) in keyStringPairToMigrateMap {
+            XCTAssertEqual(valet.string(forKey: key), value)
+            XCTAssertEqual(otherValet.string(forKey: key), value)
+        }
+    }
+
     // MARK: Protected Methods
 
     func test_secItemFormatDictionaryWithKey()
@@ -685,9 +750,15 @@ class ValetSynchronizableTests: XCTestCase
         XCTAssertFalse(valet == localValet)
         XCTAssertFalse(valet === localValet)
 
+        // Setting
         XCTAssertTrue(valet.setString("butts", forKey: "cloud"))
         XCTAssertEqual("butts", valet.string(forKey: "cloud"))
         XCTAssertNil(localValet.string(forKey: "cloud"))
+        
+        // Removal
+        XCTAssertTrue(localValet.setString("snake people", forKey: "millennials"))
+        XCTAssertTrue(valet.removeObject(forKey: "millennials"))
+        XCTAssertEqual("snake people", localValet.string(forKey: "millennials"))
     }
 
     func test_setStringForKey()
