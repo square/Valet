@@ -87,7 +87,7 @@ internal final class SecItem {
         return execute(secItemFunction: SecItemAdd, query: attributes)
     }
     
-    internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) -> Result<Void, OSStatus> {
+    internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) -> Result<Void?, OSStatus> {
         guard attributes.count > 0 else {
             ErrorHandler.assertionFailure("Must provide attributes with at least one item")
             return Result.error(errSecParam)
