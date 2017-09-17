@@ -17,6 +17,14 @@
 		167296471F6E02E20090E3D8 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296451F6E02E20090E3D8 /* ErrorHandler.swift */; };
 		167296491F6E04630090E3D8 /* SecItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296481F6E04630090E3D8 /* SecItemTests.swift */; };
 		1672964A1F6E04630090E3D8 /* SecItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296481F6E04630090E3D8 /* SecItemTests.swift */; };
+		168CB3851F6F0F9000605B6D /* Flavor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3821F6F0A8C00605B6D /* Flavor.swift */; };
+		168CB3861F6F0F9000605B6D /* KeychainUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3831F6F0A8C00605B6D /* KeychainUtility.swift */; };
+		168CB3871F6F0F9000605B6D /* SecItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3811F6F0A8B00605B6D /* SecItem.swift */; };
+		168CB3881F6F0F9000605B6D /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3841F6F0A8C00605B6D /* Service.swift */; };
+		168CB3891F6F0F9100605B6D /* Flavor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3821F6F0A8C00605B6D /* Flavor.swift */; };
+		168CB38A1F6F0F9100605B6D /* KeychainUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3831F6F0A8C00605B6D /* KeychainUtility.swift */; };
+		168CB38B1F6F0F9100605B6D /* SecItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3811F6F0A8B00605B6D /* SecItem.swift */; };
+		168CB38C1F6F0F9100605B6D /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3841F6F0A8C00605B6D /* Service.swift */; };
 		26E682841BA8B42100EFF4EA /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = EA1E1F861A8C46080067C991 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A531BA8B53100E039CD /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A541BA8B53C00E039CD /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -583,12 +591,16 @@
 			files = (
 				26F06A8D1BA8BC8F00E039CD /* VALValet.m in Sources */,
 				167296371F6DECDF0090E3D8 /* MigrationResult.swift in Sources */,
+				168CB38A1F6F0F9100605B6D /* KeychainUtility.swift in Sources */,
 				26F06A8E1BA8BC9000E039CD /* VALSecureEnclaveValet.m in Sources */,
+				168CB3891F6F0F9100605B6D /* Flavor.swift in Sources */,
+				168CB38C1F6F0F9100605B6D /* Service.swift in Sources */,
 				1672963A1F6DF4230090E3D8 /* Identifier.swift in Sources */,
 				371E38141E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
 				167296341F6DE8D00090E3D8 /* Accessibility.swift in Sources */,
 				167296461F6E02E20090E3D8 /* ErrorHandler.swift in Sources */,
 				26F06A8F1BA8BC9200E039CD /* VALSynchronizableValet.m in Sources */,
+				168CB38B1F6F0F9100605B6D /* SecItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -598,12 +610,16 @@
 			files = (
 				26F06A921BA8BC9700E039CD /* VALValet.m in Sources */,
 				167296381F6DECDF0090E3D8 /* MigrationResult.swift in Sources */,
+				168CB3861F6F0F9000605B6D /* KeychainUtility.swift in Sources */,
 				26F06A911BA8BC9500E039CD /* VALSecureEnclaveValet.m in Sources */,
+				168CB3851F6F0F9000605B6D /* Flavor.swift in Sources */,
+				168CB3881F6F0F9000605B6D /* Service.swift in Sources */,
 				1672963B1F6DF4230090E3D8 /* Identifier.swift in Sources */,
 				371E38151E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
 				167296351F6DE8D00090E3D8 /* Accessibility.swift in Sources */,
 				167296471F6E02E20090E3D8 /* ErrorHandler.swift in Sources */,
 				26F06A901BA8BC9400E039CD /* VALSynchronizableValet.m in Sources */,
+				168CB3871F6F0F9000605B6D /* SecItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
