@@ -3,7 +3,7 @@
 //  Valet
 //
 //  Created by Eric Muller on 9/16/17.
-//  Copyright © 2017 Square, Inc. All rights reserved.
+//  Copyright © 2017 Square, Inc.
 //
 
 #import <Valet/Valet.h>

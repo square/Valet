@@ -364,7 +364,7 @@ class ValetTests: XCTestCase
         XCTAssertEqual(invalidQueryError, valet.migrateObjects(matchingQuery: [:], removeOnCompletion: false)?.valetMigrationError)
         XCTAssertEqual(invalidQueryError, valet.migrateObjects(matchingQuery: [:], removeOnCompletion: true)?.valetMigrationError)
 
-        var invalidQuery: [String: AnyObject] = [
+        var invalidQuery: [String: AnyHashable] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecMatchLimit as String: kSecMatchLimitOne
         ]
@@ -436,7 +436,7 @@ class ValetTests: XCTestCase
         let status = SecItemAdd(keychainData, nil)
         XCTAssertEqual(status, errSecSuccess)
         
-        let query: [String: Any] = [
+        let query: [String : AnyHashable] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: identifier
         ]
