@@ -22,10 +22,12 @@
 import Foundation
 
 
-internal func execute(in lock: NSLock, block: () -> Void) {
+internal func execute<ReturnType>(in lock: NSLock, block: () -> ReturnType) -> ReturnType {
     lock.lock()
-    block()
-    lock.unlock()
+    defer {
+        lock.unlock()
+    }
+    return block()
 }
 
 
@@ -80,11 +82,11 @@ internal final class SecItem {
     // MARK: Internal Class Methods
     
     internal static func copy<DesiredType>(matching query: [String : AnyHashable]) -> Result<DesiredType, OSStatus> {
-        return execute(secItemFunction: SecItemCopyMatching, query: query)
+        return executeSecItem(function: SecItemCopyMatching, query: query)
     }
     
     internal static func add<DesiredType>(attributes: [String : AnyHashable]) -> Result<DesiredType, OSStatus> {
-        return execute(secItemFunction: SecItemAdd, query: attributes)
+        return executeSecItem(function: SecItemAdd, query: attributes)
     }
     
     internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) -> Result<Void?, OSStatus> {
@@ -99,7 +101,7 @@ internal final class SecItem {
         }
         
         var status = errSecNotAvailable
-        Valet.execute(in: secItemLock) {
+        execute(in: secItemLock) {
             status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
         }
         
@@ -119,9 +121,14 @@ internal final class SecItem {
             return Result.error(errSecParam)
         }
         
+        var secItemQuery = query
+        #if os(macOS)
+            // This line must exist on OS X, but must not exist on iOS.
+            secItemQuery[kSecMatchLimit as String] = kSecMatchLimitAll
+        #endif
         var status = errSecNotAvailable
-        Valet.execute(in: secItemLock) {
-            status = SecItemDelete(query as CFDictionary)
+        execute(in: secItemLock) {
+            status = SecItemDelete(secItemQuery as CFDictionary)
         }
         
         if status == errSecSuccess {
@@ -136,7 +143,7 @@ internal final class SecItem {
     
     // MARK: Private Class Methods
     
-    private static func execute<DesiredType>(secItemFunction: (CFDictionary, UnsafeMutablePointer<CoreFoundation.CFTypeRef?>?) -> OSStatus, query: [String : AnyHashable]) -> Result<DesiredType, OSStatus> {
+    private static func executeSecItem<DesiredType>(function: (CFDictionary, UnsafeMutablePointer<CoreFoundation.CFTypeRef?>?) -> OSStatus, query: [String : AnyHashable]) -> Result<DesiredType, OSStatus> {
         guard query.count > 0 else {
             ErrorHandler.assertionFailure("Must provide a query with at least one item")
             return Result.error(errSecParam)
@@ -144,8 +151,8 @@ internal final class SecItem {
         
         var status = errSecNotAvailable
         var result: AnyObject? = nil
-        Valet.execute(in: secItemLock) {
-            status = secItemFunction(query as CFDictionary, &result)
+        execute(in: secItemLock) {
+            status = function(query as CFDictionary, &result)
         }
         
         if status == errSecSuccess {

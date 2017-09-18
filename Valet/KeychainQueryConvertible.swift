@@ -1,8 +1,8 @@
 //
-//  Identifier.swift
+//  KeychainQueryConvertible.swift
 //  Valet
 //
-//  Created by Dan Federman and Eric Muller on 9/16/17.
+//  Created by Dan Federman and Eric Muller on 9/17/17.
 //  Copyright © 2017 Square, Inc.
 //
 //
@@ -22,28 +22,8 @@
 import Foundation
 
 
-public typealias Key = String
-
-public struct Identifier: CustomStringConvertible {
+public protocol KeychainQueryConvertible {
     
-    // MARK: Initialization
-    
-    public init?(nonEmpty string: String?) {
-        guard let string = string, !string.isEmpty else {
-            return nil
-        }
-        
-        backingString = string
-    }
-    
-    // MARK: CustomStringConvertible
-    
-    public var description: String {
-        return backingString
-    }
-    
-    // MARK: Private Properties
-    
-    private let backingString: String
+    var keychainQuery: [String : AnyHashable] { get }
     
 }

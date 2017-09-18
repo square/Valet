@@ -36,6 +36,13 @@ extension VALSecureEnclaveValet {
 }
 
 
+extension Error
+{
+    // The Error.code -> VALMigrationError conversion is gross right now:
+    var valetMigrationError: VALMigrationError { return VALMigrationError(rawValue: UInt((self as NSError).code))! }
+}
+
+
 @available (iOS 8, OSX 10.11, *)
 class ValetSecureEnclaveTests: XCTestCase
 {

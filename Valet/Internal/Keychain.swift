@@ -1,0 +1,390 @@
+//
+//  Keychain.swift
+//  Valet
+//
+//  Created by Dan Federman and Eric Muller on 9/16/17.
+//  Copyright © 2017 Square, Inc.
+//
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
+import Foundation
+
+
+internal final class Keychain {
+    
+    // MARK: Private Static Properties
+    
+    private static let canaryKey = "VAL_KeychainCanaryUsername"
+    private static let canaryValue = "VAL_KeychainCanaryPassword"
+    
+    // MARK: Keychain Accessibility
+    
+    internal static func canAccess(attributes: [String : AnyHashable]) -> Bool {
+        func isCanaryValueInKeychain() -> Bool {
+            if case let .success(retrievedCanaryValue) = string(for: canaryKey, options: attributes),
+                retrievedCanaryValue == canaryValue {
+                return true
+                
+            } else {
+                return false
+            }
+        }
+        
+        if isCanaryValueInKeychain() {
+            return true
+            
+        } else {
+            var secItemQuery = attributes
+            secItemQuery[kSecAttrAccount as String] = canaryKey
+            secItemQuery[kSecValueData as String] = canaryValue.data(using: .utf8)
+            let  _ : SecItem.Result<Void, OSStatus> = SecItem.add(attributes: secItemQuery)
+            
+            return isCanaryValueInKeychain()
+        }
+    }
+    
+    // MARK: Getters
+    
+    internal static func string(for key: Key, options: [String : AnyHashable]) -> SecItem.Result<String, OSStatus> {
+        switch object(for: key, options: options) {
+        case let .success(data):
+            if let string = String(data: data, encoding: .utf8) {
+                return SecItem.Result.success(string)
+            } else {
+                return SecItem.Result.error(errSecItemNotFound)
+            }
+        case let .error(status):
+            return SecItem.Result.error(status)
+        }
+    }
+    
+    internal static func object(for key: Key, options: [String : AnyHashable]) -> SecItem.Result<Data, OSStatus> {
+        guard !key.isEmpty else {
+            ErrorHandler.assertionFailure("Can not set a value with an empty key.")
+            return SecItem.Result.error(errSecParam)
+        }
+        
+        var secItemQuery = options
+        secItemQuery[kSecAttrAccount as String] = key
+        secItemQuery[kSecMatchLimit as String] = kSecMatchLimitOne
+        secItemQuery[kSecReturnData as String] = true
+        
+        return SecItem.copy(matching: secItemQuery)
+    }
+    
+    // MARK: Setters
+    
+    internal static func set(string: String, for key: Key, options: [String: AnyHashable]) -> SecItem.Result<Void?, OSStatus> {
+        guard let data = string.data(using: .utf8), !data.isEmpty else {
+            ErrorHandler.assertionFailure("Can not set an empty value.")
+            return SecItem.Result.error(errSecParam)
+        }
+        
+        return set(object: data, for: key, options: options)
+    }
+    
+    internal static func set(object: Data, for key: Key, options: [String: AnyHashable]) -> SecItem.Result<Void?, OSStatus> {
+        guard !key.isEmpty else {
+            ErrorHandler.assertionFailure("Can not set a value with an empty key.")
+            return SecItem.Result.error(errSecParam)
+        }
+        
+        guard !object.isEmpty else {
+            ErrorHandler.assertionFailure("Can not set an empty value.")
+            return SecItem.Result.error(errSecParam)
+        }
+        
+        var secItemQuery = options
+        secItemQuery[kSecAttrAccount as String] = key
+        
+        #if os(macOS)
+            // Never update an existing keychain item on OS X, since the existing item could have unauthorized apps in the Access Control List. Fixes zero-day Keychain vuln found here: https://drive.google.com/file/d/0BxxXk1d3yyuZOFlsdkNMSGswSGs/view
+            _ = SecItem.delete(itemsMatching: secItemQuery)
+            secItemQuery[kSecValueData as String] = object
+            return SecItem.add(attributes: secItemQuery)
+        #else
+            
+            if case .success = containsObject(for: key, options: options) {
+                return SecItem.update(attributes: [kSecValueData as String: object], forItemsMatching: secItemQuery)
+            } else {
+                secItemQuery[kSecValueData as String] = object
+                return SecItem.add(attributes: secItemQuery)
+            }
+        #endif
+    }
+    
+    // MARK: Removal
+    
+    internal static func removeObject(for key: Key, options: [String : AnyHashable]) -> SecItem.Result<Void?, OSStatus> {
+        guard !key.isEmpty else {
+            ErrorHandler.assertionFailure("Can not set a value with an empty key.")
+            return SecItem.Result.error(errSecParam)
+        }
+        
+        var secItemQuery = options
+        secItemQuery[kSecAttrAccount as String] = key
+        
+        switch SecItem.delete(itemsMatching: secItemQuery) {
+        case .success:
+            return SecItem.Result.success(())
+            
+        case let .error(status):
+            switch status {
+            case errSecInteractionNotAllowed, errSecMissingEntitlement:
+                return SecItem.Result.error(status)
+                
+            default:
+                // We succeeded as long as we can confirm that the item is not in the keychain.
+                return SecItem.Result.success(())
+            }
+        }
+    }
+    
+    internal static func removeAllObjects(matching options: [String : AnyHashable]) -> SecItem.Result<Void, OSStatus> {
+        switch SecItem.delete(itemsMatching: options) {
+        case .success:
+            return SecItem.Result.success(())
+            
+        case let .error(status):
+            switch status {
+            case errSecInteractionNotAllowed, errSecMissingEntitlement:
+                return SecItem.Result.error(status)
+                
+            default:
+                // We succeeded as long as we can confirm that the item is not in the keychain.
+                return SecItem.Result.success(())
+            }
+        }
+    }
+    
+    // MARK: Contains
+    
+    internal static func containsObject(for key: Key, options: [String : AnyHashable]) -> SecItem.Result<Void?, OSStatus> {
+        guard !key.isEmpty else {
+            ErrorHandler.assertionFailure("Can not set a value with an empty key.")
+            return SecItem.Result.error(errSecParam)
+        }
+        
+        var secItemQuery = options
+        secItemQuery[kSecAttrAccount as String] = key
+        
+        return SecItem.copy(matching: secItemQuery)
+    }
+    
+    // MARK: AllObjects
+    
+    internal static func allKeys(options: [String: AnyHashable]) -> SecItem.Result<Set<String>, OSStatus> {
+        var secItemQuery = options
+        secItemQuery[kSecMatchLimit as String] = kSecMatchLimitAll
+        secItemQuery[kSecReturnAttributes as String] = true
+        
+        let result: SecItem.Result<Any, OSStatus> = SecItem.copy(matching: secItemQuery)
+        switch result {
+        case let .success(collection):
+            if let singleMatch = collection as? [String : AnyHashable], let singleKey = singleMatch[kSecAttrAccount as String] as? String {
+                return SecItem.Result.success(Set([singleKey]))
+                
+            } else if let multipleMatches = collection as? [[String: AnyHashable]] {
+                return SecItem.Result.success(Set(multipleMatches.flatMap({ attributes in
+                    return attributes[kSecAttrAccount as String] as? String
+                })))
+                
+            } else {
+                return SecItem.Result.success(Set())
+            }
+            
+        case let .error(status):
+            return SecItem.Result.error(status)
+        }
+    }
+    
+    // MARK: Migration
+    
+    internal static func migrateObjects(matching query: [String : AnyHashable], into destinationAttributes: [String : AnyHashable], removeOnCompletion: Bool) -> MigrationResult {
+        guard query.count > 0 else {
+            ErrorHandler.assertionFailure("Migration requires secItemQuery to contain values.")
+            return .invalidQuery
+        }
+        
+        guard query[kSecMatchLimit as String] as? String as CFString? != kSecMatchLimitOne else {
+            ErrorHandler.assertionFailure("Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.")
+            return .invalidQuery
+        }
+        
+        guard query[kSecReturnData as String] as? Bool != true else {
+            ErrorHandler.assertionFailure("kSecReturnData is not supported in a migration query.")
+            return .invalidQuery
+        }
+        
+        guard query[kSecReturnAttributes as String] as? Bool != false else {
+            ErrorHandler.assertionFailure("Migration requires kSecReturnAttributes to be set to kCFBooleanTrue.")
+            return .invalidQuery
+        }
+        
+        guard query[kSecReturnRef as String] as? Bool != true else {
+            ErrorHandler.assertionFailure("kSecReturnRef is not supported in a migration query.")
+            return .invalidQuery
+        }
+        
+        guard query[kSecReturnPersistentRef as String] as? Bool != false else {
+            ErrorHandler.assertionFailure("Migration requires SecReturnPersistentRef to be set to kCFBooleanTrue.")
+            return .invalidQuery
+        }
+        
+        guard let _ = query[kSecClass as String] as? String else {
+            ErrorHandler.assertionFailure("Migration requires a kSecClass to be set to a valid kSecClass string.")
+            return .invalidQuery
+        }
+        
+        guard query[kSecUseOperationPrompt as String] == nil else {
+            ErrorHandler.assertionFailure("kSecUseOperationPrompt is not supported in a migration query. Keychain items can not be migrated en masse from the Secure Enclave.")
+            return .invalidQuery
+        }
+        
+        var secItemQuery = query
+        secItemQuery[kSecMatchLimit as String] = kSecMatchLimitAll
+        secItemQuery[kSecReturnAttributes as String] = true
+        secItemQuery[kSecReturnData as String] = false
+        secItemQuery[kSecReturnRef as String] = false
+        secItemQuery[kSecReturnPersistentRef as String] = true
+        
+        let result: SecItem.Result<Any, OSStatus> = SecItem.copy(matching: secItemQuery)
+        let retrievedItemsToMigrate: [[String: AnyHashable]]
+        switch result {
+        case let .success(collection):
+            if let singleMatch = collection as? [String : AnyHashable] {
+                retrievedItemsToMigrate = [singleMatch]
+                
+            } else if let multipleMatches = collection as? [[String: AnyHashable]] {
+                retrievedItemsToMigrate = multipleMatches
+                
+            } else {
+                return .dataInQueryResultInvalid
+            }
+            
+        case let .error(status):
+            switch status {
+            case errSecItemNotFound:
+                return .noItemsToMigrateFound
+                
+            case errSecParam:
+                return .invalidQuery
+                
+            default:
+                return .couldNotReadKeychain
+            }
+        }
+        
+        // Now that we have the persistent refs with attributes, get the data associated with each keychain entry.
+        var retrievedItemsToMigrateWithData = [[String : AnyHashable]]()
+        for retrievedItem in retrievedItemsToMigrate {
+            guard let retrievedPersistentRef = retrievedItem[kSecValuePersistentRef as String] else {
+                return .couldNotReadKeychain
+            }
+            
+            let retrieveDataQuery: [String : AnyHashable] = [
+                kSecValuePersistentRef as String : retrievedPersistentRef,
+                kSecReturnData as String : true
+            ]
+            
+            let retrievedData: SecItem.Result<Data, OSStatus> = SecItem.copy(matching: retrieveDataQuery)
+            switch retrievedData {
+            case let .success(data):
+                guard !data.isEmpty else {
+                    return .dataInQueryResultInvalid
+                }
+                
+                var retrievedItemToMigrateWithData = retrievedItem
+                retrievedItemToMigrateWithData[kSecValueData as String] = data
+                retrievedItemsToMigrateWithData.append(retrievedItemToMigrateWithData)
+                
+            case .error:
+                return .couldNotReadKeychain
+            }
+        }
+        
+        // Sanity check that we are capable of migrating the data.
+        var keysToMigrate = Set<String>()
+        for keychainEntry in retrievedItemsToMigrateWithData {
+            guard let key = keychainEntry[kSecAttrAccount as String] as? String, key != Keychain.canaryKey else {
+                // We don't care about this key. Move along.
+                continue
+            }
+            
+            guard !key.isEmpty else {
+                return .keyInQueryResultInvalid
+            }
+            
+            guard !keysToMigrate.contains(key) else {
+                return .duplicateKeyInQueryResult
+            }
+            
+            guard let data = keychainEntry[kSecValueData as String] as? Data, !data.isEmpty else {
+                return .dataInQueryResultInvalid
+            }
+            
+            guard case let .error(status) = Keychain.containsObject(for: key, options: destinationAttributes), status == errSecItemNotFound else {
+                return .keyInQueryResultAlreadyExistsInValet
+            }
+            
+            keysToMigrate.insert(key)
+        }
+        
+        // All looks good. Time to actually migrate.
+        var alreadyMigratedKeys = [String]()
+        func revertMigration() {
+            // Something has gone wrong. Remove all migrated items.
+            for alreadyMigratedKey in alreadyMigratedKeys {
+                _ = Keychain.removeObject(for: alreadyMigratedKey, options: destinationAttributes)
+            }
+        }
+        
+        for keychainEntry in retrievedItemsToMigrateWithData {
+            guard let key = keychainEntry[kSecAttrAccount as String] as? String else {
+                revertMigration()
+                return .keyInQueryResultInvalid
+            }
+            guard let value = keychainEntry[kSecValueData as String] as? Data else {
+                revertMigration()
+                return .dataInQueryResultInvalid
+            }
+            
+            switch Keychain.set(object: value, for: key, options: destinationAttributes) {
+            case .success:
+                alreadyMigratedKeys.append(key)
+                
+            case .error:
+                revertMigration()
+                return .couldNotWriteToKeychain
+            }
+        }
+        
+        // Remove data if requested.
+        if removeOnCompletion {
+            switch Keychain.removeAllObjects(matching: query) {
+            case .success:
+                // Nothing to do here.
+                break
+                
+            case .error:
+                revertMigration()
+                return .removalFailed
+            }
+        }
+        
+        return .success
+    }
+    
+}

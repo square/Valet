@@ -26,6 +26,12 @@ internal enum Service: CustomStringConvertible {
     case standard(Identifier, Accessibility, Flavor)
     case sharedAccessGroup(Identifier, Accessibility, Flavor)
     
+    // MARK: Equatable
+    
+    internal static func ==(lhs: Service, rhs: Service) -> Bool {
+        return lhs.description == rhs.description
+    }
+
     // MARK: CustomStringConvertible
     
     internal var description: String {
@@ -43,7 +49,7 @@ internal enum Service: CustomStringConvertible {
         return [
             kSecClass as String : kSecClassGenericPassword as String,
             kSecAttrService as String : description,
-            kSecAttrAccessible as String : accessability.description
+            kSecAttrAccessible as String : accessability.secAccessibilityAttribute
         ]
     }
     
