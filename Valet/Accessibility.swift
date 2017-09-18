@@ -55,7 +55,7 @@ public enum Accessibility: CustomStringConvertible {
         case .whenPasscodeSetThisDeviceOnly:
             return "AccessibleWhenPasscodeSetThisDeviceOnly"
         case .whenUnlocked:
-            return "AccessibleWhenUnlockedThisDeviceOnly"
+            return "AccessibleWhenUnlocked"
         case .whenUnlockedThisDeviceOnly:
             return "AccessibleWhenUnlockedThisDeviceOnly"
         }

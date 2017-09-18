@@ -1,10 +1,9 @@
 //
-//  Valet.swift
+//  SynchronizableValet.swift
 //  Valet
 //
-//  Created by Dan Federman and Eric Muller on 9/17/17.
+//  Created by Dan Federman on 9/17/17.
 //  Copyright © 2017 Square, Inc.
-//
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -22,29 +21,30 @@
 import Foundation
 
 
-public final class Valet: NSObject, KeychainQueryConvertible {
+@available(iOS 8.2, macOS 10.9, *)
+public final class SynchronizableValet: NSObject, KeychainQueryConvertible {
     
     // MARK: Public Class Methods
     
-    public class func valet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        let key = Service.standard(identifier, accessibility, .vanilla).description as NSString
+    public class func valet(with identifier: Identifier, accessibility: SynchronizableAccessibility) -> SynchronizableValet {
+        let key = Service.standard(identifier, accessibility.accessibility, .synchronizable).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
         } else {
-            let valet = Valet(identifier: identifier, accessibility: accessibility)
+            let valet = SynchronizableValet(identifier: identifier, accessibility: accessibility)
             identifierToValetMap.setObject(valet, forKey: key)
             return valet
         }
     }
     
-    public class func sharedAccessGroupValet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        let key = Service.sharedAccessGroup(identifier, accessibility, .vanilla).description as NSString
+    public class func sharedAccessGroupValet(with identifier: Identifier, accessibility: SynchronizableAccessibility) -> SynchronizableValet {
+        let key = Service.sharedAccessGroup(identifier, accessibility.accessibility, .synchronizable).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
         } else {
-            let valet = Valet(sharedAccess: identifier, accessibility: accessibility)
+            let valet = SynchronizableValet(sharedAccess: identifier, accessibility: accessibility)
             identifierToValetMap.setObject(valet, forKey: key)
             return valet
         }
@@ -52,13 +52,13 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     // MARK: Equatable
     
-    public static func ==(lhs: Valet, rhs: Valet) -> Bool {
+    public static func ==(lhs: SynchronizableValet, rhs: SynchronizableValet) -> Bool {
         return lhs.service == rhs.service
     }
     
     // MARK: Private Class Properties
     
-    private static let identifierToValetMap = NSMapTable<NSString, Valet>.strongToWeakObjects()
+    private static let identifierToValetMap = NSMapTable<NSString, SynchronizableValet>.strongToWeakObjects()
     
     // MARK: Initialization
     
@@ -67,16 +67,22 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         fatalError("Do not use this initializer")
     }
     
-    private init(identifier: Identifier, accessibility: Accessibility) {
-        service = .standard(identifier, accessibility, .vanilla)
-        keychainQuery = service.baseQuery
+    private init(identifier: Identifier, accessibility: SynchronizableAccessibility) {
+        service = .standard(identifier, accessibility.accessibility, .synchronizable)
+        var baseQuery = service.baseQuery
+        baseQuery[kSecAttrSynchronizable as String] = true
+        keychainQuery = baseQuery
+        
         self.accessibility = accessibility
         self.identifier = identifier
     }
     
-    private init(sharedAccess identifier: Identifier, accessibility: Accessibility) {
-        service = .sharedAccessGroup(identifier, accessibility, .vanilla)
-        keychainQuery = service.baseQuery
+    private init(sharedAccess identifier: Identifier, accessibility: SynchronizableAccessibility) {
+        service = .sharedAccessGroup(identifier, accessibility.accessibility, .synchronizable)
+        var baseQuery = service.baseQuery
+        baseQuery[kSecAttrSynchronizable as String] = true
+        keychainQuery = baseQuery
+        
         self.accessibility = accessibility
         self.identifier = identifier
     }
@@ -93,7 +99,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     // MARK: Public Properties
     
-    public let accessibility: Accessibility
+    public let accessibility: SynchronizableAccessibility
     public let identifier: Identifier
     
     // MARK: Public Methods

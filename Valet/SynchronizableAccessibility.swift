@@ -1,0 +1,54 @@
+//
+//  SynchronizableAccessibility.swift
+//  Valet
+//
+//  Created by Dan Federman on 9/17/17.
+//  Copyright © 2017 Square, Inc.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
+import Foundation
+
+
+public enum SynchronizableAccessibility: CustomStringConvertible {
+    /// Valet data can only be accessed while the device is unlocked. This attribute is recommended for data that only needs to be accessible while the application is in the foreground. Valet data with this attribute will migrate to a new device when using encrypted backups.
+    case whenUnlocked
+    /// Valet data can only be accessed once the device has been unlocked after a restart. This attribute is recommended for data that needs to be accessible by background applications. Valet data with this attribute will migrate to a new device when using encrypted backups.
+    case afterFirstUnlock
+    /// Valet data can always be accessed regardless of the lock state of the device. This attribute is not recommended. Valet data with this attribute will migrate to a new device when using encrypted backups.
+    case always
+    
+    // MARK: CustomStringConvertible
+    
+    public var description: String {
+        return accessibility.description
+    }
+    
+    // MARK: Public Properties
+    
+    public var accessibility: Accessibility {
+        switch self {
+        case .afterFirstUnlock:
+            return .afterFirstUnlock
+        case .always:
+            return .always
+        case .whenUnlocked:
+            return .whenUnlocked
+        }
+    }
+    
+    public var secAccessibilityAttribute: String {
+        return accessibility.secAccessibilityAttribute
+    }
+}

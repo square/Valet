@@ -23,14 +23,14 @@ import Valet
 import XCTest
 
 
-// The iPhone simulator fakes entitlements, allowing us to test the iCloud Keychain (VALSynchronizableValet) code without writing a signed host app.
-#if (arch(i386) || arch(x86_64)) && os(iOS)
+// Until we can write a signed host app on macOS, we can only test the iCloud Keychain (SynchronizableValet) code on iOS.
+#if os(iOS)
     
     @available (iOS 8.2, OSX 10.11, *)
     class ValetSynchronizableTests: XCTestCase
     {
-        static let identifier = "valet_testing"
-        let valet = VALSynchronizableValet(identifier: identifier, accessibility: .whenUnlocked)!
+        static let identifier = Identifier(nonEmpty: "valet_testing")!
+        let valet = SynchronizableValet.valet(with: identifier, accessibility: .whenUnlocked)
         let key = "key"
         let passcode = "topsecret"
         
@@ -40,45 +40,37 @@ import XCTest
             valet.removeAllObjects()
         }
         
-        func test_initializers_withDeviceScopeAreUnsupported()
-        {
-            XCTAssertNil(VALSynchronizableValet(identifier: valet.identifier, accessibility: .whenUnlockedThisDeviceOnly))
-            XCTAssertNil(VALSynchronizableValet(identifier: valet.identifier, accessibility: .afterFirstUnlockThisDeviceOnly))
-            XCTAssertNil(VALSynchronizableValet(identifier: valet.identifier, accessibility: .whenPasscodeSetThisDeviceOnly))
-            XCTAssertNil(VALSynchronizableValet(identifier: valet.identifier, accessibility: .alwaysThisDeviceOnly))
-        }
-        
         func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
         {
-            let localValet = VALValet(identifier: valet.identifier, accessibility: valet.accessibility)!
+            let localValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility.accessibility)
             XCTAssertFalse(valet == localValet)
             XCTAssertFalse(valet === localValet)
             
             // Setting
-            XCTAssertTrue(valet.setString("butts", forKey: "cloud"))
-            XCTAssertEqual("butts", valet.string(forKey: "cloud"))
-            XCTAssertNil(localValet.string(forKey: "cloud"))
+            XCTAssertTrue(valet.set(string: "butts", for: "cloud"))
+            XCTAssertEqual("butts", valet.string(for: "cloud"))
+            XCTAssertNil(localValet.string(for: "cloud"))
             
             // Removal
-            XCTAssertTrue(localValet.setString("snake people", forKey: "millennials"))
-            XCTAssertTrue(valet.removeObject(forKey: "millennials"))
-            XCTAssertEqual("snake people", localValet.string(forKey: "millennials"))
+            XCTAssertTrue(localValet.set(string: "snake people", for: "millennials"))
+            XCTAssertTrue(valet.removeObject(for: "millennials"))
+            XCTAssertEqual("snake people", localValet.string(for: "millennials"))
         }
         
         func test_setStringForKey()
         {
-            XCTAssertNil(valet.string(forKey: key))
-            XCTAssertTrue(valet.setString(passcode, forKey: key))
-            XCTAssertEqual(passcode, valet.string(forKey: key))
+            XCTAssertNil(valet.string(for: key))
+            XCTAssertTrue(valet.set(string: passcode, for: key))
+            XCTAssertEqual(passcode, valet.string(for: key))
         }
         
         func test_removeObjectForKey()
         {
-            XCTAssertTrue(valet.setString(passcode, forKey:key))
-            XCTAssertEqual(passcode, valet.string(forKey: key))
+            XCTAssertTrue(valet.set(string: passcode, for: key))
+            XCTAssertEqual(passcode, valet.string(for: key))
             
-            XCTAssertTrue(valet.removeObject(forKey: key))
-            XCTAssertNil(valet.string(forKey: key))
+            XCTAssertTrue(valet.removeObject(for: key))
+            XCTAssertNil(valet.string(for: key))
         }
     }
     

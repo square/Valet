@@ -25,7 +25,7 @@ import XCTest
 extension VALSecureEnclaveValet {
     
     class var supportsSecureEnclaveKeychainTests: Bool {
-        // The iPhone simulator fakes entitlements, allowing us to test the iCloud Keychain (VALSynchronizableValet) and the secure enclave (VALSecureEnclaveValet) code without writing a signed host app.
+        // Until we can write a signed host app on macOS, we can only test the iCloud Keychain (SynchronizableValet) code on iOS.
         #if TARGET_IPHONE_SIMULATOR
             return supportsSecureEnclaveKeychainItems
         #else
