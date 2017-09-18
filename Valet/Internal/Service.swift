@@ -22,7 +22,7 @@
 import Foundation
 
 
-internal enum Service: CustomStringConvertible {
+internal enum Service: CustomStringConvertible, Equatable {
     case standard(Identifier, Accessibility, Flavor)
     case sharedAccessGroup(Identifier, Accessibility, Flavor)
     
