@@ -67,13 +67,7 @@ internal final class SecItem {
             status = SecItemAdd(query, &result)
         }
         
-        guard status == errSecSuccess else {
-            ErrorHandler.assertionFailure("Could not find shared access group prefix.")
-            return nil
-        }
-        
-        let queryResult = result as! [CFString : AnyHashable]
-        guard let accessGroup = queryResult[kSecAttrAccessGroup] as? String else {
+        guard status == errSecSuccess, let queryResult = result as? [CFString : AnyHashable], let accessGroup = queryResult[kSecAttrAccessGroup] as? String else {
             ErrorHandler.assertionFailure("Could not find shared access group prefix.")
             return nil
         }
