@@ -37,6 +37,11 @@ import XCTest
         override func setUp()
         {
             super.setUp()
+            
+            ErrorHandler.customAssertBody = { _, _, _, _ in
+                // Nothing to do here.
+            }
+            
             valet.removeAllObjects()
         }
         
