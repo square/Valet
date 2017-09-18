@@ -98,7 +98,7 @@ internal final class SecItem {
             status = SecItemCopyMatching(query as CFDictionary, &result)
         }
         
-        if status == errSecSuccess {
+        if status == errSecSuccess, let result = result {
             return .success(result as! DesiredType)
             
         } else {

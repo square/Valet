@@ -391,17 +391,17 @@ class ValetTests: XCTestCase
         
         invalidQuery = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecUseOperationPrompt as String: "This should fail"
+            kSecAttrAccessControl as String: NSNull()
         ]
-        // Migration queries must not have kSecUseOperationPrompt set
+        // Migration queries must not have kSecAttrAccessControl set
         XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
-        
     }
 
     func test_migrateObjectsMatching_bailsOutIfConflictExistsInQueryResult()
     {
         let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
-
+        migrationValet.removeAllObjects()
+        
         XCTAssertTrue(valet.set(string: passcode, for: key))
         XCTAssertTrue(otherValet.set(string: passcode, for:key))
 
