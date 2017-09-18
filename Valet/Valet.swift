@@ -21,11 +21,14 @@
 
 import Foundation
 
-
+/// Reads and writes keychain elements.
 public final class Valet: NSObject, KeychainQueryConvertible {
     
     // MARK: Public Class Methods
     
+    /// - parameter identifier: A non-empty string that uniquely identifies a Valet.
+    /// - parameter accessibility: Determines when the values in this Valet will be accessible.
+    /// - returns: A Valet that reads/writes keychain elements with the desired accessibility.
     public class func valet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
         let key = Service.standard(identifier, accessibility, .vanilla).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
@@ -38,6 +41,9 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    /// - parameter accessibility: Determines when the values in this Valet will be accessible.
+    /// - returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedAccessGroupValet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
         let key = Service.sharedAccessGroup(identifier, accessibility, .vanilla).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
@@ -52,6 +58,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     // MARK: Equatable
     
+    /// - returns: `true` if lhs and rhs both read from and write to the same sandbox within the keychain.
     public static func ==(lhs: Valet, rhs: Valet) -> Bool {
         return lhs.service == rhs.service
     }
@@ -98,12 +105,17 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     // MARK: Public Methods
     
+    /// - returns: `true` if the keychain is accessible for reading and writing, `false` otherwise.
+    /// - note: Determined by writing a value to the keychain and then reading it back out.
     public func canAccessKeychain() -> Bool {
         return execute(in: lock) {
             return Keychain.canAccess(attributes: keychainQuery)
         }
     }
     
+    /// - parameter object: A Data value to be inserted into the keychain.
+    /// - parameter key: A Key that can be used to retrieve the `object` from the keychain.
+    /// - returns: `false` if the keychain is not accessible.
     @discardableResult
     public func set(object: Data, for key: Key) -> Bool {
         return execute(in: lock) {
@@ -117,6 +129,8 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    /// - parameter key: A Key used to retrieve the desired object from the keychain.
+    /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
     public func object(for key: Key) -> Data? {
         return execute(in: lock) {
             switch Keychain.object(for: key, options: keychainQuery) {
@@ -129,6 +143,8 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    /// - parameter key: The key to look up in the keychain.
+    /// - returns: `true` if a value has been set for the given key, `false` otherwise.
     public func containsObject(for key: Key) -> Bool {
         return execute(in: lock) {
             switch Keychain.containsObject(for: key, options: keychainQuery) {
@@ -140,6 +156,9 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    /// - parameter string: A String value to be inserted into the keychain.
+    /// - parameter key: A Key that can be used to retrieve the `string` from the keychain.
+    /// @return NO if the keychain is not accessible.
     @discardableResult
     public func set(string: String, for key: Key) -> Bool {
         return execute(in: lock) {
@@ -153,6 +172,8 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    /// - parameter key: A Key used to retrieve the desired object from the keychain.
+    /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     public func string(for key: Key) -> String? {
         return execute(in: lock) {
             switch Keychain.string(for: key, options: keychainQuery) {
@@ -165,6 +186,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    /// - returns: The set of all (String) keys currently stored in this Valet instance.
     public func allKeys() -> Set<String> {
         return execute(in: lock) {
             switch Keychain.allKeys(options: keychainQuery) {
@@ -177,6 +199,8 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    /// Removes a key/object pair from the keychain.
+    /// - returns: `false` if the keychain is not accessible.
     @discardableResult
     public func removeObject(for key: Key) -> Bool {
         return execute(in: lock) {
@@ -190,6 +214,8 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    /// Removes all key/object pairs accessible by this Valet instance from the keychain.
+    /// - returns: `false` if the keychain is not accessible.
     @discardableResult
     public func removeAllObjects() -> Bool {
         return execute(in: lock) {
@@ -203,12 +229,22 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    /// Migrates objects matching the input query into the receiving Valet instance.
+    /// - parameter query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
+    /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
+    /// - returns: Whether the migration succeeded or failed.
+    /// - note: The keychain is not modified if a failure occurs.
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) -> MigrationResult {
         return execute(in: lock) {
             return Keychain.migrateObjects(matching: query, into: keychainQuery, removeOnCompletion: removeOnCompletion)
         }
     }
     
+    /// Migrates objects matching the vended keychain query into the receiving Valet instance.
+    /// - parameter keychain: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
+    /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
+    /// - returns: Whether the migration succeeded or failed.
+    /// - note: The keychain is not modified if a failure occurs.
     public func migrateObjects(from keychain: KeychainQueryConvertible, removeOnCompletion: Bool) -> MigrationResult {
         return migrateObjects(matching: keychain.keychainQuery, removeOnCompletion: removeOnCompletion)
     }

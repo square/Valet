@@ -254,8 +254,8 @@ internal final class Keychain {
             return .invalidQuery
         }
         
-        guard query[kSecUseOperationPrompt as String] == nil else {
-            ErrorHandler.assertionFailure("kSecUseOperationPrompt is not supported in a migration query. Keychain items can not be migrated en masse from the Secure Enclave.")
+        guard query[kSecAttrAccessControl as String] == nil else {
+            ErrorHandler.assertionFailure("kSecAttrAccessControl is not supported in a migration query. Keychain items can not be migrated en masse from the Secure Enclave.")
             return .invalidQuery
         }
         
