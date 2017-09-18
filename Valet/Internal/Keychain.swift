@@ -318,7 +318,7 @@ internal final class Keychain {
                 retrievedItemsToMigrateWithData.append(retrievedItemToMigrateWithData)
                 
             case let .error(status):
-                if status == errSecSuccess {
+                if status == errSecItemNotFound {
                     // It is possible for metadata-only items to exist in the keychain that do not have data associated with them. Ignore this entry.
                     continue
                     

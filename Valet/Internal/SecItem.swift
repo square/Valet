@@ -92,8 +92,15 @@ internal final class SecItem {
             status = SecItemCopyMatching(query as CFDictionary, &result)
         }
         
-        if status == errSecSuccess, let result = result {
-            return .success(result as! DesiredType)
+        if status == errSecSuccess {
+            if let result = result as? DesiredType {
+                return .success(result)
+                
+            } else {
+                // The query failed to pull out a value object of the desired type, but did find metadata matching this query.
+                // This can happen because either the query didn't ask for return data via [kSecReturnData : true], or because a metadata-only item existed in the keychain.
+                return .error(errSecItemNotFound)
+            }
             
         } else {
             ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
