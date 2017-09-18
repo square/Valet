@@ -46,11 +46,45 @@ internal enum Service: CustomStringConvertible {
     // MARK: Internal Properties
     
     internal var baseQuery: [String : AnyHashable] {
-        return [
+        var baseQuery: [String : AnyHashable] = [
             kSecClass as String : kSecClassGenericPassword as String,
             kSecAttrService as String : description,
             kSecAttrAccessible as String : accessability.secAccessibilityAttribute
         ]
+        
+        func modifyBaseQuery(given flavor: Flavor, accessibility: Accessibility) {
+            switch flavor {
+            case .vanilla:
+                // Nothing to do here.
+                break
+            case .synchronizable:
+                baseQuery[kSecAttrSynchronizable as String] = true
+                
+            case .secureEnclave:
+                switch accessibility {
+                default:
+                    // TODO: flesh this out.
+                    break
+                }
+            case .singlePromptSecureEnclave:
+                switch accessibility {
+                default:
+                    // TODO: flesh this out.
+                    break
+                }
+            }
+        }
+        
+        switch self {
+        case let .standard(_, accessibility, flavor):
+            modifyBaseQuery(given: flavor, accessibility: accessibility)
+            
+        case let .sharedAccessGroup(identifier, accessibility, flavor):
+            baseQuery[kSecAttrAccessGroup as String] = "\(SecItem.sharedAccessGroupPrefix).\(identifier.description)"
+            modifyBaseQuery(given: flavor, accessibility: accessibility)
+        }
+        
+        return baseQuery
     }
     
     // MARK: Internal Methods

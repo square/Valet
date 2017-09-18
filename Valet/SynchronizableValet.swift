@@ -77,9 +77,7 @@ public final class SynchronizableValet: NSObject, KeychainQueryConvertible {
     
     private init(identifier: Identifier, accessibility: SynchronizableAccessibility) {
         service = .standard(identifier, accessibility.accessibility, .synchronizable)
-        var baseQuery = service.baseQuery
-        baseQuery[kSecAttrSynchronizable as String] = true
-        keychainQuery = baseQuery
+        keychainQuery = service.baseQuery
         
         self.accessibility = accessibility
         self.identifier = identifier
@@ -87,9 +85,7 @@ public final class SynchronizableValet: NSObject, KeychainQueryConvertible {
     
     private init(sharedAccess identifier: Identifier, accessibility: SynchronizableAccessibility) {
         service = .sharedAccessGroup(identifier, accessibility.accessibility, .synchronizable)
-        var baseQuery = service.baseQuery
-        baseQuery[kSecAttrSynchronizable as String] = true
-        keychainQuery = baseQuery
+        keychainQuery = service.baseQuery
         
         self.accessibility = accessibility
         self.identifier = identifier

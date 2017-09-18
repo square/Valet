@@ -47,7 +47,7 @@ internal final class SecItem {
     
     // MARK: Internal Class Properties
     
-    internal static var sharedAccessGroupPrefix: String? {
+    internal static var sharedAccessGroupPrefix: String {
         let query = [
             kSecClass : kSecClassGenericPassword,
             kSecAttrAccount : "SharedAccessGroupAlwaysAccessiblePrefixPlaceholder",
@@ -69,13 +69,22 @@ internal final class SecItem {
         
         guard status == errSecSuccess, let queryResult = result as? [CFString : AnyHashable], let accessGroup = queryResult[kSecAttrAccessGroup] as? String else {
             ErrorHandler.assertionFailure("Could not find shared access group prefix.")
-            return nil
+            // We should always be able to access the shared access group prefix because the accessibility of the above keychain data is set to `always`.
+            // In other words, we should never hit this code. This code is here as a failsafe to prevent a crash in a scenario where the keychain is entirely hosed.
+            // Consumers should always check `canAccessKeychain()` after creating a Valet and before using it. Doing so will catch this error.
+            return "INVALID_SHARED_ACCESS_GROUP_PREFIX"
         }
         
         let components = accessGroup.components(separatedBy: ".")
-        let bundleSeedIdentifier = components.first
-        
-        return Identifier(nonEmpty: bundleSeedIdentifier)?.description
+        if let bundleSeedIdentifier = components.first, !bundleSeedIdentifier.isEmpty {
+            return bundleSeedIdentifier
+            
+        } else {
+            // We should always be able to access the shared access group prefix because the accessibility of the above keychain data is set to `always`.
+            // In other words, we should never hit this code. This code is here as a failsafe to prevent a crash in a scenario where the keychain is entirely hosed.
+            // Consumers should always check `canAccessKeychain()` after creating a Valet and before using it. Doing so will catch this error.
+            return "INVALID_SHARED_ACCESS_GROUP_PREFIX"
+        }
     }
     
     // MARK: Internal Class Methods
