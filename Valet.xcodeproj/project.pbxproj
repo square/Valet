@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		165568DF1F6F6DD20017588C /* Flavor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D71F6F69B90017588C /* Flavor.swift */; };
+		165568E01F6F6DD20017588C /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D81F6F69B90017588C /* Keychain.swift */; };
+		165568E11F6F6DD20017588C /* SecItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D61F6F69B90017588C /* SecItem.swift */; };
+		165568E21F6F6DD20017588C /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D91F6F69B90017588C /* Service.swift */; };
+		165568E31F6F6DD20017588C /* Flavor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D71F6F69B90017588C /* Flavor.swift */; };
+		165568E41F6F6DD20017588C /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D81F6F69B90017588C /* Keychain.swift */; };
+		165568E51F6F6DD20017588C /* SecItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D61F6F69B90017588C /* SecItem.swift */; };
+		165568E61F6F6DD20017588C /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D91F6F69B90017588C /* Service.swift */; };
 		167296341F6DE8D00090E3D8 /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296331F6DE8D00090E3D8 /* Accessibility.swift */; };
 		167296351F6DE8D00090E3D8 /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296331F6DE8D00090E3D8 /* Accessibility.swift */; };
 		167296371F6DECDF0090E3D8 /* MigrationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296361F6DECDF0090E3D8 /* MigrationResult.swift */; };
@@ -17,14 +25,6 @@
 		167296471F6E02E20090E3D8 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296451F6E02E20090E3D8 /* ErrorHandler.swift */; };
 		167296491F6E04630090E3D8 /* SecItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296481F6E04630090E3D8 /* SecItemTests.swift */; };
 		1672964A1F6E04630090E3D8 /* SecItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296481F6E04630090E3D8 /* SecItemTests.swift */; };
-		168CB3851F6F0F9000605B6D /* Flavor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3821F6F0A8C00605B6D /* Flavor.swift */; };
-		168CB3861F6F0F9000605B6D /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3831F6F0A8C00605B6D /* Keychain.swift */; };
-		168CB3871F6F0F9000605B6D /* SecItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3811F6F0A8B00605B6D /* SecItem.swift */; };
-		168CB3881F6F0F9000605B6D /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3841F6F0A8C00605B6D /* Service.swift */; };
-		168CB3891F6F0F9100605B6D /* Flavor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3821F6F0A8C00605B6D /* Flavor.swift */; };
-		168CB38A1F6F0F9100605B6D /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3831F6F0A8C00605B6D /* Keychain.swift */; };
-		168CB38B1F6F0F9100605B6D /* SecItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3811F6F0A8B00605B6D /* SecItem.swift */; };
-		168CB38C1F6F0F9100605B6D /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168CB3841F6F0A8C00605B6D /* Service.swift */; };
 		26E682841BA8B42100EFF4EA /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = EA1E1F861A8C46080067C991 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A531BA8B53100E039CD /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A541BA8B53C00E039CD /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -105,15 +105,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		165568D61F6F69B90017588C /* SecItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecItem.swift; sourceTree = "<group>"; };
+		165568D71F6F69B90017588C /* Flavor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flavor.swift; sourceTree = "<group>"; };
+		165568D81F6F69B90017588C /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		165568D91F6F69B90017588C /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		167296331F6DE8D00090E3D8 /* Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accessibility.swift; sourceTree = "<group>"; };
 		167296361F6DECDF0090E3D8 /* MigrationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationResult.swift; sourceTree = "<group>"; };
 		167296391F6DF4230090E3D8 /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		167296451F6E02E20090E3D8 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		167296481F6E04630090E3D8 /* SecItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecItemTests.swift; sourceTree = "<group>"; };
-		168CB3811F6F0A8B00605B6D /* SecItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SecItem.swift; path = Valet/Internal/SecItem.swift; sourceTree = SOURCE_ROOT; };
-		168CB3821F6F0A8C00605B6D /* Flavor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Flavor.swift; path = Valet/Internal/Flavor.swift; sourceTree = SOURCE_ROOT; };
-		168CB3831F6F0A8C00605B6D /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Keychain.swift; path = Valet/Internal/Keychain.swift; sourceTree = SOURCE_ROOT; };
-		168CB3841F6F0A8C00605B6D /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Service.swift; path = Valet/Internal/Service.swift; sourceTree = SOURCE_ROOT; };
 		26E6827C1BA8B3F900EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E6828A1BA8B4B200EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E682921BA8B4D200EFF4EA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -205,16 +205,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		168CB3801F6F0A7800605B6D /* Internal */ = {
+		165568D51F6F69A70017588C /* Internal */ = {
 			isa = PBXGroup;
 			children = (
-				168CB3821F6F0A8C00605B6D /* Flavor.swift */,
-				168CB3831F6F0A8C00605B6D /* Keychain.swift */,
-				168CB3811F6F0A8B00605B6D /* SecItem.swift */,
-				168CB3841F6F0A8C00605B6D /* Service.swift */,
+				165568D71F6F69B90017588C /* Flavor.swift */,
+				165568D81F6F69B90017588C /* Keychain.swift */,
+				165568D61F6F69B90017588C /* SecItem.swift */,
+				165568D91F6F69B90017588C /* Service.swift */,
 			);
-			name = Internal;
-			path = "New Group";
+			path = Internal;
 			sourceTree = "<group>";
 		};
 		371150A61E2962D8004A45D4 /* Valet iOS Test Host App */ = {
@@ -259,7 +258,7 @@
 		EA1E1F851A8C46080067C991 /* Valet */ = {
 			isa = PBXGroup;
 			children = (
-				168CB3801F6F0A7800605B6D /* Internal */,
+				165568D51F6F69A70017588C /* Internal */,
 				26E682921BA8B4D200EFF4EA /* Info.plist */,
 				EA1E1F861A8C46080067C991 /* Valet.h */,
 				AC11C54A1F6F2C7D00AE9842 /* Valet.swift */,
@@ -608,19 +607,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				26F06A8D1BA8BC8F00E039CD /* VALValet.m in Sources */,
+				165568E21F6F6DD20017588C /* Service.swift in Sources */,
 				167296371F6DECDF0090E3D8 /* MigrationResult.swift in Sources */,
-				168CB38A1F6F0F9100605B6D /* Keychain.swift in Sources */,
+				165568DF1F6F6DD20017588C /* Flavor.swift in Sources */,
 				26F06A8E1BA8BC9000E039CD /* VALSecureEnclaveValet.m in Sources */,
-				168CB3891F6F0F9100605B6D /* Flavor.swift in Sources */,
-				168CB38C1F6F0F9100605B6D /* Service.swift in Sources */,
 				1672963A1F6DF4230090E3D8 /* Identifier.swift in Sources */,
+				165568E01F6F6DD20017588C /* Keychain.swift in Sources */,
 				AC11C54C1F6F2D7E00AE9842 /* Valet.swift in Sources */,
 				371E38141E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
+				165568E11F6F6DD20017588C /* SecItem.swift in Sources */,
 				167296341F6DE8D00090E3D8 /* Accessibility.swift in Sources */,
 				AC11C54F1F6F4A7600AE9842 /* KeychainQueryConvertible.swift in Sources */,
 				167296461F6E02E20090E3D8 /* ErrorHandler.swift in Sources */,
 				26F06A8F1BA8BC9200E039CD /* VALSynchronizableValet.m in Sources */,
-				168CB38B1F6F0F9100605B6D /* SecItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,19 +628,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				26F06A921BA8BC9700E039CD /* VALValet.m in Sources */,
+				165568E61F6F6DD20017588C /* Service.swift in Sources */,
 				167296381F6DECDF0090E3D8 /* MigrationResult.swift in Sources */,
-				168CB3861F6F0F9000605B6D /* Keychain.swift in Sources */,
+				165568E31F6F6DD20017588C /* Flavor.swift in Sources */,
 				26F06A911BA8BC9500E039CD /* VALSecureEnclaveValet.m in Sources */,
-				168CB3851F6F0F9000605B6D /* Flavor.swift in Sources */,
-				168CB3881F6F0F9000605B6D /* Service.swift in Sources */,
 				1672963B1F6DF4230090E3D8 /* Identifier.swift in Sources */,
+				165568E41F6F6DD20017588C /* Keychain.swift in Sources */,
 				AC11C54D1F6F2D7E00AE9842 /* Valet.swift in Sources */,
 				371E38151E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
+				165568E51F6F6DD20017588C /* SecItem.swift in Sources */,
 				167296351F6DE8D00090E3D8 /* Accessibility.swift in Sources */,
 				AC11C5501F6F4A7600AE9842 /* KeychainQueryConvertible.swift in Sources */,
 				167296471F6E02E20090E3D8 /* ErrorHandler.swift in Sources */,
 				26F06A901BA8BC9400E039CD /* VALSynchronizableValet.m in Sources */,
-				168CB3871F6F0F9000605B6D /* SecItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
