@@ -27,18 +27,26 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     // MARK: Public Class Methods
     
     public class func valet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        if let existingValet = identifierToValetMap.object(forKey: Service.standard(identifier, accessibility, .vanilla).description as NSString) {
+        let key = Service.standard(identifier, accessibility, .vanilla).description as NSString
+        if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
+            
         } else {
-            return Valet(identifier: identifier, accessibility: accessibility)
+            let valet = Valet(identifier: identifier, accessibility: accessibility)
+            identifierToValetMap.setObject(valet, forKey: key)
+            return valet
         }
     }
     
     public class func sharedAccessGroupValet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        if let existingValet = identifierToValetMap.object(forKey: Service.sharedAccessGroup(identifier, accessibility, .vanilla).description as NSString) {
+        let key = Service.sharedAccessGroup(identifier, accessibility, .vanilla).description as NSString
+        if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
+            
         } else {
-            return Valet(identifier: identifier, accessibility: accessibility)
+            let valet = Valet(sharedAccess: identifier, accessibility: accessibility)
+            identifierToValetMap.setObject(valet, forKey: key)
+            return valet
         }
     }
     

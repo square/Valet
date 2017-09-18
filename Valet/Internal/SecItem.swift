@@ -35,8 +35,13 @@ internal final class SecItem {
     
     // MARK: Internal Enum
     
-    internal enum Result<SuccessType, FailureType> {
+    internal enum DataResult<SuccessType, FailureType> {
         case success(SuccessType)
+        case error(FailureType)
+    }
+    
+    internal enum Result<FailureType> {
+        case success
         case error(FailureType)
     }
     
@@ -81,23 +86,80 @@ internal final class SecItem {
     
     // MARK: Internal Class Methods
     
-    internal static func copy<DesiredType>(matching query: [String : AnyHashable]) -> Result<DesiredType, OSStatus> {
-        return executeSecItem(function: SecItemCopyMatching, query: query)
+    internal static func copy<DesiredType>(matching query: [String : AnyHashable]) -> DataResult<DesiredType, OSStatus> {
+        guard query.count > 0 else {
+            ErrorHandler.assertionFailure("Must provide a query with at least one item")
+            return .error(errSecParam)
+        }
+        
+        var status = errSecNotAvailable
+        var result: AnyObject? = nil
+        execute(in: secItemLock) {
+            status = SecItemCopyMatching(query as CFDictionary, &result)
+        }
+        
+        if status == errSecSuccess {
+            return .success(result as! DesiredType)
+            
+        } else {
+            ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
+            
+            return .error(status)
+        }
     }
     
-    internal static func add<DesiredType>(attributes: [String : AnyHashable]) -> Result<DesiredType, OSStatus> {
-        return executeSecItem(function: SecItemAdd, query: attributes)
+    internal static func containsObject(matching query: [String : AnyHashable]) -> Result<OSStatus> {
+        guard query.count > 0 else {
+            ErrorHandler.assertionFailure("Must provide a query with at least one item")
+            return .error(errSecParam)
+        }
+        
+        var status = errSecNotAvailable
+        execute(in: secItemLock) {
+            status = SecItemCopyMatching(query as CFDictionary, nil)
+        }
+        
+        if status == errSecSuccess {
+            return .success
+            
+        } else {
+            ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
+            
+            return .error(status)
+        }
     }
     
-    internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) -> Result<Void?, OSStatus> {
+    internal static func add(attributes: [String : AnyHashable]) -> Result<OSStatus> {
         guard attributes.count > 0 else {
             ErrorHandler.assertionFailure("Must provide attributes with at least one item")
-            return Result.error(errSecParam)
+            return .error(errSecParam)
+        }
+        
+        var status = errSecNotAvailable
+        var result: AnyObject? = nil
+        execute(in: secItemLock) {
+            status = SecItemAdd(attributes as CFDictionary, &result)
+        }
+        
+        if status == errSecSuccess {
+            return .success
+            
+        } else {
+            ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
+            
+            return .error(status)
+        }
+    }
+    
+    internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) -> Result<OSStatus> {
+        guard attributes.count > 0 else {
+            ErrorHandler.assertionFailure("Must provide attributes with at least one item")
+            return .error(errSecParam)
         }
         
         guard query.count > 0 else {
             ErrorHandler.assertionFailure("Must provide a query with at least one item")
-            return Result.error(errSecParam)
+            return .error(errSecParam)
         }
         
         var status = errSecNotAvailable
@@ -106,19 +168,19 @@ internal final class SecItem {
         }
         
         if status == errSecSuccess {
-            return Result.success(())
+            return .success
             
         } else {
             ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
             
-            return Result.error(status)
+            return .error(status)
         }
     }
     
-    internal static func delete(itemsMatching query: [String : AnyHashable]) -> Result<Void, OSStatus> {
+    internal static func delete(itemsMatching query: [String : AnyHashable]) -> Result<OSStatus> {
         guard query.count > 0 else {
             ErrorHandler.assertionFailure("Must provide a query with at least one item")
-            return Result.error(errSecParam)
+            return .error(errSecParam)
         }
         
         var secItemQuery = query
@@ -132,36 +194,12 @@ internal final class SecItem {
         }
         
         if status == errSecSuccess {
-            return Result.success(())
+            return .success
             
         } else {
             ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
             
-            return Result.error(status)
-        }
-    }
-    
-    // MARK: Private Class Methods
-    
-    private static func executeSecItem<DesiredType>(function: (CFDictionary, UnsafeMutablePointer<CoreFoundation.CFTypeRef?>?) -> OSStatus, query: [String : AnyHashable]) -> Result<DesiredType, OSStatus> {
-        guard query.count > 0 else {
-            ErrorHandler.assertionFailure("Must provide a query with at least one item")
-            return Result.error(errSecParam)
-        }
-        
-        var status = errSecNotAvailable
-        var result: AnyObject? = nil
-        execute(in: secItemLock) {
-            status = function(query as CFDictionary, &result)
-        }
-        
-        if status == errSecSuccess {
-            return Result.success(result as! DesiredType)
-            
-        } else {
-            ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
-            
-            return Result.error(status)
+            return .error(status)
         }
     }
     

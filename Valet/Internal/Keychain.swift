@@ -49,7 +49,7 @@ internal final class Keychain {
             var secItemQuery = attributes
             secItemQuery[kSecAttrAccount as String] = canaryKey
             secItemQuery[kSecValueData as String] = canaryValue.data(using: .utf8)
-            let  _ : SecItem.Result<Void, OSStatus> = SecItem.add(attributes: secItemQuery)
+            _ = SecItem.add(attributes: secItemQuery)
             
             return isCanaryValueInKeychain()
         }
@@ -57,23 +57,23 @@ internal final class Keychain {
     
     // MARK: Getters
     
-    internal static func string(for key: Key, options: [String : AnyHashable]) -> SecItem.Result<String, OSStatus> {
+    internal static func string(for key: Key, options: [String : AnyHashable]) -> SecItem.DataResult<String, OSStatus> {
         switch object(for: key, options: options) {
         case let .success(data):
             if let string = String(data: data, encoding: .utf8) {
-                return SecItem.Result.success(string)
+                return SecItem.DataResult.success(string)
             } else {
-                return SecItem.Result.error(errSecItemNotFound)
+                return SecItem.DataResult.error(errSecItemNotFound)
             }
         case let .error(status):
-            return SecItem.Result.error(status)
+            return SecItem.DataResult.error(status)
         }
     }
     
-    internal static func object(for key: Key, options: [String : AnyHashable]) -> SecItem.Result<Data, OSStatus> {
+    internal static func object(for key: Key, options: [String : AnyHashable]) -> SecItem.DataResult<Data, OSStatus> {
         guard !key.isEmpty else {
             ErrorHandler.assertionFailure("Can not set a value with an empty key.")
-            return SecItem.Result.error(errSecParam)
+            return SecItem.DataResult.error(errSecParam)
         }
         
         var secItemQuery = options
@@ -86,24 +86,24 @@ internal final class Keychain {
     
     // MARK: Setters
     
-    internal static func set(string: String, for key: Key, options: [String: AnyHashable]) -> SecItem.Result<Void?, OSStatus> {
+    internal static func set(string: String, for key: Key, options: [String: AnyHashable]) -> SecItem.Result<OSStatus> {
         guard let data = string.data(using: .utf8), !data.isEmpty else {
             ErrorHandler.assertionFailure("Can not set an empty value.")
-            return SecItem.Result.error(errSecParam)
+            return .error(errSecParam)
         }
         
         return set(object: data, for: key, options: options)
     }
     
-    internal static func set(object: Data, for key: Key, options: [String: AnyHashable]) -> SecItem.Result<Void?, OSStatus> {
+    internal static func set(object: Data, for key: Key, options: [String: AnyHashable]) -> SecItem.Result<OSStatus> {
         guard !key.isEmpty else {
             ErrorHandler.assertionFailure("Can not set a value with an empty key.")
-            return SecItem.Result.error(errSecParam)
+            return .error(errSecParam)
         }
         
         guard !object.isEmpty else {
             ErrorHandler.assertionFailure("Can not set an empty value.")
-            return SecItem.Result.error(errSecParam)
+            return .error(errSecParam)
         }
         
         var secItemQuery = options
@@ -127,10 +127,10 @@ internal final class Keychain {
     
     // MARK: Removal
     
-    internal static func removeObject(for key: Key, options: [String : AnyHashable]) -> SecItem.Result<Void?, OSStatus> {
+    internal static func removeObject(for key: Key, options: [String : AnyHashable]) -> SecItem.Result<OSStatus> {
         guard !key.isEmpty else {
             ErrorHandler.assertionFailure("Can not set a value with an empty key.")
-            return SecItem.Result.error(errSecParam)
+            return .error(errSecParam)
         }
         
         var secItemQuery = options
@@ -138,75 +138,81 @@ internal final class Keychain {
         
         switch SecItem.delete(itemsMatching: secItemQuery) {
         case .success:
-            return SecItem.Result.success(())
+            return .success
             
         case let .error(status):
             switch status {
             case errSecInteractionNotAllowed, errSecMissingEntitlement:
-                return SecItem.Result.error(status)
+                return .error(status)
                 
             default:
                 // We succeeded as long as we can confirm that the item is not in the keychain.
-                return SecItem.Result.success(())
+                return .success
             }
         }
     }
     
-    internal static func removeAllObjects(matching options: [String : AnyHashable]) -> SecItem.Result<Void, OSStatus> {
+    internal static func removeAllObjects(matching options: [String : AnyHashable]) -> SecItem.Result<OSStatus> {
         switch SecItem.delete(itemsMatching: options) {
         case .success:
-            return SecItem.Result.success(())
+            return .success
             
         case let .error(status):
             switch status {
             case errSecInteractionNotAllowed, errSecMissingEntitlement:
-                return SecItem.Result.error(status)
+                return .error(status)
                 
             default:
                 // We succeeded as long as we can confirm that the item is not in the keychain.
-                return SecItem.Result.success(())
+                return .success
             }
         }
     }
     
     // MARK: Contains
     
-    internal static func containsObject(for key: Key, options: [String : AnyHashable]) -> SecItem.Result<Void?, OSStatus> {
+    internal static func containsObject(for key: Key, options: [String : AnyHashable]) -> SecItem.Result<OSStatus> {
         guard !key.isEmpty else {
             ErrorHandler.assertionFailure("Can not set a value with an empty key.")
-            return SecItem.Result.error(errSecParam)
+            return .error(errSecParam)
         }
         
         var secItemQuery = options
         secItemQuery[kSecAttrAccount as String] = key
         
-        return SecItem.copy(matching: secItemQuery)
+        switch SecItem.containsObject(matching: secItemQuery) {
+        case .success:
+            return .success
+            
+        case let .error(status):
+            return .error(status)
+        }
     }
     
     // MARK: AllObjects
     
-    internal static func allKeys(options: [String: AnyHashable]) -> SecItem.Result<Set<String>, OSStatus> {
+    internal static func allKeys(options: [String: AnyHashable]) -> SecItem.DataResult<Set<String>, OSStatus> {
         var secItemQuery = options
         secItemQuery[kSecMatchLimit as String] = kSecMatchLimitAll
         secItemQuery[kSecReturnAttributes as String] = true
         
-        let result: SecItem.Result<Any, OSStatus> = SecItem.copy(matching: secItemQuery)
+        let result: SecItem.DataResult<Any, OSStatus> = SecItem.copy(matching: secItemQuery)
         switch result {
         case let .success(collection):
             if let singleMatch = collection as? [String : AnyHashable], let singleKey = singleMatch[kSecAttrAccount as String] as? String {
-                return SecItem.Result.success(Set([singleKey]))
+                return SecItem.DataResult.success(Set([singleKey]))
                 
             } else if let multipleMatches = collection as? [[String: AnyHashable]] {
-                return SecItem.Result.success(Set(multipleMatches.flatMap({ attributes in
+                return SecItem.DataResult.success(Set(multipleMatches.flatMap({ attributes in
                     return attributes[kSecAttrAccount as String] as? String
                 })))
                 
             } else {
-                return SecItem.Result.success(Set())
+                return SecItem.DataResult.success(Set())
             }
             
         case let .error(status):
-            return SecItem.Result.error(status)
+            return SecItem.DataResult.error(status)
         }
     }
     
@@ -260,7 +266,7 @@ internal final class Keychain {
         secItemQuery[kSecReturnRef as String] = false
         secItemQuery[kSecReturnPersistentRef as String] = true
         
-        let result: SecItem.Result<Any, OSStatus> = SecItem.copy(matching: secItemQuery)
+        let result: SecItem.DataResult<Any, OSStatus> = SecItem.copy(matching: secItemQuery)
         let retrievedItemsToMigrate: [[String: AnyHashable]]
         switch result {
         case let .success(collection):
@@ -299,7 +305,7 @@ internal final class Keychain {
                 kSecReturnData as String : true
             ]
             
-            let retrievedData: SecItem.Result<Data, OSStatus> = SecItem.copy(matching: retrieveDataQuery)
+            let retrievedData: SecItem.DataResult<Data, OSStatus> = SecItem.copy(matching: retrieveDataQuery)
             switch retrievedData {
             case let .success(data):
                 guard !data.isEmpty else {

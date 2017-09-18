@@ -25,7 +25,7 @@ import XCTest
 
 extension VALValet: KeychainQueryConvertible {
     public var keychainQuery: [String : AnyHashable] {
-        return keychainQuery as! [String : AnyHashable]
+        return baseQuery as! [String : AnyHashable]
     }
 }
 
@@ -33,7 +33,6 @@ extension VALValet: KeychainQueryConvertible {
 class ValetTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
-//    let valet = Valet.valet(with: identifier, accessibility: .whenUnlocked)!
     let valet = Valet.valet(with: identifier, accessibility: .whenUnlocked)
     let otherValet = Valet.valet(with: Identifier(nonEmpty: "valet_testing_2")!, accessibility: .whenUnlocked)
     let key = "key"
@@ -44,6 +43,11 @@ class ValetTests: XCTestCase
     override func setUp()
     {
         super.setUp()
+        
+        ErrorHandler.customAssertBody = { _, _, _, _ in
+            // Nothing to do here.
+        }
+        
         valet.removeAllObjects()
         XCTAssert(valet.allKeys().isEmpty)
         otherValet.removeAllObjects()
@@ -66,7 +70,7 @@ class ValetTests: XCTestCase
 
     func test_equivalentSubclassesWithEquivalentConfiguration_areEqual()
     {
-        let secondOtherValet = Valet.valet(with: ValetTests.identifier, accessibility: .whenUnlocked)
+        let secondOtherValet = Valet.valet(with: otherValet.identifier, accessibility: otherValet.accessibility)
         XCTAssertTrue(otherValet == secondOtherValet)
         XCTAssertTrue(otherValet === secondOtherValet)
     }
@@ -310,7 +314,7 @@ class ValetTests: XCTestCase
 
     // MARK: Migration - Query
 
-    func test_migrateObjectsmatching_failsIfNoItemsMatchQuery()
+    func test_migrateObjectsMatching_failsIfNoItemsMatchQuery()
     {
         let noItemsFoundError = MigrationResult.noItemsToMigrateFound
 
@@ -327,12 +331,12 @@ class ValetTests: XCTestCase
         XCTAssertEqual(noItemsFoundError, otherValet.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: true))
     }
 
-    func test_migrateObjectsmatching_failsIfQueryHasNoInputClass()
+    func test_migrateObjectsMatching_failsIfQueryHasNoInputClass()
     {
         valet.set(string: passcode, for: key)
 
         // Test for base query success.
-        XCTAssertNil(otherValet.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: false))
+        XCTAssertEqual(otherValet.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: false), .success)
         XCTAssertEqual(passcode, otherValet.string(for: key))
 
         var mutableQuery = valet.keychainQuery
@@ -342,7 +346,7 @@ class ValetTests: XCTestCase
         XCTAssertEqual(MigrationResult.invalidQuery, otherValet.migrateObjects(matching: mutableQuery, removeOnCompletion: false))
     }
 
-    func test_migrateObjectsmatching_failsForBadQueries()
+    func test_migrateObjectsMatching_failsForBadQueries()
     {
         let invalidQueryError = MigrationResult.invalidQuery
 
@@ -394,7 +398,7 @@ class ValetTests: XCTestCase
         
     }
 
-    func test_migrateObjectsmatching_bailsOutIfConflictExistsInQueryResult()
+    func test_migrateObjectsMatching_bailsOutIfConflictExistsInQueryResult()
     {
         let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
 
@@ -409,7 +413,7 @@ class ValetTests: XCTestCase
         XCTAssertEqual(MigrationResult.duplicateKeyInQueryResult, migrationValet.migrateObjects(matching: conflictingQuery, removeOnCompletion: false))
     }
 
-    func test_migrateObjectsmatching_withAccountNameAsData_doesNotRaiseException()
+    func test_migrateObjectsMatching_withAccountNameAsData_doesNotRaiseException()
     {
         let identifier = "Keychain_With_Account_Name_As_NSData"
         guard let dataBlob = "foo".data(using: .utf8) else {
@@ -433,16 +437,9 @@ class ValetTests: XCTestCase
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: identifier
         ]
-        let error = valet.migrateObjects(matching: query, removeOnCompletion: false)
+        let migrationResult = valet.migrateObjects(matching: query, removeOnCompletion: false)
         
-        #if os(iOS)
-            XCTAssertNil(error)
-        #elseif os(macOS)
-            XCTAssertEqual(error, .keyInQueryResultInvalid)
-        #else
-            XCTFail("Unsupported/undefined OS")
-        #endif
-        
+        XCTAssertEqual(migrationResult, .keyInQueryResultInvalid)
     }
     
     // MARK: Migration - Valet
@@ -469,7 +466,7 @@ class ValetTests: XCTestCase
             otherValet.set(string: value, for: key)
         }
 
-        XCTAssertNil(valet .migrateObjects(from: otherValet, removeOnCompletion: false))
+        XCTAssertEqual(valet.migrateObjects(from: otherValet, removeOnCompletion: false), .success)
 
         // Both the migration target and the previous Valet should hold all key/value pairs.
         XCTAssertEqual(valet.allKeys(), otherValet.allKeys())
@@ -493,7 +490,7 @@ class ValetTests: XCTestCase
             otherValet.set(string: value, for: key)
         }
 
-        XCTAssertNil(valet .migrateObjects(from: otherValet, removeOnCompletion: true))
+        XCTAssertEqual(valet.migrateObjects(from: otherValet, removeOnCompletion: true), .success)
 
         // The migration target should hold all key/value pairs, the previous Valet should be empty.
         XCTAssertEqual(0, otherValet.allKeys().count)
@@ -544,7 +541,7 @@ class ValetTests: XCTestCase
 
         XCTAssertTrue(valet.canAccessKeychain())
         XCTAssertTrue(otherValet.canAccessKeychain())
-        XCTAssertNil(valet.migrateObjects(from: otherValet, removeOnCompletion: false))
+        XCTAssertEqual(valet.migrateObjects(from: otherValet, removeOnCompletion: false), .success)
 
         for (key, value) in keyStringPairToMigrateMap {
             XCTAssertEqual(valet.string(for: key), value)
