@@ -97,7 +97,7 @@ class ValetTests: XCTestCase
     func test_canAccessKeychain_Performance()
     {
         measure {
-            self.valet.canAccessKeychain()
+            _ = self.valet.canAccessKeychain()
         }
     }
 
@@ -447,8 +447,8 @@ class ValetTests: XCTestCase
     func test_migrateObjectsFromValet_migratesSingleKeyValuePairSuccessfully()
     {
         otherValet.set(string: "foo", for: "bar")
-        valet.migrateObjects(from: otherValet, removeOnCompletion: false)
-        valet.allKeys()
+        _ = valet.migrateObjects(from: otherValet, removeOnCompletion: false)
+        _ = valet.allKeys()
         XCTAssertEqual("foo", valet.string(for: "bar"))
     }
 

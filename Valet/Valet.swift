@@ -23,7 +23,7 @@ import Foundation
 
 
 public final class Valet: NSObject, KeychainQueryConvertible {
-
+    
     // MARK: Public Class Methods
     
     public class func valet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
@@ -98,7 +98,8 @@ public final class Valet: NSObject, KeychainQueryConvertible {
             return Keychain.canAccess(attributes: keychainQuery)
         }
     }
-
+    
+    @discardableResult
     public func set(object: Data, for key: Key) -> Bool {
         return execute(in: lock) {
             switch Keychain.set(object: object, for: key, options: keychainQuery) {
@@ -134,6 +135,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    @discardableResult
     public func set(string: String, for key: Key) -> Bool {
         return execute(in: lock) {
             switch Keychain.set(string: string, for: key, options: keychainQuery) {
@@ -170,6 +172,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    @discardableResult
     public func removeObject(for key: Key) -> Bool {
         return execute(in: lock) {
             switch Keychain.removeObject(for: key, options: keychainQuery) {
@@ -182,6 +185,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
     }
     
+    @discardableResult
     public func removeAllObjects() -> Bool {
         return execute(in: lock) {
             switch Keychain.removeAllObjects(matching: keychainQuery) {
