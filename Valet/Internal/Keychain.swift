@@ -199,12 +199,13 @@ internal final class Keychain {
         let result: SecItem.DataResult<Any, OSStatus> = SecItem.copy(matching: secItemQuery)
         switch result {
         case let .success(collection):
-            if let singleMatch = collection as? [String : AnyHashable], let singleKey = singleMatch[kSecAttrAccount as String] as? String {
+            if let singleMatch = collection as? [String : AnyHashable], let singleKey = singleMatch[kSecAttrAccount as String] as? String, singleKey != canaryKey {
                 return SecItem.DataResult.success(Set([singleKey]))
                 
             } else if let multipleMatches = collection as? [[String: AnyHashable]] {
                 return SecItem.DataResult.success(Set(multipleMatches.flatMap({ attributes in
-                    return attributes[kSecAttrAccount as String] as? String
+                    let key = attributes[kSecAttrAccount as String] as? String
+                    return key != canaryKey ? key : nil
                 })))
                 
             } else {

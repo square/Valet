@@ -128,6 +128,9 @@ class ValetTests: XCTestCase
 
         valet.removeAllObjects()
         XCTAssertEqual(valet.allKeys(), Set())
+        
+        _ = valet.canAccessKeychain()
+        XCTAssertEqual(valet.allKeys(), Set())
     }
 
     func test_allKeys_remainsUntouchedForUnequalValets()
