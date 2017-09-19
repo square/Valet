@@ -5,7 +5,6 @@
 //  Created by Dan Federman and Eric Muller on 9/16/17.
 //  Copyright © 2017 Square, Inc.
 //
-//
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
@@ -29,8 +28,8 @@ public enum Accessibility: CustomStringConvertible {
     case afterFirstUnlock
     /// Valet data can always be accessed regardless of the lock state of the device. This attribute is not recommended. Valet data with this attribute will migrate to a new device when using encrypted backups.
     case always
-
-    /// Valet data can only be accessed while the device is unlocked. This class is only available if a passcode is set on the device. This is recommended for items that only need to be accessible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device. No items can be stored in this class on devices without a passcode. Disabling the device passcode will cause all items in this class to be deleted.
+    
+    /// Valet data can only be accessed while the device is unlocked. This attribute is recommended for items that only need to be accessible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device. No items can be stored in this class on devices without a passcode. Disabling the device passcode will cause all items in this class to be deleted.
     case whenPasscodeSetThisDeviceOnly
     /// Valet data can only be accessed while the device is unlocked. This is recommended for data that only needs to be accessible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
     case whenUnlockedThisDeviceOnly
@@ -38,9 +37,9 @@ public enum Accessibility: CustomStringConvertible {
     case afterFirstUnlockThisDeviceOnly
     /// Valet data can always be accessed regardless of the lock state of the device. This option is not recommended. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
     case alwaysThisDeviceOnly
-
+    
     // MARK: CustomStringConvertible
-
+    
     public var description: String {
         switch self {
         case .afterFirstUnlock:
@@ -59,12 +58,12 @@ public enum Accessibility: CustomStringConvertible {
             return "AccessibleWhenUnlockedThisDeviceOnly"
         }
     }
-
+    
     // MARK: Public Properties
-
+    
     public var secAccessibilityAttribute: String {
         let accessibilityAttribute: CFString
-
+        
         switch self {
         case .afterFirstUnlock:
             accessibilityAttribute = kSecAttrAccessibleAfterFirstUnlock
@@ -81,7 +80,7 @@ public enum Accessibility: CustomStringConvertible {
         case .whenUnlockedThisDeviceOnly:
             accessibilityAttribute = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
         }
-
+        
         return accessibilityAttribute as String
     }
 }

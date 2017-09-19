@@ -216,5 +216,4 @@ internal final class SecItem {
     // MARK: Private Properties
     
     private static let secItemLock = NSLock()
-    
 }

@@ -20,6 +20,7 @@
 //
 
 import Foundation
+import LocalAuthentication
 
 
 internal enum Service: CustomStringConvertible, Equatable {
@@ -43,9 +44,9 @@ internal enum Service: CustomStringConvertible, Equatable {
         }
     }
     
-    // MARK: Internal Properties
+    // MARK: Internal Methods
     
-    internal var baseQuery: [String : AnyHashable] {
+    internal func generateBaseQuery() -> [String : AnyHashable] {
         var service = description
         var baseQuery: [String : AnyHashable] = [
             kSecClass as String : kSecClassGenericPassword as String,
@@ -72,22 +73,24 @@ internal enum Service: CustomStringConvertible, Equatable {
                 baseQuery[kSecAttrSynchronizable as String] = true
             }
             
+            baseQuery[kSecAttrAccessible as String] = configuration.accessability.secAccessibilityAttribute
+            
         case let .secureEnclave(flavor):
             let accessControl: SecureEnclaveAccessControl
             switch flavor {
             case let .singlePrompt(desiredAccessControl):
                 accessControl = desiredAccessControl
+                
             case let .alwaysPrompt(desiredAccessControl):
                 accessControl = desiredAccessControl
             }
             
             service += accessControl.description
+            // Note that kSecAttrAccessControl and kSecAttrAccessible are mutually exclusive.
             baseQuery[kSecAttrAccessControl as String] = SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, accessControl.secAccessControl, nil)
         }
         
         baseQuery[kSecAttrService as String] = service
-        baseQuery[kSecAttrAccessible as String] = configuration.accessability.secAccessibilityAttribute
         return baseQuery
-    }
-    
+    }    
 }

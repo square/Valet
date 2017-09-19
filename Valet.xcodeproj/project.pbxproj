@@ -31,6 +31,10 @@
 		168909291F70BDA30057F636 /* SecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168909271F70BDA30057F636 /* SecureEnclaveValet.swift */; };
 		1689092B1F70BF860057F636 /* SecureEnclaveAccessControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689092A1F70BF860057F636 /* SecureEnclaveAccessControl.swift */; };
 		1689092C1F70BF860057F636 /* SecureEnclaveAccessControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689092A1F70BF860057F636 /* SecureEnclaveAccessControl.swift */; };
+		1689092E1F7186CA0057F636 /* SecureEnclave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689092D1F7186CA0057F636 /* SecureEnclave.swift */; };
+		1689092F1F7186CA0057F636 /* SecureEnclave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689092D1F7186CA0057F636 /* SecureEnclave.swift */; };
+		168909311F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168909301F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift */; };
+		168909321F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168909301F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift */; };
 		26E682841BA8B42100EFF4EA /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = EA1E1F861A8C46080067C991 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A531BA8B53100E039CD /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A541BA8B53C00E039CD /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -123,6 +127,8 @@
 		167296481F6E04630090E3D8 /* SecItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecItemTests.swift; sourceTree = "<group>"; };
 		168909271F70BDA30057F636 /* SecureEnclaveValet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveValet.swift; sourceTree = "<group>"; };
 		1689092A1F70BF860057F636 /* SecureEnclaveAccessControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveAccessControl.swift; sourceTree = "<group>"; };
+		1689092D1F7186CA0057F636 /* SecureEnclave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclave.swift; sourceTree = "<group>"; };
+		168909301F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveSinglePromptValet.swift; sourceTree = "<group>"; };
 		26E6827C1BA8B3F900EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E6828A1BA8B4B200EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E682921BA8B4D200EFF4EA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -289,6 +295,8 @@
 				1603B8E01F6F708D005CF283 /* CloudAccessibility.swift */,
 				168909271F70BDA30057F636 /* SecureEnclaveValet.swift */,
 				1689092A1F70BF860057F636 /* SecureEnclaveAccessControl.swift */,
+				1689092D1F7186CA0057F636 /* SecureEnclave.swift */,
+				168909301F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift */,
 			);
 			path = Valet;
 			sourceTree = "<group>";
@@ -625,6 +633,7 @@
 				165568DF1F6F6DD20017588C /* Configuration.swift in Sources */,
 				26F06A8E1BA8BC9000E039CD /* VALSecureEnclaveValet.m in Sources */,
 				1672963A1F6DF4230090E3D8 /* Identifier.swift in Sources */,
+				1689092E1F7186CA0057F636 /* SecureEnclave.swift in Sources */,
 				165568E01F6F6DD20017588C /* Keychain.swift in Sources */,
 				1689092B1F70BF860057F636 /* SecureEnclaveAccessControl.swift in Sources */,
 				1603B8DE1F6F6EB9005CF283 /* SecItem.swift in Sources */,
@@ -635,6 +644,7 @@
 				1603B8E11F6F708D005CF283 /* CloudAccessibility.swift in Sources */,
 				167296461F6E02E20090E3D8 /* ErrorHandler.swift in Sources */,
 				26F06A8F1BA8BC9200E039CD /* VALSynchronizableValet.m in Sources */,
+				168909311F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -649,6 +659,7 @@
 				165568E31F6F6DD20017588C /* Configuration.swift in Sources */,
 				26F06A911BA8BC9500E039CD /* VALSecureEnclaveValet.m in Sources */,
 				1672963B1F6DF4230090E3D8 /* Identifier.swift in Sources */,
+				1689092F1F7186CA0057F636 /* SecureEnclave.swift in Sources */,
 				165568E41F6F6DD20017588C /* Keychain.swift in Sources */,
 				1689092C1F70BF860057F636 /* SecureEnclaveAccessControl.swift in Sources */,
 				1603B8DF1F6F6EB9005CF283 /* SecItem.swift in Sources */,
@@ -659,6 +670,7 @@
 				1603B8E21F6F708D005CF283 /* CloudAccessibility.swift in Sources */,
 				167296471F6E02E20090E3D8 /* ErrorHandler.swift in Sources */,
 				26F06A901BA8BC9400E039CD /* VALSynchronizableValet.m in Sources */,
+				168909321F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

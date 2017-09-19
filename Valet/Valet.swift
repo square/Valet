@@ -5,7 +5,6 @@
 //  Created by Dan Federman and Eric Muller on 9/17/17.
 //  Copyright © 2017 Square, Inc.
 //
-//
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
@@ -54,7 +53,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter flavor: A description of the Valet's capabilities.
     /// - returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedAccessGroupValet(with identifier: Identifier, of flavor: Flavor) -> Valet {
-        let key = Service.standard(identifier, .valet(flavor)).description as NSString
+        let key = Service.sharedAccessGroup(identifier, .valet(flavor)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
@@ -84,6 +83,8 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     }
     
     private init(identifier: Identifier, flavor: Flavor) {
+        self.identifier = identifier
+        
         switch flavor {
         case let .vanilla(accessibility):
             service = .standard(identifier, .valet(flavor))
@@ -95,11 +96,12 @@ public final class Valet: NSObject, KeychainQueryConvertible {
             self.flavor = flavor
         }
         
-        keychainQuery = service.baseQuery
-        self.identifier = identifier
+        keychainQuery = service.generateBaseQuery()
     }
     
     private init(sharedAccess identifier: Identifier, flavor: Flavor) {
+        self.identifier = identifier
+        
         switch flavor {
         case let .vanilla(accessibility):
             service = .sharedAccessGroup(identifier, .valet(flavor))
@@ -112,8 +114,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
             self.flavor = flavor
         }
         
-        keychainQuery = service.baseQuery
-        self.identifier = identifier
+        keychainQuery = service.generateBaseQuery()
     }
     
     // MARK: KeychainQueryConvertible
