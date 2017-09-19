@@ -31,7 +31,6 @@ public enum Accessibility: CustomStringConvertible {
     case always
 
     /// Valet data can only be accessed while the device is unlocked. This class is only available if a passcode is set on the device. This is recommended for items that only need to be accessible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device. No items can be stored in this class on devices without a passcode. Disabling the device passcode will cause all items in this class to be deleted.
-    @available(macOS 10.0, iOS 8.0, *)
     case whenPasscodeSetThisDeviceOnly
     /// Valet data can only be accessed while the device is unlocked. This is recommended for data that only needs to be accessible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
     case whenUnlockedThisDeviceOnly

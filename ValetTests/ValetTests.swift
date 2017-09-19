@@ -30,7 +30,7 @@ class ValetTests: XCTestCase
     let valet = Valet.valet(with: identifier, of: .vanilla(accessibility))
     
     // FIXME: Need a different flavor (Synchronizable can't be tested on Mac currently
-    let anotherFlavor = Valet.valet(with: identifier, of: .synchronizable(.whenUnlocked))
+    let anotherFlavor = Valet.valet(with: identifier, of: .iCloud(.whenUnlocked))
 
     let key = "key"
     let passcode = "topsecret"

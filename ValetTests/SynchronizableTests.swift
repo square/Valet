@@ -30,8 +30,8 @@ import XCTest
     class ValetSynchronizableTests: XCTestCase
     {
         static let identifier = Identifier(nonEmpty: "valet_testing")!
-        static let accessibility = SynchronizableAccessibility.whenUnlocked
-        let valet = Valet.valet(with: identifier, of: Valet.Flavor.synchronizable(ValetSynchronizableTests.accessibility))
+        static let accessibility = CloudAccessibility.whenUnlocked
+        let valet = Valet.valet(with: identifier, of: Valet.Flavor.iCloud(ValetSynchronizableTests.accessibility))
         let key = "key"
         let passcode = "topsecret"
         

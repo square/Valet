@@ -29,25 +29,17 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     public enum Flavor {
         /// Reads and writes keychain elements that do not sync to other devices.
         case vanilla(Accessibility)
-        /// Reads and writes keychain elements that are synchronized with iCloud
-        case synchronizable(SynchronizableAccessibility)
+        /// Reads and writes keychain elements that are synchronized with iCloud.
+        case iCloud(CloudAccessibility)
     }
     
     // MARK: Public Class Methods
     
     /// - parameter identifier: A non-empty string that uniquely identifies a Valet.
     /// - parameter flavor: A description of the Valet's capabilities.
-    /// - returns: A Valet that reads/writes keychain elements with the desired accessibility.
+    /// - returns: A Valet that reads/writes keychain elements with the desired flavor.
     public class func valet(with identifier: Identifier, of flavor: Flavor) -> Valet {
-        let key: NSString
-        switch flavor {
-        case let .vanilla(accessibility):
-            key = Service.standard(identifier, accessibility, .vanilla).description as NSString
-            
-        case let .synchronizable(synchronizableAccessibility):
-            key = Service.standard(identifier, synchronizableAccessibility.accessibility, .synchronizable).description as NSString
-        }
-        
+        let key = Service.standard(identifier, .valet(flavor)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
@@ -62,15 +54,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter flavor: A description of the Valet's capabilities.
     /// - returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedAccessGroupValet(with identifier: Identifier, of flavor: Flavor) -> Valet {
-        let key: NSString
-        switch flavor {
-        case let .vanilla(accessibility):
-            key = Service.standard(identifier, accessibility, .vanilla).description as NSString
-            
-        case let .synchronizable(synchronizableAccessibility):
-            key = Service.standard(identifier, synchronizableAccessibility.accessibility, .synchronizable).description as NSString
-        }
-        
+        let key = Service.standard(identifier, .valet(flavor)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
@@ -102,11 +86,11 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     private init(identifier: Identifier, flavor: Flavor) {
         switch flavor {
         case let .vanilla(accessibility):
-            service = .standard(identifier, accessibility, .vanilla)
+            service = .standard(identifier, .valet(flavor))
             self.accessibility = accessibility
             self.flavor = flavor
-        case let .synchronizable(synchronizableAccessibility):
-            service = .standard(identifier, synchronizableAccessibility.accessibility, .synchronizable)
+        case let .iCloud(synchronizableAccessibility):
+            service = .standard(identifier, .valet(flavor))
             accessibility = synchronizableAccessibility.accessibility
             self.flavor = flavor
         }
@@ -118,12 +102,12 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     private init(sharedAccess identifier: Identifier, flavor: Flavor) {
         switch flavor {
         case let .vanilla(accessibility):
-            service = .sharedAccessGroup(identifier, accessibility, .vanilla)
+            service = .sharedAccessGroup(identifier, .valet(flavor))
             self.accessibility = accessibility
             self.flavor = flavor
             
-        case let .synchronizable(synchronizableAccessibility):
-            service = .sharedAccessGroup(identifier, synchronizableAccessibility.accessibility, .synchronizable)
+        case let .iCloud(synchronizableAccessibility):
+            service = .sharedAccessGroup(identifier, .valet(flavor))
             accessibility = synchronizableAccessibility.accessibility
             self.flavor = flavor
         }

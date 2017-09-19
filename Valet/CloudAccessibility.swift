@@ -1,5 +1,5 @@
 //
-//  SynchronizableAccessibility.swift
+//  CloudAccessibility.swift
 //  Valet
 //
 //  Created by Dan Federman on 9/17/17.
@@ -21,7 +21,7 @@
 import Foundation
 
 
-public enum SynchronizableAccessibility: CustomStringConvertible {
+public enum CloudAccessibility: CustomStringConvertible {
     /// Valet data can only be accessed while the device is unlocked. This attribute is recommended for data that only needs to be accessible while the application is in the foreground. Valet data with this attribute will migrate to a new device when using encrypted backups.
     case whenUnlocked
     /// Valet data can only be accessed once the device has been unlocked after a restart. This attribute is recommended for data that needs to be accessible by background applications. Valet data with this attribute will migrate to a new device when using encrypted backups.

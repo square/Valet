@@ -23,8 +23,8 @@ import Foundation
 
 
 internal enum Service: CustomStringConvertible, Equatable {
-    case standard(Identifier, Accessibility, Flavor)
-    case sharedAccessGroup(Identifier, Accessibility, Flavor)
+    case standard(Identifier, Configuration)
+    case sharedAccessGroup(Identifier, Configuration)
     
     // MARK: Equatable
     
@@ -36,73 +36,58 @@ internal enum Service: CustomStringConvertible, Equatable {
     
     internal var description: String {
         switch self {
-        case let .standard(identifier, accessibility, flavor):
-            return "VAL_\(flavor)_initWithIdentifier:accessibility:_\(identifier)_\(accessibility)"
-        case let .sharedAccessGroup(identifier, accessibility, flavor):
-            return "VAL_\(flavor)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(accessibility)"
+        case let .standard(identifier, configuration):
+            return "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(configuration.accessability.description)"
+        case let .sharedAccessGroup(identifier, configuration):
+            return "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(configuration.accessability.description)"
         }
     }
     
     // MARK: Internal Properties
     
     internal var baseQuery: [String : AnyHashable] {
+        var service = description
         var baseQuery: [String : AnyHashable] = [
             kSecClass as String : kSecClassGenericPassword as String,
-            kSecAttrService as String : description,
-            kSecAttrAccessible as String : accessability.secAccessibilityAttribute
         ]
         
-        func modifyBaseQuery(given flavor: Flavor, accessibility: Accessibility) {
+        let configuration: Configuration
+        switch self {
+        case let .standard(_, desiredConfiguration):
+            configuration = desiredConfiguration
+            
+        case let .sharedAccessGroup(identifier, desiredConfiguration):
+            baseQuery[kSecAttrAccessGroup as String] = "\(SecItem.sharedAccessGroupPrefix).\(identifier.description)"
+            configuration = desiredConfiguration
+        }
+        
+        switch configuration {
+        case let .valet(flavor):
             switch flavor {
             case .vanilla:
                 // Nothing to do here.
                 break
-            case .synchronizable:
-                baseQuery[kSecAttrSynchronizable as String] = true
                 
-            case .secureEnclave:
-                switch accessibility {
-                default:
-                    // TODO: flesh this out.
-                    break
-                }
-            case .singlePromptSecureEnclave:
-                switch accessibility {
-                default:
-                    // TODO: flesh this out.
-                    break
-                }
+            case .iCloud:
+                baseQuery[kSecAttrSynchronizable as String] = true
             }
-        }
-        
-        switch self {
-        case let .standard(_, accessibility, flavor):
-            modifyBaseQuery(given: flavor, accessibility: accessibility)
             
-        case let .sharedAccessGroup(identifier, accessibility, flavor):
-            baseQuery[kSecAttrAccessGroup as String] = "\(SecItem.sharedAccessGroupPrefix).\(identifier.description)"
-            modifyBaseQuery(given: flavor, accessibility: accessibility)
+        case let .secureEnclave(flavor):
+            let accessControl: SecureEnclaveAccessControl
+            switch flavor {
+            case let .singlePrompt(desiredAccessControl):
+                accessControl = desiredAccessControl
+            case let .alwaysPrompt(desiredAccessControl):
+                accessControl = desiredAccessControl
+            }
+            
+            service += accessControl.description
+            baseQuery[kSecAttrAccessControl as String] = SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, accessControl.secAccessControl, nil)
         }
         
+        baseQuery[kSecAttrService as String] = service
+        baseQuery[kSecAttrAccessible as String] = configuration.accessability.secAccessibilityAttribute
         return baseQuery
     }
     
-    // MARK: Internal Methods
-    
-    internal func baseQuery(with options: [String : AnyHashable]) -> [String : AnyHashable] {
-        return baseQuery.merging(options, uniquingKeysWith: { (baseValue, optionValue) -> AnyHashable in
-            return optionValue
-        })
-    }
-    
-    // MARK: Private Properties
-    
-    private var accessability: Accessibility {
-        switch self {
-        case let .standard(_, accessability, _):
-            return accessability
-        case let .sharedAccessGroup(_, accessability, _):
-            return accessability
-        }
-    }
 }

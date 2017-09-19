@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		1603B8DE1F6F6EB9005CF283 /* SecItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D61F6F69B90017588C /* SecItem.swift */; };
 		1603B8DF1F6F6EB9005CF283 /* SecItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D61F6F69B90017588C /* SecItem.swift */; };
-		1603B8E11F6F708D005CF283 /* SynchronizableAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1603B8E01F6F708D005CF283 /* SynchronizableAccessibility.swift */; };
-		1603B8E21F6F708D005CF283 /* SynchronizableAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1603B8E01F6F708D005CF283 /* SynchronizableAccessibility.swift */; };
-		165568DF1F6F6DD20017588C /* Flavor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D71F6F69B90017588C /* Flavor.swift */; };
+		1603B8E11F6F708D005CF283 /* CloudAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1603B8E01F6F708D005CF283 /* CloudAccessibility.swift */; };
+		1603B8E21F6F708D005CF283 /* CloudAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1603B8E01F6F708D005CF283 /* CloudAccessibility.swift */; };
+		165568DF1F6F6DD20017588C /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D71F6F69B90017588C /* Configuration.swift */; };
 		165568E01F6F6DD20017588C /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D81F6F69B90017588C /* Keychain.swift */; };
 		165568E21F6F6DD20017588C /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D91F6F69B90017588C /* Service.swift */; };
-		165568E31F6F6DD20017588C /* Flavor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D71F6F69B90017588C /* Flavor.swift */; };
+		165568E31F6F6DD20017588C /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D71F6F69B90017588C /* Configuration.swift */; };
 		165568E41F6F6DD20017588C /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D81F6F69B90017588C /* Keychain.swift */; };
 		165568E61F6F6DD20017588C /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165568D91F6F69B90017588C /* Service.swift */; };
 		167296341F6DE8D00090E3D8 /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296331F6DE8D00090E3D8 /* Accessibility.swift */; };
@@ -27,6 +27,10 @@
 		167296471F6E02E20090E3D8 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296451F6E02E20090E3D8 /* ErrorHandler.swift */; };
 		167296491F6E04630090E3D8 /* SecItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296481F6E04630090E3D8 /* SecItemTests.swift */; };
 		1672964A1F6E04630090E3D8 /* SecItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167296481F6E04630090E3D8 /* SecItemTests.swift */; };
+		168909281F70BDA30057F636 /* SecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168909271F70BDA30057F636 /* SecureEnclaveValet.swift */; };
+		168909291F70BDA30057F636 /* SecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168909271F70BDA30057F636 /* SecureEnclaveValet.swift */; };
+		1689092B1F70BF860057F636 /* SecureEnclaveAccessControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689092A1F70BF860057F636 /* SecureEnclaveAccessControl.swift */; };
+		1689092C1F70BF860057F636 /* SecureEnclaveAccessControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689092A1F70BF860057F636 /* SecureEnclaveAccessControl.swift */; };
 		26E682841BA8B42100EFF4EA /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = EA1E1F861A8C46080067C991 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A531BA8B53100E039CD /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A541BA8B53C00E039CD /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -107,9 +111,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1603B8E01F6F708D005CF283 /* SynchronizableAccessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronizableAccessibility.swift; sourceTree = "<group>"; };
+		1603B8E01F6F708D005CF283 /* CloudAccessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAccessibility.swift; sourceTree = "<group>"; };
 		165568D61F6F69B90017588C /* SecItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecItem.swift; sourceTree = "<group>"; };
-		165568D71F6F69B90017588C /* Flavor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flavor.swift; sourceTree = "<group>"; };
+		165568D71F6F69B90017588C /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		165568D81F6F69B90017588C /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		165568D91F6F69B90017588C /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		167296331F6DE8D00090E3D8 /* Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accessibility.swift; sourceTree = "<group>"; };
@@ -117,6 +121,8 @@
 		167296391F6DF4230090E3D8 /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		167296451F6E02E20090E3D8 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		167296481F6E04630090E3D8 /* SecItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecItemTests.swift; sourceTree = "<group>"; };
+		168909271F70BDA30057F636 /* SecureEnclaveValet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveValet.swift; sourceTree = "<group>"; };
+		1689092A1F70BF860057F636 /* SecureEnclaveAccessControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveAccessControl.swift; sourceTree = "<group>"; };
 		26E6827C1BA8B3F900EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E6828A1BA8B4B200EFF4EA /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E682921BA8B4D200EFF4EA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -211,7 +217,7 @@
 		165568D51F6F69A70017588C /* Internal */ = {
 			isa = PBXGroup;
 			children = (
-				165568D71F6F69B90017588C /* Flavor.swift */,
+				165568D71F6F69B90017588C /* Configuration.swift */,
 				165568D81F6F69B90017588C /* Keychain.swift */,
 				165568D61F6F69B90017588C /* SecItem.swift */,
 				165568D91F6F69B90017588C /* Service.swift */,
@@ -280,7 +286,9 @@
 				167296391F6DF4230090E3D8 /* Identifier.swift */,
 				167296451F6E02E20090E3D8 /* ErrorHandler.swift */,
 				AC11C54E1F6F4A7600AE9842 /* KeychainQueryConvertible.swift */,
-				1603B8E01F6F708D005CF283 /* SynchronizableAccessibility.swift */,
+				1603B8E01F6F708D005CF283 /* CloudAccessibility.swift */,
+				168909271F70BDA30057F636 /* SecureEnclaveValet.swift */,
+				1689092A1F70BF860057F636 /* SecureEnclaveAccessControl.swift */,
 			);
 			path = Valet;
 			sourceTree = "<group>";
@@ -613,16 +621,18 @@
 				26F06A8D1BA8BC8F00E039CD /* VALValet.m in Sources */,
 				165568E21F6F6DD20017588C /* Service.swift in Sources */,
 				167296371F6DECDF0090E3D8 /* MigrationResult.swift in Sources */,
-				165568DF1F6F6DD20017588C /* Flavor.swift in Sources */,
+				168909281F70BDA30057F636 /* SecureEnclaveValet.swift in Sources */,
+				165568DF1F6F6DD20017588C /* Configuration.swift in Sources */,
 				26F06A8E1BA8BC9000E039CD /* VALSecureEnclaveValet.m in Sources */,
 				1672963A1F6DF4230090E3D8 /* Identifier.swift in Sources */,
 				165568E01F6F6DD20017588C /* Keychain.swift in Sources */,
+				1689092B1F70BF860057F636 /* SecureEnclaveAccessControl.swift in Sources */,
 				1603B8DE1F6F6EB9005CF283 /* SecItem.swift in Sources */,
 				AC11C54C1F6F2D7E00AE9842 /* Valet.swift in Sources */,
 				371E38141E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
 				167296341F6DE8D00090E3D8 /* Accessibility.swift in Sources */,
 				AC11C54F1F6F4A7600AE9842 /* KeychainQueryConvertible.swift in Sources */,
-				1603B8E11F6F708D005CF283 /* SynchronizableAccessibility.swift in Sources */,
+				1603B8E11F6F708D005CF283 /* CloudAccessibility.swift in Sources */,
 				167296461F6E02E20090E3D8 /* ErrorHandler.swift in Sources */,
 				26F06A8F1BA8BC9200E039CD /* VALSynchronizableValet.m in Sources */,
 			);
@@ -635,16 +645,18 @@
 				26F06A921BA8BC9700E039CD /* VALValet.m in Sources */,
 				165568E61F6F6DD20017588C /* Service.swift in Sources */,
 				167296381F6DECDF0090E3D8 /* MigrationResult.swift in Sources */,
-				165568E31F6F6DD20017588C /* Flavor.swift in Sources */,
+				168909291F70BDA30057F636 /* SecureEnclaveValet.swift in Sources */,
+				165568E31F6F6DD20017588C /* Configuration.swift in Sources */,
 				26F06A911BA8BC9500E039CD /* VALSecureEnclaveValet.m in Sources */,
 				1672963B1F6DF4230090E3D8 /* Identifier.swift in Sources */,
 				165568E41F6F6DD20017588C /* Keychain.swift in Sources */,
+				1689092C1F70BF860057F636 /* SecureEnclaveAccessControl.swift in Sources */,
 				1603B8DF1F6F6EB9005CF283 /* SecItem.swift in Sources */,
 				AC11C54D1F6F2D7E00AE9842 /* Valet.swift in Sources */,
 				371E38151E3713DF008A1C62 /* VALSinglePromptSecureEnclaveValet.m in Sources */,
 				167296351F6DE8D00090E3D8 /* Accessibility.swift in Sources */,
 				AC11C5501F6F4A7600AE9842 /* KeychainQueryConvertible.swift in Sources */,
-				1603B8E21F6F708D005CF283 /* SynchronizableAccessibility.swift in Sources */,
+				1603B8E21F6F708D005CF283 /* CloudAccessibility.swift in Sources */,
 				167296471F6E02E20090E3D8 /* ErrorHandler.swift in Sources */,
 				26F06A901BA8BC9400E039CD /* VALSynchronizableValet.m in Sources */,
 			);
@@ -768,7 +780,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Valet/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.square.Valet;
 				PRODUCT_NAME = Valet;
@@ -798,7 +810,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Valet/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.square.Valet;
 				PRODUCT_NAME = Valet;
@@ -829,7 +841,7 @@
 				INFOPLIST_FILE = Valet/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.square.Valet;
 				PRODUCT_NAME = Valet;
 				SDKROOT = macosx;
@@ -860,7 +872,7 @@
 				INFOPLIST_FILE = Valet/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.square.Valet;
 				PRODUCT_NAME = Valet;
 				SDKROOT = macosx;
@@ -970,7 +982,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1016,7 +1028,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1087,7 +1099,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = ValetTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -1113,7 +1125,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = ValetTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
