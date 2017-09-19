@@ -30,7 +30,8 @@ import XCTest
     class ValetSynchronizableTests: XCTestCase
     {
         static let identifier = Identifier(nonEmpty: "valet_testing")!
-        let valet = SynchronizableValet.valet(with: identifier, accessibility: .whenUnlocked)
+        static let accessibility = SynchronizableAccessibility.whenUnlocked
+        let valet = Valet.valet(with: identifier, of: Valet.Flavor.synchronizable(ValetSynchronizableTests.accessibility))
         let key = "key"
         let passcode = "topsecret"
         
@@ -47,7 +48,7 @@ import XCTest
         
         func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
         {
-            let localValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility.accessibility)
+            let localValet = Valet.valet(with: valet.identifier, of: Valet.Flavor.vanilla(valet.accessibility))
             XCTAssertFalse(valet == localValet)
             XCTAssertFalse(valet === localValet)
             

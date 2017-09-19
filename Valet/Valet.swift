@@ -24,33 +24,58 @@ import Foundation
 /// Reads and writes keychain elements.
 public final class Valet: NSObject, KeychainQueryConvertible {
     
+    // MARK: Flavor
+    
+    public enum Flavor {
+        /// Reads and writes keychain elements that do not sync to other devices.
+        case vanilla(Accessibility)
+        /// Reads and writes keychain elements that are synchronized with iCloud
+        case synchronizable(SynchronizableAccessibility)
+    }
+    
     // MARK: Public Class Methods
     
     /// - parameter identifier: A non-empty string that uniquely identifies a Valet.
-    /// - parameter accessibility: Determines when the values in this Valet will be accessible.
+    /// - parameter flavor: A description of the Valet's capabilities.
     /// - returns: A Valet that reads/writes keychain elements with the desired accessibility.
-    public class func valet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        let key = Service.standard(identifier, accessibility, .vanilla).description as NSString
+    public class func valet(with identifier: Identifier, of flavor: Flavor) -> Valet {
+        let key: NSString
+        switch flavor {
+        case let .vanilla(accessibility):
+            key = Service.standard(identifier, accessibility, .vanilla).description as NSString
+            
+        case let .synchronizable(synchronizableAccessibility):
+            key = Service.standard(identifier, synchronizableAccessibility.accessibility, .synchronizable).description as NSString
+        }
+        
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
         } else {
-            let valet = Valet(identifier: identifier, accessibility: accessibility)
+            let valet = Valet(identifier: identifier, flavor: flavor)
             identifierToValetMap.setObject(valet, forKey: key)
             return valet
         }
     }
     
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
-    /// - parameter accessibility: Determines when the values in this Valet will be accessible.
+    /// - parameter flavor: A description of the Valet's capabilities.
     /// - returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    public class func sharedAccessGroupValet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        let key = Service.sharedAccessGroup(identifier, accessibility, .vanilla).description as NSString
+    public class func sharedAccessGroupValet(with identifier: Identifier, of flavor: Flavor) -> Valet {
+        let key: NSString
+        switch flavor {
+        case let .vanilla(accessibility):
+            key = Service.standard(identifier, accessibility, .vanilla).description as NSString
+            
+        case let .synchronizable(synchronizableAccessibility):
+            key = Service.standard(identifier, synchronizableAccessibility.accessibility, .synchronizable).description as NSString
+        }
+        
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
         } else {
-            let valet = Valet(sharedAccess: identifier, accessibility: accessibility)
+            let valet = Valet(sharedAccess: identifier, flavor: flavor)
             identifierToValetMap.setObject(valet, forKey: key)
             return valet
         }
@@ -74,17 +99,33 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         fatalError("Do not use this initializer")
     }
     
-    private init(identifier: Identifier, accessibility: Accessibility) {
-        service = .standard(identifier, accessibility, .vanilla)
+    private init(identifier: Identifier, flavor: Flavor) {
+        switch flavor {
+        case let .vanilla(accessibility):
+            service = .standard(identifier, accessibility, .vanilla)
+            self.accessibility = accessibility
+            
+        case let .synchronizable(synchronizableAccessibility):
+            service = .standard(identifier, synchronizableAccessibility.accessibility, .synchronizable)
+            accessibility = synchronizableAccessibility.accessibility
+        }
+        
         keychainQuery = service.baseQuery
-        self.accessibility = accessibility
         self.identifier = identifier
     }
     
-    private init(sharedAccess identifier: Identifier, accessibility: Accessibility) {
-        service = .sharedAccessGroup(identifier, accessibility, .vanilla)
+    private init(sharedAccess identifier: Identifier, flavor: Flavor) {
+        switch flavor {
+        case let .vanilla(accessibility):
+            service = .sharedAccessGroup(identifier, accessibility, .vanilla)
+            self.accessibility = accessibility
+            
+        case let .synchronizable(synchronizableAccessibility):
+            service = .sharedAccessGroup(identifier, synchronizableAccessibility.accessibility, .synchronizable)
+            accessibility = synchronizableAccessibility.accessibility
+        }
+        
         keychainQuery = service.baseQuery
-        self.accessibility = accessibility
         self.identifier = identifier
     }
     
