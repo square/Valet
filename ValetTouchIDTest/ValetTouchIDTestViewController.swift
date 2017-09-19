@@ -25,68 +25,62 @@ import UIKit
 final class ValetTouchIDTestViewController : UIViewController
 {
     // MARK: Properties
-
+    
     @IBOutlet var textView : UITextView?
-    var singlePromptSecureEnclaveValet : VALSinglePromptSecureEnclaveValet
+    var singlePromptSecureEnclaveValet : SecureEnclaveSinglePromptValet
     let username = "CustomerPresentProof"
-
-
+    
     // MARK: Initializers
-
+    
     required init?(coder aDecoder: NSCoder)
     {
-        if let valet = VALSinglePromptSecureEnclaveValet(identifier: "UserPresence", accessControl: VALAccessControl.userPresence) {
-            self.singlePromptSecureEnclaveValet = valet
-        } else {
-            return nil;
-        }
-
+        singlePromptSecureEnclaveValet = SecureEnclaveSinglePromptValet.valet(with: Identifier(nonEmpty: "UserPresence")!, accessControl: .userPresence)
+        
         super.init(coder: aDecoder)
     }
-
-
+    
     // MARK: Outlets
-
+    
     @objc(setOrUpdateItem:)
     @IBAction func setOrUpdateItem(sender: UIResponder)
     {
         let stringToSet = "I am here! " + NSUUID().uuidString
-        let setOrUpdatedItem = singlePromptSecureEnclaveValet.setString(stringToSet, forKey: username)
+        let setOrUpdatedItem = singlePromptSecureEnclaveValet.set(string: stringToSet, for: username)
         updateTextView(messageComponents: #function, (setOrUpdatedItem ? "Success" : "Failure"))
     }
-
+    
     @objc(getItem:)
     @IBAction func getItem(sender: UIResponder)
     {
-        var userCancelled: ObjCBool = false
-        let password = singlePromptSecureEnclaveValet.string(forKey: username, userPrompt: "Use TouchID to retrieve password", userCancelled:&userCancelled)
-
-        var resultString: String
-        if (userCancelled.boolValue) {
+        let resultString: String
+        switch singlePromptSecureEnclaveValet.string(for: username, withPrompt: "Use TouchID to retrieve password") {
+        case let .success(password):
+            resultString = password
+            
+        case .userCancelled:
             resultString = "user cancelled TouchID"
-        } else if (password == nil) {
+            
+        case .itemNotFound:
             resultString = "object not found"
-        } else {
-            resultString = password as String!
         }
-
+        
         updateTextView(messageComponents: #function, resultString)
     }
-
+    
     @objc(removeItem:)
     @IBAction func removeItem(sender: UIResponder)
     {
-        let removedItem = singlePromptSecureEnclaveValet.removeObject(forKey: username)
+        let removedItem = singlePromptSecureEnclaveValet.removeObject(for: username)
         updateTextView(messageComponents: #function, (removedItem ? "Success" : "Failure"))
     }
-
+    
     @objc(containsItem:)
     @IBAction func containsItem(sender: UIResponder)
     {
-        let containsItem = singlePromptSecureEnclaveValet.containsObject(forKey: username)
+        let containsItem = singlePromptSecureEnclaveValet.containsObject(for: username)
         updateTextView(messageComponents: #function, (containsItem ? "YES" : "NO"))
     }
-
+    
     @objc(requirePrompt:)
     @IBAction func requirePrompt(sender: UIResponder)
     {
@@ -95,7 +89,7 @@ final class ValetTouchIDTestViewController : UIViewController
     }
     
     // MARK: Private
-
+    
     private func updateTextView(messageComponents: String...)
     {
         if let textView = textView as UITextView! {

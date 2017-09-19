@@ -35,6 +35,8 @@
 		1689092F1F7186CA0057F636 /* SecureEnclave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1689092D1F7186CA0057F636 /* SecureEnclave.swift */; };
 		168909311F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168909301F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift */; };
 		168909321F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168909301F718A7A0057F636 /* SecureEnclaveSinglePromptValet.swift */; };
+		168909381F7199D60057F636 /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; };
+		168909391F7199D60057F636 /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		26E682841BA8B42100EFF4EA /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = EA1E1F861A8C46080067C991 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A531BA8B53100E039CD /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1B1AB7B84000EDB6E3 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		26F06A541BA8B53C00E039CD /* VALSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = EAEEAC1E1AB7B84E00EDB6E3 /* VALSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -84,12 +86,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		16B4284F1F6DD4290052680B /* PBXContainerItemProxy */ = {
+		1689093A1F7199D60057F636 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 26E6827B1BA8B3F900EFF4EA;
-			remoteInfo = "Valet-iOS";
+			remoteInfo = "Valet iOS";
 		};
 		371150B81E2962FC004A45D4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -113,6 +115,20 @@
 			remoteInfo = "Valet-Mac";
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1689093C1F7199D60057F636 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				168909391F7199D60057F636 /* Valet.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1603B8E01F6F708D005CF283 /* CloudAccessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAccessibility.swift; sourceTree = "<group>"; };
@@ -214,6 +230,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				168909381F7199D60057F636 /* Valet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +246,13 @@
 				165568D91F6F69B90017588C /* Service.swift */,
 			);
 			path = Internal;
+			sourceTree = "<group>";
+		};
+		168909331F7199B50057F636 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		371150A61E2962D8004A45D4 /* Valet iOS Test Host App */ = {
@@ -254,6 +278,7 @@
 				EAF894751B053E0500EDAD6C /* ValetTouchIDTest */,
 				371150A61E2962D8004A45D4 /* Valet iOS Test Host App */,
 				EA1E1F841A8C46080067C991 /* Products */,
+				168909331F7199B50057F636 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -488,11 +513,12 @@
 				EAF894701B053E0400EDAD6C /* Sources */,
 				EAF894711B053E0400EDAD6C /* Frameworks */,
 				EAF894721B053E0400EDAD6C /* Resources */,
+				1689093C1F7199D60057F636 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				16B428501F6DD4290052680B /* PBXTargetDependency */,
+				1689093B1F7199D60057F636 /* PBXTargetDependency */,
 			);
 			name = ValetTouchIDTest;
 			productName = ValetTouchIDTest;
@@ -511,6 +537,7 @@
 				TargetAttributes = {
 					26E6827B1BA8B3F900EFF4EA = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = 9XUJ7M53NG;
 						LastSwiftMigration = 0900;
 					};
 					26E682891BA8B4B200EFF4EA = {
@@ -543,6 +570,7 @@
 					};
 					EAF894731B053E0400EDAD6C = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 9XUJ7M53NG;
 						LastSwiftMigration = 0900;
 					};
 				};
@@ -719,10 +747,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		16B428501F6DD4290052680B /* PBXTargetDependency */ = {
+		1689093B1F7199D60057F636 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 26E6827B1BA8B3F900EFF4EA /* Valet iOS */;
-			targetProxy = 16B4284F1F6DD4290052680B /* PBXContainerItemProxy */;
+			targetProxy = 1689093A1F7199D60057F636 /* PBXContainerItemProxy */;
 		};
 		371150B91E2962FC004A45D4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -786,13 +814,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 9XUJ7M53NG;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Valet/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.square.Valet;
 				PRODUCT_NAME = Valet;
@@ -816,13 +844,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 9XUJ7M53NG;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Valet/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.square.Valet;
 				PRODUCT_NAME = Valet;
@@ -909,7 +937,6 @@
 				DEVELOPMENT_TEAM = 9XUJ7M53NG;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Valet iOS Test Host App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.Valet-iOS-Test-Host-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -937,7 +964,6 @@
 				DEVELOPMENT_TEAM = 9XUJ7M53NG;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Valet iOS Test Host App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.Valet-iOS-Test-Host-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1149,11 +1175,12 @@
 		EAF894951B053E0700EDAD6C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9XUJ7M53NG;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1161,9 +1188,8 @@
 				);
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = ValetTouchIDTest/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTest;
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTestApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ValetTouchIDTest/ValetTouchIDTest-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1175,18 +1201,18 @@
 		EAF894961B053E0700EDAD6C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9XUJ7M53NG;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = ValetTouchIDTest/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTest;
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTestApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ValetTouchIDTest/ValetTouchIDTest-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
