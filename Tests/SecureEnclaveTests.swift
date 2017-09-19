@@ -23,20 +23,6 @@ import Valet
 import XCTest
 
 
-extension VALSecureEnclaveValet {
-    
-    class var supportsSecureEnclaveKeychainTests: Bool {
-        // Until we can write a signed host app on macOS, we can only test the iCloud Keychain (SynchronizableValet) code on iOS.
-        #if TARGET_IPHONE_SIMULATOR
-            return supportsSecureEnclaveKeychainItems
-        #else
-            return false
-        #endif
-    }
-    
-}
-
-
 extension Error
 {
     // The Error.code -> VALMigrationError conversion is gross right now:
@@ -62,7 +48,7 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_secureEnclaveValetsWithEqualConfiguration_haveEqualPointers()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainTests else {
+        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
             return
         }
         
@@ -73,7 +59,7 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_secureEnclaveValetsWithEqualConfiguration_canAccessSameData()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainTests else {
+        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
             return
         }
         
@@ -85,7 +71,7 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_secureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainTests else {
+        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
             return
         }
         
@@ -99,7 +85,7 @@ class ValetSecureEnclaveTests: XCTestCase
     @available (*, deprecated)
     func test_secureEnclaveValet_backwardsCompatibility()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainTests else {
+        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
             return
         }
         
@@ -113,7 +99,7 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_canAccessKeychain()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainTests else {
+        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
             return
         }
         
@@ -124,7 +110,7 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_migrateObjectsMatchingQuery_failsForBadQuery()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainTests else {
+        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
             return
         }
         
@@ -137,7 +123,7 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainTests else {
+        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
             return
         }
         
@@ -169,7 +155,7 @@ class ValetSecureEnclaveTests: XCTestCase
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainTests else {
+        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
             return
         }
         

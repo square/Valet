@@ -32,16 +32,13 @@ class ValetMacTests: XCTestCase
     @available (OSX 10.10, *)
     func test_setStringForKey_neutralizesMacOSAccessControlListVuln()
     {
-        let valet = VALValet(identifier: "MacOSVulnTest", accessibility: .whenUnlocked)!
+        let valet = Valet.valet(with: Identifier(nonEmpty: "MacOSVulnTest")!, of: .vanilla(.whenUnlocked))
         let vulnKey = "KeepIt"
         let vulnValue = "Secret"
-        valet.removeObject(forKey: vulnKey)
+        valet.removeObject(for: vulnKey)
         
-        var query = valet.baseQuery
-        
-        for (key, value) in valet._secItemFormatDictionary(withKey: vulnKey) {
-            query[key] = value
-        }
+        var query = valet.keychainQuery
+        query[kSecAttrAccount as String] = vulnKey
         
         var accessList: SecAccess?
         var trustedAppSelf: SecTrustedApplication?
@@ -54,16 +51,16 @@ class ValetMacTests: XCTestCase
         // Add an entry to the keychain with an access control list.
         XCTAssertEqual(SecAccessCreate("Access Control List" as CFString, trustedList, &accessList), errSecSuccess)
         var accessListQuery = query
-        accessListQuery[kSecAttrAccess as AnyHashable] = accessList
-        accessListQuery[kSecValueData as AnyHashable] = vulnValue.data(using: .utf8)
+        accessListQuery[kSecAttrAccess as String] = accessList
+        accessListQuery[kSecValueData as String] = vulnValue.data(using: .utf8)
         XCTAssertEqual(SecItemAdd(accessListQuery as CFDictionary, nil), errSecSuccess)
         
         // The potentially vulnerable keychain item should exist in our Valet now.
-        XCTAssertTrue(valet.containsObject(forKey: vulnKey))
+        XCTAssertTrue(valet.containsObject(for: vulnKey))
         
         // Obtain a reference to the vulnerable keychain entry.
-        query[kSecReturnRef as AnyHashable] = true
-        query[kSecReturnAttributes as AnyHashable] = true
+        query[kSecReturnRef as String] = true
+        query[kSecReturnAttributes as String] = true
         var vulnerableEntryReference: CFTypeRef?
         XCTAssertEqual(SecItemCopyMatching(query as CFDictionary, &vulnerableEntryReference), errSecSuccess)
         
@@ -84,7 +81,7 @@ class ValetMacTests: XCTestCase
         
         // Update the vulnerable value with Valet - we should have deleted the existing item, making the entry no longer vulnerable.
         let updatedValue = "Safe"
-        XCTAssertTrue(valet.setString(updatedValue, forKey: vulnKey))
+        XCTAssertTrue(valet.set(string: updatedValue, for: vulnKey))
         
         // We should no longer be able to access the keychain item via the ref.
         let queryWithVulnerableReferenceAndAttributes = [

@@ -23,79 +23,74 @@ import Valet
 import XCTest
 
 
-// Until we can write a signed host app on macOS, we can only test the iCloud Keychain (SynchronizableValet) code on iOS.
-#if os(iOS)
+@available (iOS 8.2, OSX 10.11, *)
+class ValetSynchronizableTests: XCTestCase
+{
+    static let identifier = Identifier(nonEmpty: "valet_testing")!
+    static let accessibility = CloudAccessibility.whenUnlocked
+    let valet = Valet.valet(with: identifier, of: Valet.Flavor.iCloud(ValetSynchronizableTests.accessibility))
+    let key = "key"
+    let passcode = "topsecret"
     
-    @available (iOS 8.2, OSX 10.11, *)
-    class ValetSynchronizableTests: XCTestCase
+    override func setUp()
     {
-        static let identifier = Identifier(nonEmpty: "valet_testing")!
-        static let accessibility = CloudAccessibility.whenUnlocked
-        let valet = Valet.valet(with: identifier, of: Valet.Flavor.iCloud(ValetSynchronizableTests.accessibility))
-        let key = "key"
-        let passcode = "topsecret"
+        super.setUp()
         
-        override func setUp()
-        {
-            super.setUp()
-            
-            ErrorHandler.customAssertBody = { _, _, _, _ in
-                // Nothing to do here.
-            }
-            
-            valet.removeAllObjects()
+        ErrorHandler.customAssertBody = { _, _, _, _ in
+            // Nothing to do here.
         }
         
-        func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
-        {
-            let localValet = Valet.valet(with: valet.identifier, of: Valet.Flavor.vanilla(valet.accessibility))
-            XCTAssertFalse(valet == localValet)
-            XCTAssertFalse(valet === localValet)
-            
-            // Setting
-            XCTAssertTrue(valet.set(string: "butts", for: "cloud"))
-            XCTAssertEqual("butts", valet.string(for: "cloud"))
-            XCTAssertNil(localValet.string(for: "cloud"))
-            
-            // Removal
-            XCTAssertTrue(localValet.set(string: "snake people", for: "millennials"))
-            XCTAssertTrue(valet.removeObject(for: "millennials"))
-            XCTAssertEqual("snake people", localValet.string(for: "millennials"))
-        }
-        
-        func test_synchronizableValets_withEquivalentConfigurationsAreEqual() {
-            let otherValet = Valet.valet(with: valet.identifier, of: valet.flavor)
-            XCTAssert(valet == otherValet)
-            XCTAssert(valet === otherValet)
-        }
-        
-        func test_setStringForKey()
-        {
-            XCTAssertNil(valet.string(for: key))
-            XCTAssertTrue(valet.set(string: passcode, for: key))
-            XCTAssertEqual(passcode, valet.string(for: key))
-        }
-        
-        func test_removeObjectForKey()
-        {
-            XCTAssertTrue(valet.set(string: passcode, for: key))
-            XCTAssertEqual(passcode, valet.string(for: key))
-            
-            XCTAssertTrue(valet.removeObject(for: key))
-            XCTAssertNil(valet.string(for: key))
-        }
-        
-        // MARK: Backwards Compatibility
-        
-        func test_backwardsCompatibilityWithObjectiveCValet() {
-            XCTAssert(valet.accessibility == .whenUnlocked)
-            let legacyValet = VALSynchronizableValet(identifier: valet.identifier.description, accessibility: VALAccessibility.whenUnlocked)!
-            
-            let key = "yo"
-            legacyValet.setString("dawg", forKey: key)
-            
-            XCTAssertEqual(legacyValet.string(forKey: "yo"), valet.string(for: key))
-        }
+        valet.removeAllObjects()
     }
     
-#endif
+    func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
+    {
+        let localValet = Valet.valet(with: valet.identifier, of: Valet.Flavor.vanilla(valet.accessibility))
+        XCTAssertFalse(valet == localValet)
+        XCTAssertFalse(valet === localValet)
+        
+        // Setting
+        XCTAssertTrue(valet.set(string: "butts", for: "cloud"))
+        XCTAssertEqual("butts", valet.string(for: "cloud"))
+        XCTAssertNil(localValet.string(for: "cloud"))
+        
+        // Removal
+        XCTAssertTrue(localValet.set(string: "snake people", for: "millennials"))
+        XCTAssertTrue(valet.removeObject(for: "millennials"))
+        XCTAssertEqual("snake people", localValet.string(for: "millennials"))
+    }
+    
+    func test_synchronizableValets_withEquivalentConfigurationsAreEqual() {
+        let otherValet = Valet.valet(with: valet.identifier, of: valet.flavor)
+        XCTAssert(valet == otherValet)
+        XCTAssert(valet === otherValet)
+    }
+    
+    func test_setStringForKey()
+    {
+        XCTAssertNil(valet.string(for: key))
+        XCTAssertTrue(valet.set(string: passcode, for: key))
+        XCTAssertEqual(passcode, valet.string(for: key))
+    }
+    
+    func test_removeObjectForKey()
+    {
+        XCTAssertTrue(valet.set(string: passcode, for: key))
+        XCTAssertEqual(passcode, valet.string(for: key))
+        
+        XCTAssertTrue(valet.removeObject(for: key))
+        XCTAssertNil(valet.string(for: key))
+    }
+    
+    // MARK: Backwards Compatibility
+    
+    func test_backwardsCompatibilityWithObjectiveCValet() {
+        XCTAssert(valet.accessibility == .whenUnlocked)
+        let legacyValet = VALSynchronizableValet(identifier: valet.identifier.description, accessibility: VALAccessibility.whenUnlocked)!
+        
+        let key = "yo"
+        legacyValet.setString("dawg", forKey: key)
+        
+        XCTAssertEqual(legacyValet.string(forKey: "yo"), valet.string(for: key))
+    }
+}
