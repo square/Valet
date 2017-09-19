@@ -551,4 +551,16 @@ class ValetTests: XCTestCase
             XCTAssertEqual(otherValet.string(for: key), value)
         }
     }
+    
+    // MARK: Backwards compatibility
+    
+    func test_backwardsCompatibilityWithObjectiveCValet() {
+        XCTAssert(valet.accessibility == .whenUnlocked)
+        let legacyValet = VALValet(identifier: valet.identifier.description, accessibility: VALAccessibility.whenUnlocked)!
+        
+        let key = "yo"
+        legacyValet.setString("dawg", forKey: key)
+        
+        XCTAssertEqual(legacyValet.string(forKey: "yo"), valet.string(for: key))
+    }
 }

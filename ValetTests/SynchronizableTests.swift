@@ -77,6 +77,18 @@ import XCTest
             XCTAssertTrue(valet.removeObject(for: key))
             XCTAssertNil(valet.string(for: key))
         }
+        
+        // MARK: Backwards Compatibility
+        
+        func test_backwardsCompatibilityWithObjectiveCValet() {
+            XCTAssert(valet.accessibility == .whenUnlocked)
+            let legacyValet = VALSynchronizableValet(identifier: valet.identifier.description, accessibility: VALAccessibility.whenUnlocked)!
+            
+            let key = "yo"
+            legacyValet.setString("dawg", forKey: key)
+            
+            XCTAssertEqual(legacyValet.string(forKey: "yo"), valet.string(for: key))
+        }
     }
     
 #endif
