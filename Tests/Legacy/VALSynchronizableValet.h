@@ -1,8 +1,8 @@
 //
-//  Valet.h
+//  VALSynchronizableValet.h
 //  Valet
 //
-//  Created by Dan Federman on 1/21/15.
+//  Created by Dan Federman on 3/16/15.
 //  Copyright 2015 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,13 @@
 //  limitations under the License.
 //
 
-#import <Valet/VALValet.h>
-#import <Valet/VALSecureEnclaveValet.h>
-#import <Valet/VALSynchronizableValet.h>
-#import <Valet/VALSinglePromptSecureEnclaveValet.h>
+#import "VALValet.h"
+
+
+/// Reads and writes keychain elements that are synchronized with iCloud (supported on devices on iOS 7.0.3 and later). Accessibility must not be scoped to this device.
+@interface VALSynchronizableValet : VALValet
+
+/// @return YES if iCloud syncronizable keychain is supported on the current iOS version (7.0.3 and later).
++ (BOOL)supportsSynchronizableKeychainItems;
+
+@end

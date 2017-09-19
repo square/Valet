@@ -6,7 +6,7 @@
 //  Copyright © 2017 Square, Inc.
 //
 
-#import <Valet/Valet.h>
+#import "VALValet.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

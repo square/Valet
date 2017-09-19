@@ -23,15 +23,14 @@ import Foundation
 
 public enum SecureEnclaveAccessControl: CustomStringConvertible {
     /// Access to keychain elements requires user presence verification via Touch ID, Face ID, or device Passcode. Keychain elements are still accessible by Touch ID even if fingers are added or removed. Touch ID does not have to be available or enrolled.
-    @available(macOS 10.11, iOS 8.0, *)
     case userPresence
     
     /// Access to keychain elements requires user presence verification via Face ID, or any finger enrolled in Touch ID. Keychain elements remain accessible via Face ID or Touch ID  after faces or fingers are added or removed. Face ID must be enabled with at least one face enrolled, or Touch ID must be available and at least one finger must be enrolled.
-    @available(macOS 10.12, iOS 9.0, *)
+    @available(macOS 10.12.1, iOS 9.0, *)
     case biometricAny
     
     /// Access to keychain elements requires user presence verification via the face currently enrolled in Face ID, or fingers currently enrolled in Touch ID. Previously written keychain elements become inaccessible when faces or fingers are added or removed. Face ID must be enabled with at least one face enrolled, or Touch ID must be available and at least one finger must be enrolled.
-    @available(macOS 10.12, iOS 9.0, *)
+    @available(macOS 10.12.1, iOS 9.0, *)
     case biometricCurrentSet
     
     /// Access to keychain elements requires user presence verification via device Passcode.
@@ -64,9 +63,19 @@ public enum SecureEnclaveAccessControl: CustomStringConvertible {
         case .userPresence:
             return .userPresence
         case .biometricAny:
-            return .touchIDAny
+            if #available(macOS 10.12.1, *) {
+                return .touchIDAny
+            } else {
+                // We should never hit since .biometricAny requires macOS 10.12.1.
+                return .userPresence
+            }
         case .biometricCurrentSet:
-            return .touchIDCurrentSet
+            if #available(macOS 10.12.1, *) {
+                return .touchIDCurrentSet
+            } else {
+                // We should never hit since .biometricCurrentSet requires macOS 10.12.1.
+                return .userPresence
+            }
         case .devicePasscode:
             return .devicePasscode
         }

@@ -6,7 +6,7 @@
 //  Copyright © 2017 Square, Inc.
 //
 
-#import <Valet/VALSecureEnclaveValet.h>
+#import "VALSecureEnclaveValet.h"
 
 
 /// Reads and writes keychain elements that are stored on the Secure Enclave (available on iOS 8.0 and later and macOS 10.11 and later) using accessibility attribute VALAccessibilityWhenPasscodeSetThisDeviceOnly. The first access of these keychain elements will require the user to confirm their presence via Touch ID or passcode entry.

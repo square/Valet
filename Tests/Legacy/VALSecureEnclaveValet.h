@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <Valet/VALValet.h>
+#import "VALValet.h"
 
 
 /// Compiler flag for building against an SDK where Secure Enclave is available.

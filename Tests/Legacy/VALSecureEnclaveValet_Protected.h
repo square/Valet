@@ -6,7 +6,7 @@
 //  Copyright © 2017 Square, Inc.
 //
 
-#import <Valet/VALValet.h>
+#import "VALSecureEnclaveValet.h"
 
 
 @interface VALSecureEnclaveValet ()

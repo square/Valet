@@ -22,6 +22,7 @@ import Foundation
 import Valet
 import XCTest
 
+
 extension VALSecureEnclaveValet {
     
     class var supportsSecureEnclaveKeychainTests: Bool {

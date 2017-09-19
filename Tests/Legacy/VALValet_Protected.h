@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <Valet/VALValet.h>
+#import "VALValet.h"
 
 
 extern NSString * __nonnull VALStringForAccessibility(VALAccessibility accessibility);

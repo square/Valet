@@ -20,8 +20,8 @@
 //
 
 import Foundation
-import Valet
 import XCTest
+import Valet
 
 
 class ValetMacTests: XCTestCase
