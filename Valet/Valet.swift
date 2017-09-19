@@ -104,10 +104,11 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         case let .vanilla(accessibility):
             service = .standard(identifier, accessibility, .vanilla)
             self.accessibility = accessibility
-            
+            self.flavor = flavor
         case let .synchronizable(synchronizableAccessibility):
             service = .standard(identifier, synchronizableAccessibility.accessibility, .synchronizable)
             accessibility = synchronizableAccessibility.accessibility
+            self.flavor = flavor
         }
         
         keychainQuery = service.baseQuery
@@ -119,10 +120,12 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         case let .vanilla(accessibility):
             service = .sharedAccessGroup(identifier, accessibility, .vanilla)
             self.accessibility = accessibility
+            self.flavor = flavor
             
         case let .synchronizable(synchronizableAccessibility):
             service = .sharedAccessGroup(identifier, synchronizableAccessibility.accessibility, .synchronizable)
             accessibility = synchronizableAccessibility.accessibility
+            self.flavor = flavor
         }
         
         keychainQuery = service.baseQuery
@@ -143,6 +146,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     public let accessibility: Accessibility
     public let identifier: Identifier
+    public let flavor: Flavor
     
     // MARK: Public Methods
     
@@ -283,7 +287,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     /// Migrates objects matching the vended keychain query into the receiving Valet instance.
     /// - parameter keychain: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
-    /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
+    /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
     public func migrateObjects(from keychain: KeychainQueryConvertible, removeOnCompletion: Bool) -> MigrationResult {

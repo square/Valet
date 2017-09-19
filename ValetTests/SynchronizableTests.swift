@@ -63,6 +63,12 @@ import XCTest
             XCTAssertEqual("snake people", localValet.string(for: "millennials"))
         }
         
+        func test_synchronizableValets_withEquivalentConfigurationsAreEqual() {
+            let otherValet = Valet.valet(with: valet.identifier, of: valet.flavor)
+            XCTAssert(valet == otherValet)
+            XCTAssert(valet === otherValet)
+        }
+        
         func test_setStringForKey()
         {
             XCTAssertNil(valet.string(for: key))
