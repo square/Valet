@@ -21,7 +21,7 @@
 import Foundation
 
 
-public enum SecureEnclaveAccessControl: CustomStringConvertible {
+public enum SecureEnclaveAccessControl: CustomStringConvertible, Equatable {
     /// Access to keychain elements requires user presence verification via Touch ID, Face ID, or device Passcode. Keychain elements are still accessible by Touch ID even if fingers are added or removed. Touch ID does not have to be available or enrolled.
     case userPresence
     

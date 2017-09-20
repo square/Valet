@@ -25,11 +25,30 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     // MARK: Flavor
     
-    public enum Flavor {
+    public enum Flavor: Equatable {
         /// Reads and writes keychain elements that do not sync to other devices.
         case vanilla(Accessibility)
         /// Reads and writes keychain elements that are synchronized with iCloud.
         case iCloud(CloudAccessibility)
+        
+        // MARK: Equatable
+        
+        public static func ==(lhs: Flavor, rhs: Flavor) -> Bool {
+            switch lhs {
+            case let .vanilla(lhsAccessibility):
+                if case let .vanilla(rhsAccessibility) = rhs, lhsAccessibility == rhsAccessibility {
+                    return true
+                } else {
+                    return false
+                }
+            case let .iCloud(lhsAccessibility):
+                if case let .iCloud(rhsAccessibility) = rhs, lhsAccessibility == rhsAccessibility {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        }
     }
     
     // MARK: Public Class Methods

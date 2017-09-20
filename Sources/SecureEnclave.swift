@@ -25,13 +25,38 @@ public final class SecureEnclave {
     
     // MARK: Result
     
-    public enum Result<Type> {
+    public enum Result<Type: Equatable>: Equatable {
         /// Data was retrieved from the keychain.
         case success(Type)
         /// User dismissed the user-presence prompt.
         case userCancelled
         /// No data was found for the requested key.
         case itemNotFound
+        
+        // MARK: Equatable
+        
+        public static func ==(lhs: Result<Type>, rhs: Result<Type>) -> Bool {
+            switch lhs {
+            case let .success(lhsResult):
+                if case let .success(rhsResult) = rhs, lhsResult == rhsResult {
+                    return true
+                } else {
+                    return false
+                }
+            case .userCancelled:
+                if case .userCancelled = rhs {
+                    return true
+                } else {
+                    return false
+                }
+            case .itemNotFound:
+                if case .itemNotFound = rhs {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        }
     }
     
     // MARK: Flavor

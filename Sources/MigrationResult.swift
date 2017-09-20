@@ -21,7 +21,7 @@
 import Foundation
 
 
-public enum MigrationResult {
+public enum MigrationResult: Equatable {
     /// Migration succeeded.
     case success
     /// Migration failed because the keychain query was not valid.
