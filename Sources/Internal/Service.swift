@@ -36,20 +36,15 @@ internal enum Service: CustomStringConvertible, Equatable {
     // MARK: CustomStringConvertible
     
     internal var description: String {
-        switch self {
-        case let .standard(identifier, configuration):
-            return "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(configuration.accessability.description)"
-        case let .sharedAccessGroup(identifier, configuration):
-            return "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(configuration.accessability.description)"
-        }
+        return secService
     }
     
     // MARK: Internal Methods
     
     internal func generateBaseQuery() -> [String : AnyHashable] {
-        var service = description
         var baseQuery: [String : AnyHashable] = [
             kSecClass as String : kSecClassGenericPassword as String,
+            kSecAttrService as String : secService
         ]
         
         let configuration: Configuration
@@ -85,12 +80,49 @@ internal enum Service: CustomStringConvertible, Equatable {
                 accessControl = desiredAccessControl
             }
             
-            service += accessControl.description
             // Note that kSecAttrAccessControl and kSecAttrAccessible are mutually exclusive.
             baseQuery[kSecAttrAccessControl as String] = SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, accessControl.secAccessControl, nil)
         }
         
-        baseQuery[kSecAttrService as String] = service
         return baseQuery
-    }    
+    }
+    
+    // MARK: Private Methods
+    
+    private var secService: String {
+        var service: String
+        switch self {
+        case let .standard(identifier, configuration):
+            service = "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(configuration.accessability.description)"
+        case let .sharedAccessGroup(identifier, configuration):
+            service = "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(configuration.accessability.description)"
+        }
+        
+        let configuration: Configuration
+        switch self {
+        case let .standard(_, desiredConfiguration):
+            configuration = desiredConfiguration
+        case let .sharedAccessGroup(_, desiredConfiguration):
+            configuration = desiredConfiguration
+        }
+        
+        switch configuration {
+        case .valet:
+            // Nothing to do here.
+            break
+        case let .secureEnclave(flavor):
+            let accessControl: SecureEnclaveAccessControl
+            switch flavor {
+            case let .singlePrompt(desiredAccessControl):
+                accessControl = desiredAccessControl
+                
+            case let .alwaysPrompt(desiredAccessControl):
+                accessControl = desiredAccessControl
+            }
+            
+            service += accessControl.description
+        }
+        
+        return service
+    }
 }
