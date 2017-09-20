@@ -45,6 +45,10 @@ class ValetSynchronizableTests: XCTestCase
     
     func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         let localValet = Valet.valet(with: valet.identifier, of: Valet.Flavor.vanilla(valet.accessibility))
         XCTAssertFalse(valet == localValet)
         XCTAssertFalse(valet === localValet)
@@ -68,6 +72,10 @@ class ValetSynchronizableTests: XCTestCase
     
     func test_setStringForKey()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         XCTAssertNil(valet.string(for: key))
         XCTAssertTrue(valet.set(string: passcode, for: key))
         XCTAssertEqual(passcode, valet.string(for: key))
@@ -75,6 +83,10 @@ class ValetSynchronizableTests: XCTestCase
     
     func test_removeObjectForKey()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         XCTAssertTrue(valet.set(string: passcode, for: key))
         XCTAssertEqual(passcode, valet.string(for: key))
         

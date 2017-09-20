@@ -618,8 +618,9 @@
 					};
 					26E682891BA8B4B200EFF4EA = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = 9XUJ7M53NG;
 						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					371150A41E2962D8004A45D4 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -643,7 +644,6 @@
 						CreatedOnToolsVersion = 6.3.2;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
-						TestTargetID = 16B5856B1F71DBE00038EE30;
 					};
 					EAF894731B053E0400EDAD6C = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -1036,10 +1036,12 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 9XUJ7M53NG;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1050,6 +1052,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.square.Valet;
 				PRODUCT_NAME = Valet;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1065,11 +1068,13 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 9XUJ7M53NG;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1080,6 +1085,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.square.Valet;
 				PRODUCT_NAME = Valet;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -1312,7 +1318,6 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/ValetTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Valet macOS Test Host App.app/Contents/MacOS/Valet macOS Test Host App";
 			};
 			name = Debug;
 		};
@@ -1337,7 +1342,6 @@
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/ValetTests-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Valet macOS Test Host App.app/Contents/MacOS/Valet macOS Test Host App";
 			};
 			name = Release;
 		};

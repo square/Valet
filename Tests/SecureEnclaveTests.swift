@@ -60,6 +60,10 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_secureEnclaveValetsWithEqualConfiguration_canAccessSameData()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         XCTAssertTrue(valet.set(string: passcode, for: key))
         let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertEqual(valet, equivalentValet)
@@ -68,6 +72,10 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_secureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         XCTAssertTrue(valet.set(string: passcode, for: key))
         let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
         XCTAssertNotEqual(valet, equivalentValet)
@@ -78,6 +86,10 @@ class ValetSecureEnclaveTests: XCTestCase
     @available (*, deprecated)
     func test_secureEnclaveValet_backwardsCompatibility()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         let deprecatedValet = VALSecureEnclaveValet(identifier: valet.identifier.description)!
         XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
         XCTAssertEqual(.success(passcode), valet.string(for: key, withPrompt: ""))
@@ -87,6 +99,10 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_canAccessKeychain()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         XCTAssertTrue(valet.canAccessKeychain())
     }
     
@@ -94,6 +110,10 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_migrateObjectsMatchingQuery_failsForBadQuery()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         let invalidQuery = [
             kSecClass as String: kSecClassGenericPassword as String,
             kSecAttrAccessControl as String: "Fake access control"
@@ -103,6 +123,10 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         let plainOldValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, of: .vanilla(.afterFirstUnlock))
         
         // Clean up any dangling keychain items before we start this tests.
@@ -135,6 +159,10 @@ class ValetSecureEnclaveTests: XCTestCase
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         let otherValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me_To_Valet")!, of: .vanilla(.afterFirstUnlock))
         
         // Clean up any dangling keychain items before we start this tests.

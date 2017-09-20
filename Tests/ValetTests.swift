@@ -23,6 +23,15 @@ import Valet
 import XCTest
 
 
+/// - returns: `true` when the test environment is signed.
+/// - The Valet Mac Tests target is left without a host app on master. Mac test host app signing requires CI to have the Developer team credentials down in keychain, which we can't easily accomplish.
+/// - note: In order to test changes locally, set the Valet Mac Tests host to Valet macOS Test Host App, delete all VAL_* keychain items in your keychain via Keychain Access.app, and run Mac tests.
+func testEnvironmentIsSigned() -> Bool {
+    // Our test host apps for iOS and Mac are both signed, so testing for a bundle identifier is analogous to testing signing.
+    return Bundle.main.bundleIdentifier != nil
+}
+
+
 class ValetTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
@@ -187,6 +196,10 @@ class ValetTests: XCTestCase
 
     func test_stringForKey_withEquivalentConfigurationButDifferingFlavor_isNil()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         XCTAssertTrue(valet.set(string: "monster", for: "cookie"))
         XCTAssertEqual("monster", valet.string(for: "cookie"))
 
@@ -248,6 +261,10 @@ class ValetTests: XCTestCase
     }
     
     func test_objectForKey_withEquivalentConfigurationButDifferingFlavor_isNil() {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         XCTAssertTrue(valet.set(object: passcodeData, for: key))
         XCTAssertEqual(passcodeData, valet.object(for: key))
         
@@ -395,6 +412,10 @@ class ValetTests: XCTestCase
 
     func test_removeObjectForKey_isDistinctForDifferingClasses()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         XCTAssertTrue(valet.set(string: passcode, for: key))
         XCTAssertTrue(anotherFlavor.set(string: passcode, for: key))
 
@@ -408,6 +429,10 @@ class ValetTests: XCTestCase
 
     func test_migrateObjectsMatching_failsIfNoItemsMatchQuery()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         let noItemsFoundError = MigrationResult.noItemsToMigrateFound
 
         let queryWithNoMatches = [
@@ -425,6 +450,10 @@ class ValetTests: XCTestCase
 
     func test_migrateObjectsMatching_failsIfQueryHasNoInputClass()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         valet.set(string: passcode, for: key)
 
         // Test for base query success.
@@ -492,6 +521,10 @@ class ValetTests: XCTestCase
     // FIXME: Looks to me like this test may no longer be valid, need to dig a bit
     func disabled_test_migrateObjectsMatching_bailsOutIfConflictExistsInQueryResult()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, of: .vanilla(.afterFirstUnlock))
         migrationValet.removeAllObjects()
         
@@ -532,17 +565,25 @@ class ValetTests: XCTestCase
     }
     
     // MARK: Migration - Valet
-
+    
     func test_migrateObjectsFromValet_migratesSingleKeyValuePairSuccessfully()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         anotherFlavor.set(string: "foo", for: "bar")
         _ = valet.migrateObjects(from: anotherFlavor, removeOnCompletion: false)
         _ = valet.allKeys()
         XCTAssertEqual("foo", valet.string(for: "bar"))
     }
-
+    
     func test_migrateObjectsFromValet_migratesMultipleKeyValuePairsSuccessfully()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         let keyValuePairs = [
             "yo": "dawg",
             "we": "heard",
@@ -567,6 +608,10 @@ class ValetTests: XCTestCase
 
     func test_migrateObjectsFromValet_removesOnCompletionWhenRequested()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         let keyValuePairs = [
             "yo": "dawg",
             "we": "heard",
@@ -591,6 +636,10 @@ class ValetTests: XCTestCase
 
     func test_migrateObjectsFromValet_leavesKeychainUntouchedWhenConflictsExist()
     {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
         let keyValuePairs = [
             "yo": "dawg",
             "we": "heard",
