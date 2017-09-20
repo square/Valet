@@ -33,76 +33,60 @@ extension Error
 @available (iOS 8, OSX 10.11, *)
 class ValetSecureEnclaveTests: XCTestCase
 {
-    static let identifier = "valet_testing"
-    let valet = VALSecureEnclaveValet(identifier: identifier, accessControl: .userPresence)!
+    static let identifier = Identifier(nonEmpty: "valet_testing")!
+    let valet = SecureEnclaveValet.valet(with: identifier, accessControl: .userPresence)
     let key = "key"
     let passcode = "topsecret"
     
     override func setUp()
     {
         super.setUp()
-        valet.removeObject(forKey: key)
+        
+        ErrorHandler.customAssertBody = { _, _, _, _ in
+            // Nothing to do here.
+        }
+        
+        valet.removeObject(for: key)
     }
     
     // MARK: Equality
     
     func test_secureEnclaveValetsWithEqualConfiguration_haveEqualPointers()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
-            return
-        }
-        
-        let equivalentValet = VALSecureEnclaveValet(identifier: valet.identifier, accessControl: valet.accessControl)!
+        let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertTrue(valet == equivalentValet)
         XCTAssertTrue(valet === equivalentValet)
     }
     
     func test_secureEnclaveValetsWithEqualConfiguration_canAccessSameData()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
-            return
-        }
-        
-        XCTAssertTrue(valet.setString(passcode, forKey: key))
-        let equivalentValet = VALSecureEnclaveValet(identifier: valet.identifier, accessControl: valet.accessControl)!
+        XCTAssertTrue(valet.set(string: passcode, for: key))
+        let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertEqual(valet, equivalentValet)
-        XCTAssertEqual(passcode, equivalentValet.string(forKey: key, userPrompt: ""))
+        XCTAssertEqual(.success(passcode), equivalentValet.string(for: key, withPrompt: ""))
     }
     
     func test_secureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
-            return
-        }
-        
-        XCTAssertTrue(valet.setString(passcode, forKey: key))
-        let equivalentValet = VALSecureEnclaveValet(identifier: valet.identifier, accessControl: .devicePasscode)!
+        XCTAssertTrue(valet.set(string: passcode, for: key))
+        let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
         XCTAssertNotEqual(valet, equivalentValet)
-        XCTAssertEqual(passcode, valet.string(forKey: key, userPrompt: ""))
-        XCTAssertNil(equivalentValet.string(forKey: key, userPrompt: ""))
+        XCTAssertEqual(.success(passcode), valet.string(for: key, withPrompt: ""))
+        XCTAssertEqual(.itemNotFound, equivalentValet.string(for: key, withPrompt: ""))
     }
     
     @available (*, deprecated)
     func test_secureEnclaveValet_backwardsCompatibility()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
-            return
-        }
-        
-        let deprecatedValet = VALSecureEnclaveValet(identifier: valet.identifier)!
-        XCTAssertEqual(valet, deprecatedValet)
+        let deprecatedValet = VALSecureEnclaveValet(identifier: valet.identifier.description)!
         XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
-        XCTAssertEqual(passcode, valet.string(forKey: key, userPrompt: ""))
+        XCTAssertEqual(.success(passcode), valet.string(for: key, withPrompt: ""))
     }
     
     // MARK: canAccessKeychain
     
     func test_canAccessKeychain()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
-            return
-        }
-        
         XCTAssertTrue(valet.canAccessKeychain())
     }
     
@@ -110,22 +94,20 @@ class ValetSecureEnclaveTests: XCTestCase
     
     func test_migrateObjectsMatchingQuery_failsForBadQuery()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
-            return
-        }
-        
         let invalidQuery = [
             kSecClass as String: kSecClassGenericPassword as String,
-            kSecUseOperationPrompt as String: "Migration Prompt"
+            kSecAttrAccessControl as String: "Fake access control"
         ]
-        XCTAssertEqual(VALMigrationError.invalidQuery, valet.migrateObjects(matchingQuery: invalidQuery, removeOnCompletion: false)?.valetMigrationError)
+        XCTAssertEqual(.invalidQuery, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave()
     {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
-            return
-        }
+        let plainOldValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, of: .vanilla(.afterFirstUnlock))
+        
+        // Clean up any dangling keychain items before we start this tests.
+        valet.removeAllObjects()
+        plainOldValet.removeAllObjects()
         
         let keyValuePairs = [
             "yo": "dawg",
@@ -135,55 +117,42 @@ class ValetSecureEnclaveTests: XCTestCase
             "other": "valets"
         ]
         
-        let plainOldValet = VALValet(identifier: "Migrate_Me", accessibility: .afterFirstUnlock)!
-        
         for (key, value) in keyValuePairs {
-            plainOldValet.setString(value, forKey: key)
+            plainOldValet.set(string: value, for: key)
         }
         
-        XCTAssertNil(valet.migrateObjects(from: plainOldValet, removeOnCompletion: true))
+        XCTAssertEqual(.success, valet.migrateObjects(from: plainOldValet, removeOnCompletion: true))
         
         for (key, value) in keyValuePairs {
-            XCTAssertEqual(value, valet.string(forKey: key))
-            XCTAssertNil(plainOldValet.string(forKey: key))
+            XCTAssertEqual(.success(value), valet.string(for: key, withPrompt: ""))
+            XCTAssertNil(plainOldValet.string(for: key))
         }
         
         // Clean up items for the next test run (allKeys and removeAllObjects are unsupported in VALSecureEnclaveValet.
         for key in keyValuePairs.keys {
-            XCTAssertTrue(valet.removeObject(forKey: key))
+            XCTAssertTrue(valet.removeObject(for: key))
         }
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() {
-        guard VALSecureEnclaveValet.supportsSecureEnclaveKeychainItems() else {
-            return
-        }
-        
-        let otherValet = VALValet(identifier: "Migrate_Me_To_Valet", accessibility: .afterFirstUnlock)!
+        let otherValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me_To_Valet")!, of: .vanilla(.afterFirstUnlock))
         
         // Clean up any dangling keychain items before we start this tests.
+        valet.removeAllObjects()
         otherValet.removeAllObjects()
         
         let keyStringPairToMigrateMap = ["foo" : "bar", "testing" : "migration", "is" : "quite", "entertaining" : "if", "you" : "don't", "screw" : "up"]
         for (key, value) in keyStringPairToMigrateMap {
-            XCTAssertTrue(otherValet.setString(value, forKey: key))
+            XCTAssertTrue(otherValet.set(string: value, for: key))
         }
         
         XCTAssertTrue(valet.canAccessKeychain())
         XCTAssertTrue(otherValet.canAccessKeychain())
-        XCTAssertNil(valet.migrateObjects(from: otherValet, removeOnCompletion: false))
+        XCTAssertEqual(.success, valet.migrateObjects(from: otherValet, removeOnCompletion: false))
         
         for (key, value) in keyStringPairToMigrateMap {
-            XCTAssertEqual(valet.string(forKey: key), value)
-            XCTAssertEqual(otherValet.string(forKey: key), value)
+            XCTAssertEqual(valet.string(for: key, withPrompt: ""), .success(value))
+            XCTAssertEqual(otherValet.string(for: key), value)
         }
-    }
-    
-    // MARK: Protected Methods
-    
-    func test_secItemFormatDictionaryWithKey()
-    {
-        let secItemDictionary = valet._secItemFormatDictionary(withKey: key)
-        XCTAssertEqual(key, secItemDictionary[kSecAttrAccount as AnyHashable] as? String)
     }
 }
