@@ -72,13 +72,6 @@
     return [self stringForKey:key options:[self _contextOptions] status:nil];
 }
 
-- (BOOL)containsObjectForKey:(NSString *)key;
-{
-    OSStatus const status = [self containsObjectForKey:key options:[self _contextOptions]];
-    BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed || status == errSecSuccess);
-    return keyAlreadyInKeychain;
-}
-
 - (BOOL)removeObjectForKey:(nonnull NSString *)key;
 {
     return [self removeObjectForKey:key options:[self _contextOptions]];
