@@ -52,36 +52,14 @@
 
 #pragma mark - VALValet
 
-- (BOOL)setObject:(nonnull NSData *)value forKey:(nonnull NSString *)key;
-{
-    return [self setObject:value forKey:key options:[self _contextOptions]];
-}
-
 - (nullable NSData *)objectForKey:(nonnull NSString *)key;
 {
     return [self objectForKey:key options:[self _contextOptions] status:nil];
 }
 
-- (BOOL)setString:(nonnull NSString *)string forKey:(nonnull NSString *)key;
-{
-    return [self setString:string forKey:key options:[self _contextOptions]];
-}
-
 - (nullable NSString *)stringForKey:(nonnull NSString *)key;
 {
     return [self stringForKey:key options:[self _contextOptions] status:nil];
-}
-
-- (BOOL)containsObjectForKey:(NSString *)key;
-{
-    OSStatus const status = [self containsObjectForKey:key options:[self _contextOptions]];
-    BOOL const keyAlreadyInKeychain = (status == errSecInteractionNotAllowed || status == errSecSuccess);
-    return keyAlreadyInKeychain;
-}
-
-- (BOOL)removeObjectForKey:(nonnull NSString *)key;
-{
-    return [self removeObjectForKey:key options:[self _contextOptions]];
 }
 
 #pragma mark - VALSecureEnclaveValet
