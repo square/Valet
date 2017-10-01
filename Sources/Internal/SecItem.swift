@@ -46,7 +46,8 @@ internal final class SecItem {
     }
     
     // MARK: Internal Class Properties
-    
+
+  /// Programatically grab the required prefix for the shared access group (i.e. Bundle Seed ID). The value for the kSecAttrAccessGroup key in queries for data that is shared between apps must be of the format bundleSeedID.sharedAccessGroup. For more information on the Bundle Seed ID, see https://developer.apple.com/library/ios/qa/qa1713/_index.html
     internal static var sharedAccessGroupPrefix: String {
         let query = [
             kSecClass : kSecClassGenericPassword,
