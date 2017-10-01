@@ -21,7 +21,7 @@
 import Foundation
 
 
-@objc
+@objc(VALKeychainQueryConvertible)
 public protocol KeychainQueryConvertible {
     
     var keychainQuery: [String : AnyHashable] { get }

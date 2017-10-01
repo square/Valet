@@ -21,7 +21,7 @@
 import Foundation
 
 
-@objc
+@objc(VALSecureEnclaveAccessControl)
 public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable {
     /// Access to keychain elements requires user presence verification via Touch ID, Face ID, or device Passcode. Keychain elements are still accessible by Touch ID even if fingers are added or removed. Touch ID does not have to be available or enrolled.
     /// @version Available on iOS 8 or later, and macOS 10.11 or later.

@@ -20,7 +20,9 @@
 
 import Foundation
 
+
 /// Reads and writes keychain elements.
+@objc(VALValet)
 public final class Valet: NSObject, KeychainQueryConvertible {
     
     // MARK: Flavor

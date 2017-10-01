@@ -21,7 +21,7 @@
 import Foundation
 
 
-@objc(Identifier)
+@objc(VALIdentifier)
 public class ObjectiveCCompatibilityIdentifier: NSObject {
 
     // MARK: Initialization

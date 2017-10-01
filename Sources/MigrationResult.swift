@@ -20,7 +20,7 @@
 
 import Foundation
 
-@objc
+@objc(VALMigrationResult)
 public enum MigrationResult: Int, Equatable {
     /// Migration succeeded.
     case success = 1
