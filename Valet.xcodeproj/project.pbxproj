@@ -85,6 +85,8 @@
 		371150AD1E2962D8004A45D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150AB1E2962D8004A45D4 /* Main.storyboard */; };
 		371150AF1E2962D8004A45D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 371150AE1E2962D8004A45D4 /* Assets.xcassets */; };
 		371150B21E2962D8004A45D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150B01E2962D8004A45D4 /* LaunchScreen.storyboard */; };
+		AC11C5571F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */; };
+		AC11C5581F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */; };
 		AC89A3EC1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */; };
 		AC89A3EE1CC82738009A7121 /* ValetTouchIDTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3ED1CC82738009A7121 /* ValetTouchIDTestViewController.swift */; };
 		EAF894841B053E0500EDAD6C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAF894831B053E0500EDAD6C /* Images.xcassets */; };
@@ -202,6 +204,7 @@
 		371150B11E2962D8004A45D4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		371150B31E2962D8004A45D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37250B1D1E2DD55D008B4777 /* Valet iOS Test Host App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Valet iOS Test Host App.entitlements"; sourceTree = "<group>"; };
+		AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveSinglePromptTests.swift; sourceTree = "<group>"; };
 		AC89A3EA1CC82426009A7121 /* ValetTouchIDTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ValetTouchIDTest-Bridging-Header.h"; sourceTree = "<group>"; };
 		AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetTouchIDTestAppDelegate.swift; sourceTree = "<group>"; };
 		AC89A3ED1CC82738009A7121 /* ValetTouchIDTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetTouchIDTestViewController.swift; sourceTree = "<group>"; };
@@ -330,6 +333,7 @@
 				16E04BF21F71B72C00E8552D /* MacTests.swift */,
 				16E04BED1F71B72C00E8552D /* SecItemTests.swift */,
 				16E04BEE1F71B72C00E8552D /* SecureEnclaveTests.swift */,
+				AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */,
 				16E04BEF1F71B72C00E8552D /* SynchronizableTests.swift */,
 				16E04BF11F71B72C00E8552D /* ValetTests-Bridging-Header.h */,
 				16E04BF41F71B72C00E8552D /* ValetTests.h */,
@@ -810,6 +814,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16E04C0B1F71B77E00E8552D /* ValetTests.m in Sources */,
+				AC11C5571F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift in Sources */,
 				16E04C081F71B76A00E8552D /* SecureEnclaveTests.swift in Sources */,
 				16E04C0A1F71B76A00E8552D /* ValetTests.swift in Sources */,
 				16E04C071F71B76A00E8552D /* SecItemTests.swift in Sources */,
@@ -826,6 +831,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16E04C0C1F71B77F00E8552D /* ValetTests.m in Sources */,
+				AC11C5581F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift in Sources */,
 				16E04C031F71B76900E8552D /* SecureEnclaveTests.swift in Sources */,
 				16E04C051F71B76900E8552D /* ValetTests.swift in Sources */,
 				16E04C021F71B76900E8552D /* SecItemTests.swift in Sources */,

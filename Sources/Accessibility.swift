@@ -84,4 +84,18 @@ public enum Accessibility: Int, CustomStringConvertible, Equatable {
         
         return accessibilityAttribute as String
     }
+    
+    // MARK: Internal
+    
+    internal static func allValues() -> [Accessibility] {
+        return [
+            .whenUnlocked,
+            .afterFirstUnlock,
+            .always,
+            .whenPasscodeSetThisDeviceOnly,
+            .whenUnlockedThisDeviceOnly,
+            .afterFirstUnlockThisDeviceOnly,
+            .alwaysThisDeviceOnly
+        ]
+    }
 }

@@ -19,7 +19,7 @@
 //
 
 import Foundation
-import Valet
+@testable import Valet
 import XCTest
 
 
@@ -29,21 +29,6 @@ import XCTest
 func testEnvironmentIsSigned() -> Bool {
     // Our test host apps for iOS and Mac are both signed, so testing for a bundle identifier is analogous to testing signing.
     return Bundle.main.bundleIdentifier != nil
-}
-
-
-fileprivate extension Accessibility {
-    static func allValues() -> [Accessibility] {
-        return [
-            .whenUnlocked,
-            .afterFirstUnlock,
-            .always,
-            .whenPasscodeSetThisDeviceOnly,
-            .whenUnlockedThisDeviceOnly,
-            .afterFirstUnlockThisDeviceOnly,
-            .alwaysThisDeviceOnly
-        ]
-    }
 }
 
 
@@ -715,7 +700,7 @@ class ValetTests: XCTestCase
     func test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenBothValetsHavePreviouslyCalled_canAccessKeychain() {
         let otherValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me_To_Valet")!, of: .vanilla(.afterFirstUnlock))
 
-        // Clean up any dangling keychain items before we start this tests.
+        // Clean up any dangling keychain items before we start this test.
         otherValet.removeAllObjects()
 
         let keyStringPairToMigrateMap = ["foo" : "bar", "testing" : "migration", "is" : "quite", "entertaining" : "if", "you" : "don't", "screw" : "up"]

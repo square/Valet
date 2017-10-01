@@ -19,27 +19,16 @@
 //
 
 import Foundation
-import Valet
+@testable import Valet
 import XCTest
 
 
-fileprivate extension CloudAccessibility {
-    static func allValues() -> [CloudAccessibility] {
-        return [
-            .whenUnlocked,
-            .afterFirstUnlock,
-            .always
-        ]
-    }
-}
-
-
 @available (iOS 8.2, OSX 10.11, *)
-class ValetSynchronizableTests: XCTestCase
+class SynchronizableTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     static let accessibility = CloudAccessibility.whenUnlocked
-    let valet = Valet.valet(with: identifier, of: Valet.Flavor.iCloud(ValetSynchronizableTests.accessibility))
+    let valet = Valet.valet(with: identifier, of: .iCloud(accessibility))
     let key = "key"
     let passcode = "topsecret"
     
@@ -60,7 +49,7 @@ class ValetSynchronizableTests: XCTestCase
             return
         }
         
-        let localValet = Valet.valet(with: valet.identifier, of: Valet.Flavor.vanilla(valet.accessibility))
+        let localValet = Valet.valet(with: valet.identifier, of: .vanilla(valet.accessibility))
         XCTAssertFalse(valet == localValet)
         XCTAssertFalse(valet === localValet)
         

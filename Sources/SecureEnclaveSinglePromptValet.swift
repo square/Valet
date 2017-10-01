@@ -79,12 +79,14 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
         service = .standard(identifier, .secureEnclave(.singlePrompt(accessControl)))
         baseKeychainQuery = service.generateBaseQuery()
         self.identifier = identifier
+        self.accessControl = accessControl
     }
     
     private init(sharedAccess identifier: Identifier, accessControl: SecureEnclaveAccessControl) {
         service = .sharedAccessGroup(identifier, .secureEnclave(.singlePrompt(accessControl)))
         baseKeychainQuery = service.generateBaseQuery()
         self.identifier = identifier
+        self.accessControl = accessControl
     }
     
     // MARK: Hashable
@@ -96,6 +98,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     // MARK: Public Properties
     
     public let identifier: Identifier
+    public let accessControl: SecureEnclaveAccessControl
     
     // MARK: Public Methods
     

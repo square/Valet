@@ -52,4 +52,14 @@ public enum CloudAccessibility: Int, CustomStringConvertible, Equatable {
     public var secAccessibilityAttribute: String {
         return accessibility.secAccessibilityAttribute
     }
+    
+    // MARK: Internal
+    
+    internal static func allValues() -> [CloudAccessibility] {
+        return [
+            .whenUnlocked,
+            .afterFirstUnlock,
+            .always
+        ]
+    }
 }

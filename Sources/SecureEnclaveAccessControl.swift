@@ -81,4 +81,20 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable 
             return .devicePasscode
         }
     }
+    
+    internal static func allValues() -> [SecureEnclaveAccessControl] {
+        if #available(OSX 10.12.1, *) {
+            return [
+                .userPresence,
+                .biometricAny,
+                .biometricCurrentSet,
+                .devicePasscode
+            ]
+        } else {
+            return [
+                .userPresence,
+                .devicePasscode
+            ]
+        }
+    }
 }

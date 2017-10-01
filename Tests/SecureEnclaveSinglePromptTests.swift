@@ -1,21 +1,9 @@
 //
-//  SecureEnclaveTests.swift
+//  SecureEnclaveSinglePromptTests.swift
 //  Valet
 //
-//  Created by Dan Federman and Eric Muller on 9/17/17.
-//  Copyright © 2017 Square, Inc.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
+//  Created by Eric Muller on 10/1/17.
+//  Copyright © 2017 Square, Inc. All rights reserved.
 //
 
 import Foundation
@@ -24,10 +12,10 @@ import XCTest
 
 
 @available (iOS 8, OSX 10.11, *)
-class SecureEnclaveTests: XCTestCase
+class SecureEnclaveSinglePromptTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
-    let valet = SecureEnclaveValet.valet(with: identifier, accessControl: .userPresence)
+    let valet = SecureEnclaveSinglePromptValet.valet(with: identifier, accessControl: .userPresence)
     let key = "key"
     let passcode = "topsecret"
     
@@ -44,26 +32,26 @@ class SecureEnclaveTests: XCTestCase
     
     // MARK: Equality
     
-    func test_secureEnclaveValetsWithEqualConfiguration_haveEqualPointers()
+    func test_secureEnclaveSinglePromptValetsWithEqualConfiguration_haveEqualPointers()
     {
-        let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
+        let equivalentValet = SecureEnclaveSinglePromptValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertTrue(valet == equivalentValet)
         XCTAssertTrue(valet === equivalentValet)
     }
     
-    func test_secureEnclaveValetsWithEqualConfiguration_canAccessSameData()
+    func test_secureEnclaveSinglePromptValetsWithEqualConfiguration_canAccessSameData()
     {
         guard testEnvironmentIsSigned() else {
             return
         }
         
         XCTAssertTrue(valet.set(string: passcode, for: key))
-        let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
+        let equivalentValet = SecureEnclaveSinglePromptValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertEqual(valet, equivalentValet)
         XCTAssertEqual(.success(passcode), equivalentValet.string(for: key, withPrompt: ""))
     }
     
-    func test_secureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
+    func test_secureEnclaveSinglePromptValetsWithDifferingAccessControl_canNotAccessSameData()
     {
         guard testEnvironmentIsSigned() else {
             return
@@ -83,9 +71,31 @@ class SecureEnclaveTests: XCTestCase
             return
         }
         
-        let deprecatedValet = VALSecureEnclaveValet(identifier: valet.identifier.description)!
+        let deprecatedValet = VALSinglePromptSecureEnclaveValet(identifier: valet.identifier.description)!
         XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
         XCTAssertEqual(.success(passcode), valet.string(for: key, withPrompt: ""))
+    }
+    
+    // MARK: allKeys
+    
+    func test_allKeys()
+    {
+        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set())
+        
+        XCTAssertTrue(valet.set(string: passcode, for: key))
+        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set(arrayLiteral: key))
+        
+        XCTAssertTrue(valet.set(string: "monster", for: "cookie"))
+        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set(arrayLiteral: key, "cookie"))
+        
+        valet.removeAllObjects()
+        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set())
+    }
+    
+    func test_allKeys_doesNotReflectValetImplementationDetails() {
+        // Under the hood, Valet inserts a canary when calling `canAccessKeychain()` - this should not appear in `allKeys()`.
+        _ = valet.canAccessKeychain()
+        XCTAssertEqual(valet.allKeys(userPrompt: "it me"), Set())
     }
     
     // MARK: canAccessKeychain
