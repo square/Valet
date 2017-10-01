@@ -6,11 +6,11 @@
 //  Copyright © 2017 Square, Inc.
 //
 
-#import "VALValet.h"
+#import "VALLegacyValet.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface VALValet (Testing)
+@interface VALLegacyValet (Testing)
 
 @property (copy, readonly) NSDictionary *baseQuery;
 

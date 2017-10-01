@@ -20,7 +20,7 @@
 
 #import "VALSecureEnclaveValet.h"
 #import "VALSecureEnclaveValet_Protected.h"
-#import "VALValet_Protected.h"
+#import "VALLegacyValet_Protected.h"
 
 #import "ValetDefines.h"
 
@@ -211,7 +211,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     VALCheckCondition([[self class] supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
     VALCheckCondition([[self class] _currentOSSupportedForAccessControl:accessControl], nil, @"This device does not support %@", VALStringForAccessControl(accessControl));
     
-    VALAccessibility const accessibility = VALAccessibilityWhenPasscodeSetThisDeviceOnly;
+    VALLegacyAccessibility const accessibility = VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly;
     self = [super initWithIdentifier:identifier accessibility:accessibility];
 
     SEL const backwardsCompatibleInitializer = @selector(initWithIdentifier:accessibility:);
@@ -231,7 +231,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     VALCheckCondition([[self class] supportsSecureEnclaveKeychainItems], nil, @"This device does not support storing data on the secure enclave.");
     VALCheckCondition([[self class] _currentOSSupportedForAccessControl:accessControl], nil, @"This device does not support %@", VALStringForAccessControl(accessControl));
     
-    VALAccessibility const accessibility = VALAccessibilityWhenPasscodeSetThisDeviceOnly;
+    VALLegacyAccessibility const accessibility = VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly;
     self = [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];
 
     SEL const backwardsCompatibleInitializer = @selector(initWithSharedAccessGroupIdentifier:accessibility:);
@@ -251,11 +251,11 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 - (BOOL)canAccessKeychain;
 {
     // To avoid prompting the user for Touch ID or passcode, create a VALValet with our identifier and accessibility and ask it if it can access the keychain.
-    VALValet *noPromptValet = nil;
+    VALLegacyValet *noPromptValet = nil;
     if ([self isSharedAcrossApplications]) {
-        noPromptValet = [[VALValet alloc] initWithSharedAccessGroupIdentifier:self.identifier accessibility:self.accessibility];
+        noPromptValet = [[VALLegacyValet alloc] initWithSharedAccessGroupIdentifier:self.identifier accessibility:self.accessibility];
     } else {
-        noPromptValet = [[VALValet alloc] initWithIdentifier:self.identifier accessibility:self.accessibility];
+        noPromptValet = [[VALLegacyValet alloc] initWithIdentifier:self.identifier accessibility:self.accessibility];
     }
     
     return [noPromptValet canAccessKeychain];
@@ -405,24 +405,24 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 
 - (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier;
 {
-    return [self initWithIdentifier:identifier accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly];
+    return [self initWithIdentifier:identifier accessibility:VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly];
 }
 
-- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALLegacyAccessibility)accessibility;
 {
-    VALCheckCondition(accessibility == VALAccessibilityWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibilityWhenPasscodeSetThisDeviceOnly");
+    VALCheckCondition(accessibility == VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly");
     
     return [self initWithIdentifier:identifier accessControl:VALAccessControlUserPresence];
 }
 
 - (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier;
 {
-    return [self initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly];
+    return [self initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly];
 }
 
-- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALLegacyAccessibility)accessibility;
 {
-    VALCheckCondition(accessibility == VALAccessibilityWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALAccessibilityWhenPasscodeSetThisDeviceOnly");
+    VALCheckCondition(accessibility == VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly, nil, @"Accessibility on SecureEnclaveValet must be VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly");
     
     return [self initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessControl:VALAccessControlUserPresence];
 }
@@ -488,7 +488,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
 }
 
-- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALLegacyAccessibility)accessibility;
 {
     VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
 }
@@ -498,7 +498,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
 }
 
-- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALLegacyAccessibility)accessibility;
 {
     VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
 }

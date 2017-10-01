@@ -18,11 +18,11 @@
 //  limitations under the License.
 //
 
-#import "VALValet.h"
+#import "VALLegacyValet.h"
 
 
 /// Reads and writes keychain elements that are synchronized with iCloud (supported on devices on iOS 7.0.3 and later). Accessibility must not be scoped to this device.
-@interface VALSynchronizableValet : VALValet
+@interface VALSynchronizableValet : VALLegacyValet
 
 /// @return YES if iCloud syncronizable keychain is supported on the current iOS version (7.0.3 and later).
 + (BOOL)supportsSynchronizableKeychainItems;

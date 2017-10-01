@@ -19,13 +19,14 @@
 //
 
 #import <XCTest/XCTest.h>
+//@import Valet;
 
 #import "ValetTests.h"
 
 
 @interface KeychainTests : XCTestCase
 
-@property (nonatomic, readwrite) VALValet *valet;
+@property (nonatomic, readwrite) VALLegacyValet *valet;
 @property (nonatomic, copy, readwrite) NSString *key;
 @property (nonatomic, copy, readwrite) NSString *string;
 
@@ -41,7 +42,7 @@
     [super setUp];
     
     NSString *const valetTestingIdentifier = @"valet_testing";
-    self.valet = [[VALValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenUnlocked];
+    self.valet = [[VALLegacyValet alloc] initWithIdentifier:valetTestingIdentifier accessibility:VALLegacyAccessibilityWhenUnlocked];
     
     // In case testing quit unexpectedly, clean up the keychain from last time.
     [self.valet removeAllObjects];
@@ -55,9 +56,9 @@
 - (void)test_initialization_invalidArgumentsCauseFailure;
 {
     id nilValue = nil;
-    XCTAssertNil([[VALValet alloc] initWithIdentifier:nilValue accessibility:VALAccessibilityAlways]);
-    XCTAssertNil([[VALValet alloc] initWithIdentifier:@"" accessibility:VALAccessibilityAlways]);
-    XCTAssertNil([[VALValet alloc] initWithIdentifier:@"test" accessibility:0]);
+    XCTAssertNil([[VALLegacyValet alloc] initWithIdentifier:nilValue accessibility:VALLegacyAccessibilityAlways]);
+    XCTAssertNil([[VALLegacyValet alloc] initWithIdentifier:@"" accessibility:VALLegacyAccessibilityAlways]);
+    XCTAssertNil([[VALLegacyValet alloc] initWithIdentifier:@"test" accessibility:0]);
 }
 
 - (void)test_setObjectForKey_invalidArgumentsCauseFailure;
@@ -93,6 +94,30 @@
 {
     XCTAssertTrue([self.valet setString:self.string forKey:self.key]);
     XCTAssertEqualObjects([self.valet stringForKey:self.key], self.string);
+}
+
+@end
+
+
+// FIXME: emuller - coming soon
+@interface SwiftInteropTests : XCTestCase
+
+@property (nonatomic, readwrite) VALLegacyValet *valet;
+@property (nonatomic, copy, readwrite) NSString *key;
+@property (nonatomic, copy, readwrite) NSString *string;
+
+@end
+
+@implementation SwiftInteropTests
+
+- (void)setUp;
+{
+    [super setUp];
+}
+
+- (void)tearDown;
+{
+    [super tearDown];
 }
 
 @end

@@ -21,22 +21,22 @@
 #import <Foundation/Foundation.h>
 
 
-typedef NS_ENUM(NSUInteger, VALAccessibility) {
+typedef NS_ENUM(NSUInteger, VALLegacyAccessibility) {
     /// Valet data can only be accessed while the device is unlocked. This attribute is recommended for data that only needs to be accessible while the application is in the foreground. Valet data with this attribute will migrate to a new device when using encrypted backups.
-    VALAccessibilityWhenUnlocked = 1,
+    VALLegacyAccessibilityWhenUnlocked = 1,
     /// Valet data can only be accessed once the device has been unlocked after a restart. This attribute is recommended for data that needs to be accessible by background applications. Valet data with this attribute will migrate to a new device when using encrypted backups.
-    VALAccessibilityAfterFirstUnlock,
+    VALLegacyAccessibilityAfterFirstUnlock,
     /// Valet data can always be accessed regardless of the lock state of the device. This attribute is not recommended. Valet data with this attribute will migrate to a new device when using encrypted backups.
-    VALAccessibilityAlways,
+    VALLegacyAccessibilityAlways,
     
     /// Valet data can only be accessed while the device is unlocked. This class is only available if a passcode is set on the device. This is recommended for items that only need to be accessible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device. No items can be stored in this class on devices without a passcode. Disabling the device passcode will cause all items in this class to be deleted.
-    VALAccessibilityWhenPasscodeSetThisDeviceOnly NS_ENUM_AVAILABLE(10_10, 8_0),
+    VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly NS_ENUM_AVAILABLE(10_10, 8_0),
     /// Valet data can only be accessed while the device is unlocked. This is recommended for data that only needs to be accessible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
-    VALAccessibilityWhenUnlockedThisDeviceOnly,
+    VALLegacyAccessibilityWhenUnlockedThisDeviceOnly,
     /// Valet data can only be accessed once the device has been unlocked after a restart. This is recommended for items that need to be accessible by background applications. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
-    VALAccessibilityAfterFirstUnlockThisDeviceOnly,
+    VALLegacyAccessibilityAfterFirstUnlockThisDeviceOnly,
     /// Valet data can always be accessed regardless of the lock state of the device. This option is not recommended. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
-    VALAccessibilityAlwaysThisDeviceOnly,
+    VALLegacyAccessibilityAlwaysThisDeviceOnly,
 };
 
 extern NSString * __nonnull const VALMigrationErrorDomain;
@@ -64,26 +64,26 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
 
 
 /// Reads and writes keychain elements.
-@interface VALValet : NSObject <NSCopying>
+@interface VALLegacyValet : NSObject <NSCopying>
 
 /// Creates a Valet that reads/writes keychain elements with the desired accessibility.
-/// @see VALAccessibility
-- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility NS_DESIGNATED_INITIALIZER;
+/// @see VALLegacyAccessibility
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALLegacyAccessibility)accessibility NS_DESIGNATED_INITIALIZER;
 
 /// Creates a Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
 /// @param sharedAccessGroupIdentifier This must correspond with the value for keychain-access-groups in your Entitlements file.
-/// @see VALAccessibility
-- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility NS_DESIGNATED_INITIALIZER;
+/// @see VALLegacyAccessibility
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALLegacyAccessibility)accessibility NS_DESIGNATED_INITIALIZER;
 
 - (nonnull instancetype)init NS_UNAVAILABLE;
 + (nonnull instancetype)new NS_UNAVAILABLE;
 
 @property (nonnull, copy, readonly) NSString *identifier;
 @property (readonly, getter=isSharedAcrossApplications) BOOL sharedAcrossApplications;
-@property (readonly) VALAccessibility accessibility;
+@property (readonly) VALLegacyAccessibility accessibility;
 
 /// @return YES if otherValet reads from and writes to the same sandbox within the keychain as the receiver.
-- (BOOL)isEqualToValet:(nonnull VALValet *)otherValet;
+- (BOOL)isEqualToValet:(nonnull VALLegacyValet *)otherValet;
 
 /// @return YES if the keychain is accessible for reading and writing, NO otherwise.
 /// @note Determined by writing a value to the keychain and then reading it back out.
@@ -122,6 +122,6 @@ typedef NS_ENUM(NSUInteger, VALMigrationError) {
 /// Migrates objects from the passed-in Valet into the receiving Valet instance.
 /// @return An error if the operation failed. Error domain will be <code>VALMigrationErrorDomain</code>, and codes will be of type <code>VALMigrationError</code>
 /// @see VALMigrationError
-- (nullable NSError *)migrateObjectsFromValet:(nonnull VALValet *)valet removeOnCompletion:(BOOL)remove;
+- (nullable NSError *)migrateObjectsFromValet:(nonnull VALLegacyValet *)valet removeOnCompletion:(BOOL)remove;
 
 @end

@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import "VALValet.h"
+#import "VALLegacyValet.h"
 
 
 /// Compiler flag for building against an SDK where Secure Enclave is available.
@@ -44,9 +44,9 @@ typedef NS_ENUM(NSUInteger, VALAccessControl) {
 };
 
 
-/// Reads and writes keychain elements that are stored on the Secure Enclave (available on iOS 8.0 and later and macOS 10.11 and later) using accessibility attribute VALAccessibilityWhenPasscodeSetThisDeviceOnly. Accessing these keychain elements will require the user to confirm their presence via Touch ID or passcode entry. If no passcode is set on the device, the below methods will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI.
+/// Reads and writes keychain elements that are stored on the Secure Enclave (available on iOS 8.0 and later and macOS 10.11 and later) using accessibility attribute VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly. Accessing these keychain elements will require the user to confirm their presence via Touch ID or passcode entry. If no passcode is set on the device, the below methods will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI.
 /// @version Available on iOS 8 or later, and macOS 10.11 or later.
-@interface VALSecureEnclaveValet : VALValet
+@interface VALSecureEnclaveValet : VALLegacyValet
 
 /// @return YES if Secure Enclave storage is supported on the current iOS or macOS version (iOS 8.0 and macOS 10.11 and later).
 + (BOOL)supportsSecureEnclaveKeychainItems;
@@ -94,9 +94,9 @@ typedef NS_ENUM(NSUInteger, VALAccessControl) {
 @interface VALSecureEnclaveValet (Deprecated)
 
 - (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));
-- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALLegacyAccessibility)accessibility __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));
 
 - (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));
-- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALLegacyAccessibility)accessibility __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));
 
 @end

@@ -80,6 +80,11 @@ class SecureEnclaveSinglePromptTests: XCTestCase
     
     func test_allKeys()
     {
+        guard testEnvironmentIsSigned() else {
+            XCTFail()
+            return
+        }
+        
         XCTAssertEqual(valet.allKeys(userPrompt: ""), Set())
         
         XCTAssertTrue(valet.set(string: passcode, for: key))

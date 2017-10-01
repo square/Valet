@@ -137,7 +137,7 @@ class SynchronizableTests: XCTestCase
     
     func test_backwardsCompatibilityWithObjectiveCValet() {
         XCTAssert(valet.accessibility == .whenUnlocked)
-        let legacyValet = VALSynchronizableValet(identifier: valet.identifier.description, accessibility: VALAccessibility.whenUnlocked)!
+        let legacyValet = VALSynchronizableValet(identifier: valet.identifier.description, accessibility: VALLegacyAccessibility.whenUnlocked)!
         
         let key = "yo"
         legacyValet.setString("dawg", forKey: key)

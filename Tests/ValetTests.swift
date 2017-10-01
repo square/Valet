@@ -722,7 +722,7 @@ class ValetTests: XCTestCase
     
     func test_backwardsCompatibilityWithObjectiveCValet() {
         XCTAssert(valet.accessibility == .whenUnlocked)
-        let legacyValet = VALValet(identifier: valet.identifier.description, accessibility: VALAccessibility.whenUnlocked)!
+        let legacyValet = VALLegacyValet(identifier: valet.identifier.description, accessibility: VALLegacyAccessibility.whenUnlocked)!
         
         legacyValet.setString(passcode, forKey: key)
         

@@ -7,8 +7,8 @@
 #import "VALSecureEnclaveValet.h"
 #import "VALSinglePromptSecureEnclaveValet.h"
 #import "VALSynchronizableValet.h"
-#import "VALValet_Protected.h"
-#import "VALValet.h"
+#import "VALLegacyValet_Protected.h"
+#import "VALLegacyValet.h"
 
 
 #import "ValetTests.m"

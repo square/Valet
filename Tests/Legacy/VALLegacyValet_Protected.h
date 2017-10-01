@@ -1,5 +1,5 @@
 //
-//  VALValet_Protected.h
+//  VALLegacyValet_Protected.h
 //  Valet
 //
 //  Created by Dan Federman on 3/16/15.
@@ -18,24 +18,24 @@
 //  limitations under the License.
 //
 
-#import "VALValet.h"
+#import "VALLegacyValet.h"
 
 
-extern NSString * __nonnull VALStringForAccessibility(VALAccessibility accessibility);
+extern NSString * __nonnull VALStringForAccessibility(VALLegacyAccessibility accessibility);
 extern void VALAtomicSecItemLock(__nonnull dispatch_block_t block);
 
 
-@interface VALValet ()
+@interface VALLegacyValet ()
 
 /// Ensures the atomicity for set and remove operations by limiting ourselves to one instance per configuration.
 /// @return An existing valet object with the same configuration as the valet provided if one exists, or the passed in valet.
-+ (nonnull id)sharedValetForValet:(nonnull VALValet *)valet;
++ (nonnull id)sharedValetForValet:(nonnull VALLegacyValet *)valet;
 
 /// Creates a base query given the injected properties. Do not override.
-+ (nullable NSMutableDictionary *)mutableBaseQueryWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility initializer:(nonnull SEL)initializer;
++ (nullable NSMutableDictionary *)mutableBaseQueryWithIdentifier:(nonnull NSString *)identifier accessibility:(VALLegacyAccessibility)accessibility initializer:(nonnull SEL)initializer;
 
 /// Creates a base query for shared access group Valets given the injected properties. Do not override.
-+ (nullable NSMutableDictionary *)mutableBaseQueryWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility initializer:(nonnull SEL)initializer;
++ (nullable NSMutableDictionary *)mutableBaseQueryWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALLegacyAccessibility)accessibility initializer:(nonnull SEL)initializer;
 
 /// Stores the root query to be used in all SecItem queries.
 @property (nonnull, copy, readonly) NSDictionary *baseQuery;
