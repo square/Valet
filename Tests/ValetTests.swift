@@ -28,7 +28,15 @@ import XCTest
 /// - note: In order to test changes locally, set the Valet Mac Tests host to Valet macOS Test Host App, delete all VAL_* keychain items in your keychain via Keychain Access.app, and run Mac tests.
 func testEnvironmentIsSigned() -> Bool {
     // Our test host apps for iOS and Mac are both signed, so testing for a bundle identifier is analogous to testing signing.
-    return Bundle.main.bundleIdentifier != nil
+    guard Bundle.main.bundleIdentifier != nil else {
+        #if os(iOS)
+            XCTFail("iOS test bundle should be signed")
+        #endif
+        
+        return false
+    }
+    
+    return true
 }
 
 

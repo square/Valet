@@ -93,7 +93,6 @@ class SecureEnclaveSinglePromptTests: XCTestCase
     func test_allKeys()
     {
         guard testEnvironmentIsSigned() else {
-            XCTFail()
             return
         }
         
