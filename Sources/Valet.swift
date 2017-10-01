@@ -321,6 +321,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
 
 // MARK: - Objective C Compatibility
 
+
 extension Valet {
 
     // MARK: Public Class Methods
@@ -329,38 +330,32 @@ extension Valet {
     /// - parameter accessibility: The desired accessibility for the Valet.
     /// - returns: A Valet that reads/writes keychain elements with the desired accessibility.
     @objc(vanillaValetWithIdentifier:accessibility:)
-    public class func objectiveccompatibility_vanillaValet(with identifier: ObjectiveCCompatibilityIdentifier, accessibility: Accessibility) -> Valet {
-        return valet(with: identifier.asIdentifier, of: .vanilla(accessibility))
+    public class func notforswift_vanillaValet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
+        return valet(with: identifier, of: .vanilla(accessibility))
     }
     
     /// - parameter identifier: A non-empty string that uniquely identifies a Valet.
     /// - parameter accessibility: The desired accessibility for the Valet.
     /// - returns: A Valet that reads/writes iCloud-shared keychain elements with the desired accessibility.
     @objc(iCloudValetWithIdentifier:accessibility:)
-    public class func objectiveccompatibility_iCloudValet(with identifier: ObjectiveCCompatibilityIdentifier, accessibility: CloudAccessibility) -> Valet {
-        return valet(with: identifier.asIdentifier, of: .iCloud(accessibility))
+    public class func notforswift_iCloudValet(with identifier: Identifier, accessibility: CloudAccessibility) -> Valet {
+        return valet(with: identifier, of: .iCloud(accessibility))
     }
     
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
     /// - parameter accessibility: The desired accessibility for the Valet.
     /// - returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     @objc(vanillaValetWithSharedAccessGroupIdentifier:accessibility:)
-    public class func objectiveccompatibility_vanillaSharedAccessGroupValet(with identifier: ObjectiveCCompatibilityIdentifier, accessibility: Accessibility) -> Valet {
-        return sharedAccessGroupValet(with: identifier.asIdentifier, of: .vanilla(accessibility))
+    public class func notforswift_vanillaSharedAccessGroupValet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
+        return sharedAccessGroupValet(with: identifier, of: .vanilla(accessibility))
     }
     
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
     /// - parameter accessibility: The desired accessibility for the Valet.
     /// - returns: A Valet that reads/writes iCloud-shared keychain elements that can be shared across applications written by the same development team.
     @objc(iCloudValetWithSharedAccessGroupIdentifier:accessibility:)
-    public class func objectiveccompatibility_iCloudSharedAccessGroupValet(with identifier: ObjectiveCCompatibilityIdentifier, accessibility: CloudAccessibility) -> Valet {
-        return sharedAccessGroupValet(with: identifier.asIdentifier, of: .iCloud(accessibility))
+    public class func notforswift_iCloudSharedAccessGroupValet(with identifier: Identifier, accessibility: CloudAccessibility) -> Valet {
+        return sharedAccessGroupValet(with: identifier, of: .iCloud(accessibility))
     }
     
-    // MARK: Public Properties
-    
-    @objc(identifier)
-    public var objectiveccompatibility_identifier: ObjectiveCCompatibilityIdentifier {
-        return ObjectiveCCompatibilityIdentifier(nonEmpty: identifier.description)!
-    }
 }
