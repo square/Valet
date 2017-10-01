@@ -24,6 +24,7 @@ import Foundation
 public typealias Key = String
 
 
+@objc(VALIdentifier)
 public class Identifier: NSObject {
     
     // MARK: Initialization
