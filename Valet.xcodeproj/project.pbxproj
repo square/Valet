@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		168909381F7199D60057F636 /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; };
 		168909391F7199D60057F636 /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		16939FCB1F81897700D9F044 /* ObjectiveCCompatibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16939FCA1F81897700D9F044 /* ObjectiveCCompatibilityIdentifier.swift */; };
+		16939FCC1F81897700D9F044 /* ObjectiveCCompatibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16939FCA1F81897700D9F044 /* ObjectiveCCompatibilityIdentifier.swift */; };
 		16B5856F1F71DBE00038EE30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B5856E1F71DBE00038EE30 /* AppDelegate.swift */; };
 		16B585711F71DBE00038EE30 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B585701F71DBE00038EE30 /* ViewController.swift */; };
 		16B585731F71DBE00038EE30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16B585721F71DBE00038EE30 /* Assets.xcassets */; };
@@ -143,6 +145,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		16939FCA1F81897700D9F044 /* ObjectiveCCompatibilityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectiveCCompatibilityIdentifier.swift; sourceTree = "<group>"; };
 		16B5856C1F71DBE00038EE30 /* Valet macOS Test Host App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Valet macOS Test Host App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		16B5856E1F71DBE00038EE30 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		16B585701F71DBE00038EE30 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -295,6 +298,7 @@
 				16E04BE51F71B6D200E8552D /* CloudAccessibility.swift */,
 				16E04BE21F71B6D200E8552D /* ErrorHandler.swift */,
 				16E04BDF1F71B6D200E8552D /* Identifier.swift */,
+				16939FCA1F81897700D9F044 /* ObjectiveCCompatibilityIdentifier.swift */,
 				16E04BE71F71B6D200E8552D /* KeychainQueryConvertible.swift */,
 				16E04BE91F71B6D300E8552D /* MigrationResult.swift */,
 				16E04BE01F71B6D200E8552D /* SecureEnclave.swift */,
@@ -750,6 +754,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16939FCB1F81897700D9F044 /* ObjectiveCCompatibilityIdentifier.swift in Sources */,
 				16EB52521F71BDF400363869 /* ErrorHandler.swift in Sources */,
 				16EB52511F71BDF400363869 /* CloudAccessibility.swift in Sources */,
 				16EB52691F71BDFF00363869 /* Service.swift in Sources */,
@@ -772,6 +777,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16939FCC1F81897700D9F044 /* ObjectiveCCompatibilityIdentifier.swift in Sources */,
 				16EB525C1F71BDF400363869 /* ErrorHandler.swift in Sources */,
 				16EB525B1F71BDF400363869 /* CloudAccessibility.swift in Sources */,
 				16EB526D1F71BDFF00363869 /* Service.swift in Sources */,

@@ -20,10 +20,10 @@
 
 import Foundation
 
-
-public enum MigrationResult: Equatable {
+@objc
+public enum MigrationResult: Int, Equatable {
     /// Migration succeeded.
-    case success
+    case success = 1
     /// Migration failed because the keychain query was not valid.
     case invalidQuery
     /// Migration failed because no items to migrate were found.
