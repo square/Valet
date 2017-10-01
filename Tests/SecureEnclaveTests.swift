@@ -23,10 +23,22 @@ import Valet
 import XCTest
 
 
-extension Error
-{
-    // The Error.code -> VALMigrationError conversion is gross right now:
-    var valetMigrationError: VALMigrationError { return VALMigrationError(rawValue: UInt((self as NSError).code))! }
+fileprivate extension SecureEnclaveAccessControl {
+    static func allValues() -> [SecureEnclaveAccessControl] {
+        if #available(OSX 10.12.1, *) {
+            return [
+                .userPresence,
+                .biometricAny,
+                .biometricCurrentSet,
+                .devicePasscode
+            ]
+        } else {
+            return [
+                .userPresence,
+                .devicePasscode
+            ]
+        }
+    }
 }
 
 
@@ -103,7 +115,34 @@ class ValetSecureEnclaveTests: XCTestCase
             return
         }
         
-        XCTAssertTrue(valet.canAccessKeychain())
+        let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().flatMap { accessControl in
+            return .valet(with: valet.identifier, accessControl: accessControl)
+        }
+        for permutation in permutations {
+            XCTAssertTrue(permutation.canAccessKeychain())
+        }
+    }
+    
+    func test_canAccessKeychain_sharedAccessGroup() {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
+        let sharedAccessGroupIdentifier: Identifier
+        #if os(iOS)
+            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
+        #elseif os(OSX)
+            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        #else
+            XCTFail()
+        #endif
+        
+        let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().flatMap { accessControl in
+            return .sharedAccessGroupValet(with: sharedAccessGroupIdentifier, accessControl: accessControl)
+        }
+        for permutation in permutations {
+            XCTAssertTrue(permutation.canAccessKeychain())
+        }
     }
     
     // MARK: Migration
@@ -165,7 +204,7 @@ class ValetSecureEnclaveTests: XCTestCase
         
         let otherValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me_To_Valet")!, of: .vanilla(.afterFirstUnlock))
         
-        // Clean up any dangling keychain items before we start this tests.
+        // Clean up any dangling keychain items before we start this test.
         valet.removeAllObjects()
         otherValet.removeAllObjects()
         

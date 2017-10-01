@@ -32,6 +32,21 @@ func testEnvironmentIsSigned() -> Bool {
 }
 
 
+fileprivate extension Accessibility {
+    static func allValues() -> [Accessibility] {
+        return [
+            .whenUnlocked,
+            .afterFirstUnlock,
+            .always,
+            .whenPasscodeSetThisDeviceOnly,
+            .whenUnlockedThisDeviceOnly,
+            .afterFirstUnlockThisDeviceOnly,
+            .alwaysThisDeviceOnly
+        ]
+    }
+}
+
+
 class ValetTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
@@ -92,7 +107,35 @@ class ValetTests: XCTestCase
 
     func test_canAccessKeychain()
     {
-        XCTAssertTrue(valet.canAccessKeychain())
+        let permutations: [Valet] = Accessibility.allValues().flatMap { accessibility in
+            return .valet(with: valet.identifier, of: .vanilla(accessibility))
+        }
+        for permutation in permutations {
+            XCTAssertTrue(permutation.canAccessKeychain())
+        }
+    }
+    
+    func test_canAccessKeychain_sharedAccessGroup()
+    {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
+        let sharedAccessGroupIdentifier: Identifier
+        #if os(iOS)
+            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
+        #elseif os(OSX)
+            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        #else
+            XCTFail()
+        #endif
+        
+        let permutations: [Valet] = Accessibility.allValues().flatMap { accessibility in
+            return .sharedAccessGroupValet(with: sharedAccessGroupIdentifier, of: .vanilla(accessibility))
+        }
+        for permutation in permutations {
+            XCTAssertTrue(permutation.canAccessKeychain())
+        }
     }
 
     func test_canAccessKeychain_Performance()

@@ -23,6 +23,17 @@ import Valet
 import XCTest
 
 
+fileprivate extension CloudAccessibility {
+    static func allValues() -> [CloudAccessibility] {
+        return [
+            .whenUnlocked,
+            .afterFirstUnlock,
+            .always
+        ]
+    }
+}
+
+
 @available (iOS 8.2, OSX 10.11, *)
 class ValetSynchronizableTests: XCTestCase
 {
@@ -92,6 +103,45 @@ class ValetSynchronizableTests: XCTestCase
         
         XCTAssertTrue(valet.removeObject(for: key))
         XCTAssertNil(valet.string(for: key))
+    }
+    
+    // MARK: canAccessKeychain
+    
+    func test_canAccessKeychain()
+    {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
+        let permutations: [Valet] = CloudAccessibility.allValues().flatMap { cloudAccessibility in
+            return .valet(with: valet.identifier, of: .iCloud(cloudAccessibility))
+        }
+        for permutation in permutations {
+            XCTAssertTrue(permutation.canAccessKeychain())
+        }
+    }
+    
+    func test_canAccessKeychain_sharedAccessGroup()
+    {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
+        let sharedAccessGroupIdentifier: Identifier
+        #if os(iOS)
+            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
+        #elseif os(OSX)
+            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        #else
+            XCTFail()
+        #endif
+        
+        let permutations: [Valet] = CloudAccessibility.allValues().flatMap { cloudAccessibility in
+            return .sharedAccessGroupValet(with: sharedAccessGroupIdentifier, of: .iCloud(cloudAccessibility))
+        }
+        for permutation in permutations {
+            XCTAssertTrue(permutation.canAccessKeychain())
+        }
     }
     
     // MARK: Backwards Compatibility
