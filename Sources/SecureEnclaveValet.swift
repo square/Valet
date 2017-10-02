@@ -222,7 +222,7 @@ public final class SecureEnclaveValet: NSObject {
 }
 
 
-// MARK: - Objective C Compatibility
+// MARK: - Objective-C Compatibility
 
 
 extension SecureEnclaveValet {
@@ -232,6 +232,7 @@ extension SecureEnclaveValet {
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
+    @available(swift, obsoleted: 1.0)
     @objc(objectForKey:userPrompt:userCancelled:)
     public func notforswift_object(for key: Key, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> Data? {
         switch object(for: key, withPrompt: userPrompt) {
@@ -248,6 +249,7 @@ extension SecureEnclaveValet {
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
+    @available(swift, obsoleted: 1.0)
     @objc(stringForKey:userPrompt:userCancelled:)
     public func notforswift_string(for key: Key, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> String? {
         switch string(for: key, withPrompt: userPrompt) {

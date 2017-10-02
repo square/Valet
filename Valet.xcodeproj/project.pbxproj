@@ -168,7 +168,6 @@
 		16E04BF11F71B72C00E8552D /* ValetTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ValetTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		16E04BF21F71B72C00E8552D /* MacTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTests.swift; sourceTree = "<group>"; };
 		16E04BF31F71B72C00E8552D /* ValetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValetTests.swift; sourceTree = "<group>"; };
-		16E04BF41F71B72C00E8552D /* ValetTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ValetTests.h; sourceTree = "<group>"; };
 		16E04BF51F71B73700E8552D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16E04BF61F71B74100E8552D /* VALSynchronizableValet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VALSynchronizableValet.h; sourceTree = "<group>"; };
 		16E04BF71F71B74100E8552D /* VALSynchronizableValet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VALSynchronizableValet.m; sourceTree = "<group>"; };
@@ -325,7 +324,6 @@
 				AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */,
 				16E04BEF1F71B72C00E8552D /* SynchronizableTests.swift */,
 				16E04BF11F71B72C00E8552D /* ValetTests-Bridging-Header.h */,
-				16E04BF41F71B72C00E8552D /* ValetTests.h */,
 				16E04BF01F71B72C00E8552D /* ValetTests.m */,
 				16E04BF31F71B72C00E8552D /* ValetTests.swift */,
 				16E04BEC1F71B70C00E8552D /* Legacy */,
