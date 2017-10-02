@@ -57,13 +57,13 @@ VALValet *const myValet = [VALValet vanillaValetWithIdentifier:@"Druidia" access
 To begin storing data securely using Valet, you need to create a Valet instance with:
 
 * An identifier – a string that is used to identify this Valet.
-* An accessibility value – an enum ([Accessibility](Sources/Accessibility.swift)) that defines when you will be able to store and retrieve data.
+* A flavor – an enum ([Valet.Flavor](Sources/Valet.swift#L28)) that defines where data will be stored and when you will be able to persist and retrieve data.
 
-This instance can be used to store and retrieve data securely, but only when the device is unlocked.
+This `myValet` instance can be used to store and retrieve data securely on this device, but only when the device is unlocked.
 
 #### Choosing the Best Accessibility Value
 
-The VALAccessibility enum is used to determine when your secrets can be accessed. It’s a good idea to use the strictest accessibility possible that will allow your app to function. For example, if your app does not run in the background you will want to ensure the secrets can only be read when the phone is unlocked by using `.whenUnlocked` or `.whenUnlockedThisDeviceOnly`.
+The Accessibility enum is used to determine when your secrets can be accessed. It’s a good idea to use the strictest accessibility possible that will allow your app to function. For example, if your app does not run in the background you will want to ensure the secrets can only be read when the phone is unlocked by using `.whenUnlocked` or `.whenUnlockedThisDeviceOnly`.
 
 ### Reading and Writing
 
@@ -115,7 +115,7 @@ let mySecureEnclaveValet = SecureEnclaveValet.valet(with: Identifier(nonEmpty: "
 VALSecureEnclaveValet *const mySecureEnclaveValet = [VALSecureEnclaveValet initWithIdentifier:@"Druidia" accessControl:VALAccessControlUserPresence];
 ```
 
-This instance can be used to store and retrieve data in the Secure Enclave (available on iOS 8.0 and later and Mac OS 10.11 and later). Each time data is retrieved from this Valet, the user will be prompted to confirm their presence via Touch ID or by entering their device passcode. *If no passcode is set on the device, this instance will be unable to access or store data.* Data is removed from the Secure Enclave when the user removes a passcode from the device. Storing data using VALSecureEnclaveValet is the most secure way to store data on either iOS or Mac OS.
+This instance can be used to store and retrieve data in the Secure Enclave (available on iOS 8.0 and later and Mac OS 10.11 and later). Each time data is retrieved from this Valet, the user will be prompted to confirm their presence via Touch ID or by entering their device passcode. *If no passcode is set on the device, this instance will be unable to access or store data.* Data is removed from the Secure Enclave when the user removes a passcode from the device. Storing data using SecureEnclaveValet is the most secure way to store data on either iOS or Mac OS.
 
 ```swift
 let mySecureEnclaveValet = SecureEnclaveSinglePromptValet.valet(with: Identifier(nonEmpty: "Druidia")!, accessControl: .userPresence)
