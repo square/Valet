@@ -100,13 +100,6 @@
 			remoteGlobalIDString = 26E6827B1BA8B3F900EFF4EA;
 			remoteInfo = "Valet iOS";
 		};
-		16B5857C1F71DBF00038EE30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 16B5856B1F71DBE00038EE30;
-			remoteInfo = "Valet macOS Test Host App";
-		};
 		371150B81E2962FC004A45D4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
@@ -566,7 +559,6 @@
 			);
 			dependencies = (
 				AC80E0A31F6DABC90091D04D /* PBXTargetDependency */,
-				16B5857D1F71DBF00038EE30 /* PBXTargetDependency */,
 			);
 			name = "Valet Mac Tests";
 			productName = "Valet MacTests";
@@ -853,11 +845,6 @@
 			isa = PBXTargetDependency;
 			target = 26E6827B1BA8B3F900EFF4EA /* Valet iOS */;
 			targetProxy = 1689093A1F7199D60057F636 /* PBXContainerItemProxy */;
-		};
-		16B5857D1F71DBF00038EE30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 16B5856B1F71DBE00038EE30 /* Valet macOS Test Host App */;
-			targetProxy = 16B5857C1F71DBF00038EE30 /* PBXContainerItemProxy */;
 		};
 		371150B91E2962FC004A45D4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
