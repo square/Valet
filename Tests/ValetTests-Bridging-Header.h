@@ -3,9 +3,9 @@
 //
 
 #import "ValetDefines.h"
-#import "VALSecureEnclaveValet_Protected.h"
-#import "VALSecureEnclaveValet.h"
-#import "VALSinglePromptSecureEnclaveValet.h"
+#import "VALLegacySecureEnclaveValet_Protected.h"
+#import "VALLegacySecureEnclaveValet.h"
+#import "VALLegacySinglePromptSecureEnclaveValet.h"
 #import "VALSynchronizableValet.h"
 #import "VALLegacyValet_Protected.h"
 #import "VALLegacyValet.h"

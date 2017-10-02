@@ -18,8 +18,9 @@
 //  limitations under the License.
 //
 
+@import Valet;
+
 #import <XCTest/XCTest.h>
-//@import Valet;
 
 #import "ValetTests.h"
 
@@ -102,7 +103,7 @@
 // FIXME: emuller - coming soon
 @interface SwiftInteropTests : XCTestCase
 
-@property (nonatomic, readwrite) VALLegacyValet *valet;
+@property (nonatomic, readwrite) VALValet *valet;
 @property (nonatomic, copy, readwrite) NSString *key;
 @property (nonatomic, copy, readwrite) NSString *string;
 
@@ -113,6 +114,9 @@
 - (void)setUp;
 {
     [super setUp];
+
+    NSString *const __unused valetTestingIdentifier = @"valet_testing";
+//    self.valet = [VALValet vanillaValetWithIdentifier:valetTestingIdentifier accessibility:VALAccessibilityWhenUnlocked];
 }
 
 - (void)tearDown;

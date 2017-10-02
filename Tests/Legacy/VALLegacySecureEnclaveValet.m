@@ -1,5 +1,5 @@
 //
-//  VALSecureEnclaveValet.m
+//  VALLegacySecureEnclaveValet.m
 //  Valet
 //
 //  Created by Dan Federman on 3/16/15.
@@ -18,8 +18,8 @@
 //  limitations under the License.
 //
 
-#import "VALSecureEnclaveValet.h"
-#import "VALSecureEnclaveValet_Protected.h"
+#import "VALLegacySecureEnclaveValet.h"
+#import "VALLegacySecureEnclaveValet_Protected.h"
 #import "VALLegacyValet_Protected.h"
 
 #import "ValetDefines.h"
@@ -53,7 +53,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 
 #if VAL_SECURE_ENCLAVE_SDK_AVAILABLE
 
-@implementation VALSecureEnclaveValet
+@implementation VALLegacySecureEnclaveValet
 
 @synthesize baseQuery = _baseQuery;
 
@@ -183,7 +183,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
         switch (accessControl) {
             case VALAccessControlUserPresence:
                 /*
-                 VALSecureEnclaveValet v1.0-v2.0.7 used UserPresence without a suffix – the concept of a customizable AccessControl was added in v2.1.
+                 VALLegacySecureEnclaveValet v1.0-v2.0.7 used UserPresence without a suffix – the concept of a customizable AccessControl was added in v2.1.
                  For backwards compatibility, do not append an access control suffix for UserPresence.
                  */
                 break;
@@ -345,7 +345,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     return [super containsObjectForKey:key options:allOptions];
 }
 
-#pragma mark - VALSecureEnclaveValet Protected Methods
+#pragma mark - VALLegacySecureEnclaveValet Protected Methods
 
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled options:(nullable NSDictionary *)options;
 {
@@ -399,7 +399,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 #pragma mark - Deprecated Category
 
 
-@implementation VALSecureEnclaveValet (Deprecated)
+@implementation VALLegacySecureEnclaveValet (Deprecated)
 
 #pragma mark - Deprecated Initializers
 
@@ -431,76 +431,76 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 
 #else // Below this line we're in !VAL_SECURE_ENCLAVE_SDK_AVAILABLE, meaning none of our API is actually usable. Return NO or nil everywhere.
 
-@implementation VALSecureEnclaveValet
+@implementation VALLegacySecureEnclaveValet
 
 + (BOOL)supportsSecureEnclaveKeychainItems;
 {
-    VALCheckCondition(NO, NO, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, NO, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessControl:(VALAccessControl)accessControl;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessControl:(VALAccessControl)accessControl;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled options:(nullable NSDictionary *)options;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled options:(nullable NSDictionary *)options;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 @end
 
 
-@implementation VALSecureEnclaveValet (Deprecated)
+@implementation VALLegacySecureEnclaveValet (Deprecated)
 
 - (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALLegacyAccessibility)accessibility;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 - (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALLegacyAccessibility)accessibility;
 {
-    VALCheckCondition(NO, nil, @"VALSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, nil, @"VALLegacySecureEnclaveValet unsupported on this SDK");
 }
 
 @end

@@ -1,5 +1,5 @@
 //
-//  VALSecureEnclaveValet.h
+//  VALLegacySecureEnclaveValet.h
 //  Valet
 //
 //  Created by Dan Federman on 3/16/15.
@@ -46,7 +46,7 @@ typedef NS_ENUM(NSUInteger, VALAccessControl) {
 
 /// Reads and writes keychain elements that are stored on the Secure Enclave (available on iOS 8.0 and later and macOS 10.11 and later) using accessibility attribute VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly. Accessing these keychain elements will require the user to confirm their presence via Touch ID or passcode entry. If no passcode is set on the device, the below methods will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device. Use the userPrompt methods to display custom text to the user in Apple's Touch ID and passcode entry UI.
 /// @version Available on iOS 8 or later, and macOS 10.11 or later.
-@interface VALSecureEnclaveValet : VALLegacyValet
+@interface VALLegacySecureEnclaveValet : VALLegacyValet
 
 /// @return YES if Secure Enclave storage is supported on the current iOS or macOS version (iOS 8.0 and macOS 10.11 and later).
 + (BOOL)supportsSecureEnclaveKeychainItems;
@@ -63,7 +63,7 @@ typedef NS_ENUM(NSUInteger, VALAccessControl) {
 @property (readonly) VALAccessControl accessControl;
 
 /// Convenience method for retrieving data from the keychain with a user prompt.
-/// @see -[VALSecureEnclave objectForKey:userPrompt:userCancelled:]
+/// @see -[VALLegacySecureEnclave objectForKey:userPrompt:userCancelled:]
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
 
 /// Convenience method for retrieving data from the keychain with a user prompt.
@@ -73,7 +73,7 @@ typedef NS_ENUM(NSUInteger, VALAccessControl) {
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 
 /// Convenience method for retrieving a string from the keychain with a user prompt.
-/// @see -[VALSecureEnclave stringForKey:userPrompt:userCancelled:]
+/// @see -[VALLegacySecureEnclave stringForKey:userPrompt:userCancelled:]
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
 
 /// Convenience method for retrieving a string from the keychain with a user prompt.
@@ -82,16 +82,16 @@ typedef NS_ENUM(NSUInteger, VALAccessControl) {
 /// @return The string currently stored in the keychain for the provided key. Returns nil if no string exists in the keychain for the specified key, if the keychain is inaccessible, or if the user cancels out of the authentication UI.
 - (nullable NSString *)stringForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt userCancelled:(nullable inout BOOL *)userCancelled;
 
-/// This method is not supported on VALSecureEnclaveValet.
+/// This method is not supported on VALLegacySecureEnclaveValet.
 - (nonnull NSSet *)allKeys NS_UNAVAILABLE;
 
-/// This method is not supported on VALSecureEnclaveValet.
+/// This method is not supported on VALLegacySecureEnclaveValet.
 - (BOOL)removeAllObjects NS_UNAVAILABLE;
 
 @end
 
 
-@interface VALSecureEnclaveValet (Deprecated)
+@interface VALLegacySecureEnclaveValet (Deprecated)
 
 - (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));
 - (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALLegacyAccessibility)accessibility __attribute__((deprecated("Use backwards-compatible initWithIdentifier:accessControl: with VALAccessControlUserPresence instead")));

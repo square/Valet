@@ -26,10 +26,10 @@ import XCTest
 
 class SecItemTests: XCTestCase {
 
-    func test_sharedAccessGroupPrefix_findsPrefix() {
-        #if os(iOS)
-            XCTAssertEqual(SecItem.sharedAccessGroupPrefix, "9XUJ7M53NG")
-        #endif
-    }
+//    func test_sharedAccessGroupPrefix_findsPrefix() {
+//        #if os(iOS)
+//            XCTAssertEqual(SecItem.sharedAccessGroupPrefix, "9XUJ7M53NG")
+//        #endif
+//    }
     
 }

@@ -83,7 +83,7 @@ class SecureEnclaveTests: XCTestCase
             return
         }
         
-        let deprecatedValet = VALSecureEnclaveValet(identifier: valet.identifier.description)!
+        let deprecatedValet = VALLegacySecureEnclaveValet(identifier: valet.identifier.description)!
         XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
         XCTAssertEqual(.success(passcode), valet.string(for: key, withPrompt: ""))
     }

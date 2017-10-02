@@ -29,7 +29,6 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     // MARK: Public Class Methods
     
     /// - parameter identifier: A non-empty string that uniquely identifies a SecureEnclaveSinglePromptValet.
-    /// - parameter flavor: A description of the SecureEnclaveSinglePromptValet's capabilities.
     /// - returns: A SecureEnclaveSinglePromptValet that reads/writes keychain elements with the desired flavor.
     @objc
     public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveSinglePromptValet {
@@ -45,7 +44,6 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     }
     
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
-    /// - parameter flavor: A description of the SecureEnclaveSinglePromptValet's capabilities.
     /// - returns: A SecureEnclaveSinglePromptValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     @objc
     public class func sharedAccessGroupValet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveSinglePromptValet {

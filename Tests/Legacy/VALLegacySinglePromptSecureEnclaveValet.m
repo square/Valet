@@ -1,13 +1,25 @@
 //
-//  VALSinglePromptSecureEnclaveValet.m
+//  VALLegacySinglePromptSecureEnclaveValet.m
 //  Valet
 //
 //  Created by Dan Federman on 1/23/17.
 //  Copyright © 2017 Square, Inc.
 //
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
 
-#import "VALSinglePromptSecureEnclaveValet.h"
-#import "VALSecureEnclaveValet_Protected.h"
+#import "VALLegacySinglePromptSecureEnclaveValet.h"
+#import "VALLegacySecureEnclaveValet_Protected.h"
 #import "VALLegacyValet_Protected.h"
 
 #import "ValetDefines.h"
@@ -17,14 +29,14 @@
 #import <LocalAuthentication/LocalAuthentication.h>
 
 
-@interface VALSinglePromptSecureEnclaveValet ()
+@interface VALLegacySinglePromptSecureEnclaveValet ()
 
 @property (nonnull, strong, readwrite) LAContext *context;
 
 @end
 
 
-@implementation VALSinglePromptSecureEnclaveValet
+@implementation VALLegacySinglePromptSecureEnclaveValet
 
 #pragma mark - Initialization
 
@@ -62,7 +74,7 @@
     return [self stringForKey:key options:[self _contextOptions] status:nil];
 }
 
-#pragma mark - VALSecureEnclaveValet
+#pragma mark - VALLegacySecureEnclaveValet
 
 - (nullable NSData *)objectForKey:(nonnull NSString *)key userPrompt:(nullable NSString *)userPrompt;
 {
@@ -105,11 +117,11 @@
 
 #else // Below this line we're in !VAL_SECURE_ENCLAVE_SDK_AVAILABLE, meaning none of our API is actually usable. Return NO or nil everywhere.
 
-@implementation VALSinglePromptSecureEnclaveValet
+@implementation VALLegacySinglePromptSecureEnclaveValet
 
 - (void)requirePromptOnNextAccess;
 {
-    VALCheckCondition(NO, , @"VALSinglePromptSecureEnclaveValet unsupported on this SDK");
+    VALCheckCondition(NO, , @"VALLegacySinglePromptSecureEnclaveValet unsupported on this SDK");
 }
 
 @end
