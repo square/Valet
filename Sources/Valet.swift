@@ -169,7 +169,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter object: A Data value to be inserted into the keychain.
     /// - parameter key: A Key that can be used to retrieve the `object` from the keychain.
     /// - returns: `false` if the keychain is not accessible.
-    @objc
+    @objc(setObject:forKey:)
     @discardableResult
     public func set(object: Data, for key: Key) -> Bool {
         return execute(in: lock) {
@@ -185,7 +185,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
-    @objc
+    @objc(objectForKey:)
     public func object(for key: Key) -> Data? {
         return execute(in: lock) {
             switch Keychain.object(for: key, options: keychainQuery) {
@@ -200,7 +200,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     /// - parameter key: The key to look up in the keychain.
     /// - returns: `true` if a value has been set for the given key, `false` otherwise.
-    @objc
+    @objc(containsObjectForKey:)
     public func containsObject(for key: Key) -> Bool {
         return execute(in: lock) {
             switch Keychain.containsObject(for: key, options: keychainQuery) {
@@ -215,7 +215,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter string: A String value to be inserted into the keychain.
     /// - parameter key: A Key that can be used to retrieve the `string` from the keychain.
     /// @return NO if the keychain is not accessible.
-    @objc
+    @objc(setString:forKey:)
     @discardableResult
     public func set(string: String, for key: Key) -> Bool {
         return execute(in: lock) {
@@ -231,7 +231,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
-    @objc
+    @objc(stringforKey:)
     public func string(for key: Key) -> String? {
         return execute(in: lock) {
             switch Keychain.string(for: key, options: keychainQuery) {
@@ -260,7 +260,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     /// Removes a key/object pair from the keychain.
     /// - returns: `false` if the keychain is not accessible.
-    @objc
+    @objc(removeObjectForKey:)
     @discardableResult
     public func removeObject(for key: Key) -> Bool {
         return execute(in: lock) {
@@ -295,7 +295,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
-    @objc
+    @objc(migrateObjectsMatchingQuery:removeOnCompletion:)
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) -> MigrationResult {
         return execute(in: lock) {
             return Keychain.migrateObjects(matching: query, into: keychainQuery, removeOnCompletion: removeOnCompletion)
@@ -307,7 +307,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
-    @objc
+    @objc(migrateObjectsFromKeychain:removeOnCompletion:)
     public func migrateObjects(from keychain: KeychainQueryConvertible, removeOnCompletion: Bool) -> MigrationResult {
         return migrateObjects(matching: keychain.keychainQuery, removeOnCompletion: removeOnCompletion)
     }

@@ -114,7 +114,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     /// - parameter object: A Data value to be inserted into the keychain.
     /// - parameter key: A Key that can be used to retrieve the `object` from the keychain.
     /// - returns: `false` if the keychain is not accessible.
-    @objc
+    @objc(setObject:forKey:)
     @discardableResult
     public func set(object: Data, for key: Key) -> Bool {
         return execute(in: lock) {
@@ -134,7 +134,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     /// - parameter key: The key to look up in the keychain.
     /// - returns: `true` if a value has been set for the given key, `false` otherwise.
     /// - note: Will never prompt the user for Face ID, Touch ID, or password.
-    @objc
+    @objc(containsObjectForKey:)
     public func containsObject(for key: Key) -> Bool {
         return execute(in: lock) {
             return SecureEnclave.containsObject(for: key, options: baseKeychainQuery)
@@ -144,7 +144,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     /// - parameter string: A String value to be inserted into the keychain.
     /// - parameter key: A Key that can be used to retrieve the `string` from the keychain.
     /// @return NO if the keychain is not accessible.
-    @objc
+    @objc(setString:forKey:)
     @discardableResult
     public func set(string: String, for key: Key) -> Bool {
         return execute(in: lock) {
@@ -172,7 +172,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     
     /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SecureEnclaveSinglePromptValet` has already been unlocked, no prompt will be shown.
     /// - returns: The set of all (String) keys currently stored in this Valet instance.
-    @objc
+    @objc(allKeysWithUserPrompt:)
     public func allKeys(userPrompt: String) -> Set<String> {
         return execute(in: lock) {
             var secItemQuery = continuedAuthenticationKeychainQuery
@@ -192,7 +192,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     
     /// Removes a key/object pair from the keychain.
     /// - returns: `false` if the keychain is not accessible.
-    @objc
+    @objc(removeObjectForKey:)
     @discardableResult
     public func removeObject(for key: Key) -> Bool {
         return execute(in: lock) {
@@ -227,7 +227,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
-    @objc
+    @objc(migrateObjectsMatchingQuery:removeOnCompletion:)
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) -> MigrationResult {
         return execute(in: lock) {
             return Keychain.migrateObjects(matching: query, into: baseKeychainQuery, removeOnCompletion: removeOnCompletion)
@@ -239,7 +239,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
-    @objc
+    @objc(migrateObjectsFromKeychain:removeOnCompletion:)
     public func migrateObjects(from keychain: KeychainQueryConvertible, removeOnCompletion: Bool) -> MigrationResult {
         return migrateObjects(matching: keychain.keychainQuery, removeOnCompletion: removeOnCompletion)
     }
