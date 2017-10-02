@@ -69,7 +69,7 @@ public enum Accessibility: Int, CustomStringConvertible, Equatable {
         case .afterFirstUnlock:
             accessibilityAttribute = kSecAttrAccessibleAfterFirstUnlock
         case .afterFirstUnlockThisDeviceOnly:
-            accessibilityAttribute = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+            accessibilityAttribute = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         case .always:
             accessibilityAttribute = kSecAttrAccessibleAlways
         case .alwaysThisDeviceOnly:

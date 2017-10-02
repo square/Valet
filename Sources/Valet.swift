@@ -27,11 +27,22 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     // MARK: Flavor
     
-    public enum Flavor: Equatable {
+    public enum Flavor: CustomStringConvertible, Equatable {
         /// Reads and writes keychain elements that do not sync to other devices.
         case vanilla(Accessibility)
         /// Reads and writes keychain elements that are synchronized with iCloud.
         case iCloud(CloudAccessibility)
+
+        // MARK: CustomStringConvertible
+
+        public var description: String {
+            switch self {
+            case let .vanilla(accessibility):
+                return "\(accessibility) (Vanilla)"
+            case let .iCloud(cloudAccessibility):
+                return "\(cloudAccessibility.accessibility) (iCloud)"
+            }
+        }
         
         // MARK: Equatable
         
@@ -136,6 +147,12 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         }
         
         keychainQuery = service.generateBaseQuery()
+    }
+
+    // MARK: CustomStringConvertible
+
+    public override var description: String {
+        return "\(super.description) \(identifier.description) \(flavor.description)"
     }
     
     // MARK: KeychainQueryConvertible
