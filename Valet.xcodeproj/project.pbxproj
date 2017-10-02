@@ -22,8 +22,6 @@
 		16E04C081F71B76A00E8552D /* SecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BEE1F71B72C00E8552D /* SecureEnclaveTests.swift */; };
 		16E04C091F71B76A00E8552D /* SynchronizableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BEF1F71B72C00E8552D /* SynchronizableTests.swift */; };
 		16E04C0A1F71B76A00E8552D /* ValetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BF31F71B72C00E8552D /* ValetTests.swift */; };
-		16E04C0B1F71B77E00E8552D /* ValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BF01F71B72C00E8552D /* ValetTests.m */; };
-		16E04C0C1F71B77F00E8552D /* ValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BF01F71B72C00E8552D /* ValetTests.m */; };
 		16E04C0D1F71B78700E8552D /* VALLegacySecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BFE1F71B74100E8552D /* VALLegacySecureEnclaveValet.m */; };
 		16E04C0E1F71B78700E8552D /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E04C001F71B74100E8552D /* VALLegacySinglePromptSecureEnclaveValet.m */; };
 		16E04C0F1F71B78700E8552D /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BF71F71B74100E8552D /* VALSynchronizableValet.m */; };
@@ -164,7 +162,6 @@
 		16E04BED1F71B72C00E8552D /* SecItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecItemTests.swift; sourceTree = "<group>"; };
 		16E04BEE1F71B72C00E8552D /* SecureEnclaveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveTests.swift; sourceTree = "<group>"; };
 		16E04BEF1F71B72C00E8552D /* SynchronizableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronizableTests.swift; sourceTree = "<group>"; };
-		16E04BF01F71B72C00E8552D /* ValetTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ValetTests.m; sourceTree = "<group>"; };
 		16E04BF11F71B72C00E8552D /* ValetTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ValetTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		16E04BF21F71B72C00E8552D /* MacTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTests.swift; sourceTree = "<group>"; };
 		16E04BF31F71B72C00E8552D /* ValetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValetTests.swift; sourceTree = "<group>"; };
@@ -324,7 +321,6 @@
 				AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */,
 				16E04BEF1F71B72C00E8552D /* SynchronizableTests.swift */,
 				16E04BF11F71B72C00E8552D /* ValetTests-Bridging-Header.h */,
-				16E04BF01F71B72C00E8552D /* ValetTests.m */,
 				16E04BF31F71B72C00E8552D /* ValetTests.swift */,
 				16E04BEC1F71B70C00E8552D /* Legacy */,
 			);
@@ -796,7 +792,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16E04C0B1F71B77E00E8552D /* ValetTests.m in Sources */,
 				AC11C5571F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift in Sources */,
 				16E04C081F71B76A00E8552D /* SecureEnclaveTests.swift in Sources */,
 				16E04C0A1F71B76A00E8552D /* ValetTests.swift in Sources */,
@@ -813,7 +808,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16E04C0C1F71B77F00E8552D /* ValetTests.m in Sources */,
 				AC11C5581F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift in Sources */,
 				16E04C031F71B76900E8552D /* SecureEnclaveTests.swift in Sources */,
 				16E04C051F71B76900E8552D /* ValetTests.swift in Sources */,

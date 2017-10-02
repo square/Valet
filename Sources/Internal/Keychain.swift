@@ -245,7 +245,7 @@ internal final class Keychain {
         }
         
         guard query[kSecReturnPersistentRef as String] as? Bool != false else {
-            ErrorHandler.assertionFailure("Migration requires SecReturnPersistentRef to be set to kCFBooleanTrue.")
+            ErrorHandler.assertionFailure("Migration requires kSecReturnPersistentRef to be set to kCFBooleanTrue.")
             return .invalidQuery
         }
         

@@ -9,6 +9,3 @@
 #import "VALSynchronizableValet.h"
 #import "VALLegacyValet_Protected.h"
 #import "VALLegacyValet.h"
-
-
-#import "ValetTests.m"

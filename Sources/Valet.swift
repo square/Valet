@@ -231,7 +231,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
-    @objc(stringforKey:)
+    @objc(stringForKey:)
     public func string(for key: Key) -> String? {
         return execute(in: lock) {
             switch Keychain.string(for: key, options: keychainQuery) {
@@ -307,7 +307,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
-    @objc(migrateObjectsFromKeychain:removeOnCompletion:)
+    @objc(migrateObjectsFromValet:removeOnCompletion:)
     public func migrateObjects(from keychain: KeychainQueryConvertible, removeOnCompletion: Bool) -> MigrationResult {
         return migrateObjects(matching: keychain.keychainQuery, removeOnCompletion: removeOnCompletion)
     }
