@@ -23,13 +23,10 @@ import Foundation
 
 public typealias Key = String
 
-
-@objc(VALIdentifier)
-public class Identifier: NSObject {
+public struct Identifier: CustomStringConvertible {
     
     // MARK: Initialization
     
-    @objc
     public init?(nonEmpty string: String?) {
         guard let string = string, !string.isEmpty else {
             return nil
@@ -40,7 +37,7 @@ public class Identifier: NSObject {
     
     // MARK: CustomStringConvertible
     
-    public override var description: String {
+    public var description: String {
         return backingString
     }
     

@@ -5,7 +5,6 @@
 //  Created by Dan Federman and Eric Muller on 9/16/17.
 //  Copyright © 2017 Square, Inc.
 //
-//
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
@@ -32,7 +31,7 @@ class ValetMacTests: XCTestCase
     @available (OSX 10.10, *)
     func test_setStringForKey_neutralizesMacOSAccessControlListVuln()
     {
-        let valet = Valet.valet(with: Identifier(nonEmpty: "MacOSVulnTest")!, of: .vanilla(.whenUnlocked))
+        let valet = Valet.valet(with: Identifier(nonEmpty: "MacOSVulnTest")!, flavor: .vanilla(.whenUnlocked))
         let vulnKey = "KeepIt"
         let vulnValue = "Secret"
         valet.removeObject(for: vulnKey)

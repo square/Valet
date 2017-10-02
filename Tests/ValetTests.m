@@ -38,8 +38,7 @@
 {
     [super setUp];
 
-    VALIdentifier *identifier = [[VALIdentifier alloc] initWithNonEmpty:@"valet_testing"];
-    self.valet = [VALValet vanillaValetWithIdentifier:identifier accessibility:VALAccessibilityWhenUnlocked];
+    self.valet = [VALValet vanillaValetWithIdentifier:@"valet_testing" accessibility:VALAccessibilityWhenUnlocked];
     
     // In case testing quit unexpectedly, clean up the keychain from last time.
     [self.valet removeAllObjects];

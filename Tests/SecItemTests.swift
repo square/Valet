@@ -5,7 +5,6 @@
 //  Created by Dan Federman and Eric Muller on 9/16/17.
 //  Copyright © 2017 Square, Inc.
 //
-//
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
@@ -26,10 +25,10 @@ import XCTest
 
 class SecItemTests: XCTestCase {
 
-//    func test_sharedAccessGroupPrefix_findsPrefix() {
-//        #if os(iOS)
-//            XCTAssertEqual(SecItem.sharedAccessGroupPrefix, "9XUJ7M53NG")
-//        #endif
-//    }
+    func test_sharedAccessGroupPrefix_findsPrefix() {
+        #if os(iOS)
+            XCTAssertEqual(SecItem.sharedAccessGroupPrefix, "9XUJ7M53NG")
+        #endif
+    }
     
 }

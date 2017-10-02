@@ -58,7 +58,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter identifier: A non-empty string that uniquely identifies a Valet.
     /// - parameter flavor: A description of the Valet's capabilities.
     /// - returns: A Valet that reads/writes keychain elements with the desired flavor.
-    public class func valet(with identifier: Identifier, of flavor: Flavor) -> Valet {
+    public class func valet(with identifier: Identifier, flavor: Flavor) -> Valet {
         let key = Service.standard(identifier, .valet(flavor)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
@@ -73,7 +73,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
     /// - parameter flavor: A description of the Valet's capabilities.
     /// - returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    public class func sharedAccessGroupValet(with identifier: Identifier, of flavor: Flavor) -> Valet {
+    public class func sharedAccessGroupValet(with identifier: Identifier, flavor: Flavor) -> Valet {
         let key = Service.sharedAccessGroup(identifier, .valet(flavor)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
@@ -330,8 +330,11 @@ extension Valet {
     /// - returns: A Valet that reads/writes keychain elements with the desired accessibility.
     @available(swift, obsoleted: 1.0)
     @objc(vanillaValetWithIdentifier:accessibility:)
-    public class func notforswift_vanillaValet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        return valet(with: identifier, of: .vanilla(accessibility))
+    public class func notforswift_vanillaValet(with identifier: String, accessibility: Accessibility) -> Valet? {
+        guard let identifier = Identifier(nonEmpty: identifier) else {
+            return nil
+        }
+        return valet(with: identifier, flavor: .vanilla(accessibility))
     }
     
     /// - parameter identifier: A non-empty string that uniquely identifies a Valet.
@@ -339,8 +342,11 @@ extension Valet {
     /// - returns: A Valet that reads/writes iCloud-shared keychain elements with the desired accessibility.
     @available(swift, obsoleted: 1.0)
     @objc(iCloudValetWithIdentifier:accessibility:)
-    public class func notforswift_iCloudValet(with identifier: Identifier, accessibility: CloudAccessibility) -> Valet {
-        return valet(with: identifier, of: .iCloud(accessibility))
+    public class func notforswift_iCloudValet(with identifier: String, accessibility: CloudAccessibility) -> Valet? {
+        guard let identifier = Identifier(nonEmpty: identifier) else {
+            return nil
+        }
+        return valet(with: identifier, flavor: .iCloud(accessibility))
     }
     
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
@@ -348,8 +354,11 @@ extension Valet {
     /// - returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     @available(swift, obsoleted: 1.0)
     @objc(vanillaValetWithSharedAccessGroupIdentifier:accessibility:)
-    public class func notforswift_vanillaSharedAccessGroupValet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        return sharedAccessGroupValet(with: identifier, of: .vanilla(accessibility))
+    public class func notforswift_vanillaSharedAccessGroupValet(with identifier: String, accessibility: Accessibility) -> Valet? {
+        guard let identifier = Identifier(nonEmpty: identifier) else {
+            return nil
+        }
+        return sharedAccessGroupValet(with: identifier, flavor: .vanilla(accessibility))
     }
     
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
@@ -357,8 +366,11 @@ extension Valet {
     /// - returns: A Valet that reads/writes iCloud-shared keychain elements that can be shared across applications written by the same development team.
     @available(swift, obsoleted: 1.0)
     @objc(iCloudValetWithSharedAccessGroupIdentifier:accessibility:)
-    public class func notforswift_iCloudSharedAccessGroupValet(with identifier: Identifier, accessibility: CloudAccessibility) -> Valet {
-        return sharedAccessGroupValet(with: identifier, of: .iCloud(accessibility))
+    public class func notforswift_iCloudSharedAccessGroupValet(with identifier: String, accessibility: CloudAccessibility) -> Valet? {
+        guard let identifier = Identifier(nonEmpty: identifier) else {
+            return nil
+        }
+        return sharedAccessGroupValet(with: identifier, flavor: .iCloud(accessibility))
     }
     
 }

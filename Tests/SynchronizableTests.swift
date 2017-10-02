@@ -28,7 +28,7 @@ class SynchronizableTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     static let accessibility = CloudAccessibility.whenUnlocked
-    let valet = Valet.valet(with: identifier, of: .iCloud(accessibility))
+    let valet = Valet.valet(with: identifier, flavor: .iCloud(accessibility))
     let key = "key"
     let passcode = "topsecret"
     
@@ -49,7 +49,7 @@ class SynchronizableTests: XCTestCase
             return
         }
         
-        let localValet = Valet.valet(with: valet.identifier, of: .vanilla(valet.accessibility))
+        let localValet = Valet.valet(with: valet.identifier, flavor: .vanilla(valet.accessibility))
         XCTAssertFalse(valet == localValet)
         XCTAssertFalse(valet === localValet)
         
@@ -65,7 +65,7 @@ class SynchronizableTests: XCTestCase
     }
     
     func test_synchronizableValets_withEquivalentConfigurationsAreEqual() {
-        let otherValet = Valet.valet(with: valet.identifier, of: valet.flavor)
+        let otherValet = Valet.valet(with: valet.identifier, flavor: valet.flavor)
         XCTAssert(valet == otherValet)
         XCTAssert(valet === otherValet)
     }
@@ -103,7 +103,7 @@ class SynchronizableTests: XCTestCase
         }
         
         let permutations: [Valet] = CloudAccessibility.allValues().flatMap { cloudAccessibility in
-            return .valet(with: valet.identifier, of: .iCloud(cloudAccessibility))
+            return .valet(with: valet.identifier, flavor: .iCloud(cloudAccessibility))
         }
         for permutation in permutations {
             XCTAssertTrue(permutation.canAccessKeychain())
@@ -126,7 +126,7 @@ class SynchronizableTests: XCTestCase
         #endif
         
         let permutations: [Valet] = CloudAccessibility.allValues().flatMap { cloudAccessibility in
-            return .sharedAccessGroupValet(with: sharedAccessGroupIdentifier, of: .iCloud(cloudAccessibility))
+            return .sharedAccessGroupValet(with: sharedAccessGroupIdentifier, flavor: .iCloud(cloudAccessibility))
         }
         for permutation in permutations {
             XCTAssertTrue(permutation.canAccessKeychain())

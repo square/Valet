@@ -29,7 +29,6 @@ public final class SecureEnclaveValet: NSObject {
     
     /// - parameter identifier: A non-empty string that uniquely identifies a SecureEnclaveValet.
     /// - returns: A SecureEnclaveValet that reads/writes keychain elements with the desired flavor.
-    @objc
     public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
         let key = Service.standard(identifier, .secureEnclave(.alwaysPrompt(accessControl))).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
@@ -44,7 +43,6 @@ public final class SecureEnclaveValet: NSObject {
     
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
     /// - returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    @objc
     public class func sharedAccessGroupValet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
         let key = Service.sharedAccessGroup(identifier, .secureEnclave(.alwaysPrompt(accessControl))).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
@@ -226,6 +224,28 @@ public final class SecureEnclaveValet: NSObject {
 
 
 extension SecureEnclaveValet {
+    
+    // MARK: Public Class Methods
+    
+    /// - parameter identifier: A non-empty string that uniquely identifies a SecureEnclaveValet.
+    /// - returns: A SecureEnclaveValet that reads/writes keychain elements with the desired flavor.
+    @objc(valetWithIdentifier:accessControl:)
+    public class func valet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet? {
+        guard let identifier = Identifier(nonEmpty: identifier) else {
+            return nil
+        }
+        return valet(with: identifier, accessControl: accessControl)
+    }
+    
+    /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    /// - returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
+    @objc(sharedAccessGroupValetWithIdentifier:accessControl:)
+    public class func sharedAccessGroupValet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet? {
+        guard let identifier = Identifier(nonEmpty: identifier) else {
+            return nil
+        }
+        return sharedAccessGroupValet(with: identifier, accessControl: accessControl)
+    }
     
     // MARK: Public Methods
     

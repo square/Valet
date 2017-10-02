@@ -173,7 +173,7 @@ class SecureEnclaveSinglePromptTests: XCTestCase
             return
         }
         
-        let plainOldValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, of: .vanilla(.afterFirstUnlock))
+        let plainOldValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, flavor: .vanilla(.afterFirstUnlock))
         
         // Clean up any dangling keychain items before we start this test.
         valet.removeAllObjects()
@@ -209,7 +209,7 @@ class SecureEnclaveSinglePromptTests: XCTestCase
             return
         }
         
-        let otherValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me_To_Valet")!, of: .vanilla(.afterFirstUnlock))
+        let otherValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me_To_Valet")!, flavor: .vanilla(.afterFirstUnlock))
         
         // Clean up any dangling keychain items before we start this test.
         valet.removeAllObjects()
