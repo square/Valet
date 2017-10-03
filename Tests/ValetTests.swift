@@ -63,6 +63,25 @@ internal extension Valet {
         }
     }
 
+    var legacyValet: VALLegacyValet {
+        switch flavor {
+        case .vanilla(_):
+            switch service {
+            case .standard(_, _):
+                return VALLegacyValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
+            case .sharedAccessGroup(_, _):
+                return VALLegacyValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
+            }
+        case .iCloud(_):
+            switch service {
+            case .standard(_, _):
+                return VALSynchronizableValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
+            case .sharedAccessGroup(_, _):
+                return VALSynchronizableValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
+            }
+        }
+    }
+
     // MARK: Shared Access Group
 
     static var sharedAccessGroupIdentifier: Identifier = {
@@ -79,17 +98,19 @@ internal extension Valet {
 
     // MARK: Permutations
 
-    class func permutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
+    class func permutations(with identifier: Identifier, shared: Bool = false) -> [(Valet, VALLegacyValet)] {
         return Accessibility.allValues().map { accessibility in
             let flavor: Flavor = .vanilla(accessibility)
-            return shared ? .sharedAccessGroupValet(with: identifier, flavor: flavor) : .valet(with: identifier, flavor: flavor)
+            let valet: Valet = shared ? .sharedAccessGroupValet(with: identifier, flavor: flavor) : .valet(with: identifier, flavor: flavor)
+            return (valet, valet.legacyValet)
         }
     }
 
-    class func iCloudPermutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
+    class func iCloudPermutations(with identifier: Identifier, shared: Bool = false) -> [(Valet, VALSynchronizableValet)] {
         return CloudAccessibility.allValues().map { cloudAccessibility in
             let flavor: Flavor = .iCloud(cloudAccessibility)
-            return shared ? .sharedAccessGroupValet(with: identifier, flavor: flavor) : .valet(with: identifier, flavor: flavor)
+            let valet: Valet = shared ? .sharedAccessGroupValet(with: identifier, flavor: flavor) : .valet(with: identifier, flavor: flavor)
+            return (valet, valet.legacyValet as! VALSynchronizableValet)
         }
     }
 }
@@ -121,7 +142,7 @@ class ValetTests: XCTestCase
         anotherFlavor.removeAllObjects()
         let identifier = ValetTests.identifier
         let allPermutations = Valet.permutations(with: identifier) + Valet.permutations(with: identifier, shared: true)
-        allPermutations.forEach { testingValet in testingValet.removeAllObjects() }
+        allPermutations.forEach { testingValet, _ in testingValet.removeAllObjects() }
         XCTAssert(valet.allKeys().isEmpty)
         XCTAssert(anotherFlavor.allKeys().isEmpty)
     }
@@ -157,7 +178,7 @@ class ValetTests: XCTestCase
 
     func test_canAccessKeychain()
     {
-        for permutation in Valet.permutations(with: valet.identifier) {
+        Valet.permutations(with: valet.identifier).forEach { permutation, _ in
             XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
         }
     }
@@ -168,7 +189,7 @@ class ValetTests: XCTestCase
             return
         }
 
-        for permutation in Valet.permutations(with: Valet.sharedAccessGroupIdentifier, shared: true) {
+        Valet.permutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, _ in
             XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
         }
     }
@@ -771,8 +792,7 @@ class ValetTests: XCTestCase
     // MARK: Backwards Compatibility
     
     func test_backwardsCompatibility_withLegacyValet() {
-        for permutation in Valet.permutations(with: valet.identifier) {
-            let legacyValet = VALLegacyValet(identifier: permutation.legacyIdentifier, accessibility: permutation.legacyAccessibility)!
+        Valet.permutations(with: valet.identifier).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
         
             XCTAssertNotNil(legacyValet.string(forKey: key))
@@ -781,8 +801,7 @@ class ValetTests: XCTestCase
     }
 
     func test_backwardsCompatibility_withLegacySharedAccessGroupValet() {
-        for permutation in Valet.permutations(with: Valet.sharedAccessGroupIdentifier, shared: true) {
-            let legacyValet = VALLegacyValet(sharedAccessGroupIdentifier: permutation.legacyIdentifier, accessibility: permutation.legacyAccessibility)!
+        Valet.permutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))

@@ -328,10 +328,13 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     public func migrateObjects(from keychain: KeychainQueryConvertible, removeOnCompletion: Bool) -> MigrationResult {
         return migrateObjects(matching: keychain.keychainQuery, removeOnCompletion: removeOnCompletion)
     }
-    
+
+    // MARK: Internal Properties
+
+    internal let service: Service
+
     // MARK: Private Properties
     
-    private let service: Service
     private let lock = NSLock()
 }
 

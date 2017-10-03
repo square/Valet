@@ -43,7 +43,7 @@ class SynchronizableTests: XCTestCase
         valet.removeAllObjects()
         let identifier = SynchronizableTests.identifier
         let allPermutations = Valet.iCloudPermutations(with: identifier) + Valet.iCloudPermutations(with: identifier, shared: true)
-        allPermutations.forEach { testValet in testValet.removeAllObjects() }
+        allPermutations.forEach { testValet, _ in testValet.removeAllObjects() }
     }
     
     func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
@@ -105,7 +105,7 @@ class SynchronizableTests: XCTestCase
             return
         }
         
-        for permutation in Valet.iCloudPermutations(with: valet.identifier) {
+        Valet.iCloudPermutations(with: valet.identifier).forEach { permutation, _ in
             XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
         }
     }
@@ -116,7 +116,7 @@ class SynchronizableTests: XCTestCase
             return
         }
         
-        for permutation in Valet.iCloudPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true) {
+        Valet.iCloudPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, _ in
             XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
         }
     }
@@ -128,8 +128,7 @@ class SynchronizableTests: XCTestCase
             return
         }
 
-        for permutation in Valet.iCloudPermutations(with: valet.identifier) {
-            let legacyValet = VALSynchronizableValet(identifier: permutation.legacyIdentifier, accessibility: permutation.legacyAccessibility)!
+        Valet.iCloudPermutations(with: valet.identifier).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
@@ -142,8 +141,7 @@ class SynchronizableTests: XCTestCase
             return
         }
 
-        for permutation in Valet.iCloudPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true) {
-            let legacyValet = VALSynchronizableValet(sharedAccessGroupIdentifier: permutation.legacyIdentifier, accessibility: permutation.legacyAccessibility)!
+        Valet.iCloudPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
