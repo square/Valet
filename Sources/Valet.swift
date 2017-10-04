@@ -341,6 +341,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
 
 // MARK: - Objective-C Compatibility
 
+
 extension Valet {
 
     // MARK: Public Class Methods
@@ -350,7 +351,7 @@ extension Valet {
     /// - returns: A Valet that reads/writes keychain elements with the desired accessibility.
     @available(swift, obsoleted: 1.0)
     @objc(vanillaValetWithIdentifier:accessibility:)
-    public class func notforswift_vanillaValet(with identifier: String, accessibility: Accessibility) -> Valet? {
+    public class func 🚫swift_vanillaValet(with identifier: String, accessibility: Accessibility) -> Valet? {
         guard let identifier = Identifier(nonEmpty: identifier) else {
             return nil
         }
@@ -362,7 +363,7 @@ extension Valet {
     /// - returns: A Valet that reads/writes iCloud-shared keychain elements with the desired accessibility.
     @available(swift, obsoleted: 1.0)
     @objc(iCloudValetWithIdentifier:accessibility:)
-    public class func notforswift_iCloudValet(with identifier: String, accessibility: CloudAccessibility) -> Valet? {
+    public class func 🚫swift_iCloudValet(with identifier: String, accessibility: CloudAccessibility) -> Valet? {
         guard let identifier = Identifier(nonEmpty: identifier) else {
             return nil
         }
@@ -374,7 +375,7 @@ extension Valet {
     /// - returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     @available(swift, obsoleted: 1.0)
     @objc(vanillaValetWithSharedAccessGroupIdentifier:accessibility:)
-    public class func notforswift_vanillaSharedAccessGroupValet(with identifier: String, accessibility: Accessibility) -> Valet? {
+    public class func 🚫swift_vanillaSharedAccessGroupValet(with identifier: String, accessibility: Accessibility) -> Valet? {
         guard let identifier = Identifier(nonEmpty: identifier) else {
             return nil
         }
@@ -386,7 +387,7 @@ extension Valet {
     /// - returns: A Valet that reads/writes iCloud-shared keychain elements that can be shared across applications written by the same development team.
     @available(swift, obsoleted: 1.0)
     @objc(iCloudValetWithSharedAccessGroupIdentifier:accessibility:)
-    public class func notforswift_iCloudSharedAccessGroupValet(with identifier: String, accessibility: CloudAccessibility) -> Valet? {
+    public class func 🚫swift_iCloudSharedAccessGroupValet(with identifier: String, accessibility: CloudAccessibility) -> Valet? {
         guard let identifier = Identifier(nonEmpty: identifier) else {
             return nil
         }

@@ -271,7 +271,7 @@ extension SecureEnclaveSinglePromptValet {
     /// - parameter identifier: A non-empty string that uniquely identifies a SecureEnclaveSinglePromptValet.
     /// - returns: A SecureEnclaveSinglePromptValet that reads/writes keychain elements with the desired flavor.
     @objc(valetWithIdentifier:accessControl:)
-    public class func valet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveSinglePromptValet? {
+    public class func 🚫swift_valet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveSinglePromptValet? {
         guard let identifier = Identifier(nonEmpty: identifier) else {
             return nil
         }
@@ -282,7 +282,7 @@ extension SecureEnclaveSinglePromptValet {
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
     /// - returns: A SecureEnclaveSinglePromptValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     @objc(sharedAccessGroupValetWithIdentifier:accessControl:)
-    public class func sharedAccessGroupValet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveSinglePromptValet? {
+    public class func 🚫swift_sharedAccessGroupValet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveSinglePromptValet? {
         guard let identifier = Identifier(nonEmpty: identifier) else {
             return nil
         }
@@ -296,7 +296,7 @@ extension SecureEnclaveSinglePromptValet {
     /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
     @available(swift, obsoleted: 1.0)
     @objc(objectForKey:userPrompt:userCancelled:)
-    public func notforswift_object(for key: Key, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> Data? {
+    public func 🚫swift_object(for key: Key, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> Data? {
         switch object(for: key, withPrompt: userPrompt) {
         case let .success(data):
             return data
@@ -313,7 +313,7 @@ extension SecureEnclaveSinglePromptValet {
     /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     @available(swift, obsoleted: 1.0)
     @objc(stringForKey:userPrompt:userCancelled:)
-    public func notforswift_string(for key: Key, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> String? {
+    public func 🚫swift_string(for key: Key, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> String? {
         switch string(for: key, withPrompt: userPrompt) {
         case let .success(string):
             return string
