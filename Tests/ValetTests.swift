@@ -65,18 +65,18 @@ internal extension Valet {
 
     var legacyValet: VALLegacyValet {
         switch flavor {
-        case .vanilla(_):
+        case .vanilla:
             switch service {
-            case .standard(_, _):
+            case .standard:
                 return VALLegacyValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
-            case .sharedAccessGroup(_, _):
+            case .sharedAccessGroup:
                 return VALLegacyValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
             }
-        case .iCloud(_):
+        case .iCloud:
             switch service {
-            case .standard(_, _):
+            case .standard:
                 return VALSynchronizableValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
-            case .sharedAccessGroup(_, _):
+            case .sharedAccessGroup:
                 return VALSynchronizableValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
             }
         }
