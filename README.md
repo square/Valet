@@ -97,7 +97,7 @@ VALSynchronizableValet *mySynchronizableValet = [[VALSynchronizableValet alloc] 
 
 This instance can be used to store and retrieve data that can be retrieved by this app on other devices logged into the same iCloud account with iCloud Keychain enabled. `mySynchronizableValet` can not read or modify values in `myValet` or `mySharedValet` because `mySynchronizableValet` is of a different class type. If iCloud Keychain is not enabled on this device, secrets can still be read and written, but will not sync to other devices.
 
-### Protecting Secrets with Touch ID or device Passcode
+### Protecting Secrets with Touch ID, Face ID, or device Passcode
 
 ```objc
 VALSecureEnclaveValet *mySecureEnclaveValet = [[VALSecureEnclaveValet alloc] initWithIdentifier:@"Druidia" accessControl:VALAccessControlUserPresence];
@@ -110,6 +110,8 @@ VALSinglePromptSecureEnclaveValet *mySecureEnclaveValet = [[VALSinglePromptSecur
 ```
 
 This instance also stores and retrieves data in the Secure Enclave, but does not require the user to confirm their presence each time data is retrieved. Instead, the user will be prompted to confirm their presence only on the first data retrieval. A `VALSinglePromptSecureEnclaveValet` instance can be forced to prompt the user on the next data retrieval by calling the instance method `requirePromptOnNextAccess`.
+
+**In order for your customers not to receive a prompt that your app does not yet support Face ID, you must set a value for the Privacy - Face ID Usage Description [(NSFaceIDUsageDescription)](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW75) key in your app’s Info.plist.**
 
 ### Migrating Existing Keychain Values into Valet
 
