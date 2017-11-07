@@ -1,5 +1,5 @@
 //
-//  SecureEnclaveSinglePromptValet.swift
+//  SinglePromptSecureEnclaveValet.swift
 //  Valet
 //
 //  Created by Dan Federman on 9/19/17.
@@ -22,35 +22,35 @@ import LocalAuthentication
 import Foundation
 
 
-/// Reads and writes keychain elements that are stored on the Secure Enclave using Accessibility attribute `.whenPasscodeSetThisDeviceOnly`. The first access of these keychain elements will require the user to confirm their presence via Touch ID, Face ID, or passcode entry. If no passcode is set on the device, accessing the keychain via a `SecureEnclaveSinglePromptValet` will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device.
+/// Reads and writes keychain elements that are stored on the Secure Enclave using Accessibility attribute `.whenPasscodeSetThisDeviceOnly`. The first access of these keychain elements will require the user to confirm their presence via Touch ID, Face ID, or passcode entry. If no passcode is set on the device, accessing the keychain via a `SinglePromptSecureEnclaveValet` will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device.
 @objc(VALSinglePromptSecureEnclaveValet)
-public final class SecureEnclaveSinglePromptValet: NSObject {
+public final class SinglePromptSecureEnclaveValet: NSObject {
     
     // MARK: Public Class Methods
     
-    /// - parameter identifier: A non-empty string that uniquely identifies a SecureEnclaveSinglePromptValet.
-    /// - returns: A SecureEnclaveSinglePromptValet that reads/writes keychain elements with the desired flavor.
-    public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveSinglePromptValet {
+    /// - parameter identifier: A non-empty string that uniquely identifies a SinglePromptSecureEnclaveValet.
+    /// - returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements with the desired flavor.
+    public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
         let key = Service.standard(identifier, .secureEnclave(.singlePrompt(accessControl))).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
         } else {
-            let valet = SecureEnclaveSinglePromptValet(identifier: identifier, accessControl: accessControl)
+            let valet = SinglePromptSecureEnclaveValet(identifier: identifier, accessControl: accessControl)
             identifierToValetMap.setObject(valet, forKey: key)
             return valet
         }
     }
     
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
-    /// - returns: A SecureEnclaveSinglePromptValet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    public class func sharedAccessGroupValet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveSinglePromptValet {
+    /// - returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
+    public class func sharedAccessGroupValet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
         let key = Service.sharedAccessGroup(identifier, .secureEnclave(.singlePrompt(accessControl))).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
         } else {
-            let valet = SecureEnclaveSinglePromptValet(sharedAccess: identifier, accessControl: accessControl)
+            let valet = SinglePromptSecureEnclaveValet(sharedAccess: identifier, accessControl: accessControl)
             identifierToValetMap.setObject(valet, forKey: key)
             return valet
         }
@@ -59,13 +59,13 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     // MARK: Equatable
     
     /// - returns: `true` if lhs and rhs both read from and write to the same sandbox within the keychain.
-    public static func ==(lhs: SecureEnclaveSinglePromptValet, rhs: SecureEnclaveSinglePromptValet) -> Bool {
+    public static func ==(lhs: SinglePromptSecureEnclaveValet, rhs: SinglePromptSecureEnclaveValet) -> Bool {
         return lhs.service == rhs.service
     }
     
     // MARK: Private Class Properties
     
-    private static let identifierToValetMap = NSMapTable<NSString, SecureEnclaveSinglePromptValet>.strongToWeakObjects()
+    private static let identifierToValetMap = NSMapTable<NSString, SinglePromptSecureEnclaveValet>.strongToWeakObjects()
     
     // MARK: Initialization
     
@@ -121,7 +121,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
-    /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SecureEnclaveSinglePromptValet` has already been unlocked, no prompt will be shown.
+    /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
     /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
     public func object(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<Data> {
         return execute(in: lock) {
@@ -151,7 +151,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
-    /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SecureEnclaveSinglePromptValet` has already been unlocked, no prompt will be shown.
+    /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
     /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     public func string(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<String> {
         return execute(in: lock) {
@@ -168,7 +168,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
         }
     }
     
-    /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SecureEnclaveSinglePromptValet` has already been unlocked, no prompt will be shown.
+    /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
     /// - returns: The set of all (String) keys currently stored in this Valet instance.
     @objc(allKeysWithUserPrompt:)
     public func allKeys(userPrompt: String) -> Set<String> {
@@ -220,7 +220,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
         }
     }
     
-    /// Migrates objects matching the input query into the receiving SecureEnclaveSinglePromptValet instance.
+    /// Migrates objects matching the input query into the receiving SinglePromptSecureEnclaveValet instance.
     /// - parameter query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
@@ -232,7 +232,7 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
         }
     }
     
-    /// Migrates objects matching the vended keychain query into the receiving SecureEnclaveSinglePromptValet instance.
+    /// Migrates objects matching the vended keychain query into the receiving SinglePromptSecureEnclaveValet instance.
     /// - parameter keychain: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
@@ -264,14 +264,14 @@ public final class SecureEnclaveSinglePromptValet: NSObject {
 // MARK: - Objective-C Compatibility
 
 
-extension SecureEnclaveSinglePromptValet {
+extension SinglePromptSecureEnclaveValet {
     
     // MARK: Public Class Methods
     
-    /// - parameter identifier: A non-empty string that uniquely identifies a SecureEnclaveSinglePromptValet.
-    /// - returns: A SecureEnclaveSinglePromptValet that reads/writes keychain elements with the desired flavor.
+    /// - parameter identifier: A non-empty string that uniquely identifies a SinglePromptSecureEnclaveValet.
+    /// - returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     @objc(valetWithIdentifier:accessControl:)
-    public class func 🚫swift_valet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveSinglePromptValet? {
+    public class func 🚫swift_valet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet? {
         guard let identifier = Identifier(nonEmpty: identifier) else {
             return nil
         }
@@ -280,9 +280,9 @@ extension SecureEnclaveSinglePromptValet {
     }
     
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
-    /// - returns: A SecureEnclaveSinglePromptValet that reads/writes keychain elements that can be shared across applications written by the same development team.
+    /// - returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     @objc(sharedAccessGroupValetWithIdentifier:accessControl:)
-    public class func 🚫swift_sharedAccessGroupValet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveSinglePromptValet? {
+    public class func 🚫swift_sharedAccessGroupValet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet? {
         guard let identifier = Identifier(nonEmpty: identifier) else {
             return nil
         }

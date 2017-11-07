@@ -118,14 +118,14 @@ VALSecureEnclaveValet *const mySecureEnclaveValet = [VALSecureEnclaveValet initW
 This instance can be used to store and retrieve data in the Secure Enclave (available on iOS 8.0 and later and Mac OS 10.11 and later). Each time data is retrieved from this Valet, the user will be prompted to confirm their presence via Face ID, Touch ID, or by entering their device passcode. *If no passcode is set on the device, this instance will be unable to access or store data.* Data is removed from the Secure Enclave when the user removes a passcode from the device. Storing data using SecureEnclaveValet is the most secure way to store data on either iOS or Mac OS.
 
 ```swift
-let mySecureEnclaveValet = SecureEnclaveSinglePromptValet.valet(with: Identifier(nonEmpty: "Druidia")!, accessControl: .userPresence)
+let mySecureEnclaveValet = SinglePromptSecureEnclaveValet.valet(with: Identifier(nonEmpty: "Druidia")!, accessControl: .userPresence)
 ```
 
 ```objc
 VALSinglePromptSecureEnclaveValet *mySecureEnclaveValet = [VALSinglePromptSecureEnclaveValet initWithIdentifier:@"Druidia" accessControl:VALAccessControlUserPresence];
 ```
 
-This instance also stores and retrieves data in the Secure Enclave, but does not require the user to confirm their presence each time data is retrieved. Instead, the user will be prompted to confirm their presence only on the first data retrieval. A `SecureEnclaveSinglePromptValet` instance can be forced to prompt the user on the next data retrieval by calling the instance method `requirePromptOnNextAccess()`.
+This instance also stores and retrieves data in the Secure Enclave, but does not require the user to confirm their presence each time data is retrieved. Instead, the user will be prompted to confirm their presence only on the first data retrieval. A `SinglePromptSecureEnclaveValet` instance can be forced to prompt the user on the next data retrieval by calling the instance method `requirePromptOnNextAccess()`.
 
 **In order for your customers not to receive a prompt that your app does not yet support Face ID, you must set a value for the Privacy - Face ID Usage Description [(NSFaceIDUsageDescription)](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW75) key in your app’s Info.plist.**
 

@@ -27,7 +27,7 @@ import XCTest
 class SecureEnclaveSinglePromptTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
-    let valet = SecureEnclaveSinglePromptValet.valet(with: identifier, accessControl: .userPresence)
+    let valet = SinglePromptSecureEnclaveValet.valet(with: identifier, accessControl: .userPresence)
     let key = "key"
     let passcode = "topsecret"
     
@@ -44,26 +44,26 @@ class SecureEnclaveSinglePromptTests: XCTestCase
     
     // MARK: Equality
     
-    func test_secureEnclaveSinglePromptValetsWithEqualConfiguration_haveEqualPointers()
+    func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_haveEqualPointers()
     {
-        let equivalentValet = SecureEnclaveSinglePromptValet.valet(with: valet.identifier, accessControl: valet.accessControl)
+        let equivalentValet = SinglePromptSecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertTrue(valet == equivalentValet)
         XCTAssertTrue(valet === equivalentValet)
     }
     
-    func test_secureEnclaveSinglePromptValetsWithEqualConfiguration_canAccessSameData()
+    func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_canAccessSameData()
     {
         guard testEnvironmentIsSigned() else {
             return
         }
         
         XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        let equivalentValet = SecureEnclaveSinglePromptValet.valet(with: valet.identifier, accessControl: valet.accessControl)
+        let equivalentValet = SinglePromptSecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertEqual(valet, equivalentValet)
         XCTAssertEqual(.success(passcode), equivalentValet.string(forKey: key, withPrompt: ""))
     }
     
-    func test_secureEnclaveSinglePromptValetsWithDifferingAccessControl_canNotAccessSameData()
+    func test_SinglePromptSecureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
     {
         guard testEnvironmentIsSigned() else {
             return

@@ -27,14 +27,14 @@ final class ValetTouchIDTestViewController : UIViewController
     // MARK: Properties
     
     @IBOutlet var textView : UITextView?
-    var singlePromptSecureEnclaveValet : SecureEnclaveSinglePromptValet
+    var singlePromptSecureEnclaveValet : SinglePromptSecureEnclaveValet
     let username = "CustomerPresentProof"
     
     // MARK: Initializers
     
     required init?(coder aDecoder: NSCoder)
     {
-        singlePromptSecureEnclaveValet = SecureEnclaveSinglePromptValet.valet(with: Identifier(nonEmpty: "UserPresence")!, accessControl: .userPresence)
+        singlePromptSecureEnclaveValet = SinglePromptSecureEnclaveValet.valet(with: Identifier(nonEmpty: "UserPresence")!, accessControl: .userPresence)
         
         super.init(coder: aDecoder)
     }
