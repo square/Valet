@@ -77,7 +77,7 @@ class SecureEnclaveSinglePromptTests: XCTestCase
     }
     
     @available (*, deprecated)
-    func test_secureEnclaveValet_backwardsCompatibility()
+    func test_backwardsCompatibility_withLegacyValet()
     {
         guard testEnvironmentIsSigned() else {
             return

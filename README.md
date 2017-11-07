@@ -151,7 +151,19 @@ Valet guarantees it will never fail to write to or read from the keychain unless
 * OS X 10.11 or later.
 
 ### Migrating from Valet 2.*
-TODO: write this!
+
+First the good news: you will _not_ have to migrate your keychain data when upgrading from Valet 2.* to Valet 3.*. All Valet objects are backwards compatible with their Valet 2 counterparts. We have exhaustive unit tests to prove it (search for `test_backwardsCompatibility`).
+
+Now the bad news: the Swift Valet API has slight differences from the Objective-C Valet API. You may have noticed a few of the differences in the sample code above, but here's a rundown of the changes that may affect you.
+
+1. Initializers have changed in both Swift and Objective-C. [See examples above](#Basic-Initialization).
+2. `VALSynchronizableValet` has been replaced by a `Valet`  (or `VALValet` in Objective-C) with an `.iCloud` flavor. [See examples above](#Sharing-Secrets-Across-Devices-with-iCloud).
+3. `setObject(_:forKey:)` has become `set(object:forKey:)` in Swift. The Objective-C API `-setObject:forKey:` remains the same.
+4. `setString(_:forKey:)` has become `set(string:forKey:)` in Swift. The Objective-C API `-setString:forKey:` remains the same.
+5. `SecureEnclaveValet` and `SinglePromptSecureEnclaveValet` data retrieval methods now return a single enum [SecureEnclave.Result](Sources/SecureEnclave.swift#L28) rather than using an `inout` boolean to signal whether a user cancelled. The Objective-C API remains the same.
+6. `migrateObjects(matching:)` and `migrateObjects(from:)` now both return a nonnull [MigrationResult](Sources/MigrationResult.swift#L24).
+7. `VALAccessControl` has been renamed to `SecureEnclaveAccessControl` (`VALSecureEnclaveAccessControl` in Objective-C). This enum no longer references `TouchID`; instead it refers to unlocking with `biometric` due to the introduction of Face ID.
+8. `Valet`, `SecureEnclaveValet`, and `SinglePromptSecureEnclaveValet` are no longer in the same inheritance tree. All three now inherit directly from `NSObject` and use composition to share code.
 
 ## Contributing
 
