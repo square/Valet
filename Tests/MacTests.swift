@@ -34,7 +34,7 @@ class ValetMacTests: XCTestCase
         let valet = Valet.valet(with: Identifier(nonEmpty: "MacOSVulnTest")!, flavor: .vanilla(.whenUnlocked))
         let vulnKey = "KeepIt"
         let vulnValue = "Secret"
-        valet.removeObject(for: vulnKey)
+        valet.removeObject(forKey: vulnKey)
         
         var query = valet.keychainQuery
         query[kSecAttrAccount as String] = vulnKey
@@ -55,7 +55,7 @@ class ValetMacTests: XCTestCase
         XCTAssertEqual(SecItemAdd(accessListQuery as CFDictionary, nil), errSecSuccess)
         
         // The potentially vulnerable keychain item should exist in our Valet now.
-        XCTAssertTrue(valet.containsObject(for: vulnKey))
+        XCTAssertTrue(valet.containsObject(forKey: vulnKey))
         
         // Obtain a reference to the vulnerable keychain entry.
         query[kSecReturnRef as String] = true
@@ -80,7 +80,7 @@ class ValetMacTests: XCTestCase
         
         // Update the vulnerable value with Valet - we should have deleted the existing item, making the entry no longer vulnerable.
         let updatedValue = "Safe"
-        XCTAssertTrue(valet.set(string: updatedValue, for: vulnKey))
+        XCTAssertTrue(valet.set(string: updatedValue, forKey: vulnKey))
         
         // We should no longer be able to access the keychain item via the ref.
         let queryWithVulnerableReferenceAndAttributes = [

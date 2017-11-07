@@ -57,14 +57,14 @@ class SynchronizableTests: XCTestCase
         XCTAssertFalse(valet === localValet)
         
         // Setting
-        XCTAssertTrue(valet.set(string: "butts", for: "cloud"))
-        XCTAssertEqual("butts", valet.string(for: "cloud"))
-        XCTAssertNil(localValet.string(for: "cloud"))
+        XCTAssertTrue(valet.set(string: "butts", forKey: "cloud"))
+        XCTAssertEqual("butts", valet.string(forKey: "cloud"))
+        XCTAssertNil(localValet.string(forKey: "cloud"))
         
         // Removal
-        XCTAssertTrue(localValet.set(string: "snake people", for: "millennials"))
-        XCTAssertTrue(valet.removeObject(for: "millennials"))
-        XCTAssertEqual("snake people", localValet.string(for: "millennials"))
+        XCTAssertTrue(localValet.set(string: "snake people", forKey: "millennials"))
+        XCTAssertTrue(valet.removeObject(forKey: "millennials"))
+        XCTAssertEqual("snake people", localValet.string(forKey: "millennials"))
     }
     
     func test_synchronizableValets_withEquivalentConfigurationsAreEqual() {
@@ -79,9 +79,9 @@ class SynchronizableTests: XCTestCase
             return
         }
         
-        XCTAssertNil(valet.string(for: key))
-        XCTAssertTrue(valet.set(string: passcode, for: key))
-        XCTAssertEqual(passcode, valet.string(for: key))
+        XCTAssertNil(valet.string(forKey: key))
+        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        XCTAssertEqual(passcode, valet.string(forKey: key))
     }
     
     func test_removeObjectForKey()
@@ -90,11 +90,11 @@ class SynchronizableTests: XCTestCase
             return
         }
         
-        XCTAssertTrue(valet.set(string: passcode, for: key))
-        XCTAssertEqual(passcode, valet.string(for: key))
+        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        XCTAssertEqual(passcode, valet.string(forKey: key))
         
-        XCTAssertTrue(valet.removeObject(for: key))
-        XCTAssertNil(valet.string(for: key))
+        XCTAssertTrue(valet.removeObject(forKey: key))
+        XCTAssertNil(valet.string(forKey: key))
     }
     
     // MARK: canAccessKeychain
@@ -132,7 +132,7 @@ class SynchronizableTests: XCTestCase
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
-            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(for: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
+            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
         }
     }
 
@@ -145,7 +145,7 @@ class SynchronizableTests: XCTestCase
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
-            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(for: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
+            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
         }
     }
 }

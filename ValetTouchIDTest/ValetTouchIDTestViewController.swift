@@ -45,7 +45,7 @@ final class ValetTouchIDTestViewController : UIViewController
     @IBAction func setOrUpdateItem(sender: UIResponder)
     {
         let stringToSet = "I am here! " + NSUUID().uuidString
-        let setOrUpdatedItem = singlePromptSecureEnclaveValet.set(string: stringToSet, for: username)
+        let setOrUpdatedItem = singlePromptSecureEnclaveValet.set(string: stringToSet, forKey: username)
         updateTextView(messageComponents: #function, (setOrUpdatedItem ? "Success" : "Failure"))
     }
     
@@ -53,7 +53,7 @@ final class ValetTouchIDTestViewController : UIViewController
     @IBAction func getItem(sender: UIResponder)
     {
         let resultString: String
-        switch singlePromptSecureEnclaveValet.string(for: username, withPrompt: "Use TouchID to retrieve password") {
+        switch singlePromptSecureEnclaveValet.string(forKey: username, withPrompt: "Use TouchID to retrieve password") {
         case let .success(password):
             resultString = password
             
@@ -70,14 +70,14 @@ final class ValetTouchIDTestViewController : UIViewController
     @objc(removeItem:)
     @IBAction func removeItem(sender: UIResponder)
     {
-        let removedItem = singlePromptSecureEnclaveValet.removeObject(for: username)
+        let removedItem = singlePromptSecureEnclaveValet.removeObject(forKey: username)
         updateTextView(messageComponents: #function, (removedItem ? "Success" : "Failure"))
     }
     
     @objc(containsItem:)
     @IBAction func containsItem(sender: UIResponder)
     {
-        let containsItem = singlePromptSecureEnclaveValet.containsObject(for: username)
+        let containsItem = singlePromptSecureEnclaveValet.containsObject(forKey: username)
         updateTextView(messageComponents: #function, (containsItem ? "YES" : "NO"))
     }
     

@@ -21,8 +21,6 @@
 import Foundation
 
 
-public typealias Key = String
-
 public struct Identifier: CustomStringConvertible {
     
     // MARK: Initialization

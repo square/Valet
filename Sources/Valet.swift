@@ -188,9 +188,9 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - returns: `false` if the keychain is not accessible.
     @objc(setObject:forKey:)
     @discardableResult
-    public func set(object: Data, for key: Key) -> Bool {
+    public func set(object: Data, forKey key: String) -> Bool {
         return execute(in: lock) {
-            switch Keychain.set(object: object, for: key, options: keychainQuery) {
+            switch Keychain.set(object: object, forKey: key, options: keychainQuery) {
             case .success:
                 return true
                 
@@ -203,9 +203,9 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
     @objc(objectForKey:)
-    public func object(for key: Key) -> Data? {
+    public func object(forKey key: String) -> Data? {
         return execute(in: lock) {
-            switch Keychain.object(for: key, options: keychainQuery) {
+            switch Keychain.object(forKey: key, options: keychainQuery) {
             case let .success(data):
                 return data
                 
@@ -218,9 +218,9 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter key: The key to look up in the keychain.
     /// - returns: `true` if a value has been set for the given key, `false` otherwise.
     @objc(containsObjectForKey:)
-    public func containsObject(for key: Key) -> Bool {
+    public func containsObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            switch Keychain.containsObject(for: key, options: keychainQuery) {
+            switch Keychain.containsObject(forKey: key, options: keychainQuery) {
             case .success:
                 return true
             case .error:
@@ -234,9 +234,9 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// @return NO if the keychain is not accessible.
     @objc(setString:forKey:)
     @discardableResult
-    public func set(string: String, for key: Key) -> Bool {
+    public func set(string: String, forKey key: String) -> Bool {
         return execute(in: lock) {
-            switch Keychain.set(string: string, for: key, options: keychainQuery) {
+            switch Keychain.set(string: string, forKey: key, options: keychainQuery) {
             case .success:
                 return true
                 
@@ -249,9 +249,9 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     @objc(stringForKey:)
-    public func string(for key: Key) -> String? {
+    public func string(forKey key: String) -> String? {
         return execute(in: lock) {
-            switch Keychain.string(for: key, options: keychainQuery) {
+            switch Keychain.string(forKey: key, options: keychainQuery) {
             case let .success(data):
                 return data
                 
@@ -279,9 +279,9 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - returns: `false` if the keychain is not accessible.
     @objc(removeObjectForKey:)
     @discardableResult
-    public func removeObject(for key: Key) -> Bool {
+    public func removeObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            switch Keychain.removeObject(for: key, options: keychainQuery) {
+            switch Keychain.removeObject(forKey: key, options: keychainQuery) {
             case .success:
                 return true
                 

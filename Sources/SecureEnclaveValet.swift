@@ -113,18 +113,18 @@ public final class SecureEnclaveValet: NSObject {
     /// - returns: `false` if the keychain is not accessible.
     @objc(setObject:forKey:)
     @discardableResult
-    public func set(object: Data, for key: Key) -> Bool {
+    public func set(object: Data, forKey key: String) -> Bool {
         return execute(in: lock) {
-            return SecureEnclave.set(object: object, for: key, options: keychainQuery)
+            return SecureEnclave.set(object: object, forKey: key, options: keychainQuery)
         }
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
-    public func object(for key: Key, withPrompt userPrompt: String) -> SecureEnclave.Result<Data> {
+    public func object(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<Data> {
         return execute(in: lock) {
-            return SecureEnclave.object(for: key, withPrompt: userPrompt, options: keychainQuery)
+            return SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: keychainQuery)
         }
     }
     
@@ -132,9 +132,9 @@ public final class SecureEnclaveValet: NSObject {
     /// - returns: `true` if a value has been set for the given key, `false` otherwise.
     /// - note: Will never prompt the user for Face ID, Touch ID, or password.
     @objc(containsObjectForKey:)
-    public func containsObject(for key: Key) -> Bool {
+    public func containsObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            return SecureEnclave.containsObject(for: key, options: keychainQuery)
+            return SecureEnclave.containsObject(forKey: key, options: keychainQuery)
         }
     }
     
@@ -143,18 +143,18 @@ public final class SecureEnclaveValet: NSObject {
     /// @return NO if the keychain is not accessible.
     @objc(setString:forKey:)
     @discardableResult
-    public func set(string: String, for key: Key) -> Bool {
+    public func set(string: String, forKey key: String) -> Bool {
         return execute(in: lock) {
-            return SecureEnclave.set(string: string, for: key, options: keychainQuery)
+            return SecureEnclave.set(string: string, forKey: key, options: keychainQuery)
         }
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
-    public func string(for key: Key, withPrompt userPrompt: String) -> SecureEnclave.Result<String> {
+    public func string(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<String> {
         return execute(in: lock) {
-            return SecureEnclave.string(for: key, withPrompt: userPrompt, options: keychainQuery)
+            return SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: keychainQuery)
         }
     }
     
@@ -162,9 +162,9 @@ public final class SecureEnclaveValet: NSObject {
     /// - returns: `false` if the keychain is not accessible.
     @objc(removeObjectForKey:)
     @discardableResult
-    public func removeObject(for key: Key) -> Bool {
+    public func removeObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            switch Keychain.removeObject(for: key, options: keychainQuery) {
+            switch Keychain.removeObject(forKey: key, options: keychainQuery) {
             case .success:
                 return true
                 
@@ -254,8 +254,8 @@ extension SecureEnclaveValet {
     /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
     @available(swift, obsoleted: 1.0)
     @objc(objectForKey:userPrompt:userCancelled:)
-    public func 🚫swift_object(for key: Key, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> Data? {
-        switch object(for: key, withPrompt: userPrompt) {
+    public func 🚫swift_object(forKey key: String, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> Data? {
+        switch object(forKey: key, withPrompt: userPrompt) {
         case let .success(data):
             return data
         case .userCancelled:
@@ -271,8 +271,8 @@ extension SecureEnclaveValet {
     /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     @available(swift, obsoleted: 1.0)
     @objc(stringForKey:userPrompt:userCancelled:)
-    public func 🚫swift_string(for key: Key, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> String? {
-        switch string(for: key, withPrompt: userPrompt) {
+    public func 🚫swift_string(forKey key: String, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> String? {
+        switch string(forKey: key, withPrompt: userPrompt) {
         case let .success(string):
             return string
         case .userCancelled:

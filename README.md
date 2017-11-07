@@ -69,8 +69,8 @@ The Accessibility enum is used to determine when your secrets can be accessed. I
 
 ```swift
 let username = "Skroob"
-myValet.set(string: "12345", for: username)
-let myLuggageCombination = myValet.string(for: username)
+myValet.set(string: "12345", forKey: username)
+let myLuggageCombination = myValet.string(forKey: username)
 ```
 
 ```objc
