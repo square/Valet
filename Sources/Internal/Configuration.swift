@@ -22,45 +22,52 @@ import Foundation
 
 
 internal enum Configuration: CustomStringConvertible {
-    case valet(Valet.Flavor)
-    case secureEnclave(SecureEnclave.Flavor)
-    
+    case valet(Accessibility)
+    case iCloud(CloudAccessibility)
+    case secureEnclave(SecureEnclaveAccessControl)
+    case singlePromptSecureEnclave(SecureEnclaveAccessControl)
+
     // MARK: CustomStringConvertible
     
     internal var description: String {
         switch self {
-        case let .valet(flavor):
-            switch flavor {
-            case .vanilla:
-                return "VALValet"
-            case .iCloud:
-                return "VALSynchronizableValet"
-            }
-            
-        case let .secureEnclave(flavor):
-            switch flavor {
-            case .singlePrompt:
-                return "VALSinglePromptSecureEnclaveValet"
-            case .alwaysPrompt:
-                return "VALSecureEnclaveValet"
-            }
+        case .valet:
+            return "VALValet"
+        case .iCloud:
+            return "VALSynchronizableValet"
+        case .secureEnclave:
+            return "VALSecureEnclaveValet"
+        case .singlePromptSecureEnclave:
+            return "VALSinglePromptSecureEnclaveValet"
         }
     }
     
     // MARK: Internal Properties
     
-    internal var accessability: Accessibility {
+    internal var accessibility: Accessibility {
         switch self {
-        case let .valet(flavor):
-            switch flavor {
-            case let .vanilla(accessibility):
-                return accessibility
-            case let .iCloud(cloudAccessibility):
-                return cloudAccessibility.accessibility
-            }
-            
-        case .secureEnclave:
+        case let .valet(accessibility):
+            return accessibility
+        case let .iCloud(cloudAccessibility):
+            return cloudAccessibility.accessibility
+        case .secureEnclave, .singlePromptSecureEnclave:
             return Accessibility.whenPasscodeSetThisDeviceOnly
         }
+    }
+    
+    internal var prettyDescription: String {
+        let configurationDescription: String = {
+            switch self {
+            case .valet:
+                return "(Valet)"
+            case .iCloud:
+                return "(iCloud)"
+            case .secureEnclave:
+                return "(Secure Enclave)"
+            case .singlePromptSecureEnclave:
+                return "(Single Prompt)"
+            }
+        }()
+        return "\(accessibility) \(configurationDescription)"
     }
 }

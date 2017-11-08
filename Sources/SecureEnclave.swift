@@ -59,15 +59,6 @@ public final class SecureEnclave {
         }
     }
     
-    // MARK: Flavor
-    
-    internal enum Flavor {
-        /// Can read multiple items from the Secure Enclave with only a single user-presence prompt to retrieve multiple items.
-        case singlePrompt(SecureEnclaveAccessControl)
-        /// Requires a user-presence prompt to retrieve each item in the Secure Enclave.
-        case alwaysPrompt(SecureEnclaveAccessControl)
-    }
-    
     // MARK: Internal Methods
     
     /// - parameter service: The service of the keychain slice we want to check if we can access.
@@ -79,9 +70,9 @@ public final class SecureEnclave {
         let noPromptValet: Valet
         switch service {
         case .standard:
-            noPromptValet = .valet(with: identifier, flavor: .vanilla(.whenPasscodeSetThisDeviceOnly))
+            noPromptValet = .valet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         case .sharedAccessGroup:
-            noPromptValet = .sharedAccessGroupValet(with: identifier, flavor: .vanilla(.whenPasscodeSetThisDeviceOnly))
+            noPromptValet = .sharedAccessGroupValet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         }
         
         return noPromptValet.canAccessKeychain()

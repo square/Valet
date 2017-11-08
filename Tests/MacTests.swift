@@ -31,7 +31,7 @@ class ValetMacTests: XCTestCase
     @available (OSX 10.10, *)
     func test_setStringForKey_neutralizesMacOSAccessControlListVuln()
     {
-        let valet = Valet.valet(with: Identifier(nonEmpty: "MacOSVulnTest")!, flavor: .vanilla(.whenUnlocked))
+        let valet = Valet.valet(with: Identifier(nonEmpty: "MacOSVulnTest")!, accessibility: .whenUnlocked)
         let vulnKey = "KeepIt"
         let vulnValue = "Secret"
         valet.removeObject(forKey: vulnKey)

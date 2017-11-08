@@ -30,7 +30,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - parameter identifier: A non-empty string that uniquely identifies a SecureEnclaveValet.
     /// - returns: A SecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
-        let key = Service.standard(identifier, .secureEnclave(.alwaysPrompt(accessControl))).description as NSString
+        let key = Service.standard(identifier, .secureEnclave(accessControl)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
@@ -44,7 +44,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
     /// - returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedAccessGroupValet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
-        let key = Service.sharedAccessGroup(identifier, .secureEnclave(.alwaysPrompt(accessControl))).description as NSString
+        let key = Service.sharedAccessGroup(identifier, .secureEnclave(accessControl)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
@@ -74,14 +74,14 @@ public final class SecureEnclaveValet: NSObject {
     }
     
     private init(identifier: Identifier, accessControl: SecureEnclaveAccessControl) {
-        service = .standard(identifier, .secureEnclave(SecureEnclave.Flavor.alwaysPrompt(accessControl)))
+        service = .standard(identifier, .secureEnclave(accessControl))
         keychainQuery = service.generateBaseQuery()
         self.identifier = identifier
         self.accessControl = accessControl
     }
     
     private init(sharedAccess identifier: Identifier, accessControl: SecureEnclaveAccessControl) {
-        service = .sharedAccessGroup(identifier, .secureEnclave(SecureEnclave.Flavor.alwaysPrompt(accessControl)))
+        service = .sharedAccessGroup(identifier, .secureEnclave(accessControl))
         keychainQuery = service.generateBaseQuery()
         self.identifier = identifier
         self.accessControl = accessControl

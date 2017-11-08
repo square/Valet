@@ -57,30 +57,17 @@ internal enum Service: CustomStringConvertible, Equatable {
         }
         
         switch configuration {
-        case let .valet(flavor):
-            switch flavor {
-            case .vanilla:
-                // Nothing to do here.
-                break
-                
-            case .iCloud:
-                baseQuery[kSecAttrSynchronizable as String] = true
-            }
-            
-            baseQuery[kSecAttrAccessible as String] = configuration.accessability.secAccessibilityAttribute
-            
-        case let .secureEnclave(flavor):
-            let accessControl: SecureEnclaveAccessControl
-            switch flavor {
-            case let .singlePrompt(desiredAccessControl):
-                accessControl = desiredAccessControl
-                
-            case let .alwaysPrompt(desiredAccessControl):
-                accessControl = desiredAccessControl
-            }
-            
+        case .valet:
+            baseQuery[kSecAttrAccessible as String] = configuration.accessibility.secAccessibilityAttribute
+
+        case .iCloud:
+            baseQuery[kSecAttrSynchronizable as String] = true
+            baseQuery[kSecAttrAccessible as String] = configuration.accessibility.secAccessibilityAttribute
+
+        case let .secureEnclave(desiredAccessControl),
+             let .singlePromptSecureEnclave(desiredAccessControl):
             // Note that kSecAttrAccessControl and kSecAttrAccessible are mutually exclusive.
-            baseQuery[kSecAttrAccessControl as String] = SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, accessControl.secAccessControl, nil)
+            baseQuery[kSecAttrAccessControl as String] = SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, desiredAccessControl.secAccessControl, nil)
         }
         
         return baseQuery
@@ -92,9 +79,9 @@ internal enum Service: CustomStringConvertible, Equatable {
         var service: String
         switch self {
         case let .standard(identifier, configuration):
-            service = "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(configuration.accessability.description)"
+            service = "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(configuration.accessibility.description)"
         case let .sharedAccessGroup(identifier, configuration):
-            service = "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(configuration.accessability.description)"
+            service = "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(configuration.accessibility.description)"
         }
         
         let configuration: Configuration
@@ -106,19 +93,12 @@ internal enum Service: CustomStringConvertible, Equatable {
         }
         
         switch configuration {
-        case .valet:
+        case .valet, .iCloud:
             // Nothing to do here.
             break
-        case let .secureEnclave(flavor):
-            let accessControl: SecureEnclaveAccessControl
-            switch flavor {
-            case let .singlePrompt(desiredAccessControl):
-                accessControl = desiredAccessControl
-                
-            case let .alwaysPrompt(desiredAccessControl):
-                accessControl = desiredAccessControl
-            }
-            
+
+        case let .secureEnclave(accessControl),
+             let .singlePromptSecureEnclave(accessControl):
             service += accessControl.description
         }
         

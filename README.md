@@ -47,17 +47,17 @@ Or manually checkout the submodule with `git submodule add git@github.com:Square
 ### Basic Initialization
 
 ```swift
-let myValet = Valet.valet(with: Identifier(nonEmpty: "Druidia")!, flavor: .vanilla(.whenUnlocked))
+let myValet = Valet.valet(with: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
 ```
 
 ```objc
-VALValet *const myValet = [VALValet vanillaValetWithIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
+VALValet *const myValet = [VALValet valetWithIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
 To begin storing data securely using Valet, you need to create a Valet instance with:
 
 * An identifier – a string that is used to identify this Valet.
-* A flavor – an enum ([Valet.Flavor](Sources/Valet.swift#L28)) that defines where data will be stored and when you will be able to persist and retrieve data.
+* An accessibility – an enum ([Accessibility](Sources/Accessibility.swift#L25)) that defines when you will be able to persist and retrieve data.
 
 This `myValet` instance can be used to store and retrieve data securely on this device, but only when the device is unlocked.
 
@@ -79,16 +79,16 @@ NSString *const username = @"Skroob";
 NSString *const myLuggageCombination = [myValet stringForKey:username];
 ```
 
-In addition to allowing the storage of strings, Valet allows the storage of `Data` objects via `set(object: Data, for key: Key)` and `-objectForKey:`. Valets created with a different class type, via a different initializer, or with a different flavor or accessibility attribute will not be able to read or modify values in `myValet`.
+In addition to allowing the storage of strings, Valet allows the storage of `Data` objects via `set(object: Data, forKey key: Key)` and `-objectForKey:`. Valets created with a different class type, via a different initializer, or with a different accessibility attribute will not be able to read or modify values in `myValet`.
 
 ### Sharing Secrets Among Multiple Applications
 
 ```swift
-let mySharedValet = Valet.sharedAccessGroupValet(with: Identifier(nonEmpty: "Druidia")!, flavor: .vanilla(.whenUnlocked))
+let mySharedValet = Valet.sharedAccessGroupValet(with: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
 ```
 
 ```objc
-VALValet *const mySharedValet = [VALValet vanillaValetWithSharedAccessGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
+VALValet *const mySharedValet = [VALValet valetWithSharedAccessGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
 This instance can be used to store and retrieve data securely across any app written by the same developer with the value `Druidia` under the `keychain-access-groups` key in the app’s `Entitlements` file, when the device is unlocked. `myValet` and `mySharedValet` can not read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedAccessGroupValet` initializer.
@@ -96,7 +96,7 @@ This instance can be used to store and retrieve data securely across any app wri
 ### Sharing Secrets Across Devices with iCloud
 
 ```swift
-let myCloudValet = Valet.valet(with: Identifier(nonEmpty: "Druidia")!, flavor: .iCloud(.whenUnlocked))
+let myCloudValet = Valet.iCloudValet(with: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
 ```
 
 ```objc
@@ -156,14 +156,14 @@ First the good news: you will _not_ have to migrate your keychain data when upgr
 
 Now the bad news: the Swift Valet API has slight differences from the Objective-C Valet API. You may have noticed a few of the differences in the sample code above, but here's a rundown of the changes that may affect you.
 
-1. Initializers have changed in both Swift and Objective-C. [See examples above](#Basic-Initialization).
-2. `VALSynchronizableValet` has been replaced by a `Valet`  (or `VALValet` in Objective-C) with an `.iCloud` flavor. [See examples above](#Sharing-Secrets-Across-Devices-with-iCloud).
+1. Initializers have changed in both Swift and Objective-C - both languages use class methods now, which felt more semantically honest (a lot of the time you're not instantiating a new Valet, you're re-accessing one you've already created). [See example usage above](#Basic-Initialization).
+2. `VALSynchronizableValet` (which allowed keychains to be synced to iCloud) has been replaced by a `Valet.iCloudValet(with:accessibility:)`  (or `+iCloudValetWithIdentifier:accessibility:` in Objective-C). [See examples above](#Sharing-Secrets-Across-Devices-with-iCloud).
 3. `setObject(_:forKey:)` has become `set(object:forKey:)` in Swift. The Objective-C API `-setObject:forKey:` remains the same.
 4. `setString(_:forKey:)` has become `set(string:forKey:)` in Swift. The Objective-C API `-setString:forKey:` remains the same.
 5. `SecureEnclaveValet` and `SinglePromptSecureEnclaveValet` data retrieval methods now return a single enum [SecureEnclave.Result](Sources/SecureEnclave.swift#L28) rather than using an `inout` boolean to signal whether a user cancelled. The Objective-C API remains the same.
 6. `migrateObjects(matching:)` and `migrateObjects(from:)` now both return a nonnull [MigrationResult](Sources/MigrationResult.swift#L24).
 7. `VALAccessControl` has been renamed to `SecureEnclaveAccessControl` (`VALSecureEnclaveAccessControl` in Objective-C). This enum no longer references `TouchID`; instead it refers to unlocking with `biometric` due to the introduction of Face ID.
-8. `Valet`, `SecureEnclaveValet`, and `SinglePromptSecureEnclaveValet` are no longer in the same inheritance tree. All three now inherit directly from `NSObject` and use composition to share code.
+8. `Valet`, `SecureEnclaveValet`, and `SinglePromptSecureEnclaveValet` are no longer in the same inheritance tree. All three now inherit directly from `NSObject` and use composition to share code. If you were relying on the subclass hierarchy before, 1) that might be a code smell 2) consider declaring a protocol for the shared behavior you were expecting to make your migration to Valet 3 easier.
 
 ## Contributing
 
