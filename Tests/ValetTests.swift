@@ -435,7 +435,7 @@ class ValetTests: XCTestCase
             removeQueueExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 5.0, handler: nil)
+        waitForExpectations(timeout: 10.0, handler: nil)
     }
 
     func test_stringForKey_canReadDataWrittenOnAnotherThread()
