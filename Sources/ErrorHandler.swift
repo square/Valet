@@ -26,8 +26,10 @@ public final class ErrorHandler {
     // MARK: Public Static Properties
     
     public static var customAssertBody: ((_ condition: Bool, _ message: String, _ file: StaticString, _ line: UInt) -> Void)? = nil
-    
-    public static let defaultAssertBody: (_ condition: Bool, _ message: String, _ file: StaticString, _ line: UInt) -> Void = { condition, message, file, line in
+
+    // MARK: Internal Static Properties
+
+    internal static let defaultAssertBody: (_ condition: Bool, _ message: String, _ file: StaticString, _ line: UInt) -> Void = { condition, message, file, line in
         guard !condition else {
             return
         }

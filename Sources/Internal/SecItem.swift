@@ -34,19 +34,19 @@ internal final class SecItem {
     
     // MARK: Internal Enum
     
-    internal enum DataResult<SuccessType, FailureType> {
+    internal enum DataResult<SuccessType> {
         case success(SuccessType)
-        case error(FailureType)
+        case error(OSStatus)
     }
     
-    internal enum Result<FailureType> {
+    internal enum Result {
         case success
-        case error(FailureType)
+        case error(OSStatus)
     }
     
     // MARK: Internal Class Properties
 
-  /// Programatically grab the required prefix for the shared access group (i.e. Bundle Seed ID). The value for the kSecAttrAccessGroup key in queries for data that is shared between apps must be of the format bundleSeedID.sharedAccessGroup. For more information on the Bundle Seed ID, see https://developer.apple.com/library/ios/qa/qa1713/_index.html
+    /// Programatically grab the required prefix for the shared access group (i.e. Bundle Seed ID). The value for the kSecAttrAccessGroup key in queries for data that is shared between apps must be of the format bundleSeedID.sharedAccessGroup. For more information on the Bundle Seed ID, see https://developer.apple.com/library/ios/qa/qa1713/_index.html
     internal static var sharedAccessGroupPrefix: String {
         let query = [
             kSecClass : kSecClassGenericPassword,
@@ -89,7 +89,7 @@ internal final class SecItem {
     
     // MARK: Internal Class Methods
     
-    internal static func copy<DesiredType>(matching query: [String : AnyHashable]) -> DataResult<DesiredType, OSStatus> {
+    internal static func copy<DesiredType>(matching query: [String : AnyHashable]) -> DataResult<DesiredType> {
         guard query.count > 0 else {
             ErrorHandler.assertionFailure("Must provide a query with at least one item")
             return .error(errSecParam)
@@ -118,7 +118,7 @@ internal final class SecItem {
         }
     }
     
-    internal static func containsObject(matching query: [String : AnyHashable]) -> Result<OSStatus> {
+    internal static func containsObject(matching query: [String : AnyHashable]) -> Result {
         guard query.count > 0 else {
             ErrorHandler.assertionFailure("Must provide a query with at least one item")
             return .error(errSecParam)
@@ -139,7 +139,7 @@ internal final class SecItem {
         }
     }
     
-    internal static func add(attributes: [String : AnyHashable]) -> Result<OSStatus> {
+    internal static func add(attributes: [String : AnyHashable]) -> Result {
         guard attributes.count > 0 else {
             ErrorHandler.assertionFailure("Must provide attributes with at least one item")
             return .error(errSecParam)
@@ -161,7 +161,7 @@ internal final class SecItem {
         }
     }
     
-    internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) -> Result<OSStatus> {
+    internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) -> Result {
         guard attributes.count > 0 else {
             ErrorHandler.assertionFailure("Must provide attributes with at least one item")
             return .error(errSecParam)
@@ -187,7 +187,7 @@ internal final class SecItem {
         }
     }
     
-    internal static func delete(itemsMatching query: [String : AnyHashable]) -> Result<OSStatus> {
+    internal static func deleteItems(matching query: [String : AnyHashable]) -> Result {
         guard query.count > 0 else {
             ErrorHandler.assertionFailure("Must provide a query with at least one item")
             return .error(errSecParam)

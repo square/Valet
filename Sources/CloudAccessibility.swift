@@ -40,12 +40,12 @@ public enum CloudAccessibility: Int, CustomStringConvertible, Equatable {
     
     public var accessibility: Accessibility {
         switch self {
+        case .whenUnlocked:
+          return .whenUnlocked
         case .afterFirstUnlock:
             return .afterFirstUnlock
         case .always:
             return .always
-        case .whenUnlocked:
-            return .whenUnlocked
         }
     }
     

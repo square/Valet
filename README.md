@@ -56,8 +56,8 @@ VALValet *const myValet = [VALValet valetWithIdentifier:@"Druidia" accessibility
 
 To begin storing data securely using Valet, you need to create a Valet instance with:
 
-* An identifier – a string that is used to identify this Valet.
-* An accessibility – an enum ([Accessibility](Sources/Accessibility.swift#L25)) that defines when you will be able to persist and retrieve data.
+* An identifier – a non-empty string that is used to identify this Valet. The Swift API uses an `Identifier` wrapper class to enforce the non-empty constraint.
+* An accessibility value – an enum ([Accessibility](Sources/Accessibility.swift#L25)) that defines when you will be able to persist and retrieve data.
 
 This `myValet` instance can be used to store and retrieve data securely on this device, but only when the device is unlocked.
 
@@ -122,7 +122,7 @@ let mySecureEnclaveValet = SinglePromptSecureEnclaveValet.valet(with: Identifier
 ```
 
 ```objc
-VALSinglePromptSecureEnclaveValet *mySecureEnclaveValet = [VALSinglePromptSecureEnclaveValet initWithIdentifier:@"Druidia" accessControl:VALAccessControlUserPresence];
+VALSinglePromptSecureEnclaveValet *const mySecureEnclaveValet = [VALSinglePromptSecureEnclaveValet initWithIdentifier:@"Druidia" accessControl:VALAccessControlUserPresence];
 ```
 
 This instance also stores and retrieves data in the Secure Enclave, but does not require the user to confirm their presence each time data is retrieved. Instead, the user will be prompted to confirm their presence only on the first data retrieval. A `SinglePromptSecureEnclaveValet` instance can be forced to prompt the user on the next data retrieval by calling the instance method `requirePromptOnNextAccess()`.
@@ -156,8 +156,8 @@ First the good news: you will _not_ have to migrate your keychain data when upgr
 
 Now the bad news: the Swift Valet API has slight differences from the Objective-C Valet API. You may have noticed a few of the differences in the sample code above, but here's a rundown of the changes that may affect you.
 
-1. Initializers have changed in both Swift and Objective-C - both languages use class methods now, which felt more semantically honest (a lot of the time you're not instantiating a new Valet, you're re-accessing one you've already created). [See example usage above](#Basic-Initialization).
-2. `VALSynchronizableValet` (which allowed keychains to be synced to iCloud) has been replaced by a `Valet.iCloudValet(with:accessibility:)`  (or `+iCloudValetWithIdentifier:accessibility:` in Objective-C). [See examples above](#Sharing-Secrets-Across-Devices-with-iCloud).
+1. Initializers have changed in both Swift and Objective-C - both languages use class methods now, which felt more semantically honest (a lot of the time you're not instantiating a new Valet, you're re-accessing one you've already created). [See example usage above](#basic-initialization).
+2. `VALSynchronizableValet` (which allowed keychains to be synced to iCloud) has been replaced by a `Valet.iCloudValet(with:accessibility:)`  (or `+[VALValet iCloudValetWithIdentifier:accessibility:]` in Objective-C). [See examples above](#sharing-secrets-across-devices-with-icloud).
 3. `setObject(_:forKey:)` has become `set(object:forKey:)` in Swift. The Objective-C API `-setObject:forKey:` remains the same.
 4. `setString(_:forKey:)` has become `set(string:forKey:)` in Swift. The Objective-C API `-setString:forKey:` remains the same.
 5. `SecureEnclaveValet` and `SinglePromptSecureEnclaveValet` data retrieval methods now return a single enum [SecureEnclave.Result](Sources/SecureEnclave.swift#L28) rather than using an `inout` boolean to signal whether a user cancelled. The Objective-C API remains the same.

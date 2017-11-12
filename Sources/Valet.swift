@@ -83,10 +83,11 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     }
     
     // MARK: Initialization
-    
+
     @available(*, deprecated)
+    @available(swift, obsoleted: 1.0)
     public override init() {
-        fatalError("Do not use this initializer")
+        fatalError("Use the class methods above to create usable Valet objects")
     }
     
     private init(identifier: Identifier, configuration: Configuration) {
@@ -186,7 +187,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     /// - parameter string: A String value to be inserted into the keychain.
     /// - parameter key: A Key that can be used to retrieve the `string` from the keychain.
-    /// @return NO if the keychain is not accessible.
+    /// - returns: `true` if the operation succeeded, or `false` if the keychain is not accessible.
     @objc(setString:forKey:)
     @discardableResult
     public func set(string: String, forKey key: String) -> Bool {

@@ -99,7 +99,7 @@ public final class SecureEnclave {
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - parameter options: A base query used to scope the calls in the keychain.
-    /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
+    /// - returns: The data currently stored in the keychain for the provided key. Returns `.itemNotFound` if no object exists in the keychain for the specified key, or if the keychain is inaccessible. Returns `.userCancelled` if the user cancels the user-presence prompt.
     internal static func object(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) -> Result<Data> {
         var secItemQuery = options
         if !userPrompt.isEmpty {
@@ -140,7 +140,7 @@ public final class SecureEnclave {
     /// - parameter string: A String value to be inserted into the keychain.
     /// - parameter key: A Key that can be used to retrieve the `string` from the keychain.
     /// - parameter options: A base query used to scope the calls in the keychain.
-    /// @return NO if the keychain is not accessible.
+    /// - returns: `true` if the operation succeeded, or `false` if the keychain is not accessible.
     @discardableResult
     internal static func set(string: String, forKey key: String, options: [String : AnyHashable]) -> Bool {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.

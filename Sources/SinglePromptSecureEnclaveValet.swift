@@ -70,8 +70,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     // MARK: Initialization
     
     @available(*, deprecated)
+    @available(swift, obsoleted: 1.0)
     public override init() {
-        fatalError("Do not use this initializer")
+        fatalError("Use the class methods above to create usable SinglePromptSecureEnclaveValet objects")
     }
     
     private init(identifier: Identifier, accessControl: SecureEnclaveAccessControl) {
@@ -122,7 +123,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
-    /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
+    /// - returns: The data currently stored in the keychain for the provided key. Returns `.itemNotFound` if no object exists in the keychain for the specified key, or if the keychain is inaccessible. Returns `.userCancelled` if the user cancels the user-presence prompt.
     public func object(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<Data> {
         return execute(in: lock) {
             return SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: continuedAuthenticationKeychainQuery)
@@ -141,7 +142,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     
     /// - parameter string: A String value to be inserted into the keychain.
     /// - parameter key: A Key that can be used to retrieve the `string` from the keychain.
-    /// @return NO if the keychain is not accessible.
+    /// - returns: `true` if the operation succeeded, or `false` if the keychain is not accessible.
     @objc(setString:forKey:)
     @discardableResult
     public func set(string: String, forKey key: String) -> Bool {
