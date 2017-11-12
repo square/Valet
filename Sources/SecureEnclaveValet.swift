@@ -122,7 +122,7 @@ public final class SecureEnclaveValet: NSObject {
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
-    /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
+    /// - returns: The data currently stored in the keychain for the provided key. Returns `.itemNotFound` if no object exists in the keychain for the specified key, or if the keychain is inaccessible. Returns `.userCancelled` if the user cancels the user-presence prompt.
     public func object(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<Data> {
         return execute(in: lock) {
             return SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: keychainQuery)
