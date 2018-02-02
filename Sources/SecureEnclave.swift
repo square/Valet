@@ -36,26 +36,18 @@ public final class SecureEnclave {
         // MARK: Equatable
         
         public static func ==(lhs: Result<Type>, rhs: Result<Type>) -> Bool {
-            switch lhs {
-            case let .success(lhsResult):
-                if case let .success(rhsResult) = rhs, lhsResult == rhsResult {
-                    return true
-                } else {
-                    return false
-                }
-            case .userCancelled:
-                if case .userCancelled = rhs {
-                    return true
-                } else {
-                    return false
-                }
-            case .itemNotFound:
-                if case .itemNotFound = rhs {
-                    return true
-                } else {
-                    return false
-                }
-            }
+            switch (lhs, rhs) {
+            case let (.success(lhsResult), .success(rhsResult)):
+                return lhsResult == rhsResult
+            case (.userCancelled, .userCancelled):
+                return true
+            case (.itemNotFound, .itemNotFound):
+                return true
+            case (.success, _),
+                 (.userCancelled, _),
+                 (.itemNotFound, _):
+              return false
+          }
         }
     }
     
