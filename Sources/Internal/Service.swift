@@ -86,9 +86,8 @@ internal enum Service: CustomStringConvertible, Equatable {
         
         let configuration: Configuration
         switch self {
-        case let .standard(_, desiredConfiguration):
-            configuration = desiredConfiguration
-        case let .sharedAccessGroup(_, desiredConfiguration):
+        case let .standard(_, desiredConfiguration),
+             let .sharedAccessGroup(_, desiredConfiguration):
             configuration = desiredConfiguration
         }
         
