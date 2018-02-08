@@ -70,7 +70,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     // MARK: Initialization
     
     @available(*, unavailable)
-    public override init() {
+    private override init() {
         fatalError("Use the class methods above to create usable SinglePromptSecureEnclaveValet objects")
     }
     
