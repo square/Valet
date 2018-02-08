@@ -69,8 +69,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     
     // MARK: Initialization
     
-    @available(*, deprecated)
-    @available(swift, obsoleted: 1.0)
+    @available(*, unavailable)
     public override init() {
         fatalError("Use the class methods above to create usable SinglePromptSecureEnclaveValet objects")
     }
