@@ -91,7 +91,7 @@ let mySharedValet = Valet.sharedAccessGroupValet(with: Identifier(nonEmpty: "Dru
 VALValet *const mySharedValet = [VALValet valetWithSharedAccessGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
-This instance can be used to store and retrieve data securely across any app written by the same developer with the value `Druidia` under the `keychain-access-groups` key in the app’s `Entitlements` file, when the device is unlocked. `myValet` and `mySharedValet` can not read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedAccessGroupValet` initializer.
+This instance can be used to store and retrieve data securely across any app written by the same developer with the value `Druidia` under the `keychain-access-groups` key in the app’s `Entitlements` file, when the device is unlocked. Note that `myValet` and `mySharedValet` can not read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedAccessGroupValet` initializer.
 
 ### Sharing Secrets Across Devices with iCloud
 
@@ -103,7 +103,7 @@ let myCloudValet = Valet.iCloudValet(with: Identifier(nonEmpty: "Druidia")!, acc
 VALValet *const myCloudValet = [VALValet iCloudValetWithIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
-This instance can be used to store and retrieve data that can be retrieved by this app on other devices logged into the same iCloud account with iCloud Keychain enabled. `myCloudValet` can not read or modify values in `myValet` or `mySharedValet` because `myCloudValet` is of a different class type. If iCloud Keychain is not enabled on this device, secrets can still be read and written, but will not sync to other devices.
+This instance can be used to store and retrieve data that can be retrieved by this app on other devices logged into the same iCloud account with iCloud Keychain enabled. If iCloud Keychain is not enabled on this device, secrets can still be read and written, but will not sync to other devices. Note that  `myCloudValet` can not read or modify values in either `myValet` or `mySharedValet` because `myCloudValet` was created a different initializer.
 
 ### Protecting Secrets with Face ID, Touch ID, or device Passcode
 
@@ -115,7 +115,7 @@ let mySecureEnclaveValet = SecureEnclaveValet.valet(with: Identifier(nonEmpty: "
 VALSecureEnclaveValet *const mySecureEnclaveValet = [VALSecureEnclaveValet valetWithIdentifier:@"Druidia" accessControl:VALAccessControlUserPresence];
 ```
 
-This instance can be used to store and retrieve data in the Secure Enclave (available on iOS 8.0 and later and Mac OS 10.11 and later). Each time data is retrieved from this Valet, the user will be prompted to confirm their presence via Face ID, Touch ID, or by entering their device passcode. *If no passcode is set on the device, this instance will be unable to access or store data.* Data is removed from the Secure Enclave when the user removes a passcode from the device. Storing data using SecureEnclaveValet is the most secure way to store data on either iOS or Mac OS.
+This instance can be used to store and retrieve data in the Secure Enclave (available on iOS 8.0 and later and Mac OS 10.11 and later). Each time data is retrieved from this Valet, the user will be prompted to confirm their presence via Face ID, Touch ID, or by entering their device passcode. *If no passcode is set on the device, this instance will be unable to access or store data.* Data is removed from the Secure Enclave when the user removes a passcode from the device. Storing data using `SecureEnclaveValet` is the most secure way to store data on either iOS or Mac OS.
 
 ```swift
 let mySecureEnclaveValet = SinglePromptSecureEnclaveValet.valet(with: Identifier(nonEmpty: "Druidia")!, accessControl: .userPresence)
