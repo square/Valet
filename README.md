@@ -18,6 +18,7 @@ on iOS:
 
 ```
 platform :ios, '9.0'
+use_frameworks!
 pod 'Valet'
 ```
 
@@ -25,6 +26,7 @@ on macOS:
 
 ```
 platform :osx, '10.11'
+use_frameworks!
 pod 'Valet'
 ```
 
