@@ -27,7 +27,11 @@ class SecItemTests: XCTestCase {
 
     func test_sharedAccessGroupPrefix_findsPrefix() {
         #if os(iOS)
-            XCTAssertEqual(SecItem.sharedAccessGroupPrefix, "9XUJ7M53NG")
+            // CocoaPods app host DSL does not provide ability to edit the app host settings such
+            // the `DEVELOPER TEAM` so for now skip this assertion.
+            #if !COCOAPODS
+                XCTAssertEqual(SecItem.sharedAccessGroupPrefix, "9XUJ7M53NG")
+            #endif
         #endif
     }
     
