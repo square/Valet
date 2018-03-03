@@ -23,14 +23,14 @@ import Foundation
 import XCTest
 
 
-@available (iOS 8, OSX 10.11, *)
+@available(tvOS 10.0, *)
 class SecureEnclaveSinglePromptTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = SinglePromptSecureEnclaveValet.valet(with: identifier, accessControl: .userPresence)
     let key = "key"
     let passcode = "topsecret"
-    
+
     override func setUp()
     {
         super.setUp()
@@ -75,19 +75,7 @@ class SecureEnclaveSinglePromptTests: XCTestCase
         XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
         XCTAssertEqual(.itemNotFound, equivalentValet.string(forKey: key, withPrompt: ""))
     }
-    
-    @available (*, deprecated)
-    func test_backwardsCompatibility_withLegacyValet()
-    {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
-        let deprecatedValet = VALLegacySinglePromptSecureEnclaveValet(identifier: valet.identifier.description)!
-        XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
-        XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
-    }
-    
+
     // MARK: allKeys
     
     func test_allKeys()
@@ -140,6 +128,8 @@ class SecureEnclaveSinglePromptTests: XCTestCase
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
         #elseif os(OSX)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        #elseif os(tvOS)
+            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-tvOS-Test-Host-App")!
         #else
             XCTFail()
         #endif

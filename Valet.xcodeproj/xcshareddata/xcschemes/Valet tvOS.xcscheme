@@ -14,9 +14,23 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAF894731B053E0400EDAD6C"
-               BuildableName = "ValetTouchIDTest.app"
-               BlueprintName = "ValetTouchIDTest"
+               BlueprintIdentifier = "16C3B06C204B1DB800B4D0B4"
+               BuildableName = "Valet.framework"
+               BlueprintName = "Valet tvOS"
+               ReferencedContainer = "container:Valet.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "16C3B096204B1E4C00B4D0B4"
+               BuildableName = "Valet tvOS Tests.xctest"
+               BlueprintName = "Valet tvOS Tests"
                ReferencedContainer = "container:Valet.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,13 +43,23 @@
       language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "16C3B096204B1E4C00B4D0B4"
+               BuildableName = "Valet tvOS Tests.xctest"
+               BlueprintName = "Valet tvOS Tests"
+               ReferencedContainer = "container:Valet.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAF894731B053E0400EDAD6C"
-            BuildableName = "ValetTouchIDTest.app"
-            BlueprintName = "ValetTouchIDTest"
+            BlueprintIdentifier = "16C3B06C204B1DB800B4D0B4"
+            BuildableName = "Valet.framework"
+            BlueprintName = "Valet tvOS"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -53,16 +77,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAF894731B053E0400EDAD6C"
-            BuildableName = "ValetTouchIDTest.app"
-            BlueprintName = "ValetTouchIDTest"
+            BlueprintIdentifier = "16C3B06C204B1DB800B4D0B4"
+            BuildableName = "Valet.framework"
+            BlueprintName = "Valet tvOS"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -72,16 +95,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAF894731B053E0400EDAD6C"
-            BuildableName = "ValetTouchIDTest.app"
-            BlueprintName = "ValetTouchIDTest"
+            BlueprintIdentifier = "16C3B06C204B1DB800B4D0B4"
+            BuildableName = "Valet.framework"
+            BlueprintName = "Valet tvOS"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

@@ -7,12 +7,46 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		165CDDAA204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDA9204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift */; };
+		165CDDAB204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDA9204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift */; };
+		165CDDAD204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDAC204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift */; };
+		165CDDAE204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDAC204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift */; };
+		165CDDC9204B26D400C96C2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDC8204B26D400C96C2E /* AppDelegate.swift */; };
+		165CDDCB204B26D400C96C2E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDCA204B26D400C96C2E /* ViewController.swift */; };
+		165CDDCE204B26D400C96C2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 165CDDCC204B26D400C96C2E /* Main.storyboard */; };
+		165CDDD0204B26D500C96C2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 165CDDCF204B26D500C96C2E /* Assets.xcassets */; };
 		168909381F7199D60057F636 /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; };
 		168909391F7199D60057F636 /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		16B5856F1F71DBE00038EE30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B5856E1F71DBE00038EE30 /* AppDelegate.swift */; };
 		16B585711F71DBE00038EE30 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B585701F71DBE00038EE30 /* ViewController.swift */; };
 		16B585731F71DBE00038EE30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16B585721F71DBE00038EE30 /* Assets.xcassets */; };
 		16B585761F71DBE00038EE30 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16B585741F71DBE00038EE30 /* Main.storyboard */; };
+		16C3B084204B1E1500B4D0B4 /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE11F71B6D200E8552D /* Accessibility.swift */; };
+		16C3B085204B1E1500B4D0B4 /* CloudAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE51F71B6D200E8552D /* CloudAccessibility.swift */; };
+		16C3B086204B1E1500B4D0B4 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE21F71B6D200E8552D /* ErrorHandler.swift */; };
+		16C3B087204B1E1500B4D0B4 /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDF1F71B6D200E8552D /* Identifier.swift */; };
+		16C3B088204B1E1500B4D0B4 /* KeychainQueryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE71F71B6D200E8552D /* KeychainQueryConvertible.swift */; };
+		16C3B089204B1E1500B4D0B4 /* MigrationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE91F71B6D300E8552D /* MigrationResult.swift */; };
+		16C3B08A204B1E1500B4D0B4 /* SecureEnclave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE01F71B6D200E8552D /* SecureEnclave.swift */; };
+		16C3B08B204B1E1500B4D0B4 /* SecureEnclaveAccessControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE81F71B6D200E8552D /* SecureEnclaveAccessControl.swift */; };
+		16C3B08C204B1E1500B4D0B4 /* SinglePromptSecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE41F71B6D200E8552D /* SinglePromptSecureEnclaveValet.swift */; };
+		16C3B08D204B1E1500B4D0B4 /* SecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE31F71B6D200E8552D /* SecureEnclaveValet.swift */; };
+		16C3B08E204B1E1500B4D0B4 /* Valet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE61F71B6D200E8552D /* Valet.swift */; };
+		16C3B08F204B1E1500B4D0B4 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDD1F71B6C400E8552D /* Configuration.swift */; };
+		16C3B090204B1E1500B4D0B4 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDC1F71B6C400E8552D /* Keychain.swift */; };
+		16C3B091204B1E1500B4D0B4 /* SecItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDE1F71B6C400E8552D /* SecItem.swift */; };
+		16C3B092204B1E1500B4D0B4 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDB1F71B6C400E8552D /* Service.swift */; };
+		16C3B09C204B1E4C00B4D0B4 /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C3B06D204B1DB800B4D0B4 /* Valet.framework */; };
+		16C3B0A3204B1EA700B4D0B4 /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16EB523D1F71BC6B00363869 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16C3B0A5204B203100B4D0B4 /* SecItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BED1F71B72C00E8552D /* SecItemTests.swift */; };
+		16C3B0A6204B203100B4D0B4 /* SecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BEE1F71B72C00E8552D /* SecureEnclaveTests.swift */; };
+		16C3B0A7204B203100B4D0B4 /* SecureEnclaveSinglePromptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */; };
+		16C3B0A8204B203100B4D0B4 /* SynchronizableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BEF1F71B72C00E8552D /* SynchronizableTests.swift */; };
+		16C3B0A9204B207F00B4D0B4 /* ValetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BF31F71B72C00E8552D /* ValetTests.swift */; };
+		16C3B0AB204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C3B0AA204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift */; };
+		16C3B0AC204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C3B0AA204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift */; };
+		16C3B0AE204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C3B0AD204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift */; };
+		16C3B0AF204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C3B0AD204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift */; };
 		16E04C011F71B76900E8552D /* MacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BF21F71B72C00E8552D /* MacTests.swift */; };
 		16E04C021F71B76900E8552D /* SecItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BED1F71B72C00E8552D /* SecItemTests.swift */; };
 		16E04C031F71B76900E8552D /* SecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BEE1F71B72C00E8552D /* SecureEnclaveTests.swift */; };
@@ -91,12 +125,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		165CDDD6204B275000C96C2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 165CDDC5204B26D400C96C2E;
+			remoteInfo = "Valet tvOS Test Host App";
+		};
 		1689093A1F7199D60057F636 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 26E6827B1BA8B3F900EFF4EA;
 			remoteInfo = "Valet iOS";
+		};
+		16C3B09D204B1E4C00B4D0B4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 16C3B06C204B1DB800B4D0B4;
+			remoteInfo = "Valet tvOS";
 		};
 		371150B81E2962FC004A45D4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -136,6 +184,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		165CDDA9204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveBackwardsCompatibilityTests.swift; sourceTree = "<group>"; };
+		165CDDAC204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift; sourceTree = "<group>"; };
+		165CDDC6204B26D400C96C2E /* Valet tvOS Test Host App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Valet tvOS Test Host App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		165CDDC8204B26D400C96C2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		165CDDCA204B26D400C96C2E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		165CDDCD204B26D400C96C2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		165CDDCF204B26D500C96C2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		165CDDD1204B26D500C96C2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		165CDDD5204B26F700C96C2E /* Valet tvOS Test Host App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Valet tvOS Test Host App.entitlements"; sourceTree = "<group>"; };
 		16B5856C1F71DBE00038EE30 /* Valet macOS Test Host App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Valet macOS Test Host App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		16B5856E1F71DBE00038EE30 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		16B585701F71DBE00038EE30 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -143,6 +200,10 @@
 		16B585751F71DBE00038EE30 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		16B585771F71DBE00038EE30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16B585781F71DBE00038EE30 /* Valet_macOS_Test_Host_App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Valet_macOS_Test_Host_App.entitlements; sourceTree = "<group>"; };
+		16C3B06D204B1DB800B4D0B4 /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		16C3B097204B1E4C00B4D0B4 /* Valet tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Valet tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		16C3B0AA204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronizableBackwardsCompatibilityTests.swift; sourceTree = "<group>"; };
+		16C3B0AD204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValetBackwardsCompatibilityTests.swift; sourceTree = "<group>"; };
 		16E04BDB1F71B6C400E8552D /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		16E04BDC1F71B6C400E8552D /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		16E04BDD1F71B6C400E8552D /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
@@ -204,10 +265,32 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		165CDDC3204B26D400C96C2E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		16B585691F71DBE00038EE30 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16C3B069204B1DB800B4D0B4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16C3B094204B1E4C00B4D0B4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16C3B09C204B1E4C00B4D0B4 /* Valet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,6 +340,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		165CDDC7204B26D400C96C2E /* Valet tvOS Test Host App */ = {
+			isa = PBXGroup;
+			children = (
+				165CDDD5204B26F700C96C2E /* Valet tvOS Test Host App.entitlements */,
+				165CDDC8204B26D400C96C2E /* AppDelegate.swift */,
+				165CDDCA204B26D400C96C2E /* ViewController.swift */,
+				165CDDCC204B26D400C96C2E /* Main.storyboard */,
+				165CDDCF204B26D500C96C2E /* Assets.xcassets */,
+				165CDDD1204B26D500C96C2E /* Info.plist */,
+			);
+			path = "Valet tvOS Test Host App";
+			sourceTree = "<group>";
+		};
 		168909331F7199B50057F636 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,10 +414,14 @@
 				16E04BF21F71B72C00E8552D /* MacTests.swift */,
 				16E04BED1F71B72C00E8552D /* SecItemTests.swift */,
 				16E04BEE1F71B72C00E8552D /* SecureEnclaveTests.swift */,
+				165CDDA9204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift */,
 				AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */,
+				165CDDAC204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift */,
 				16E04BEF1F71B72C00E8552D /* SynchronizableTests.swift */,
+				16C3B0AA204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift */,
 				16E04BF11F71B72C00E8552D /* ValetTests-Bridging-Header.h */,
 				16E04BF31F71B72C00E8552D /* ValetTests.swift */,
+				16C3B0AD204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift */,
 				16E04BEC1F71B70C00E8552D /* Legacy */,
 			);
 			path = Tests;
@@ -367,6 +467,7 @@
 				EAF894751B053E0500EDAD6C /* ValetTouchIDTest */,
 				371150A61E2962D8004A45D4 /* Valet iOS Test Host App */,
 				16B5856D1F71DBE00038EE30 /* Valet macOS Test Host App */,
+				165CDDC7204B26D400C96C2E /* Valet tvOS Test Host App */,
 				EA1E1F841A8C46080067C991 /* Products */,
 				168909331F7199B50057F636 /* Frameworks */,
 			);
@@ -382,6 +483,9 @@
 				26E6828A1BA8B4B200EFF4EA /* Valet.framework */,
 				371150A51E2962D8004A45D4 /* Valet iOS Test Host App.app */,
 				16B5856C1F71DBE00038EE30 /* Valet macOS Test Host App.app */,
+				16C3B06D204B1DB800B4D0B4 /* Valet.framework */,
+				16C3B097204B1E4C00B4D0B4 /* Valet tvOS Tests.xctest */,
+				165CDDC6204B26D400C96C2E /* Valet tvOS Test Host App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -403,6 +507,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		16C3B06A204B1DB800B4D0B4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16C3B0A3204B1EA700B4D0B4 /* Valet.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		16EB52401F71BCF700363869 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -450,6 +562,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		165CDDC5204B26D400C96C2E /* Valet tvOS Test Host App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 165CDDD2204B26D500C96C2E /* Build configuration list for PBXNativeTarget "Valet tvOS Test Host App" */;
+			buildPhases = (
+				165CDDC2204B26D400C96C2E /* Sources */,
+				165CDDC3204B26D400C96C2E /* Frameworks */,
+				165CDDC4204B26D400C96C2E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Valet tvOS Test Host App";
+			productName = "Valet tvOS Test Host App";
+			productReference = 165CDDC6204B26D400C96C2E /* Valet tvOS Test Host App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		16B5856B1F71DBE00038EE30 /* Valet macOS Test Host App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16B585791F71DBE00038EE30 /* Build configuration list for PBXNativeTarget "Valet macOS Test Host App" */;
@@ -466,6 +595,43 @@
 			productName = "Valet macOS Test Host App";
 			productReference = 16B5856C1F71DBE00038EE30 /* Valet macOS Test Host App.app */;
 			productType = "com.apple.product-type.application";
+		};
+		16C3B06C204B1DB800B4D0B4 /* Valet tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16C3B072204B1DB800B4D0B4 /* Build configuration list for PBXNativeTarget "Valet tvOS" */;
+			buildPhases = (
+				16C3B068204B1DB800B4D0B4 /* Sources */,
+				16C3B069204B1DB800B4D0B4 /* Frameworks */,
+				16C3B06A204B1DB800B4D0B4 /* Headers */,
+				16C3B06B204B1DB800B4D0B4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Valet tvOS";
+			productName = "Valet tvOS";
+			productReference = 16C3B06D204B1DB800B4D0B4 /* Valet.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		16C3B096204B1E4C00B4D0B4 /* Valet tvOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16C3B09F204B1E4C00B4D0B4 /* Build configuration list for PBXNativeTarget "Valet tvOS Tests" */;
+			buildPhases = (
+				16C3B093204B1E4C00B4D0B4 /* Sources */,
+				16C3B094204B1E4C00B4D0B4 /* Frameworks */,
+				16C3B095204B1E4C00B4D0B4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				16C3B09E204B1E4C00B4D0B4 /* PBXTargetDependency */,
+				165CDDD7204B275000C96C2E /* PBXTargetDependency */,
+			);
+			name = "Valet tvOS Tests";
+			productName = "Valet tvOS Tests";
+			productReference = 16C3B097204B1E4C00B4D0B4 /* Valet tvOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		26E6827B1BA8B3F900EFF4EA /* Valet iOS */ = {
 			isa = PBXNativeTarget;
@@ -584,10 +750,20 @@
 		EA1E1F7B1A8C46080067C991 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0900;
+				LastSwiftUpdateCheck = 0920;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Square, Inc.";
 				TargetAttributes = {
+					165CDDC5204B26D400C96C2E = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = 9XUJ7M53NG;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
+					};
 					16B5856B1F71DBE00038EE30 = {
 						CreatedOnToolsVersion = 9.0;
 						DevelopmentTeam = 9XUJ7M53NG;
@@ -600,6 +776,17 @@
 								enabled = 1;
 							};
 						};
+					};
+					16C3B06C204B1DB800B4D0B4 = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = 9XUJ7M53NG;
+						ProvisioningStyle = Manual;
+					};
+					16C3B096204B1E4C00B4D0B4 = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = 9XUJ7M53NG;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 165CDDC5204B26D400C96C2E;
 					};
 					26E6827B1BA8B3F900EFF4EA = {
 						CreatedOnToolsVersion = 7.0;
@@ -654,24 +841,50 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				26E6827B1BA8B3F900EFF4EA /* Valet iOS */,
 				EA1E1F8D1A8C46090067C991 /* Valet iOS Tests */,
 				EAF894731B053E0400EDAD6C /* ValetTouchIDTest */,
-				EAEAA88B1B167A8700F7AA98 /* Valet Mac Tests */,
-				26E6827B1BA8B3F900EFF4EA /* Valet iOS */,
 				26E682891BA8B4B200EFF4EA /* Valet Mac */,
+				EAEAA88B1B167A8700F7AA98 /* Valet Mac Tests */,
+				16C3B06C204B1DB800B4D0B4 /* Valet tvOS */,
+				16C3B096204B1E4C00B4D0B4 /* Valet tvOS Tests */,
 				371150A41E2962D8004A45D4 /* Valet iOS Test Host App */,
 				16B5856B1F71DBE00038EE30 /* Valet macOS Test Host App */,
+				165CDDC5204B26D400C96C2E /* Valet tvOS Test Host App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		165CDDC4204B26D400C96C2E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				165CDDD0204B26D500C96C2E /* Assets.xcassets in Resources */,
+				165CDDCE204B26D400C96C2E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		16B5856A1F71DBE00038EE30 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				16B585731F71DBE00038EE30 /* Assets.xcassets in Resources */,
 				16B585761F71DBE00038EE30 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16C3B06B204B1DB800B4D0B4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16C3B095204B1E4C00B4D0B4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -726,12 +939,55 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		165CDDC2204B26D400C96C2E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				165CDDCB204B26D400C96C2E /* ViewController.swift in Sources */,
+				165CDDC9204B26D400C96C2E /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		16B585681F71DBE00038EE30 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				16B585711F71DBE00038EE30 /* ViewController.swift in Sources */,
 				16B5856F1F71DBE00038EE30 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16C3B068204B1DB800B4D0B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16C3B084204B1E1500B4D0B4 /* Accessibility.swift in Sources */,
+				16C3B085204B1E1500B4D0B4 /* CloudAccessibility.swift in Sources */,
+				16C3B086204B1E1500B4D0B4 /* ErrorHandler.swift in Sources */,
+				16C3B087204B1E1500B4D0B4 /* Identifier.swift in Sources */,
+				16C3B088204B1E1500B4D0B4 /* KeychainQueryConvertible.swift in Sources */,
+				16C3B089204B1E1500B4D0B4 /* MigrationResult.swift in Sources */,
+				16C3B08A204B1E1500B4D0B4 /* SecureEnclave.swift in Sources */,
+				16C3B08B204B1E1500B4D0B4 /* SecureEnclaveAccessControl.swift in Sources */,
+				16C3B08C204B1E1500B4D0B4 /* SinglePromptSecureEnclaveValet.swift in Sources */,
+				16C3B08D204B1E1500B4D0B4 /* SecureEnclaveValet.swift in Sources */,
+				16C3B08E204B1E1500B4D0B4 /* Valet.swift in Sources */,
+				16C3B08F204B1E1500B4D0B4 /* Configuration.swift in Sources */,
+				16C3B090204B1E1500B4D0B4 /* Keychain.swift in Sources */,
+				16C3B091204B1E1500B4D0B4 /* SecItem.swift in Sources */,
+				16C3B092204B1E1500B4D0B4 /* Service.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16C3B093204B1E4C00B4D0B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16C3B0A9204B207F00B4D0B4 /* ValetTests.swift in Sources */,
+				16C3B0A5204B203100B4D0B4 /* SecItemTests.swift in Sources */,
+				16C3B0A6204B203100B4D0B4 /* SecureEnclaveTests.swift in Sources */,
+				16C3B0A7204B203100B4D0B4 /* SecureEnclaveSinglePromptTests.swift in Sources */,
+				16C3B0A8204B203100B4D0B4 /* SynchronizableTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -796,10 +1052,14 @@
 				16E04C081F71B76A00E8552D /* SecureEnclaveTests.swift in Sources */,
 				16E04C0A1F71B76A00E8552D /* ValetTests.swift in Sources */,
 				16E04C071F71B76A00E8552D /* SecItemTests.swift in Sources */,
+				16C3B0AB204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift in Sources */,
+				165CDDAA204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift in Sources */,
 				16E04C0D1F71B78700E8552D /* VALLegacySecureEnclaveValet.m in Sources */,
 				16E04C091F71B76A00E8552D /* SynchronizableTests.swift in Sources */,
+				165CDDAD204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift in Sources */,
 				16E04C0F1F71B78700E8552D /* VALSynchronizableValet.m in Sources */,
 				16E04C0E1F71B78700E8552D /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */,
+				16C3B0AE204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift in Sources */,
 				16E04C101F71B78700E8552D /* VALLegacyValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -815,9 +1075,13 @@
 				16E04C111F71B78800E8552D /* VALLegacySecureEnclaveValet.m in Sources */,
 				16E04C041F71B76900E8552D /* SynchronizableTests.swift in Sources */,
 				16E04C131F71B78800E8552D /* VALSynchronizableValet.m in Sources */,
+				16C3B0AC204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift in Sources */,
+				16C3B0AF204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift in Sources */,
 				16E04C121F71B78800E8552D /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */,
 				16E04C141F71B78800E8552D /* VALLegacyValet.m in Sources */,
 				16E04C011F71B76900E8552D /* MacTests.swift in Sources */,
+				165CDDAB204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift in Sources */,
+				165CDDAE204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,10 +1097,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		165CDDD7204B275000C96C2E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 165CDDC5204B26D400C96C2E /* Valet tvOS Test Host App */;
+			targetProxy = 165CDDD6204B275000C96C2E /* PBXContainerItemProxy */;
+		};
 		1689093B1F7199D60057F636 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 26E6827B1BA8B3F900EFF4EA /* Valet iOS */;
 			targetProxy = 1689093A1F7199D60057F636 /* PBXContainerItemProxy */;
+		};
+		16C3B09E204B1E4C00B4D0B4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 16C3B06C204B1DB800B4D0B4 /* Valet tvOS */;
+			targetProxy = 16C3B09D204B1E4C00B4D0B4 /* PBXContainerItemProxy */;
 		};
 		371150B91E2962FC004A45D4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -856,6 +1130,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		165CDDCC204B26D400C96C2E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				165CDDCD204B26D400C96C2E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		16B585741F71DBE00038EE30 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -899,6 +1181,63 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		165CDDD3204B26D500C96C2E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "Valet tvOS Test Host App/Valet tvOS Test Host App.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Valet tvOS Test Host App/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.Valet-tvOS-Test-Host-App";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = appletvos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		165CDDD4204B26D500C96C2E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "Valet tvOS Test Host App/Valet tvOS Test Host App.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Valet tvOS Test Host App/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.Valet-tvOS-Test-Host-App";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Release;
+		};
 		16B5857A1F71DBE00038EE30 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -949,6 +1288,128 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		16C3B073204B1DB800B4D0B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.square.Valet;
+				PRODUCT_NAME = Valet;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		16C3B074204B1DB800B4D0B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.square.Valet;
+				PRODUCT_NAME = Valet;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		16C3B0A0204B1E4C00B4D0B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.Valet-tvOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = appletvos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Valet tvOS Test Host App.app/Valet tvOS Test Host App";
+			};
+			name = Debug;
+		};
+		16C3B0A1204B1E4C00B4D0B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.Valet-tvOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Valet tvOS Test Host App.app/Valet tvOS Test Host App";
 			};
 			name = Release;
 		};
@@ -1360,11 +1821,38 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		165CDDD2204B26D500C96C2E /* Build configuration list for PBXNativeTarget "Valet tvOS Test Host App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				165CDDD3204B26D500C96C2E /* Debug */,
+				165CDDD4204B26D500C96C2E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		16B585791F71DBE00038EE30 /* Build configuration list for PBXNativeTarget "Valet macOS Test Host App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				16B5857A1F71DBE00038EE30 /* Debug */,
 				16B5857B1F71DBE00038EE30 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		16C3B072204B1DB800B4D0B4 /* Build configuration list for PBXNativeTarget "Valet tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16C3B073204B1DB800B4D0B4 /* Debug */,
+				16C3B074204B1DB800B4D0B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		16C3B09F204B1E4C00B4D0B4 /* Build configuration list for PBXNativeTarget "Valet tvOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16C3B0A0204B1E4C00B4D0B4 /* Debug */,
+				16C3B0A1204B1E4C00B4D0B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -23,7 +23,7 @@ import Foundation
 
 
 /// Reads and writes keychain elements that are stored on the Secure Enclave using Accessibility attribute `.whenPasscodeSetThisDeviceOnly`. The first access of these keychain elements will require the user to confirm their presence via Touch ID, Face ID, or passcode entry. If no passcode is set on the device, accessing the keychain via a `SinglePromptSecureEnclaveValet` will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device.
-@available(macOS 10.11, *)
+@available(tvOS 10.0, macOS 10.11, *)
 @objc(VALSinglePromptSecureEnclaveValet)
 public final class SinglePromptSecureEnclaveValet: NSObject {
     
@@ -265,7 +265,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
 // MARK: - Objective-C Compatibility
 
 
-@available(macOS 10.11, *)
+@available(tvOS 10.0, macOS 10.11, *)
 extension SinglePromptSecureEnclaveValet {
     
     // MARK: Public Class Methods

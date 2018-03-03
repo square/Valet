@@ -4,5 +4,6 @@ before_script:
     - bundle install
 script:
     - xcodebuild -project Valet.xcodeproj -scheme "Valet iOS" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=11.0,name=iPhone 7" -configuration Debug -PBXBuildsContinueAfterErrors=0 build test
+    - xcodebuild -project Valet.xcodeproj -scheme "Valet tvOS" -sdk appletvsimulator11.0 -destination "platform=tvOS Simulator,name=Apple TV" -configuration Debug -PBXBuildsContinueAfterErrors=0 build test
     - xcodebuild -project Valet.xcodeproj -scheme "Valet Mac" -sdk macosx10.13 -configuration Debug -destination "platform=OS X" -PBXBuildsContinueAfterErrors=0 build test
     - bundle exec pod lib lint --verbose --fail-fast
