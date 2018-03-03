@@ -99,7 +99,7 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable 
     }
     
     internal static func allValues() -> [SecureEnclaveAccessControl] {
-        if #available(OSX 10.12.1, *) {
+        if #available(macOS 10.12.1, *) {
             return [
                 .userPresence,
                 .biometricAny,

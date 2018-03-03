@@ -20,7 +20,9 @@
 
 import Foundation
 @testable import Valet
-import XCTest
+#if !os(watchOS)
+    import XCTest
+#endif
 
 
 class SecureEnclaveTests: XCTestCase
@@ -126,10 +128,12 @@ class SecureEnclaveTests: XCTestCase
         let sharedAccessGroupIdentifier: Identifier
         #if os(iOS)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
-        #elseif os(OSX)
+        #elseif os(macOS)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
         #elseif os(tvOS)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-tvOS-Test-Host-App")!
+        #elseif os(watchOS)
+            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension")!
         #else
             XCTFail()
         #endif

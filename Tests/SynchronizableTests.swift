@@ -20,7 +20,9 @@
 
 import Foundation
 @testable import Valet
-import XCTest
+#if !os(watchOS)
+    import XCTest
+#endif
 
 
 class CloudTests: XCTestCase
@@ -72,8 +74,8 @@ class CloudTests: XCTestCase
             return
         }
         let otherValet = Valet.iCloudValet(with: valet.identifier, accessibility: accessibility)
-        XCTAssert(valet == otherValet)
-        XCTAssert(valet === otherValet)
+        XCTAssertTrue(valet == otherValet)
+        XCTAssertTrue(valet === otherValet)
     }
     
     func test_setStringForKey()

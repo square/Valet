@@ -152,7 +152,7 @@ class SinglePromptSecureEnclaveTests: XCTestCase
         let sharedAccessGroupIdentifier: Identifier
         #if os(iOS)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
-        #elseif os(OSX)
+        #elseif os(macOS)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
         #else
             XCTFail()
