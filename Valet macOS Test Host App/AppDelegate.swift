@@ -1,9 +1,9 @@
 //
-//  Valet.h
-//  Valet
+//  AppDelegate.swift
+//  Valet macOS Test Host App
 //
-//  Created by Dan Federman on 1/21/15.
-//  Copyright 2015 Square, Inc.
+//  Created by Dan Federman on 9/19/17.
+//  Copyright © 2017 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -18,7 +18,21 @@
 //  limitations under the License.
 //
 
-#import <Valet/VALValet.h>
-#import <Valet/VALSecureEnclaveValet.h>
-#import <Valet/VALSynchronizableValet.h>
-#import <Valet/VALSinglePromptSecureEnclaveValet.h>
+import Cocoa
+
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate {
+
+
+
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        // Insert code here to initialize your application
+    }
+
+    func applicationWillTerminate(_ aNotification: Notification) {
+        // Insert code here to tear down your application
+    }
+
+
+}
+

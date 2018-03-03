@@ -19,7 +19,7 @@
 //
 
 #import "VALSynchronizableValet.h"
-#import "VALValet_Protected.h"
+#import "VALLegacyValet_Protected.h"
 
 #import "ValetDefines.h"
 
@@ -58,9 +58,9 @@
 
 #pragma mark - Initialization
 
-- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALLegacyAccessibility)accessibility;
 {
-    VALCheckCondition(accessibility == VALAccessibilityWhenUnlocked || accessibility == VALAccessibilityAfterFirstUnlock || accessibility == VALAccessibilityAlways, nil, @"Accessibility must not be scoped to this device");
+    VALCheckCondition(accessibility == VALLegacyAccessibilityWhenUnlocked || accessibility == VALLegacyAccessibilityAfterFirstUnlock || accessibility == VALLegacyAccessibilityAlways, nil, @"Accessibility must not be scoped to this device");
     VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
     
     self = [super initWithIdentifier:identifier accessibility:accessibility];
@@ -74,9 +74,9 @@
     return [[self class] sharedValetForValet:self];
 }
 
-- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALLegacyAccessibility)accessibility;
 {
-    VALCheckCondition(accessibility == VALAccessibilityWhenUnlocked || accessibility == VALAccessibilityAfterFirstUnlock || accessibility == VALAccessibilityAlways, nil, @"Accessibility must not be scoped to this device");
+    VALCheckCondition(accessibility == VALLegacyAccessibilityWhenUnlocked || accessibility == VALLegacyAccessibilityAfterFirstUnlock || accessibility == VALLegacyAccessibilityAlways, nil, @"Accessibility must not be scoped to this device");
     VALCheckCondition([[self class] supportsSynchronizableKeychainItems], nil, @"This device does not support synchronizing data to iCloud.");
     
     self = [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessibility:accessibility];

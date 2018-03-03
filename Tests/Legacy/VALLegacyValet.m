@@ -1,5 +1,5 @@
 //
-//  VALValet.m
+//  VALLegacyValet.m
 //  Valet
 //
 //  Created by Dan Federman on 3/16/15.
@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import "VALValet_Protected.h"
+#import "VALLegacyValet_Protected.h"
 
 #import "ValetDefines.h"
 
@@ -27,24 +27,24 @@ NSString * const VALMigrationErrorDomain = @"VALMigrationErrorDomain";
 NSString * const VALCanAccessKeychainCanaryKey = @"VAL_KeychainCanaryUsername";
 
 
-NSString *VALStringForAccessibility(VALAccessibility accessibility)
+NSString *VALStringForAccessibility(VALLegacyAccessibility accessibility)
 {
     switch (accessibility) {
-        case VALAccessibilityWhenUnlocked:
+        case VALLegacyAccessibilityWhenUnlocked:
             return @"AccessibleWhenUnlocked";
-        case VALAccessibilityAfterFirstUnlock:
+        case VALLegacyAccessibilityAfterFirstUnlock:
             return @"AccessibleAfterFirstUnlock";
-        case VALAccessibilityAlways:
+        case VALLegacyAccessibilityAlways:
             return @"AccessibleAlways";
 #if (TARGET_OS_IPHONE && __IPHONE_8_0) || __MAC_10_10
-        case VALAccessibilityWhenPasscodeSetThisDeviceOnly:
+        case VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly:
             return @"AccessibleWhenPasscodeSetThisDeviceOnly";
 #endif
-        case VALAccessibilityWhenUnlockedThisDeviceOnly:
+        case VALLegacyAccessibilityWhenUnlockedThisDeviceOnly:
             return @"AccessibleWhenUnlockedThisDeviceOnly";
-        case VALAccessibilityAfterFirstUnlockThisDeviceOnly:
+        case VALLegacyAccessibilityAfterFirstUnlockThisDeviceOnly:
             return @"AccessibleAfterFirstUnlockThisDeviceOnly";
-        case VALAccessibilityAlwaysThisDeviceOnly:
+        case VALLegacyAccessibilityAlwaysThisDeviceOnly:
             return @"AccessibleAlwaysThisDeviceOnly";
     }
 }
@@ -127,7 +127,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
 }
 
 
-@interface VALValet ()
+@interface VALLegacyValet ()
 
 /// The service identifier within the baseQuery (kSecAttrService).
 @property (nonnull, copy, readonly) NSString *secServiceIdentifier;
@@ -138,11 +138,11 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
 @end
 
 
-@implementation VALValet
+@implementation VALLegacyValet
 
 #pragma mark - Protected Class Methods
 
-+ (nonnull id)sharedValetForValet:(nonnull VALValet *)valet;
++ (nonnull id)sharedValetForValet:(nonnull VALLegacyValet *)valet;
 {
     @synchronized(self) {
         static NSMapTable *sServiceIdentifierToWeakValet = nil;
@@ -151,7 +151,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
             sServiceIdentifierToWeakValet = [NSMapTable strongToWeakObjectsMapTable];
         });
         
-        VALValet *existingValet = [sServiceIdentifierToWeakValet objectForKey:valet.secServiceIdentifier];
+        VALLegacyValet *existingValet = [sServiceIdentifierToWeakValet objectForKey:valet.secServiceIdentifier];
         if (existingValet != nil) {
             return existingValet;
         }
@@ -161,21 +161,22 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     }
 }
 
-+ (nullable NSMutableDictionary *)mutableBaseQueryWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility initializer:(nonnull SEL)initializer;
++ (nullable NSMutableDictionary *)mutableBaseQueryWithIdentifier:(nonnull NSString *)identifier accessibility:(VALLegacyAccessibility)accessibility initializer:(nonnull SEL)initializer;
 {
     VALCheckCondition(identifier.length > 0, nil, @"Must provide a valid identifier");
     
+    NSString *const legacyClassNameForBackwardCompatibility = [NSStringFromClass(self) stringByReplacingOccurrencesOfString:@"Legacy" withString:@""];
     return [@{
               // Valet only handles generic passwords.
               (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
               // Use the identifier, Valet type and accessibility settings to create the keychain service name.
-              (__bridge id)kSecAttrService : [NSString stringWithFormat:@"VAL_%@_%@_%@_%@", NSStringFromClass(self), NSStringFromSelector(initializer), identifier, VALStringForAccessibility(accessibility)],
+              (__bridge id)kSecAttrService : [NSString stringWithFormat:@"VAL_%@_%@_%@_%@", legacyClassNameForBackwardCompatibility, NSStringFromSelector(initializer), identifier, VALStringForAccessibility(accessibility)],
               // Set our accessibility.
               (__bridge id)kSecAttrAccessible : [self _secAccessibilityAttributeForAccessibility:accessibility],
               } mutableCopy];
 }
 
-+ (nullable NSMutableDictionary *)mutableBaseQueryWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility initializer:(nonnull SEL)initializer;
++ (nullable NSMutableDictionary *)mutableBaseQueryWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALLegacyAccessibility)accessibility initializer:(nonnull SEL)initializer;
 {
     NSMutableDictionary *const mutableBaseQuery = [self mutableBaseQueryWithIdentifier:sharedAccessGroupIdentifier accessibility:accessibility initializer:initializer];
     
@@ -186,24 +187,24 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
 
 #pragma mark - Private Class Methods
 
-+ (nonnull id)_secAccessibilityAttributeForAccessibility:(VALAccessibility)accessibility;
++ (nonnull id)_secAccessibilityAttributeForAccessibility:(VALLegacyAccessibility)accessibility;
 {
     switch (accessibility) {
-        case VALAccessibilityWhenUnlocked:
+        case VALLegacyAccessibilityWhenUnlocked:
             return (__bridge id)kSecAttrAccessibleWhenUnlocked;
-        case VALAccessibilityAfterFirstUnlock:
+        case VALLegacyAccessibilityAfterFirstUnlock:
             return (__bridge id)kSecAttrAccessibleAfterFirstUnlock;
-        case VALAccessibilityAlways:
+        case VALLegacyAccessibilityAlways:
             return (__bridge id)kSecAttrAccessibleAlways;
 #if (TARGET_OS_IPHONE && __IPHONE_8_0) || __MAC_10_10
-        case VALAccessibilityWhenPasscodeSetThisDeviceOnly:
+        case VALLegacyAccessibilityWhenPasscodeSetThisDeviceOnly:
             return (__bridge id)kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly;
 #endif
-        case VALAccessibilityWhenUnlockedThisDeviceOnly:
+        case VALLegacyAccessibilityWhenUnlockedThisDeviceOnly:
             return (__bridge id)kSecAttrAccessibleWhenUnlockedThisDeviceOnly;
-        case VALAccessibilityAfterFirstUnlockThisDeviceOnly:
+        case VALLegacyAccessibilityAfterFirstUnlockThisDeviceOnly:
             return (__bridge id)kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly;
-        case VALAccessibilityAlwaysThisDeviceOnly:
+        case VALLegacyAccessibilityAlwaysThisDeviceOnly:
             return (__bridge id)kSecAttrAccessibleAlwaysThisDeviceOnly;
     }
 }
@@ -237,7 +238,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
 
 #pragma mark - Initialization
 
-- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessibility:(VALLegacyAccessibility)accessibility;
 {
     VALCheckCondition(identifier.length > 0, nil, @"Valet requires an identifier");
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
@@ -253,7 +254,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     return [[self class] sharedValetForValet:self];
 }
 
-- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALAccessibility)accessibility;
+- (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessibility:(VALLegacyAccessibility)accessibility;
 {
     VALCheckCondition(sharedAccessGroupIdentifier.length > 0, nil, @"Valet requires a sharedAccessGroupIdentifier");
     VALCheckCondition(accessibility > 0, nil, @"Valet requires a valid accessibility setting");
@@ -274,8 +275,8 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
 
 - (BOOL)isEqual:(id)object;
 {
-    VALValet *const otherValet = (VALValet *)object;
-    return [otherValet isKindOfClass:[VALValet class]] && [self isEqualToValet:otherValet];
+    VALLegacyValet *const otherValet = (VALLegacyValet *)object;
+    return [otherValet isKindOfClass:[VALLegacyValet class]] && [self isEqualToValet:otherValet];
 }
 
 - (NSUInteger)hash;
@@ -298,7 +299,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
 
 #pragma mark - Public Methods
 
-- (BOOL)isEqualToValet:(nonnull VALValet *)otherValet;
+- (BOOL)isEqualToValet:(nonnull VALLegacyValet *)otherValet;
 {
     return [self.baseQuery isEqualToDictionary:otherValet.baseQuery];
 }
@@ -478,7 +479,7 @@ OSStatus VALAtomicSecItemDelete(__nonnull CFDictionaryRef query)
     return nil;
 }
 
-- (nullable NSError *)migrateObjectsFromValet:(VALValet *)valet removeOnCompletion:(BOOL)remove;
+- (nullable NSError *)migrateObjectsFromValet:(VALLegacyValet *)valet removeOnCompletion:(BOOL)remove;
 {
     return [self migrateObjectsMatchingQuery:valet.baseQuery removeOnCompletion:remove];
 }

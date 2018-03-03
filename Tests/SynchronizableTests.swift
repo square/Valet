@@ -1,0 +1,155 @@
+//
+//  SynchronizableTests.swift
+//  Valet iOS Tests
+//
+//  Created by Dan Federman and Eric Muller on 9/17/17.
+//  Copyright © 2017 Square, Inc.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
+import Foundation
+@testable import Valet
+import XCTest
+
+
+@available (iOS 8.2, OSX 10.11, *)
+class CloudTests: XCTestCase
+{
+    static let identifier = Identifier(nonEmpty: "valet_testing")!
+    static let accessibility = CloudAccessibility.whenUnlocked
+    let valet = Valet.iCloudValet(with: identifier, accessibility: accessibility)
+    let key = "key"
+    let passcode = "topsecret"
+    
+    override func setUp()
+    {
+        super.setUp()
+        
+        ErrorHandler.customAssertBody = { _, _, _, _ in
+            // Nothing to do here.
+        }
+        
+        valet.removeAllObjects()
+        let identifier = CloudTests.identifier
+        let allPermutations = Valet.iCloudPermutations(with: identifier) + Valet.iCloudPermutations(with: identifier, shared: true)
+        allPermutations.forEach { testValet, _ in testValet.removeAllObjects() }
+    }
+    
+    func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
+    {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
+        let localValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
+        XCTAssertFalse(valet == localValet)
+        XCTAssertFalse(valet === localValet)
+        
+        // Setting
+        XCTAssertTrue(valet.set(string: "butts", forKey: "cloud"))
+        XCTAssertEqual("butts", valet.string(forKey: "cloud"))
+        XCTAssertNil(localValet.string(forKey: "cloud"))
+        
+        // Removal
+        XCTAssertTrue(localValet.set(string: "snake people", forKey: "millennials"))
+        XCTAssertTrue(valet.removeObject(forKey: "millennials"))
+        XCTAssertEqual("snake people", localValet.string(forKey: "millennials"))
+    }
+    
+    func test_synchronizableValets_withEquivalentConfigurationsAreEqual() {
+        guard case let .iCloud(accessibility) = valet.configuration else {
+            XCTFail()
+            return
+        }
+        let otherValet = Valet.iCloudValet(with: valet.identifier, accessibility: accessibility)
+        XCTAssert(valet == otherValet)
+        XCTAssert(valet === otherValet)
+    }
+    
+    func test_setStringForKey()
+    {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
+        XCTAssertNil(valet.string(forKey: key))
+        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        XCTAssertEqual(passcode, valet.string(forKey: key))
+    }
+    
+    func test_removeObjectForKey()
+    {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
+        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        XCTAssertEqual(passcode, valet.string(forKey: key))
+        
+        XCTAssertTrue(valet.removeObject(forKey: key))
+        XCTAssertNil(valet.string(forKey: key))
+    }
+    
+    // MARK: canAccessKeychain
+    
+    func test_canAccessKeychain()
+    {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
+        Valet.iCloudPermutations(with: valet.identifier).forEach { permutation, _ in
+            XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
+        }
+    }
+    
+    func test_canAccessKeychain_sharedAccessGroup()
+    {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        
+        Valet.iCloudPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, _ in
+            XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
+        }
+    }
+    
+    // MARK: Backwards Compatibility
+    
+    func test_backwardsCompatibility_withLegacyValet() {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        Valet.iCloudPermutations(with: valet.identifier).forEach { permutation, legacyValet in
+            legacyValet.setString(passcode, forKey: key)
+
+            XCTAssertNotNil(legacyValet.string(forKey: key))
+            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
+        }
+    }
+
+    func test_backwardsCompatibility_withSharedAccessGroupLegacyValet() {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        Valet.iCloudPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
+            legacyValet.setString(passcode, forKey: key)
+
+            XCTAssertNotNil(legacyValet.string(forKey: key))
+            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
+        }
+    }
+}

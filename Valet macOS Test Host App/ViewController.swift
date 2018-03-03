@@ -1,9 +1,9 @@
 //
-//  VALSynchronizableValet.h
-//  Valet
+//  ViewController.swift
+//  Valet macOS Test Host App
 //
-//  Created by Dan Federman on 3/16/15.
-//  Copyright 2015 Square, Inc.
+//  Created by Dan Federman on 9/19/17.
+//  Copyright © 2017 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -18,13 +18,22 @@
 //  limitations under the License.
 //
 
-#import <Valet/VALValet.h>
+import Cocoa
+
+class ViewController: NSViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+    }
+
+    override var representedObject: Any? {
+        didSet {
+        // Update the view, if already loaded.
+        }
+    }
 
 
-/// Reads and writes keychain elements that are synchronized with iCloud (supported on devices on iOS 7.0.3 and later). Accessibility must not be scoped to this device.
-@interface VALSynchronizableValet : VALValet
+}
 
-/// @return YES if iCloud syncronizable keychain is supported on the current iOS version (7.0.3 and later).
-+ (BOOL)supportsSynchronizableKeychainItems;
-
-@end
