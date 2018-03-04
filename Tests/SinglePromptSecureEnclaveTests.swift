@@ -27,7 +27,7 @@ import XCTest
 class SinglePromptSecureEnclaveTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
-    let valet = SinglePromptSecureEnclaveValet.valet(with: identifier, accessControl: .userPresence)
+    var valet: SinglePromptSecureEnclaveValet!
     let key = "key"
     let passcode = "topsecret"
 
@@ -38,7 +38,11 @@ class SinglePromptSecureEnclaveTests: XCTestCase
         ErrorHandler.customAssertBody = { _, _, _, _ in
             // Nothing to do here.
         }
-        
+
+        guard AvailabilityEnforcer.canRunTest else {
+            return
+        }
+        valet = SinglePromptSecureEnclaveValet.valet(with: SinglePromptSecureEnclaveTests.identifier, accessControl: .userPresence)
         valet.removeObject(forKey: key)
     }
     
@@ -46,6 +50,9 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     
     func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_haveEqualPointers()
     {
+        guard AvailabilityEnforcer.canRunTest else {
+            return
+        }
         let equivalentValet = SinglePromptSecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertTrue(valet == equivalentValet)
         XCTAssertTrue(valet === equivalentValet)
@@ -53,6 +60,10 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     
     func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_canAccessSameData()
     {
+        guard AvailabilityEnforcer.canRunTest else {
+            return
+        }
+
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -65,6 +76,10 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     
     func test_SinglePromptSecureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
     {
+        guard AvailabilityEnforcer.canRunTest else {
+            return
+        }
+
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -80,6 +95,10 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     
     func test_allKeys()
     {
+        guard AvailabilityEnforcer.canRunTest else {
+            return
+        }
+
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -97,6 +116,10 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     }
     
     func test_allKeys_doesNotReflectValetImplementationDetails() {
+        guard AvailabilityEnforcer.canRunTest else {
+            return
+        }
+
         // Under the hood, Valet inserts a canary when calling `canAccessKeychain()` - this should not appear in `allKeys()`.
         _ = valet.canAccessKeychain()
         XCTAssertEqual(valet.allKeys(userPrompt: "it me"), Set())
@@ -106,6 +129,10 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     
     func test_canAccessKeychain()
     {
+        guard AvailabilityEnforcer.canRunTest else {
+            return
+        }
+
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -119,6 +146,10 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     }
     
     func test_canAccessKeychain_sharedAccessGroup() {
+        guard AvailabilityEnforcer.canRunTest else {
+            return
+        }
+
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -146,6 +177,10 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     
     func test_migrateObjectsMatchingQuery_failsForBadQuery()
     {
+        guard AvailabilityEnforcer.canRunTest else {
+            return
+        }
+
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -159,6 +194,10 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave()
     {
+        guard AvailabilityEnforcer.canRunTest else {
+            return
+        }
+
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -195,6 +234,10 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() {
+        guard AvailabilityEnforcer.canRunTest else {
+            return
+        }
+
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -219,4 +262,16 @@ class SinglePromptSecureEnclaveTests: XCTestCase
             XCTAssertEqual(otherValet.string(forKey: key), value)
         }
     }
+}
+
+private class AvailabilityEnforcer {
+    static var canRunTest: Bool = {
+        if #available(tvOS 10.0, *) {
+            return true
+        } else {
+            // XCTest is really dumb. It will run SinglePromptSecureEnclaveTests – which is marked as available starting on tvOS 10 – when running tests against tvOS 9.
+            // To avoid crashing when instantiating this class or when running tests on tvOS 9, we manually check for availability here.
+            return false
+        }
+    }()
 }
