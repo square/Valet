@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/cocoapods/l/Valet.svg)](http://cocoadocs.org/docsets/Valet)
 [![Platform](https://img.shields.io/cocoapods/p/Valet.svg)](http://cocoadocs.org/docsets/Valet)
 
-Valet lets you securely store data in the iOS, tvOS, or macOS Keychain without knowing a thing about how the Keychain works. It’s easy. We promise.
+Valet lets you securely store data in the iOS, tvOS, watchOS, or macOS Keychain without knowing a thing about how the Keychain works. It’s easy. We promise.
 
 ## Getting Started
 
@@ -26,6 +26,14 @@ on tvOS:
 
 ```
 platform :tvos, '9.0'
+use_frameworks!
+pod 'Valet'
+```
+
+on watchOS:
+
+```
+platform :watchos, '2.0'
 use_frameworks!
 pod 'Valet'
 ```
@@ -135,7 +143,7 @@ let mySecureEnclaveValet = SecureEnclaveValet.valet(with: Identifier(nonEmpty: "
 VALSecureEnclaveValet *const mySecureEnclaveValet = [VALSecureEnclaveValet valetWithIdentifier:@"Druidia" accessControl:VALAccessControlUserPresence];
 ```
 
-This instance can be used to store and retrieve data in the Secure Enclave. Each time data is retrieved from this Valet, the user will be prompted to confirm their presence via Face ID, Touch ID, or by entering their device passcode. *If no passcode is set on the device, this instance will be unable to access or store data.* Data is removed from the Secure Enclave when the user removes a passcode from the device. Storing data using `SecureEnclaveValet` is the most secure way to store data on iOS, tvOS, and Mac OS.
+This instance can be used to store and retrieve data in the Secure Enclave. Each time data is retrieved from this Valet, the user will be prompted to confirm their presence via Face ID, Touch ID, or by entering their device passcode. *If no passcode is set on the device, this instance will be unable to access or store data.* Data is removed from the Secure Enclave when the user removes a passcode from the device. Storing data using `SecureEnclaveValet` is the most secure way to store data on iOS, tvOS, watchOS, and Mac OS.
 
 ```swift
 let mySecureEnclaveValet = SinglePromptSecureEnclaveValet.valet(with: Identifier(nonEmpty: "Druidia")!, accessControl: .userPresence)
@@ -169,6 +177,7 @@ Valet guarantees it will never fail to write to or read from the keychain unless
 * Xcode 9.0 or later. Earlier versions of Xcode require [Valet version 2.4.2](https://github.com/square/Valet/releases/tag/2.4.2).
 * iOS 9 or later.
 * tvOS 9 or later.
+* watchOS 2 or later.
 * macOS 10.11 or later.
 
 ### Migrating from Valet 2.*
