@@ -24,7 +24,7 @@ import XCTest
 
 
 @available(tvOS 10.0, *)
-extension SecureEnclaveSinglePromptTests {
+extension SinglePromptSecureEnclaveTests {
 
     @available (*, deprecated)
     func test_backwardsCompatibility_withLegacyValet()

@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		165CDDAA204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDA9204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift */; };
 		165CDDAB204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDA9204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift */; };
-		165CDDAD204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDAC204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift */; };
-		165CDDAE204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDAC204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift */; };
+		165CDDAD204B262400C96C2E /* SinglePromptSecureEnclaveBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDAC204B262400C96C2E /* SinglePromptSecureEnclaveBackwardsCompatibilityTests.swift */; };
+		165CDDAE204B262400C96C2E /* SinglePromptSecureEnclaveBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDAC204B262400C96C2E /* SinglePromptSecureEnclaveBackwardsCompatibilityTests.swift */; };
 		165CDDC9204B26D400C96C2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDC8204B26D400C96C2E /* AppDelegate.swift */; };
 		165CDDCB204B26D400C96C2E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDCA204B26D400C96C2E /* ViewController.swift */; };
 		165CDDCE204B26D400C96C2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 165CDDCC204B26D400C96C2E /* Main.storyboard */; };
@@ -40,7 +40,7 @@
 		16C3B0A3204B1EA700B4D0B4 /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16EB523D1F71BC6B00363869 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		16C3B0A5204B203100B4D0B4 /* SecItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BED1F71B72C00E8552D /* SecItemTests.swift */; };
 		16C3B0A6204B203100B4D0B4 /* SecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BEE1F71B72C00E8552D /* SecureEnclaveTests.swift */; };
-		16C3B0A7204B203100B4D0B4 /* SecureEnclaveSinglePromptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */; };
+		16C3B0A7204B203100B4D0B4 /* SinglePromptSecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11C5561F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift */; };
 		16C3B0A8204B203100B4D0B4 /* SynchronizableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BEF1F71B72C00E8552D /* SynchronizableTests.swift */; };
 		16C3B0A9204B207F00B4D0B4 /* ValetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BF31F71B72C00E8552D /* ValetTests.swift */; };
 		16C3B0AB204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C3B0AA204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift */; };
@@ -115,8 +115,8 @@
 		371150AD1E2962D8004A45D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150AB1E2962D8004A45D4 /* Main.storyboard */; };
 		371150AF1E2962D8004A45D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 371150AE1E2962D8004A45D4 /* Assets.xcassets */; };
 		371150B21E2962D8004A45D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150B01E2962D8004A45D4 /* LaunchScreen.storyboard */; };
-		AC11C5571F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */; };
-		AC11C5581F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */; };
+		AC11C5571F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11C5561F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift */; };
+		AC11C5581F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11C5561F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift */; };
 		AC89A3EC1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */; };
 		AC89A3EE1CC82738009A7121 /* ValetTouchIDTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3ED1CC82738009A7121 /* ValetTouchIDTestViewController.swift */; };
 		EAF894841B053E0500EDAD6C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAF894831B053E0500EDAD6C /* Images.xcassets */; };
@@ -185,7 +185,7 @@
 
 /* Begin PBXFileReference section */
 		165CDDA9204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveBackwardsCompatibilityTests.swift; sourceTree = "<group>"; };
-		165CDDAC204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift; sourceTree = "<group>"; };
+		165CDDAC204B262400C96C2E /* SinglePromptSecureEnclaveBackwardsCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePromptSecureEnclaveBackwardsCompatibilityTests.swift; sourceTree = "<group>"; };
 		165CDDC6204B26D400C96C2E /* Valet tvOS Test Host App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Valet tvOS Test Host App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		165CDDC8204B26D400C96C2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		165CDDCA204B26D400C96C2E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -251,7 +251,7 @@
 		371150B11E2962D8004A45D4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		371150B31E2962D8004A45D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37250B1D1E2DD55D008B4777 /* Valet iOS Test Host App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Valet iOS Test Host App.entitlements"; sourceTree = "<group>"; };
-		AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveSinglePromptTests.swift; sourceTree = "<group>"; };
+		AC11C5561F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePromptSecureEnclaveTests.swift; sourceTree = "<group>"; };
 		AC89A3EA1CC82426009A7121 /* ValetTouchIDTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ValetTouchIDTest-Bridging-Header.h"; sourceTree = "<group>"; };
 		AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetTouchIDTestAppDelegate.swift; sourceTree = "<group>"; };
 		AC89A3ED1CC82738009A7121 /* ValetTouchIDTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetTouchIDTestViewController.swift; sourceTree = "<group>"; };
@@ -415,8 +415,8 @@
 				16E04BED1F71B72C00E8552D /* SecItemTests.swift */,
 				16E04BEE1F71B72C00E8552D /* SecureEnclaveTests.swift */,
 				165CDDA9204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift */,
-				AC11C5561F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift */,
-				165CDDAC204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift */,
+				AC11C5561F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift */,
+				165CDDAC204B262400C96C2E /* SinglePromptSecureEnclaveBackwardsCompatibilityTests.swift */,
 				16E04BEF1F71B72C00E8552D /* SynchronizableTests.swift */,
 				16C3B0AA204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift */,
 				16E04BF11F71B72C00E8552D /* ValetTests-Bridging-Header.h */,
@@ -986,7 +986,7 @@
 				16C3B0A9204B207F00B4D0B4 /* ValetTests.swift in Sources */,
 				16C3B0A5204B203100B4D0B4 /* SecItemTests.swift in Sources */,
 				16C3B0A6204B203100B4D0B4 /* SecureEnclaveTests.swift in Sources */,
-				16C3B0A7204B203100B4D0B4 /* SecureEnclaveSinglePromptTests.swift in Sources */,
+				16C3B0A7204B203100B4D0B4 /* SinglePromptSecureEnclaveTests.swift in Sources */,
 				16C3B0A8204B203100B4D0B4 /* SynchronizableTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1048,7 +1048,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC11C5571F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift in Sources */,
+				AC11C5571F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift in Sources */,
 				16E04C081F71B76A00E8552D /* SecureEnclaveTests.swift in Sources */,
 				16E04C0A1F71B76A00E8552D /* ValetTests.swift in Sources */,
 				16E04C071F71B76A00E8552D /* SecItemTests.swift in Sources */,
@@ -1056,7 +1056,7 @@
 				165CDDAA204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift in Sources */,
 				16E04C0D1F71B78700E8552D /* VALLegacySecureEnclaveValet.m in Sources */,
 				16E04C091F71B76A00E8552D /* SynchronizableTests.swift in Sources */,
-				165CDDAD204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift in Sources */,
+				165CDDAD204B262400C96C2E /* SinglePromptSecureEnclaveBackwardsCompatibilityTests.swift in Sources */,
 				16E04C0F1F71B78700E8552D /* VALSynchronizableValet.m in Sources */,
 				16E04C0E1F71B78700E8552D /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */,
 				16C3B0AE204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift in Sources */,
@@ -1068,7 +1068,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC11C5581F8197C200AE9842 /* SecureEnclaveSinglePromptTests.swift in Sources */,
+				AC11C5581F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift in Sources */,
 				16E04C031F71B76900E8552D /* SecureEnclaveTests.swift in Sources */,
 				16E04C051F71B76900E8552D /* ValetTests.swift in Sources */,
 				16E04C021F71B76900E8552D /* SecItemTests.swift in Sources */,
@@ -1081,7 +1081,7 @@
 				16E04C141F71B78800E8552D /* VALLegacyValet.m in Sources */,
 				16E04C011F71B76900E8552D /* MacTests.swift in Sources */,
 				165CDDAB204B25D100C96C2E /* SecureEnclaveBackwardsCompatibilityTests.swift in Sources */,
-				165CDDAE204B262400C96C2E /* SecureEnclaveSinglePromptBackwardsCompatibilityTests.swift in Sources */,
+				165CDDAE204B262400C96C2E /* SinglePromptSecureEnclaveBackwardsCompatibilityTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

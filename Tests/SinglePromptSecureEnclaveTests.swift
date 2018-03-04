@@ -1,5 +1,5 @@
 //
-//  SecureEnclaveSinglePromptTests.swift
+//  SinglePromptSecureEnclaveTests.swift
 //  Valet
 //
 //  Created by Eric Muller on 10/1/17.
@@ -24,7 +24,7 @@ import XCTest
 
 
 @available(tvOS 10.0, *)
-class SecureEnclaveSinglePromptTests: XCTestCase
+class SinglePromptSecureEnclaveTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = SinglePromptSecureEnclaveValet.valet(with: identifier, accessControl: .userPresence)
