@@ -48,6 +48,7 @@
                 print("\n")
             }
             print("ALL TESTS PASSED")
+            exit(0)
         }
 
         // MARK: Class Private
