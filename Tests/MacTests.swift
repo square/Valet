@@ -28,7 +28,6 @@ import Valet
         // This test verifies that we are neutralizing the zero-day Mac OS X Access Control List vulnerability.
         // Whitepaper: https://drive.google.com/file/d/0BxxXk1d3yyuZOFlsdkNMSGswSGs/view
         // Square Corner blog post: https://corner.squareup.com/2015/06/valet-beats-the-ox-x-keychain-access-control-list-zero-day-vulnerability.html
-        @available (macOS 10.10, *)
         func test_setStringForKey_neutralizesMacOSAccessControlListVuln()
         {
             let valet = Valet.valet(with: Identifier(nonEmpty: "MacOSVulnTest")!, accessibility: .whenUnlocked)
