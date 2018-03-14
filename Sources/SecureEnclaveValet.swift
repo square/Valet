@@ -22,6 +22,7 @@ import Foundation
 
 
 /// Reads and writes keychain elements that are stored on the Secure Enclave using Accessibility attribute `.whenPasscodeSetThisDeviceOnly`. Accessing these keychain elements will require the user to confirm their presence via Touch ID, Face ID, or passcode entry. If no passcode is set on the device, accessing the keychain via a `SecureEnclaveValet` will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device.
+@available(macOS 10.11, *)
 @objc(VALSecureEnclaveValet)
 public final class SecureEnclaveValet: NSObject {
     
@@ -223,6 +224,7 @@ public final class SecureEnclaveValet: NSObject {
 // MARK: - Objective-C Compatibility
 
 
+@available(macOS 10.11, *)
 extension SecureEnclaveValet {
     
     // MARK: Public Class Methods

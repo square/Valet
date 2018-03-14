@@ -89,7 +89,12 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable 
                 return .userPresence
             }
         case .devicePasscode:
-            return .devicePasscode
+            if #available(macOS 10.11, *) {
+                return .devicePasscode
+            } else {
+                ErrorHandler.assertionFailure(".devicePasscode requires macOS 10.11.")
+                return .userPresence
+            }
         }
     }
     
