@@ -40,6 +40,16 @@ github "Square/Valet"
 
 Run `carthage` to build the framework and drag the built `Valet.framework` into your Xcode project.
 
+### Swift Package Manager
+
+Install with [Swift Package Manager](https://github.com/apple/swift-package-manager) by adding the following to your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/Square/Valet", from: "3.0.0"),
+],
+```
+
 ### Submodules
 
 Or manually checkout the submodule with `git submodule add git@github.com:Square/Valet.git`, drag Valet.xcodeproj to your project, and add Valet as a build dependency.
