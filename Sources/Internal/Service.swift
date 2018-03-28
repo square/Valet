@@ -52,6 +52,7 @@ internal enum Service: CustomStringConvertible, Equatable {
             configuration = desiredConfiguration
             
         case let .sharedAccessGroup(identifier, desiredConfiguration):
+            ErrorHandler.assert(!identifier.description.hasPrefix("\(SecItem.sharedAccessGroupPrefix)."), "Do not add the Bundle Seed ID as a prefix to your identifier. Valet prepends this value for you. Your Valet will not be able to access the keychain with the provided configuration")
             baseQuery[kSecAttrAccessGroup as String] = "\(SecItem.sharedAccessGroupPrefix).\(identifier.description)"
             configuration = desiredConfiguration
         }
