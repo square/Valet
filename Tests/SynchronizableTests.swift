@@ -23,7 +23,6 @@ import Foundation
 import XCTest
 
 
-@available (iOS 8.2, OSX 10.11, *)
 class CloudTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
@@ -43,7 +42,7 @@ class CloudTests: XCTestCase
         valet.removeAllObjects()
         let identifier = CloudTests.identifier
         let allPermutations = Valet.iCloudPermutations(with: identifier) + Valet.iCloudPermutations(with: identifier, shared: true)
-        allPermutations.forEach { testValet, _ in testValet.removeAllObjects() }
+        allPermutations.forEach { testValet in testValet.removeAllObjects() }
     }
     
     func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
@@ -109,7 +108,7 @@ class CloudTests: XCTestCase
             return
         }
         
-        Valet.iCloudPermutations(with: valet.identifier).forEach { permutation, _ in
+        Valet.iCloudPermutations(with: valet.identifier).forEach { permutation in
             XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
         }
     }
@@ -120,36 +119,8 @@ class CloudTests: XCTestCase
             return
         }
         
-        Valet.iCloudPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, _ in
+        Valet.iCloudPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation in
             XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
         }
-    }
-    
-    // MARK: Backwards Compatibility
-    
-    func test_backwardsCompatibility_withLegacyValet() {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-
-        Valet.iCloudPermutations(with: valet.identifier).forEach { permutation, legacyValet in
-            legacyValet.setString(passcode, forKey: key)
-
-            XCTAssertNotNil(legacyValet.string(forKey: key))
-            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
-        }
-    }
-
-    func test_backwardsCompatibility_withSharedAccessGroupLegacyValet() {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-
-        Valet.iCloudPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
-            legacyValet.setString(passcode, forKey: key)
-
-            XCTAssertNotNil(legacyValet.string(forKey: key))
-            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
-        }
-    }
+    }    
 }

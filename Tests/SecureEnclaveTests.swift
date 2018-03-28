@@ -23,7 +23,6 @@ import Foundation
 import XCTest
 
 
-@available (iOS 8, OSX 10.11, *)
 class SecureEnclaveTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
@@ -75,19 +74,7 @@ class SecureEnclaveTests: XCTestCase
         XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
         XCTAssertEqual(.itemNotFound, equivalentValet.string(forKey: key, withPrompt: ""))
     }
-    
-    @available (*, deprecated)
-    func test_backwardsCompatibility_withLegacyValet()
-    {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
         
-        let deprecatedValet = VALLegacySecureEnclaveValet(identifier: valet.identifier.description)!
-        XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
-        XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
-    }
-    
     // MARK: canAccessKeychain
     
     func test_canAccessKeychain()
@@ -114,6 +101,8 @@ class SecureEnclaveTests: XCTestCase
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
         #elseif os(OSX)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        #elseif os(tvOS)
+            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-tvOS-Test-Host-App")!
         #else
             XCTFail()
         #endif

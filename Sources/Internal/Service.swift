@@ -19,7 +19,6 @@
 //
 
 import Foundation
-import LocalAuthentication
 
 
 internal enum Service: CustomStringConvertible, Equatable {
