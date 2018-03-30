@@ -52,6 +52,15 @@ class SecureEnclaveTests: XCTestCase
         }
     }
 
+    func test_init_createsCorrectBackingService_sharedAccess() {
+        let identifier = ValetTests.identifier
+
+        SecureEnclaveAccessControl.allValues().forEach { accessControl in
+            let backingService = SecureEnclaveValet.sharedAccessGroupValet(with: identifier, accessControl: accessControl).service
+            XCTAssertEqual(backingService, Service.sharedAccessGroup(identifier, .secureEnclave(accessControl)))
+        }
+    }
+
     // MARK: Equality
     
     func test_secureEnclaveValetsWithEqualConfiguration_haveEqualPointers()
