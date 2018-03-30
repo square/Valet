@@ -242,10 +242,13 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     public func migrateObjects(from keychain: KeychainQueryConvertible, removeOnCompletion: Bool) -> MigrationResult {
         return migrateObjects(matching: keychain.keychainQuery, removeOnCompletion: removeOnCompletion)
     }
-    
+
+    // MARK: Internal Properties
+
+    internal let service: Service
+
     // MARK: Private Properties
-    
-    private let service: Service
+
     private let lock = NSLock()
     private let baseKeychainQuery: [String : AnyHashable]
     private var localAuthenticationContext = LAContext()

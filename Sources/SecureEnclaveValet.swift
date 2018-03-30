@@ -212,10 +212,13 @@ public final class SecureEnclaveValet: NSObject {
     public func migrateObjects(from keychain: KeychainQueryConvertible, removeOnCompletion: Bool) -> MigrationResult {
         return migrateObjects(matching: keychain.keychainQuery, removeOnCompletion: removeOnCompletion)
     }
-    
+
+    // MARK: Internal Properties
+
+    internal let service: Service
+
     // MARK: Private Properties
     
-    private let service: Service
     private let lock = NSLock()
     private let keychainQuery: [String : AnyHashable]
 }
