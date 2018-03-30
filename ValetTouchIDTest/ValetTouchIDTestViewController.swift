@@ -92,7 +92,7 @@ final class ValetTouchIDTestViewController : UIViewController
     
     private func updateTextView(messageComponents: String...)
     {
-        if let textView = textView as UITextView! {
+        if let textView = textView {
             textView.text = textView.text.appendingFormat("\n%@", messageComponents.joined(separator: " "))
         }
     }
