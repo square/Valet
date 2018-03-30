@@ -14,18 +14,4 @@ Pod::Spec.new do |s|
   s.macos.deployment_target = '10.11'
 
   s.tvos.exclude_files = 'Sources/SinglePromptSecureEnclaveValet.swift'
-
-  s.test_spec 'Tests' do |test_spec|
-    test_spec.ios.requires_app_host = true
-    test_spec.ios.source_files = 'Tests/**/*.{h,m,swift}'
-    test_spec.ios.exclude_files = 'Tests/MacTests.swift'
-    test_spec.tvos.requires_app_host = true
-    test_spec.tvos.source_files = 'Tests/**/*.{h,m,swift}'
-    test_spec.tvos.exclude_files = ['Tests/MacTests.swift', 'Tests/*BackwardsCompatibilityTests.swift', 'Tests/SinglePromptSecureEnclaveTests.swift']
-    test_spec.macos.source_files = 'Tests/**/*.{h,m,swift}'
-    test_spec.pod_target_xcconfig = {
-      'SWIFT_OBJC_BRIDGING_HEADER' => '${PODS_TARGET_SRCROOT}/Tests/ValetTests-Bridging-Header.h',
-      'CLANG_WARN_UNGUARDED_AVAILABILITY' => 'YES'
-    }
-  end
 end
