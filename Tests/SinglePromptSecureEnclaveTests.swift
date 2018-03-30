@@ -43,13 +43,13 @@ class SinglePromptSecureEnclaveTests: XCTestCase
 
     // MARK: Initialization
 
-    func test_init_createsCorrectValet() {
+    func test_init_createsCorrectBackingService() {
         let identifier = ValetTests.identifier
-        let accessControl = SecureEnclaveAccessControl.userPresence
-        XCTAssertEqual(SinglePromptSecureEnclaveValet.valet(with: identifier, accessControl: accessControl).service,
-                       Service.standard(identifier, .singlePromptSecureEnclave(accessControl)))
-        XCTAssertEqual(SinglePromptSecureEnclaveValet.sharedAccessGroupValet(with: identifier, accessControl: accessControl).service,
-                       Service.sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)))
+
+        SecureEnclaveAccessControl.allValues().forEach { accessControl in
+            let backingService = SinglePromptSecureEnclaveValet.valet(with: identifier, accessControl: accessControl).service
+            XCTAssertEqual(backingService, Service.standard(identifier, .singlePromptSecureEnclave(accessControl)))
+        }
     }
 
     // MARK: Equality

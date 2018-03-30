@@ -43,13 +43,13 @@ class SecureEnclaveTests: XCTestCase
 
     // MARK: Initialization
 
-    func test_init_createsCorrectValet() {
+    func test_init_createsCorrectBackingService() {
         let identifier = ValetTests.identifier
-        let accessControl = SecureEnclaveAccessControl.userPresence
-        XCTAssertEqual(SecureEnclaveValet.valet(with: identifier, accessControl: accessControl).service,
-                       Service.standard(identifier, .secureEnclave(accessControl)))
-        XCTAssertEqual(SecureEnclaveValet.sharedAccessGroupValet(with: identifier, accessControl: accessControl).service,
-                       Service.sharedAccessGroup(identifier, .secureEnclave(accessControl)))
+
+        SecureEnclaveAccessControl.allValues().forEach { accessControl in
+            let backingService = SecureEnclaveValet.valet(with: identifier, accessControl: accessControl).service
+            XCTAssertEqual(backingService, Service.standard(identifier, .secureEnclave(accessControl)))
+        }
     }
 
     // MARK: Equality

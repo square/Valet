@@ -112,19 +112,40 @@ class ValetTests: XCTestCase
 
     // MARK: Initialization
 
-    func test_init_createsCorrectValet() {
+    func test_init_createsCorrectBackingService() {
         let identifier = ValetTests.identifier
-        let accessibility = Accessibility.whenUnlocked
-        XCTAssertEqual(Valet.valet(with: identifier, accessibility: accessibility).service,
-                       Service.standard(identifier, .valet(accessibility)))
-        XCTAssertEqual(Valet.sharedAccessGroupValet(with: identifier, accessibility: accessibility).service,
-                       Service.sharedAccessGroup(identifier, .valet(accessibility)))
 
-        let cloudAccessibility = CloudAccessibility.whenUnlocked
-        XCTAssertEqual(Valet.iCloudValet(with: identifier, accessibility: cloudAccessibility).service,
-                       Service.standard(identifier, .iCloud(cloudAccessibility)))
-        XCTAssertEqual(Valet.iCloudSharedAccessGroupValet(with: identifier, accessibility: cloudAccessibility).service,
-                       Service.sharedAccessGroup(identifier, .iCloud(cloudAccessibility)))
+        Accessibility.allValues().forEach { accessibility in
+            let backingService = Valet.valet(with: identifier, accessibility: accessibility).service
+            XCTAssertEqual(backingService, Service.standard(identifier, .valet(accessibility)))
+        }
+    }
+
+    func test_init_createsCorrectBackingService_sharedAccess() {
+        let identifier = ValetTests.identifier
+
+        Accessibility.allValues().forEach { accessibility in
+            let backingService = Valet.sharedAccessGroupValet(with: identifier, accessibility: accessibility).service
+            XCTAssertEqual(backingService, Service.sharedAccessGroup(identifier, .valet(accessibility)))
+        }
+    }
+
+    func test_init_createsCorrectBackingService_cloud() {
+        let identifier = ValetTests.identifier
+
+        CloudAccessibility.allValues().forEach { accessibility in
+            let backingService = Valet.iCloudValet(with: identifier, accessibility: accessibility).service
+            XCTAssertEqual(backingService, Service.standard(identifier, .iCloud(accessibility)))
+        }
+    }
+
+    func test_init_createsCorrectBackingService_cloudSharedAccess() {
+        let identifier = ValetTests.identifier
+
+        CloudAccessibility.allValues().forEach { accessibility in
+            let backingService = Valet.iCloudSharedAccessGroupValet(with: identifier, accessibility: accessibility).service
+            XCTAssertEqual(backingService, Service.sharedAccessGroup(identifier, .iCloud(accessibility)))
+        }
     }
 
     // MARK: Equality
