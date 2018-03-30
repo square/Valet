@@ -40,7 +40,18 @@ class SinglePromptSecureEnclaveTests: XCTestCase
 
         valet.removeObject(forKey: key)
     }
-    
+
+    // MARK: Initialization
+
+    func test_init_createsCorrectValet() {
+        let identifier = ValetTests.identifier
+        let accessControl = SecureEnclaveAccessControl.userPresence
+        XCTAssertEqual(SinglePromptSecureEnclaveValet.valet(with: identifier, accessControl: accessControl).service,
+                       Service.standard(identifier, .singlePromptSecureEnclave(accessControl)))
+        XCTAssertEqual(SinglePromptSecureEnclaveValet.sharedAccessGroupValet(with: identifier, accessControl: accessControl).service,
+                       Service.sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)))
+    }
+
     // MARK: Equality
     
     func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_haveEqualPointers()

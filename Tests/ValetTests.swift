@@ -110,6 +110,23 @@ class ValetTests: XCTestCase
         XCTAssert(anotherFlavor.allKeys().isEmpty)
     }
 
+    // MARK: Initialization
+
+    func test_init_createsCorrectValet() {
+        let identifier = ValetTests.identifier
+        let accessibility = Accessibility.whenUnlocked
+        XCTAssertEqual(Valet.valet(with: identifier, accessibility: accessibility).service,
+                       Service.standard(identifier, .valet(accessibility)))
+        XCTAssertEqual(Valet.sharedAccessGroupValet(with: identifier, accessibility: accessibility).service,
+                       Service.sharedAccessGroup(identifier, .valet(accessibility)))
+
+        let cloudAccessibility = CloudAccessibility.whenUnlocked
+        XCTAssertEqual(Valet.iCloudValet(with: identifier, accessibility: cloudAccessibility).service,
+                       Service.standard(identifier, .iCloud(cloudAccessibility)))
+        XCTAssertEqual(Valet.iCloudSharedAccessGroupValet(with: identifier, accessibility: cloudAccessibility).service,
+                       Service.sharedAccessGroup(identifier, .iCloud(cloudAccessibility)))
+    }
+
     // MARK: Equality
 
     func test_valetsWithSameConfiguration_areEqual()

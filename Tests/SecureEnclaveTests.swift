@@ -40,7 +40,18 @@ class SecureEnclaveTests: XCTestCase
         
         valet.removeObject(forKey: key)
     }
-    
+
+    // MARK: Initialization
+
+    func test_init_createsCorrectValet() {
+        let identifier = ValetTests.identifier
+        let accessControl = SecureEnclaveAccessControl.userPresence
+        XCTAssertEqual(SecureEnclaveValet.valet(with: identifier, accessControl: accessControl).service,
+                       Service.standard(identifier, .secureEnclave(accessControl)))
+        XCTAssertEqual(SecureEnclaveValet.sharedAccessGroupValet(with: identifier, accessControl: accessControl).service,
+                       Service.sharedAccessGroup(identifier, .secureEnclave(accessControl)))
+    }
+
     // MARK: Equality
     
     func test_secureEnclaveValetsWithEqualConfiguration_haveEqualPointers()

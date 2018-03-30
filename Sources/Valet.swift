@@ -69,14 +69,19 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     // MARK: Private Class Functions
 
     /// - returns: a Valet with the given Identifier, Flavor (and a shared access group service if requested)
-    private class func findOrCreate(_ identifier: Identifier, configuration: Configuration, sharedAccessGroup: Bool=false) -> Valet {
-        let service : Service = sharedAccessGroup ? .sharedAccessGroup(identifier, configuration) : .standard(identifier, configuration)
+    private class func findOrCreate(_ identifier: Identifier, configuration: Configuration, sharedAccessGroup: Bool = false) -> Valet {
+        let service: Service = sharedAccessGroup ? .sharedAccessGroup(identifier, configuration) : .standard(identifier, configuration)
         let key = service.description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
 
         } else {
-            let valet = Valet(identifier: identifier, configuration: configuration)
+            let valet: Valet
+            if sharedAccessGroup {
+                valet = Valet(sharedAccess: identifier, configuration: configuration)
+            } else {
+                valet = Valet(identifier: identifier, configuration: configuration)
+            }
             identifierToValetMap.setObject(valet, forKey: key)
             return valet
         }
