@@ -22,9 +22,6 @@ import UIKit
 
 
 @UIApplicationMain
-
-
-final class ValetTouchIDTestAppDelegate : UIResponder, UIApplicationDelegate
-{
+final class ValetTouchIDTestAppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 }

@@ -22,9 +22,6 @@ import UIKit
 
 
 @UIApplicationMain
-
-
-final class ValetIOSTestHostAppDelegate : UIResponder, UIApplicationDelegate
-{
+final class ValetIOSTestHostAppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 }
