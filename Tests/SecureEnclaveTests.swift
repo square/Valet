@@ -21,7 +21,7 @@
 import Foundation
 @testable import Valet
 #if !os(watchOS)
-    import XCTest
+import XCTest
 #endif
 
 

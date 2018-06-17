@@ -143,7 +143,7 @@ let mySecureEnclaveValet = SecureEnclaveValet.valet(with: Identifier(nonEmpty: "
 VALSecureEnclaveValet *const mySecureEnclaveValet = [VALSecureEnclaveValet valetWithIdentifier:@"Druidia" accessControl:VALAccessControlUserPresence];
 ```
 
-This instance can be used to store and retrieve data in the Secure Enclave. Each time data is retrieved from this Valet, the user will be prompted to confirm their presence via Face ID, Touch ID, or by entering their device passcode. *If no passcode is set on the device, this instance will be unable to access or store data.* Data is removed from the Secure Enclave when the user removes a passcode from the device. Storing data using `SecureEnclaveValet` is the most secure way to store data on iOS, tvOS, watchOS, and Mac OS.
+This instance can be used to store and retrieve data in the Secure Enclave. Each time data is retrieved from this Valet, the user will be prompted to confirm their presence via Face ID, Touch ID, or by entering their device passcode. *If no passcode is set on the device, this instance will be unable to access or store data.* Data is removed from the Secure Enclave when the user removes a passcode from the device. Storing data using `SecureEnclaveValet` is the most secure way to store data on iOS, tvOS, watchOS, and macOS.
 
 ```swift
 let mySecureEnclaveValet = SinglePromptSecureEnclaveValet.valet(with: Identifier(nonEmpty: "Druidia")!, accessControl: .userPresence)
