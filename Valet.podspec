@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage = 'https://github.com/square/Valet'
   s.authors  = 'Square'
   s.source   = { :git => 'https://github.com/square/Valet.git', :tag => s.version }
-  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
+  s.swift_version = '4.0'
   s.source_files = 'Sources/**/*.{swift,h}'
   s.public_header_files = 'Sources/*.h'
   s.frameworks = 'Security'
