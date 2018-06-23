@@ -6,12 +6,14 @@ Pod::Spec.new do |s|
   s.homepage = 'https://github.com/square/Valet'
   s.authors  = 'Square'
   s.source   = { :git => 'https://github.com/square/Valet.git', :tag => s.version }
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
   s.source_files = 'Sources/**/*.{swift,h}'
   s.public_header_files = 'Sources/*.h'
   s.frameworks = 'Security'
   s.ios.deployment_target = '9.0'
   s.tvos.deployment_target = '9.0'
   s.macos.deployment_target = '10.11'
+  git@github.com:square/Valet.git
 
   s.tvos.exclude_files = 'Sources/SinglePromptSecureEnclaveValet.swift'
 end
