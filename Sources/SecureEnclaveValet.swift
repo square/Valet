@@ -263,6 +263,8 @@ extension SecureEnclaveValet {
         switch object(forKey: key, withPrompt: userPrompt) {
         case let .success(data):
             return data
+        case .authFailed:
+            fallthrough
         case .userCancelled:
             userCancelled?.pointee = true
             return nil
@@ -280,6 +282,8 @@ extension SecureEnclaveValet {
         switch string(forKey: key, withPrompt: userPrompt) {
         case let .success(string):
             return string
+        case .authFailed:
+            fallthrough
         case .userCancelled:
             userCancelled?.pointee = true
             return nil
