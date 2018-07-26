@@ -202,17 +202,10 @@ internal final class Keychain {
                 return SecItem.DataResult.success(Set([singleKey]))
                 
             } else if let multipleMatches = collection as? [[String: AnyHashable]] {
-                #if swift(>=4.1)
                 return SecItem.DataResult.success(Set(multipleMatches.compactMap({ attributes in
                     let key = attributes[kSecAttrAccount as String] as? String
                     return key != canaryKey ? key : nil
                 })))
-                #else
-                return SecItem.DataResult.success(Set(multipleMatches.flatMap({ attributes in
-                    let key = attributes[kSecAttrAccount as String] as? String
-                    return key != canaryKey ? key : nil
-                })))
-                #endif
 
             } else {
                 return SecItem.DataResult.success(Set())
