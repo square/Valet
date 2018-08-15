@@ -91,7 +91,7 @@ public final class SecureEnclaveValet: NSObject {
     // MARK: Hashable
     
     public override var hash: Int {
-        return service.description.hash
+        return service.description.hashValue
     }
     
     // MARK: Public Properties
