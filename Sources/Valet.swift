@@ -122,7 +122,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     
     // MARK: Hashable
     
-    public override var hashValue: Int {
+    public override var hash: Int {
         return service.description.hashValue
     }
     
