@@ -1,0 +1,3 @@
+[submodule "Tests/xctest-watchOS"]
+	path = Tests/XCTest-watchOS
+	url = ../../dfed/XCTest-watchOS.git

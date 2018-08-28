@@ -19,6 +19,7 @@
 //
 
 import WatchKit
+import XCTest
 
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {

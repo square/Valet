@@ -19,10 +19,9 @@
 //
 
 import Foundation
-@testable import Valet
-#if !os(watchOS)
 import XCTest
-#endif
+
+@testable import Valet
 
 
 class CloudTests: XCTestCase

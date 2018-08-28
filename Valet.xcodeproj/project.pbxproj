@@ -17,7 +17,8 @@
 		165CDDD0204B26D500C96C2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 165CDDCF204B26D500C96C2E /* Assets.xcassets */; };
 		168909381F7199D60057F636 /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; };
 		168909391F7199D60057F636 /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		169DC182204B6A8400696124 /* XCTest+watchOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169DC181204B6A8400696124 /* XCTest+watchOS.swift */; };
+		16A0D5DC2134ECF1008D852B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0D5DB2134ECE1008D852B /* XCTest.framework */; };
+		16A0D5DD2134ECF1008D852B /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0D5DB2134ECE1008D852B /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		16B5856F1F71DBE00038EE30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B5856E1F71DBE00038EE30 /* AppDelegate.swift */; };
 		16B585711F71DBE00038EE30 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B585701F71DBE00038EE30 /* ViewController.swift */; };
 		16B585731F71DBE00038EE30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16B585721F71DBE00038EE30 /* Assets.xcassets */; };
@@ -168,6 +169,20 @@
 			remoteGlobalIDString = 26E6827B1BA8B3F900EFF4EA;
 			remoteInfo = "Valet iOS";
 		};
+		16A0D5DA2134ECE1008D852B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 16A0D5D62134ECE1008D852B /* XCTest.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 16A0D5BA2134D43E008D852B;
+			remoteInfo = XCTest;
+		};
+		16A0D5DE2134ECF1008D852B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 16A0D5D62134ECE1008D852B /* XCTest.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 16A0D5B92134D43E008D852B;
+			remoteInfo = XCTest;
+		};
 		16C3B09D204B1E4C00B4D0B4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
@@ -231,6 +246,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		16A0D5D52134E666008D852B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				16A0D5DD2134ECF1008D852B /* XCTest.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		16DF6B11204B496800F8E0A4 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -265,7 +291,7 @@
 		165CDDCF204B26D500C96C2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		165CDDD1204B26D500C96C2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		165CDDD5204B26F700C96C2E /* Valet tvOS Test Host App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Valet tvOS Test Host App.entitlements"; sourceTree = "<group>"; };
-		169DC181204B6A8400696124 /* XCTest+watchOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+watchOS.swift"; sourceTree = "<group>"; };
+		16A0D5D62134ECE1008D852B /* XCTest.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XCTest.xcodeproj; path = "Tests/XCTest-watchOS/XCTest.xcodeproj"; sourceTree = "<group>"; };
 		16B5856C1F71DBE00038EE30 /* Valet macOS Test Host App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Valet macOS Test Host App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		16B5856E1F71DBE00038EE30 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		16B585701F71DBE00038EE30 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -391,6 +417,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16DF6B1E204B4AFF00F8E0A4 /* Valet.framework in Frameworks */,
+				16A0D5DC2134ECF1008D852B /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,10 +483,19 @@
 		168909331F7199B50057F636 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16A0D5D62134ECE1008D852B /* XCTest.xcodeproj */,
 				16EB52701F71BE4100363869 /* Security.framework */,
 				16EB526E1F71BE3D00363869 /* Security.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		16A0D5D72134ECE1008D852B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				16A0D5DB2134ECE1008D852B /* XCTest.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		16B5856D1F71DBE00038EE30 /* Valet macOS Test Host App */ = {
@@ -545,7 +581,6 @@
 				16E04BF11F71B72C00E8552D /* ValetTests-Bridging-Header.h */,
 				16E04BF31F71B72C00E8552D /* ValetTests.swift */,
 				16C3B0AD204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift */,
-				169DC181204B6A8400696124 /* XCTest+watchOS.swift */,
 				16E04BEC1F71B70C00E8552D /* Legacy */,
 			);
 			path = Tests;
@@ -811,11 +846,13 @@
 				16DF6AFB204B496800F8E0A4 /* Sources */,
 				16DF6AFC204B496800F8E0A4 /* Frameworks */,
 				16DF6AFD204B496800F8E0A4 /* Resources */,
+				16A0D5D52134E666008D852B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				16DF6B1D204B4AF800F8E0A4 /* PBXTargetDependency */,
+				16A0D5DF2134ECF1008D852B /* PBXTargetDependency */,
 			);
 			name = "Valet watchOS Test Host App Extension";
 			productName = "Valet watchOS Test Host App Extension";
@@ -1049,6 +1086,12 @@
 			mainGroup = EA1E1F7A1A8C46080067C991;
 			productRefGroup = EA1E1F841A8C46080067C991 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 16A0D5D72134ECE1008D852B /* Products */;
+					ProjectRef = 16A0D5D62134ECE1008D852B /* XCTest.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				26E6827B1BA8B3F900EFF4EA /* Valet iOS */,
@@ -1067,6 +1110,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		16A0D5DB2134ECE1008D852B /* XCTest.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = XCTest.framework;
+			remoteRef = 16A0D5DA2134ECE1008D852B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		165CDDC4204B26D400C96C2E /* Resources */ = {
@@ -1258,7 +1311,6 @@
 				16DF6B23204B5E2700F8E0A4 /* ValetTests.swift in Sources */,
 				16DF6B07204B496800F8E0A4 /* ExtensionDelegate.swift in Sources */,
 				16DF6B05204B496800F8E0A4 /* InterfaceController.swift in Sources */,
-				169DC182204B6A8400696124 /* XCTest+watchOS.swift in Sources */,
 				16DF6B21204B5E2700F8E0A4 /* SecureEnclaveTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1380,6 +1432,11 @@
 			isa = PBXTargetDependency;
 			target = 26E6827B1BA8B3F900EFF4EA /* Valet iOS */;
 			targetProxy = 1689093A1F7199D60057F636 /* PBXContainerItemProxy */;
+		};
+		16A0D5DF2134ECF1008D852B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = XCTest;
+			targetProxy = 16A0D5DE2134ECF1008D852B /* PBXContainerItemProxy */;
 		};
 		16C3B09E204B1E4C00B4D0B4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
