@@ -19,6 +19,7 @@
 		168909391F7199D60057F636 /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		16A0D5DC2134ECF1008D852B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0D5DB2134ECE1008D852B /* XCTest.framework */; };
 		16A0D5DD2134ECF1008D852B /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0D5DB2134ECE1008D852B /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		16A0D7352135CDBA008D852B /* SwiftCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CF90CE210A25CF005B7FB2 /* SwiftCompatibility.swift */; };
 		16B5856F1F71DBE00038EE30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B5856E1F71DBE00038EE30 /* AppDelegate.swift */; };
 		16B585711F71DBE00038EE30 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B585701F71DBE00038EE30 /* ViewController.swift */; };
 		16B585731F71DBE00038EE30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16B585721F71DBE00038EE30 /* Assets.xcassets */; };
@@ -1295,6 +1296,7 @@
 				16DF6AE9204B470100F8E0A4 /* SecureEnclaveAccessControl.swift in Sources */,
 				16DF6AEB204B470100F8E0A4 /* SecureEnclaveValet.swift in Sources */,
 				16DF6AEC204B470100F8E0A4 /* Valet.swift in Sources */,
+				16A0D7352135CDBA008D852B /* SwiftCompatibility.swift in Sources */,
 				16DF6AED204B470100F8E0A4 /* Configuration.swift in Sources */,
 				16DF6AEE204B470100F8E0A4 /* Keychain.swift in Sources */,
 				16DF6AEF204B470100F8E0A4 /* SecItem.swift in Sources */,
