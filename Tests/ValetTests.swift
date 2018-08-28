@@ -87,7 +87,7 @@ class ValetTests: XCTestCase
 
     let key = "key"
     let passcode = "topsecret"
-    lazy var passcodeData: Data = { return self.passcode.data(using: .utf8)! }()
+    lazy var passcodeData: Data = { return Data(self.passcode.utf8) }()
     
     // MARK: XCTestCase
 
@@ -374,10 +374,8 @@ class ValetTests: XCTestCase
     // MARK: set(object:forKey:)
     
     func test_setObjectForKey_successfullyUpdatesExistingKey() {
-        guard let firstValue = "first".data(using: .utf8), let secondValue = "second".data(using: .utf8) else {
-            XCTFail()
-            return
-        }
+        let firstValue = Data("first".utf8)
+        let secondValue = Data("second".utf8)
         valet.set(object: firstValue, forKey: key)
         XCTAssertEqual(firstValue, valet.object(forKey: key))
         valet.set(object: secondValue, forKey: key)

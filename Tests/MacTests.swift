@@ -51,7 +51,7 @@ class ValetMacTests: XCTestCase
         XCTAssertEqual(SecAccessCreate("Access Control List" as CFString, trustedList, &accessList), errSecSuccess)
         var accessListQuery = query
         accessListQuery[kSecAttrAccess as String] = accessList
-        accessListQuery[kSecValueData as String] = vulnValue.data(using: .utf8)
+        accessListQuery[kSecValueData as String] = Data(vulnValue.utf8)
         XCTAssertEqual(SecItemAdd(accessListQuery as CFDictionary, nil), errSecSuccess)
         
         // The potentially vulnerable keychain item should exist in our Valet now.

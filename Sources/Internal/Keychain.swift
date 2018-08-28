@@ -47,7 +47,7 @@ internal final class Keychain {
         } else {
             var secItemQuery = attributes
             secItemQuery[kSecAttrAccount as String] = canaryKey
-            secItemQuery[kSecValueData as String] = canaryValue.data(using: .utf8)
+            secItemQuery[kSecValueData as String] = Data(canaryValue.utf8)
             _ = SecItem.add(attributes: secItemQuery)
             
             return isCanaryValueInKeychain()
@@ -86,7 +86,8 @@ internal final class Keychain {
     // MARK: Setters
     
     internal static func set(string: String, forKey key: String, options: [String: AnyHashable]) -> SecItem.Result {
-        guard let data = string.data(using: .utf8), !data.isEmpty else {
+        let data = Data(string.utf8)
+        guard !data.isEmpty else {
             ErrorHandler.assertionFailure("Can not set an empty value.")
             return .error(errSecParam)
         }
