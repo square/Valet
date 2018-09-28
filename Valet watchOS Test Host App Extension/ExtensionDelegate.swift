@@ -19,13 +19,6 @@
 //
 
 import WatchKit
-import XCTest
 
 
-class ExtensionDelegate: NSObject, WKExtensionDelegate {
-
-    func applicationDidFinishLaunching() {
-        XCTestCase.runAllTests()
-    }
-
-}
+class ExtensionDelegate: NSObject, WKExtensionDelegate {}
