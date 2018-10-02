@@ -29,8 +29,8 @@ public final class SecureEnclave {
     public enum Result<Type: Equatable>: Equatable {
         /// Data was retrieved from the keychain.
         case success(Type)
-        /// User dismissed the user-presence prompt.
-        case userCancelled
+        /// User dismissed the user-presence prompt. If `dueToAuthorizationFailure` is true, the user either entered the wrong password or locked the device while the prompt was presented.
+        case userCancelled(dueToAuthorizationFailure: Bool)
         /// No data was found for the requested key.
         case itemNotFound
         
@@ -40,8 +40,8 @@ public final class SecureEnclave {
             switch (lhs, rhs) {
             case let (.success(lhsResult), .success(rhsResult)):
                 return lhsResult == rhsResult
-            case (.userCancelled, .userCancelled):
-                return true
+            case let (.userCancelled(lhsDueToAuthorizationFailure), .userCancelled(rhsDueToAuthorizationFailure)):
+                return lhsDueToAuthorizationFailure == rhsDueToAuthorizationFailure
             case (.itemNotFound, .itemNotFound):
                 return true
             case (.success, _),
@@ -104,9 +104,11 @@ public final class SecureEnclave {
             return .success(data)
             
         case let .error(status):
-            let userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed)
-            if userCancelled {
-                return .userCancelled
+            let authFailed = (status == errSecAuthFailed)
+            let userCancelled = (status == errSecUserCanceled)
+            if userCancelled || authFailed {
+                // While user cancelling is self-explanatory, authorization failure can be triggered by a user entering the wrong password or locking the device while a secure enclave prompt is on screen. While we recommend applications treat these two failure types as a user cancel, some applications want to differentiate between users bailing out of the flow and failed password attempts. For more discussion on the differences between these statuses, see https://github.com/square/Valet/pull/73 and https://github.com/square/Valet/issues/143.
+                return .userCancelled(dueToAuthorizationFailure: authFailed)
             } else {
                 return .itemNotFound
             }
@@ -163,9 +165,11 @@ public final class SecureEnclave {
             return .success(string)
             
         case let .error(status):
-            let userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed)
-            if userCancelled {
-                return .userCancelled
+            let authFailed = (status == errSecAuthFailed)
+            let userCancelled = (status == errSecUserCanceled)
+            if userCancelled || authFailed {
+                // While user cancelling is self-explanatory, authorization failure can be triggered by a user entering the wrong password or locking the device while a secure enclave prompt is on screen. While we recommend applications treat these two failure types as a user cancel, some applications want to differentiate between users bailing out of the flow and failed password attempts. For more discussion on the differences between these statuses, see https://github.com/square/Valet/pull/73 and https://github.com/square/Valet/issues/143.
+                return .userCancelled(dueToAuthorizationFailure: authFailed)
             } else {
                 return .itemNotFound
             }
