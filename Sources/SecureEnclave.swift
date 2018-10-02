@@ -99,22 +99,9 @@ public final class SecureEnclave {
             secItemQuery[kSecUseOperationPrompt as String] = userPrompt
         }
         
-        switch Keychain.object(forKey: key, options: secItemQuery) {
-        case let .success(data):
-            return .success(data)
-            
-        case let .error(status):
-            let authFailed = (status == errSecAuthFailed)
-            let userCancelled = (status == errSecUserCanceled)
-            if userCancelled || authFailed {
-                // While user cancelling is self-explanatory, authorization failure can be triggered by a user entering the wrong password or locking the device while a secure enclave prompt is on screen. While we recommend applications treat these two failure types as a user cancel, some applications want to differentiate between users bailing out of the flow and failed password attempts. For more discussion on the differences between these statuses, see https://github.com/square/Valet/pull/73 and https://github.com/square/Valet/issues/143.
-                return .userCancelled(dueToAuthorizationFailure: authFailed)
-            } else {
-                return .itemNotFound
-            }
-        }
+        return Keychain.object(forKey: key, options: secItemQuery).asSecureEnclaveResult
     }
-    
+
     /// - parameter key: The key to look up in the keychain.
     /// - parameter options: A base query used to scope the calls in the keychain.
     /// - returns: `true` if a value has been set for the given key, `false` otherwise.
@@ -159,11 +146,20 @@ public final class SecureEnclave {
         if !userPrompt.isEmpty {
             secItemQuery[kSecUseOperationPrompt as String] = userPrompt
         }
-        
-        switch Keychain.string(forKey: key, options: secItemQuery) {
-        case let .success(string):
-            return .success(string)
-            
+
+        return Keychain.string(forKey: key, options: secItemQuery).asSecureEnclaveResult
+    }
+}
+
+// MARK: DataResult Extension
+
+extension SecItem.DataResult where SuccessType: Equatable {
+
+    fileprivate var asSecureEnclaveResult: SecureEnclave.Result<SuccessType> {
+        switch self {
+        case let .success(data):
+            return .success(data)
+
         case let .error(status):
             let authFailed = (status == errSecAuthFailed)
             let userCancelled = (status == errSecUserCanceled)
@@ -175,4 +171,5 @@ public final class SecureEnclave {
             }
         }
     }
+
 }
