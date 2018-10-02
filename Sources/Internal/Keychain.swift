@@ -250,7 +250,7 @@ internal final class Keychain {
             return .invalidQuery
         }
         
-        guard query[kSecClass as String] as? String == kSecClassGenericPassword as String else {
+        guard query[kSecClass as String] as? String as CFString? == kSecClassGenericPassword else {
             ErrorHandler.assertionFailure("Migration requires kSecClass to be set to kSecClassGenericPassword to avoid data loss.")
             return .invalidQuery
         }
