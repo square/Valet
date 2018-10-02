@@ -99,18 +99,7 @@ public final class SecureEnclave {
             secItemQuery[kSecUseOperationPrompt as String] = userPrompt
         }
         
-        switch Keychain.object(forKey: key, options: secItemQuery) {
-        case let .success(data):
-            return .success(data)
-            
-        case let .error(status):
-            let userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed)
-            if userCancelled {
-                return .userCancelled
-            } else {
-                return .itemNotFound
-            }
-        }
+        return Keychain.object(forKey: key, options: secItemQuery).asSecureEnclaveResult
     }
     
     /// - parameter key: The key to look up in the keychain.
@@ -157,11 +146,20 @@ public final class SecureEnclave {
         if !userPrompt.isEmpty {
             secItemQuery[kSecUseOperationPrompt as String] = userPrompt
         }
-        
-        switch Keychain.string(forKey: key, options: secItemQuery) {
-        case let .success(string):
-            return .success(string)
-            
+
+        return Keychain.string(forKey: key, options: secItemQuery).asSecureEnclaveResult
+    }
+}
+
+// MARK: DataResult Extension
+
+extension SecItem.DataResult where SuccessType: Equatable {
+
+    fileprivate var asSecureEnclaveResult: SecureEnclave.Result<SuccessType> {
+        switch self {
+        case let .success(value):
+            return .success(value)
+
         case let .error(status):
             let userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed)
             if userCancelled {
@@ -171,4 +169,5 @@ public final class SecureEnclave {
             }
         }
     }
+
 }
