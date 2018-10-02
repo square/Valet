@@ -566,6 +566,10 @@ class ValetTests: XCTestCase
 
         // Without a kSecClass, the migration should fail.
         XCTAssertEqual(.invalidQuery, anotherFlavor.migrateObjects(matching: mutableQuery, removeOnCompletion: false))
+
+        mutableQuery[kSecClass as String] = kSecClassInternetPassword
+        // Without a kSecClass set to something other than kSecClassGenericPassword, the migration should fail.
+        XCTAssertEqual(.invalidQuery, anotherFlavor.migrateObjects(matching: mutableQuery, removeOnCompletion: false))
     }
 
     func test_migrateObjectsMatching_failsForBadQueries()

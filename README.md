@@ -159,7 +159,7 @@ This instance also stores and retrieves data in the Secure Enclave, but does not
 
 ### Migrating Existing Keychain Values into Valet
 
-Already using the Keychain and no longer want to maintain your own Keychain code? We feel you. That’s why we wrote `migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool)`. This method allows you to migrate all your existing Keychain entries to a Valet instance in one line. Just pass in an NSDictionary with the `kSecClass`, `kSecAttrService`, and any other `kSecAttr*` attributes you use – we’ll migrate the data for you.
+Already using the Keychain and no longer want to maintain your own Keychain code? We feel you. That’s why we wrote `migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool)`. This method allows you to migrate all your existing Keychain entries to a Valet instance in one line. Just pass in a Dictionary with the `kSecClass`, `kSecAttrService`, and any other `kSecAttr*` attributes you use – we’ll migrate the data for you.
 
 ### Debugging
 

@@ -250,8 +250,8 @@ internal final class Keychain {
             return .invalidQuery
         }
         
-        guard let _ = query[kSecClass as String] as? String else {
-            ErrorHandler.assertionFailure("Migration requires a kSecClass to be set to a valid kSecClass string.")
+        guard query[kSecClass as String] as? String == kSecClassGenericPassword as String else {
+            ErrorHandler.assertionFailure("Migration requires kSecClass to be set to kSecClassGenericPassword to avoid data loss.")
             return .invalidQuery
         }
         
