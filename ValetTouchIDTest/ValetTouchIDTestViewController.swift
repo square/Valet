@@ -53,12 +53,16 @@ final class ValetTouchIDTestViewController : UIViewController
     @IBAction func getItem(sender: UIResponder)
     {
         let resultString: String
-        switch singlePromptSecureEnclaveValet.string(forKey: username, withPrompt: "Use TouchID to retrieve password") {
+        switch singlePromptSecureEnclaveValet.string(forKey: username, withPrompt: "Use Biometric ID to retrieve password") {
         case let .success(password):
             resultString = password
             
-        case .userCancelled:
-            resultString = "user cancelled TouchID"
+        case let .userCancelled(dueToAuthorizationFailure):
+            if dueToAuthorizationFailure {
+                resultString = "Biometric ID failed to authenticate"
+            } else {
+                resultString = "user cancelled Biometric ID"
+            }
             
         case .itemNotFound:
             resultString = "object not found"
