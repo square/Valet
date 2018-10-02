@@ -24,6 +24,11 @@ import Foundation
 internal enum Service: CustomStringConvertible, Equatable {
     case standard(Identifier, Configuration)
     case sharedAccessGroup(Identifier, Configuration)
+
+    #if os(macOS)
+    case standardOverride(service: Identifier, Configuration)
+    case sharedAccessGroupOverride(service: Identifier, Configuration)
+    #endif
     
     // MARK: Equatable
     
@@ -54,6 +59,16 @@ internal enum Service: CustomStringConvertible, Equatable {
             ErrorHandler.assert(!identifier.description.hasPrefix("\(SecItem.sharedAccessGroupPrefix)."), "Do not add the Bundle Seed ID as a prefix to your identifier. Valet prepends this value for you. Your Valet will not be able to access the keychain with the provided configuration")
             baseQuery[kSecAttrAccessGroup as String] = "\(SecItem.sharedAccessGroupPrefix).\(identifier.description)"
             configuration = desiredConfiguration
+
+        #if os(macOS)
+        case let .standardOverride(_, desiredConfiguration):
+            configuration = desiredConfiguration
+
+        case let .sharedAccessGroupOverride(identifier, desiredConfiguration):
+            ErrorHandler.assert(!identifier.description.hasPrefix("\(SecItem.sharedAccessGroupPrefix)."), "Do not add the Bundle Seed ID as a prefix to your identifier. Valet prepends this value for you. Your Valet will not be able to access the keychain with the provided configuration")
+            baseQuery[kSecAttrAccessGroup as String] = "\(SecItem.sharedAccessGroupPrefix).\(identifier.description)"
+            configuration = desiredConfiguration
+        #endif
         }
         
         switch configuration {
@@ -82,25 +97,35 @@ internal enum Service: CustomStringConvertible, Equatable {
             service = "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(configuration.accessibility.description)"
         case let .sharedAccessGroup(identifier, configuration):
             service = "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(configuration.accessibility.description)"
-        }
-        
-        let configuration: Configuration
-        switch self {
-        case let .standard(_, desiredConfiguration),
-             let .sharedAccessGroup(_, desiredConfiguration):
-            configuration = desiredConfiguration
-        }
-        
-        switch configuration {
-        case .valet, .iCloud:
-            // Nothing to do here.
-            break
 
-        case let .secureEnclave(accessControl),
-             let .singlePromptSecureEnclave(accessControl):
-            service += accessControl.description
+        #if os(macOS)
+        case let .standardOverride(identifier, _),
+             let .sharedAccessGroupOverride(identifier, _):
+             service = identifier.description
+        #endif
+
         }
-        
-        return service
+
+        switch self {
+        case let .standard(_, configuration),
+             let .sharedAccessGroup(_, configuration):
+            switch configuration {
+            case .valet, .iCloud:
+                // Nothing to do here.
+                break
+
+            case let .secureEnclave(accessControl),
+                 let .singlePromptSecureEnclave(accessControl):
+                service += accessControl.description
+            }
+
+            return service
+
+        #if os(macOS)
+        case .standardOverride,
+             .sharedAccessGroupOverride:
+            return service
+        #endif
+        }
     }
 }

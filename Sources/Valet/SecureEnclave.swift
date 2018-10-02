@@ -79,8 +79,16 @@ public final class SecureEnclave {
         // To avoid prompting the user for Touch ID or passcode, create a Valet with our identifier and accessibility and ask it if it can access the keychain.
         let noPromptValet: Valet
         switch service {
+        #if os(macOS)
+        case .standardOverride:
+            fallthrough
+        #endif
         case .standard:
             noPromptValet = .valet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
+            #if os(macOS)
+        case .sharedAccessGroupOverride:
+            fallthrough
+            #endif
         case .sharedAccessGroup:
             noPromptValet = .sharedAccessGroupValet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         }
