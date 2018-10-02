@@ -17,6 +17,11 @@
 		165CDDD0204B26D500C96C2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 165CDDCF204B26D500C96C2E /* Assets.xcassets */; };
 		168909381F7199D60057F636 /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; };
 		168909391F7199D60057F636 /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		169FC990215ECFCE00C2D6BD /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; };
+		169FC991215ECFCE00C2D6BD /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		169FC992215ECFCE00C2D6BD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D77541215BFC1D004F060C /* XCTest.framework */; };
+		169FC993215ECFCE00C2D6BD /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16D77541215BFC1D004F060C /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		16A0D7352135CDBA008D852B /* SwiftCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CF90CE210A25CF005B7FB2 /* SwiftCompatibility.swift */; };
 		16B5856F1F71DBE00038EE30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B5856E1F71DBE00038EE30 /* AppDelegate.swift */; };
 		16B585711F71DBE00038EE30 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B585701F71DBE00038EE30 /* ViewController.swift */; };
 		16B585731F71DBE00038EE30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16B585721F71DBE00038EE30 /* Assets.xcassets */; };
@@ -45,6 +50,32 @@
 		16C3B0AC204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C3B0AA204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift */; };
 		16C3B0AE204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C3B0AD204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift */; };
 		16C3B0AF204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C3B0AD204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift */; };
+		16DF6AE2204B470100F8E0A4 /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE11F71B6D200E8552D /* Accessibility.swift */; };
+		16DF6AE3204B470100F8E0A4 /* CloudAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE51F71B6D200E8552D /* CloudAccessibility.swift */; };
+		16DF6AE4204B470100F8E0A4 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE21F71B6D200E8552D /* ErrorHandler.swift */; };
+		16DF6AE5204B470100F8E0A4 /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDF1F71B6D200E8552D /* Identifier.swift */; };
+		16DF6AE6204B470100F8E0A4 /* KeychainQueryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE71F71B6D200E8552D /* KeychainQueryConvertible.swift */; };
+		16DF6AE7204B470100F8E0A4 /* MigrationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE91F71B6D300E8552D /* MigrationResult.swift */; };
+		16DF6AE8204B470100F8E0A4 /* SecureEnclave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE01F71B6D200E8552D /* SecureEnclave.swift */; };
+		16DF6AE9204B470100F8E0A4 /* SecureEnclaveAccessControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE81F71B6D200E8552D /* SecureEnclaveAccessControl.swift */; };
+		16DF6AEB204B470100F8E0A4 /* SecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE31F71B6D200E8552D /* SecureEnclaveValet.swift */; };
+		16DF6AEC204B470100F8E0A4 /* Valet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BE61F71B6D200E8552D /* Valet.swift */; };
+		16DF6AED204B470100F8E0A4 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDD1F71B6C400E8552D /* Configuration.swift */; };
+		16DF6AEE204B470100F8E0A4 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDC1F71B6C400E8552D /* Keychain.swift */; };
+		16DF6AEF204B470100F8E0A4 /* SecItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDE1F71B6C400E8552D /* SecItem.swift */; };
+		16DF6AF0204B470100F8E0A4 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDB1F71B6C400E8552D /* Service.swift */; };
+		16DF6AF7204B496800F8E0A4 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16DF6AF5204B496800F8E0A4 /* Interface.storyboard */; };
+		16DF6AF9204B496800F8E0A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16DF6AF8204B496800F8E0A4 /* Assets.xcassets */; };
+		16DF6B00204B496800F8E0A4 /* Valet watchOS Test Host App Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 16DF6AFF204B496800F8E0A4 /* Valet watchOS Test Host App Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		16DF6B05204B496800F8E0A4 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DF6B04204B496800F8E0A4 /* InterfaceController.swift */; };
+		16DF6B07204B496800F8E0A4 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DF6B06204B496800F8E0A4 /* ExtensionDelegate.swift */; };
+		16DF6B09204B496800F8E0A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16DF6B08204B496800F8E0A4 /* Assets.xcassets */; };
+		16DF6B0D204B496800F8E0A4 /* Valet watchOS Test Host App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 16DF6AF3204B496800F8E0A4 /* Valet watchOS Test Host App.app */; };
+		16DF6B1F204B4DA600F8E0A4 /* Valet.framework in Resources */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; };
+		16DF6B20204B5E2700F8E0A4 /* SecItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BED1F71B72C00E8552D /* SecItemTests.swift */; };
+		16DF6B21204B5E2700F8E0A4 /* SecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BEE1F71B72C00E8552D /* SecureEnclaveTests.swift */; };
+		16DF6B22204B5E2700F8E0A4 /* SynchronizableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BEF1F71B72C00E8552D /* SynchronizableTests.swift */; };
+		16DF6B23204B5E2700F8E0A4 /* ValetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BF31F71B72C00E8552D /* ValetTests.swift */; };
 		16E04C011F71B76900E8552D /* MacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BF21F71B72C00E8552D /* MacTests.swift */; };
 		16E04C021F71B76900E8552D /* SecItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BED1F71B72C00E8552D /* SecItemTests.swift */; };
 		16E04C031F71B76900E8552D /* SecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BEE1F71B72C00E8552D /* SecureEnclaveTests.swift */; };
@@ -140,12 +171,47 @@
 			remoteGlobalIDString = 26E6827B1BA8B3F900EFF4EA;
 			remoteInfo = "Valet iOS";
 		};
+		169FC994215ECFCF00C2D6BD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 16D7753C215BFC1D004F060C /* XCTest.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 16A0D5B92134D43E008D852B;
+			remoteInfo = XCTest;
+		};
 		16C3B09D204B1E4C00B4D0B4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 16C3B06C204B1DB800B4D0B4;
 			remoteInfo = "Valet tvOS";
+		};
+		16D77540215BFC1D004F060C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 16D7753C215BFC1D004F060C /* XCTest.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 16A0D5BA2134D43E008D852B;
+			remoteInfo = XCTest;
+		};
+		16DF6B01204B496800F8E0A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 16DF6AFE204B496800F8E0A4;
+			remoteInfo = "Valet watchOS Test Host App Extension";
+		};
+		16DF6B0B204B496800F8E0A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 16DF6AF2204B496800F8E0A4;
+			remoteInfo = "Valet watchOS Test Host App";
+		};
+		16DF6B1C204B4AF800F8E0A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 16DF6AD9204B45EB00F8E0A4;
+			remoteInfo = "Valet watchOS";
 		};
 		371150B81E2962FC004A45D4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -182,6 +248,40 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		169FC996215ECFCF00C2D6BD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				169FC991215ECFCE00C2D6BD /* Valet.framework in Embed Frameworks */,
+				169FC993215ECFCE00C2D6BD /* XCTest.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16DF6B11204B496800F8E0A4 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				16DF6B00204B496800F8E0A4 /* Valet watchOS Test Host App Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16DF6B15204B496800F8E0A4 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				16DF6B0D204B496800F8E0A4 /* Valet watchOS Test Host App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -205,6 +305,18 @@
 		16C3B097204B1E4C00B4D0B4 /* Valet tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Valet tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		16C3B0AA204B20E200B4D0B4 /* SynchronizableBackwardsCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronizableBackwardsCompatibilityTests.swift; sourceTree = "<group>"; };
 		16C3B0AD204B215A00B4D0B4 /* ValetBackwardsCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValetBackwardsCompatibilityTests.swift; sourceTree = "<group>"; };
+		16D7753C215BFC1D004F060C /* XCTest.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XCTest.xcodeproj; path = "Tests/XCTest-watchOS/XCTest.xcodeproj"; sourceTree = "<group>"; };
+		16DF6ADA204B45EB00F8E0A4 /* Valet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Valet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		16DF6AF3204B496800F8E0A4 /* Valet watchOS Test Host App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Valet watchOS Test Host App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		16DF6AF6204B496800F8E0A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		16DF6AF8204B496800F8E0A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		16DF6AFA204B496800F8E0A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		16DF6AFF204B496800F8E0A4 /* Valet watchOS Test Host App Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Valet watchOS Test Host App Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		16DF6B04204B496800F8E0A4 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		16DF6B06204B496800F8E0A4 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		16DF6B08204B496800F8E0A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		16DF6B0A204B496800F8E0A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		16DF6B16204B498E00F8E0A4 /* Valet watchOS Test Host App Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Valet watchOS Test Host App Extension.entitlements"; sourceTree = "<group>"; };
 		16E04BDB1F71B6C400E8552D /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		16E04BDC1F71B6C400E8552D /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		16E04BDD1F71B6C400E8552D /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
@@ -296,6 +408,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		16DF6AD6204B45EB00F8E0A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16DF6AFC204B496800F8E0A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				169FC990215ECFCE00C2D6BD /* Valet.framework in Frameworks */,
+				169FC992215ECFCE00C2D6BD /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		26E682781BA8B3F900EFF4EA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -358,6 +486,7 @@
 		168909331F7199B50057F636 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16D7753C215BFC1D004F060C /* XCTest.xcodeproj */,
 				16EB52701F71BE4100363869 /* Security.framework */,
 				16EB526E1F71BE3D00363869 /* Security.framework */,
 			);
@@ -375,6 +504,36 @@
 				16B585781F71DBE00038EE30 /* Valet_macOS_Test_Host_App.entitlements */,
 			);
 			path = "Valet macOS Test Host App";
+			sourceTree = "<group>";
+		};
+		16D7753D215BFC1D004F060C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				16D77541215BFC1D004F060C /* XCTest.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		16DF6AF4204B496800F8E0A4 /* Valet watchOS Test Host App */ = {
+			isa = PBXGroup;
+			children = (
+				16DF6AF5204B496800F8E0A4 /* Interface.storyboard */,
+				16DF6AF8204B496800F8E0A4 /* Assets.xcassets */,
+				16DF6AFA204B496800F8E0A4 /* Info.plist */,
+			);
+			path = "Valet watchOS Test Host App";
+			sourceTree = "<group>";
+		};
+		16DF6B03204B496800F8E0A4 /* Valet watchOS Test Host App Extension */ = {
+			isa = PBXGroup;
+			children = (
+				16DF6B16204B498E00F8E0A4 /* Valet watchOS Test Host App Extension.entitlements */,
+				16DF6B04204B496800F8E0A4 /* InterfaceController.swift */,
+				16DF6B06204B496800F8E0A4 /* ExtensionDelegate.swift */,
+				16DF6B08204B496800F8E0A4 /* Assets.xcassets */,
+				16DF6B0A204B496800F8E0A4 /* Info.plist */,
+			);
+			path = "Valet watchOS Test Host App Extension";
 			sourceTree = "<group>";
 		};
 		16E04BD91F71B69100E8552D /* Sources */ = {
@@ -471,6 +630,8 @@
 				371150A61E2962D8004A45D4 /* Valet iOS Test Host App */,
 				16B5856D1F71DBE00038EE30 /* Valet macOS Test Host App */,
 				165CDDC7204B26D400C96C2E /* Valet tvOS Test Host App */,
+				16DF6AF4204B496800F8E0A4 /* Valet watchOS Test Host App */,
+				16DF6B03204B496800F8E0A4 /* Valet watchOS Test Host App Extension */,
 				EA1E1F841A8C46080067C991 /* Products */,
 				168909331F7199B50057F636 /* Frameworks */,
 			);
@@ -489,6 +650,9 @@
 				16C3B06D204B1DB800B4D0B4 /* Valet.framework */,
 				16C3B097204B1E4C00B4D0B4 /* Valet tvOS Tests.xctest */,
 				165CDDC6204B26D400C96C2E /* Valet tvOS Test Host App.app */,
+				16DF6ADA204B45EB00F8E0A4 /* Valet.framework */,
+				16DF6AF3204B496800F8E0A4 /* Valet watchOS Test Host App.app */,
+				16DF6AFF204B496800F8E0A4 /* Valet watchOS Test Host App Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -515,6 +679,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				16C3B0A3204B1EA700B4D0B4 /* Valet.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16DF6AD7204B45EB00F8E0A4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -636,6 +807,61 @@
 			productReference = 16C3B097204B1E4C00B4D0B4 /* Valet tvOS Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		16DF6AD9204B45EB00F8E0A4 /* Valet watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16DF6ADF204B45EB00F8E0A4 /* Build configuration list for PBXNativeTarget "Valet watchOS" */;
+			buildPhases = (
+				16DF6AD5204B45EB00F8E0A4 /* Sources */,
+				16DF6AD6204B45EB00F8E0A4 /* Frameworks */,
+				16DF6AD7204B45EB00F8E0A4 /* Headers */,
+				16DF6AD8204B45EB00F8E0A4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Valet watchOS";
+			productName = "Valet watchOS";
+			productReference = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		16DF6AF2204B496800F8E0A4 /* Valet watchOS Test Host App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16DF6B12204B496800F8E0A4 /* Build configuration list for PBXNativeTarget "Valet watchOS Test Host App" */;
+			buildPhases = (
+				16DF6AF1204B496800F8E0A4 /* Resources */,
+				16DF6B11204B496800F8E0A4 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				16DF6B02204B496800F8E0A4 /* PBXTargetDependency */,
+			);
+			name = "Valet watchOS Test Host App";
+			productName = "Valet watchOS Test Host App";
+			productReference = 16DF6AF3204B496800F8E0A4 /* Valet watchOS Test Host App.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		16DF6AFE204B496800F8E0A4 /* Valet watchOS Test Host App Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16DF6B0E204B496800F8E0A4 /* Build configuration list for PBXNativeTarget "Valet watchOS Test Host App Extension" */;
+			buildPhases = (
+				16DF6AFB204B496800F8E0A4 /* Sources */,
+				16DF6AFC204B496800F8E0A4 /* Frameworks */,
+				16DF6AFD204B496800F8E0A4 /* Resources */,
+				169FC996215ECFCF00C2D6BD /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				16DF6B1D204B4AF800F8E0A4 /* PBXTargetDependency */,
+				169FC995215ECFCF00C2D6BD /* PBXTargetDependency */,
+			);
+			name = "Valet watchOS Test Host App Extension";
+			productName = "Valet watchOS Test Host App Extension";
+			productReference = 16DF6AFF204B496800F8E0A4 /* Valet watchOS Test Host App Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
 		26E6827B1BA8B3F900EFF4EA /* Valet iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 26E682831BA8B3F900EFF4EA /* Build configuration list for PBXNativeTarget "Valet iOS" */;
@@ -736,11 +962,13 @@
 				EAF894711B053E0400EDAD6C /* Frameworks */,
 				EAF894721B053E0400EDAD6C /* Resources */,
 				1689093C1F7199D60057F636 /* Embed Frameworks */,
+				16DF6B15204B496800F8E0A4 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				1689093B1F7199D60057F636 /* PBXTargetDependency */,
+				16DF6B0C204B496800F8E0A4 /* PBXTargetDependency */,
 			);
 			name = ValetTouchIDTest;
 			productName = ValetTouchIDTest;
@@ -790,6 +1018,26 @@
 						DevelopmentTeam = 9XUJ7M53NG;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 165CDDC5204B26D400C96C2E;
+					};
+					16DF6AD9204B45EB00F8E0A4 = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = 9XUJ7M53NG;
+						ProvisioningStyle = Manual;
+					};
+					16DF6AF2204B496800F8E0A4 = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = 9XUJ7M53NG;
+						ProvisioningStyle = Automatic;
+					};
+					16DF6AFE204B496800F8E0A4 = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = 9XUJ7M53NG;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					26E6827B1BA8B3F900EFF4EA = {
 						CreatedOnToolsVersion = 7.0;
@@ -842,6 +1090,12 @@
 			mainGroup = EA1E1F7A1A8C46080067C991;
 			productRefGroup = EA1E1F841A8C46080067C991 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 16D7753D215BFC1D004F060C /* Products */;
+					ProjectRef = 16D7753C215BFC1D004F060C /* XCTest.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				26E6827B1BA8B3F900EFF4EA /* Valet iOS */,
@@ -851,12 +1105,25 @@
 				EAEAA88B1B167A8700F7AA98 /* Valet Mac Tests */,
 				16C3B06C204B1DB800B4D0B4 /* Valet tvOS */,
 				16C3B096204B1E4C00B4D0B4 /* Valet tvOS Tests */,
+				16DF6AD9204B45EB00F8E0A4 /* Valet watchOS */,
 				371150A41E2962D8004A45D4 /* Valet iOS Test Host App */,
 				16B5856B1F71DBE00038EE30 /* Valet macOS Test Host App */,
 				165CDDC5204B26D400C96C2E /* Valet tvOS Test Host App */,
+				16DF6AF2204B496800F8E0A4 /* Valet watchOS Test Host App */,
+				16DF6AFE204B496800F8E0A4 /* Valet watchOS Test Host App Extension */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		16D77541215BFC1D004F060C /* XCTest.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = XCTest.framework;
+			remoteRef = 16D77540215BFC1D004F060C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		165CDDC4204B26D400C96C2E /* Resources */ = {
@@ -888,6 +1155,31 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16DF6AD8204B45EB00F8E0A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16DF6AF1204B496800F8E0A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16DF6AF9204B496800F8E0A4 /* Assets.xcassets in Resources */,
+				16DF6AF7204B496800F8E0A4 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16DF6AFD204B496800F8E0A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16DF6B1F204B4DA600F8E0A4 /* Valet.framework in Resources */,
+				16DF6B09204B496800F8E0A4 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -990,6 +1282,41 @@
 				16C3B0A5204B203100B4D0B4 /* SecItemTests.swift in Sources */,
 				16C3B0A6204B203100B4D0B4 /* SecureEnclaveTests.swift in Sources */,
 				16C3B0A8204B203100B4D0B4 /* SynchronizableTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16DF6AD5204B45EB00F8E0A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16DF6AE2204B470100F8E0A4 /* Accessibility.swift in Sources */,
+				16DF6AE3204B470100F8E0A4 /* CloudAccessibility.swift in Sources */,
+				16DF6AE4204B470100F8E0A4 /* ErrorHandler.swift in Sources */,
+				16DF6AE5204B470100F8E0A4 /* Identifier.swift in Sources */,
+				16DF6AE6204B470100F8E0A4 /* KeychainQueryConvertible.swift in Sources */,
+				16DF6AE7204B470100F8E0A4 /* MigrationResult.swift in Sources */,
+				16DF6AE8204B470100F8E0A4 /* SecureEnclave.swift in Sources */,
+				16DF6AE9204B470100F8E0A4 /* SecureEnclaveAccessControl.swift in Sources */,
+				16DF6AEB204B470100F8E0A4 /* SecureEnclaveValet.swift in Sources */,
+				16DF6AEC204B470100F8E0A4 /* Valet.swift in Sources */,
+				16A0D7352135CDBA008D852B /* SwiftCompatibility.swift in Sources */,
+				16DF6AED204B470100F8E0A4 /* Configuration.swift in Sources */,
+				16DF6AEE204B470100F8E0A4 /* Keychain.swift in Sources */,
+				16DF6AEF204B470100F8E0A4 /* SecItem.swift in Sources */,
+				16DF6AF0204B470100F8E0A4 /* Service.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16DF6AFB204B496800F8E0A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16DF6B20204B5E2700F8E0A4 /* SecItemTests.swift in Sources */,
+				16DF6B22204B5E2700F8E0A4 /* SynchronizableTests.swift in Sources */,
+				16DF6B23204B5E2700F8E0A4 /* ValetTests.swift in Sources */,
+				16DF6B07204B496800F8E0A4 /* ExtensionDelegate.swift in Sources */,
+				16DF6B05204B496800F8E0A4 /* InterfaceController.swift in Sources */,
+				16DF6B21204B5E2700F8E0A4 /* SecureEnclaveTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1111,10 +1438,30 @@
 			target = 26E6827B1BA8B3F900EFF4EA /* Valet iOS */;
 			targetProxy = 1689093A1F7199D60057F636 /* PBXContainerItemProxy */;
 		};
+		169FC995215ECFCF00C2D6BD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = XCTest;
+			targetProxy = 169FC994215ECFCF00C2D6BD /* PBXContainerItemProxy */;
+		};
 		16C3B09E204B1E4C00B4D0B4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 16C3B06C204B1DB800B4D0B4 /* Valet tvOS */;
 			targetProxy = 16C3B09D204B1E4C00B4D0B4 /* PBXContainerItemProxy */;
+		};
+		16DF6B02204B496800F8E0A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 16DF6AFE204B496800F8E0A4 /* Valet watchOS Test Host App Extension */;
+			targetProxy = 16DF6B01204B496800F8E0A4 /* PBXContainerItemProxy */;
+		};
+		16DF6B0C204B496800F8E0A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 16DF6AF2204B496800F8E0A4 /* Valet watchOS Test Host App */;
+			targetProxy = 16DF6B0B204B496800F8E0A4 /* PBXContainerItemProxy */;
+		};
+		16DF6B1D204B4AF800F8E0A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 16DF6AD9204B45EB00F8E0A4 /* Valet watchOS */;
+			targetProxy = 16DF6B1C204B4AF800F8E0A4 /* PBXContainerItemProxy */;
 		};
 		371150B91E2962FC004A45D4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1148,6 +1495,14 @@
 				16B585751F71DBE00038EE30 /* Base */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		16DF6AF5204B496800F8E0A4 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				16DF6AF6204B496800F8E0A4 /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 		371150AB1E2962D8004A45D4 /* Main.storyboard */ = {
@@ -1198,7 +1553,7 @@
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Valet tvOS Test Host App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1228,7 +1583,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Valet tvOS Test Host App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1255,7 +1610,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Valet macOS Test Host App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -1283,7 +1638,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "Valet macOS Test Host App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -1308,7 +1663,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1341,7 +1696,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1368,7 +1723,7 @@
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1409,6 +1764,181 @@
 			};
 			name = Release;
 		};
+		16DF6AE0204B45EB00F8E0A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		16DF6AE1204B45EB00F8E0A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		16DF6B0F204B496800F8E0A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "Valet watchOS Test Host App Extension/Valet watchOS Test Host App Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Valet watchOS Test Host App Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Debug;
+		};
+		16DF6B10204B496800F8E0A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "Valet watchOS Test Host App Extension/Valet watchOS Test Host App Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Valet watchOS Test Host App Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Release;
+		};
+		16DF6B13204B496800F8E0A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = Valet_watchOS_Test_Host_App_Extension;
+				INFOPLIST_FILE = "Valet watchOS Test Host App/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTestApp.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Debug;
+		};
+		16DF6B14204B496800F8E0A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = Valet_watchOS_Test_Host_App_Extension;
+				INFOPLIST_FILE = "Valet watchOS Test Host App/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTestApp.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 4.2;
+			};
+			name = Release;
+		};
 		26E682811BA8B3F900EFF4EA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1418,7 +1948,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1444,7 +1974,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1526,7 +2056,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Valet iOS Test Host App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1552,7 +2082,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Valet iOS Test Host App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1621,6 +2151,7 @@
 				PRODUCT_NAME = Valet;
 				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -1674,6 +2205,7 @@
 				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
@@ -1683,7 +2215,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1706,7 +2238,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1776,7 +2308,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1802,7 +2334,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 9XUJ7M53NG;
+				DEVELOPMENT_TEAM = "";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = ValetTouchIDTest/Info.plist;
@@ -1849,6 +2381,33 @@
 			buildConfigurations = (
 				16C3B0A0204B1E4C00B4D0B4 /* Debug */,
 				16C3B0A1204B1E4C00B4D0B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		16DF6ADF204B45EB00F8E0A4 /* Build configuration list for PBXNativeTarget "Valet watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16DF6AE0204B45EB00F8E0A4 /* Debug */,
+				16DF6AE1204B45EB00F8E0A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		16DF6B0E204B496800F8E0A4 /* Build configuration list for PBXNativeTarget "Valet watchOS Test Host App Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16DF6B0F204B496800F8E0A4 /* Debug */,
+				16DF6B10204B496800F8E0A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		16DF6B12204B496800F8E0A4 /* Build configuration list for PBXNativeTarget "Valet watchOS Test Host App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16DF6B13204B496800F8E0A4 /* Debug */,
+				16DF6B14204B496800F8E0A4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

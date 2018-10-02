@@ -1,6 +1,6 @@
 //
-//  AppDelegate.swift
-//  Valet tvOS Test Host App
+//  ExtensionDelegate.swift
+//  Valet watchOS Test Host App Extension
 //
 //  Created by Dan Federman on 3/3/18.
 //  Copyright © 2018 Square, Inc.
@@ -16,11 +16,9 @@
 //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
+//
 
-import UIKit
+import WatchKit
 
 
-@UIApplicationMain
-final class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
-}
+class ExtensionDelegate: NSObject, WKExtensionDelegate {}

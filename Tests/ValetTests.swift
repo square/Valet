@@ -19,8 +19,9 @@
 //
 
 import Foundation
-@testable import Valet
 import XCTest
+
+@testable import Valet
 
 
 /// - returns: `true` when the test environment is signed.
@@ -48,10 +49,12 @@ internal extension Valet {
         let sharedAccessGroupIdentifier: Identifier
         #if os(iOS)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
-        #elseif os(OSX)
+        #elseif os(macOS)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
         #elseif os(tvOS)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-tvOS-Test-Host-App")!
+        #elseif os(watchOS)
+            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension")!
         #else
             XCTFail()
         #endif
@@ -106,8 +109,8 @@ class ValetTests: XCTestCase
         let allPermutations = Valet.permutations(with: identifier) + Valet.permutations(with: identifier, shared: true)
         allPermutations.forEach { testingValet in testingValet.removeAllObjects() }
 
-        XCTAssert(valet.allKeys().isEmpty)
-        XCTAssert(anotherFlavor.allKeys().isEmpty)
+        XCTAssertTrue(valet.allKeys().isEmpty)
+        XCTAssertTrue(anotherFlavor.allKeys().isEmpty)
     }
 
     // MARK: Initialization
@@ -388,7 +391,7 @@ class ValetTests: XCTestCase
     
     func test_setObjectForKey_failsForEmptyData() {
         let emptyData = Data()
-        XCTAssert(emptyData.isEmpty)
+        XCTAssertTrue(emptyData.isEmpty)
         XCTAssertFalse(valet.set(object: emptyData, forKey: key))
     }
     

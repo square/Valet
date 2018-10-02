@@ -1,0 +1,4 @@
+[submodule "Tests/xctest-watchOS"]
+	path = Tests/XCTest-watchOS
+	# Use a URL that is relative to github.com/square/valet.git such that our submodules work with both SSH and HTTPS.
+	url = ../../dfed/XCTest-watchOS.git

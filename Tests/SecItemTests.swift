@@ -19,19 +19,25 @@
 //
 
 import Foundation
-@testable import Valet
 import XCTest
+
+@testable import Valet
 
 
 class SecItemTests: XCTestCase {
 
     func test_sharedAccessGroupPrefix_findsPrefix() {
-        #if os(iOS)
+        #if os(watchOS) || os(tvOS) || os(iOS)
             // CocoaPods app host DSL does not provide ability to edit the app host settings such
             // the `DEVELOPER TEAM` so for now skip this assertion.
             #if !COCOAPODS
                 XCTAssertEqual(SecItem.sharedAccessGroupPrefix, "9XUJ7M53NG")
             #endif
+        #elseif os(macOS)
+            // Do nothing.
+        #else
+            // Currently unsupported build configuration. This next line will compile-time error.
+            doNotCommentOutThisLine()
         #endif
     }
     

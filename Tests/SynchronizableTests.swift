@@ -19,8 +19,9 @@
 //
 
 import Foundation
-@testable import Valet
 import XCTest
+
+@testable import Valet
 
 
 class CloudTests: XCTestCase
@@ -72,8 +73,8 @@ class CloudTests: XCTestCase
             return
         }
         let otherValet = Valet.iCloudValet(with: valet.identifier, accessibility: accessibility)
-        XCTAssert(valet == otherValet)
-        XCTAssert(valet === otherValet)
+        XCTAssertEqual(valet, otherValet, "Valet should be equal to otherValet")
+        XCTAssertTrue(valet === otherValet, "Valet and otherValet should be the same object")
     }
     
     func test_setStringForKey()
