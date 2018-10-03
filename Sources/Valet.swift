@@ -150,13 +150,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @discardableResult
     public func set(object: Data, forKey key: String) -> Bool {
         return execute(in: lock) {
-            switch Keychain.set(object: object, forKey: key, options: keychainQuery) {
-            case .success:
-                return true
-                
-            case .error:
-                return false
-            }
+            return Keychain.set(object: object, forKey: key, options: keychainQuery).didSucceed
         }
     }
     
@@ -165,13 +159,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @objc(objectForKey:)
     public func object(forKey key: String) -> Data? {
         return execute(in: lock) {
-            switch Keychain.object(forKey: key, options: keychainQuery) {
-            case let .success(data):
-                return data
-                
-            case .error:
-                return nil
-            }
+            return Keychain.object(forKey: key, options: keychainQuery).value
         }
     }
     
@@ -180,12 +168,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @objc(containsObjectForKey:)
     public func containsObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            switch Keychain.containsObject(forKey: key, options: keychainQuery) {
-            case .success:
-                return true
-            case .error:
-                return false
-            }
+            return Keychain.containsObject(forKey: key, options: keychainQuery).didSucceed
         }
     }
     
@@ -196,13 +179,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @discardableResult
     public func set(string: String, forKey key: String) -> Bool {
         return execute(in: lock) {
-            switch Keychain.set(string: string, forKey: key, options: keychainQuery) {
-            case .success:
-                return true
-                
-            case .error:
-                return false
-            }
+            return Keychain.set(string: string, forKey: key, options: keychainQuery).didSucceed
         }
     }
     
@@ -211,13 +188,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @objc(stringForKey:)
     public func string(forKey key: String) -> String? {
         return execute(in: lock) {
-            switch Keychain.string(forKey: key, options: keychainQuery) {
-            case let .success(data):
-                return data
-                
-            case .error:
-                return nil
-            }
+            return Keychain.string(forKey: key, options: keychainQuery).value
         }
     }
     
@@ -225,13 +196,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @objc
     public func allKeys() -> Set<String> {
         return execute(in: lock) {
-            switch Keychain.allKeys(options: keychainQuery) {
-            case let .success(allKeys):
-                return allKeys
-                
-            case .error:
-                return Set()
-            }
+            return Keychain.allKeys(options: keychainQuery).value ?? Set()
         }
     }
     
@@ -241,13 +206,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @discardableResult
     public func removeObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            switch Keychain.removeObject(forKey: key, options: keychainQuery) {
-            case .success:
-                return true
-                
-            case .error:
-                return false
-            }
+            return Keychain.removeObject(forKey: key, options: keychainQuery).didSucceed
         }
     }
     
@@ -257,13 +216,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @discardableResult
     public func removeAllObjects() -> Bool {
         return execute(in: lock) {
-            switch Keychain.removeAllObjects(matching: keychainQuery) {
-            case .success:
-                return true
-                
-            case .error:
-                return false
-            }
+            return Keychain.removeAllObjects(matching: keychainQuery).didSucceed
         }
     }
     

@@ -37,11 +37,33 @@ internal final class SecItem {
     internal enum DataResult<SuccessType> {
         case success(SuccessType)
         case error(OSStatus)
+
+        var value: SuccessType? {
+            switch self {
+            case let .success(value):
+                return value
+
+            case .error:
+                return nil
+            }
+
+        }
     }
     
     internal enum Result {
         case success
         case error(OSStatus)
+
+        var didSucceed: Bool {
+            switch self {
+            case .success:
+                return true
+
+            case .error:
+                return false
+            }
+
+        }
     }
     
     // MARK: Internal Class Properties

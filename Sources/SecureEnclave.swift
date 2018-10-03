@@ -33,7 +33,24 @@ public final class SecureEnclave {
         case userCancelled
         /// No data was found for the requested key.
         case itemNotFound
-        
+
+        // MARK: Initialization
+
+        init(_ dataResult: SecItem.DataResult<Type>) {
+            switch dataResult {
+            case let .success(value):
+                self = .success(value)
+
+            case let .error(status):
+                let userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed)
+                if userCancelled {
+                    self = .userCancelled
+                } else {
+                    self = .itemNotFound
+                }
+            }
+        }
+
         // MARK: Equatable
         
         public static func ==(lhs: Result<Type>, rhs: Result<Type>) -> Bool {
@@ -80,13 +97,7 @@ public final class SecureEnclave {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         _ = Keychain.removeObject(forKey: key, options: options)
         
-        switch Keychain.set(object: object, forKey: key, options: options) {
-        case .success:
-            return true
-            
-        case .error:
-            return false
-        }
+        return Keychain.set(object: object, forKey: key, options: options).didSucceed
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
@@ -99,18 +110,7 @@ public final class SecureEnclave {
             secItemQuery[kSecUseOperationPrompt as String] = userPrompt
         }
         
-        switch Keychain.object(forKey: key, options: secItemQuery) {
-        case let .success(data):
-            return .success(data)
-            
-        case let .error(status):
-            let userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed)
-            if userCancelled {
-                return .userCancelled
-            } else {
-                return .itemNotFound
-            }
-        }
+        return Result(Keychain.object(forKey: key, options: secItemQuery))
     }
     
     /// - parameter key: The key to look up in the keychain.
@@ -139,13 +139,7 @@ public final class SecureEnclave {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         _ = Keychain.removeObject(forKey: key, options: options)
         
-        switch Keychain.set(string: string, forKey: key, options: options) {
-        case .success:
-            return true
-            
-        case .error:
-            return false
-        }
+        return Keychain.set(string: string, forKey: key, options: options).didSucceed
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
@@ -157,18 +151,7 @@ public final class SecureEnclave {
         if !userPrompt.isEmpty {
             secItemQuery[kSecUseOperationPrompt as String] = userPrompt
         }
-        
-        switch Keychain.string(forKey: key, options: secItemQuery) {
-        case let .success(string):
-            return .success(string)
-            
-        case let .error(status):
-            let userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed)
-            if userCancelled {
-                return .userCancelled
-            } else {
-                return .itemNotFound
-            }
-        }
+
+        return Result(Keychain.string(forKey: key, options: secItemQuery))
     }
 }

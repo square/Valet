@@ -387,15 +387,12 @@ internal final class Keychain {
         
         // Remove data if requested.
         if removeOnCompletion {
-            switch Keychain.removeAllObjects(matching: query) {
-            case .success:
-                // Nothing to do here.
-                break
-                
-            case .error:
+            guard Keychain.removeAllObjects(matching: query).didSucceed else {
                 revertMigration()
                 return .removalFailed
             }
+
+            // We're done!
         }
         
         return .success
