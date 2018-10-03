@@ -97,13 +97,7 @@ public final class SecureEnclave {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         _ = Keychain.removeObject(forKey: key, options: options)
         
-        switch Keychain.set(object: object, forKey: key, options: options) {
-        case .success:
-            return true
-            
-        case .error:
-            return false
-        }
+        return Keychain.set(object: object, forKey: key, options: options).didSucceed
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
@@ -145,13 +139,7 @@ public final class SecureEnclave {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         _ = Keychain.removeObject(forKey: key, options: options)
         
-        switch Keychain.set(string: string, forKey: key, options: options) {
-        case .success:
-            return true
-            
-        case .error:
-            return false
-        }
+        return Keychain.set(string: string, forKey: key, options: options).didSucceed
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.

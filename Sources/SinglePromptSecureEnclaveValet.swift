@@ -179,13 +179,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
                 secItemQuery[kSecUseOperationPrompt as String] = userPrompt
             }
             
-            switch Keychain.allKeys(options: secItemQuery) {
-            case let .success(allKeys):
-                return allKeys
-                
-            case .error:
-                return Set()
-            }
+            return Keychain.allKeys(options: secItemQuery).value ?? Set()
         }
     }
     
@@ -195,13 +189,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @discardableResult
     public func removeObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            switch Keychain.removeObject(forKey: key, options: baseKeychainQuery) {
-            case .success:
-                return true
-                
-            case .error:
-                return false
-            }
+            return Keychain.removeObject(forKey: key, options: baseKeychainQuery).didSucceed
         }
     }
     
@@ -211,13 +199,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @discardableResult
     public func removeAllObjects() -> Bool {
         return execute(in: lock) {
-            switch Keychain.removeAllObjects(matching: baseKeychainQuery) {
-            case .success:
-                return true
-                
-            case .error:
-                return false
-            }
+            return Keychain.removeAllObjects(matching: baseKeychainQuery).didSucceed
         }
     }
     

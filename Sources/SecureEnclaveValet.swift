@@ -165,13 +165,7 @@ public final class SecureEnclaveValet: NSObject {
     @discardableResult
     public func removeObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            switch Keychain.removeObject(forKey: key, options: keychainQuery) {
-            case .success:
-                return true
-                
-            case .error:
-                return false
-            }
+            return Keychain.removeObject(forKey: key, options: keychainQuery).didSucceed
         }
     }
     
@@ -181,13 +175,7 @@ public final class SecureEnclaveValet: NSObject {
     @discardableResult
     public func removeAllObjects() -> Bool {
         return execute(in: lock) {
-            switch Keychain.removeAllObjects(matching: keychainQuery) {
-            case .success:
-                return true
-                
-            case .error:
-                return false
-            }
+            return Keychain.removeAllObjects(matching: keychainQuery).didSucceed
         }
     }
     
