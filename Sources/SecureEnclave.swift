@@ -33,7 +33,24 @@ public final class SecureEnclave {
         case userCancelled
         /// No data was found for the requested key.
         case itemNotFound
-        
+
+        // MARK: Initialization
+
+        init(_ dataResult: SecItem.DataResult<Type>) {
+            switch dataResult {
+            case let .success(value):
+                self = .success(value)
+
+            case let .error(status):
+                let userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed)
+                if userCancelled {
+                    self = .userCancelled
+                } else {
+                    self = .itemNotFound
+                }
+            }
+        }
+
         // MARK: Equatable
         
         public static func ==(lhs: Result<Type>, rhs: Result<Type>) -> Bool {
@@ -99,7 +116,7 @@ public final class SecureEnclave {
             secItemQuery[kSecUseOperationPrompt as String] = userPrompt
         }
         
-        return Keychain.object(forKey: key, options: secItemQuery).asSecureEnclaveResult
+        return Result(Keychain.object(forKey: key, options: secItemQuery))
     }
     
     /// - parameter key: The key to look up in the keychain.
@@ -147,27 +164,6 @@ public final class SecureEnclave {
             secItemQuery[kSecUseOperationPrompt as String] = userPrompt
         }
 
-        return Keychain.string(forKey: key, options: secItemQuery).asSecureEnclaveResult
+        return Result(Keychain.string(forKey: key, options: secItemQuery))
     }
-}
-
-// MARK: DataResult Extension
-
-extension SecItem.DataResult where SuccessType: Equatable {
-
-    fileprivate var asSecureEnclaveResult: SecureEnclave.Result<SuccessType> {
-        switch self {
-        case let .success(value):
-            return .success(value)
-
-        case let .error(status):
-            let userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed)
-            if userCancelled {
-                return .userCancelled
-            } else {
-                return .itemNotFound
-            }
-        }
-    }
-
 }
