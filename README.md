@@ -2,9 +2,9 @@
 
 [![CI Status](https://travis-ci.org/square/Valet.svg?branch=master)](https://travis-ci.org/square/Valet)
 [![Carthage Compatibility](https://img.shields.io/badge/carthage-✓-e2c245.svg)](https://github.com/Carthage/Carthage/)
-[![Version](https://img.shields.io/cocoapods/v/Valet.svg)](http://cocoadocs.org/docsets/Valet)
-[![License](https://img.shields.io/cocoapods/l/Valet.svg)](http://cocoadocs.org/docsets/Valet)
-[![Platform](https://img.shields.io/cocoapods/p/Valet.svg)](http://cocoadocs.org/docsets/Valet)
+[![Version](https://img.shields.io/cocoapods/v/Valet.svg)](https://cocoapods.org/pods/Valet)
+[![License](https://img.shields.io/cocoapods/l/Valet.svg)](https://cocoapods.org/pods/Valet)
+[![Platform](https://img.shields.io/cocoapods/p/Valet.svg)](https://cocoapods.org/pods/Valet)
 
 Valet lets you securely store data in the iOS, tvOS, watchOS, or macOS Keychain without knowing a thing about how the Keychain works. It’s easy. We promise.
 
