@@ -1,12 +1,15 @@
 language: objective-c
 osx_image: xcode9
+env:
+  - SCHEME="Valet iOS";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=11.0,name=iPhone 7";ACTION="build test"
+  - SCHEME="Valet tvOS";SDK="appletvsimulator11.0";DESTINATION="platform=tvOS Simulator,name=Apple TV";ACTION="build test"
+  - SCHEME="Valet Mac";SDK="macosx10.13";DESTINATION="platform=OS X";ACTION="build test"
+  - SCHEME="Valet watchOS";SDK="watchos4.0";DESTINATION="platform=watchOS Simulator,OS=4.0,name=Apple Watch - 42mm";ACTION="build"
+install:
+  - bundle install
+  - brew outdated carthage || brew upgrade carthage
 before_script:
-    - bundle install
-    - brew outdated carthage || brew upgrade carthage
+  - bundle exec pod lib lint --verbose --fail-fast
+  - carthage build --verbose --no-skip-current
 script:
-    - xcodebuild -project Valet.xcodeproj -scheme "Valet iOS" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=11.0,name=iPhone 7" -configuration Debug -PBXBuildsContinueAfterErrors=0 build test
-    - xcodebuild -project Valet.xcodeproj -scheme "Valet tvOS" -sdk appletvsimulator11.0 -destination "platform=tvOS Simulator,name=Apple TV" -configuration Debug -PBXBuildsContinueAfterErrors=0 build test
-    - xcodebuild -project Valet.xcodeproj -scheme "Valet Mac" -sdk macosx10.13 -configuration Debug -destination "platform=OS X" -PBXBuildsContinueAfterErrors=0 build test
-    - xcodebuild -project Valet.xcodeproj -scheme "Valet watchOS" -sdk watchos4.0 -configuration Debug -PBXBuildsContinueAfterErrors=0 build
-    - bundle exec pod lib lint --verbose --fail-fast
-    - carthage build --verbose --no-skip-current
+  - xcodebuild -project Valet.xcodeproj -scheme "$SCHEME" -sdk $SDK -destination "$DESTINATION" -configuration Debug -PBXBuildsContinueAfterErrors=0 $ACTION
