@@ -4,7 +4,7 @@ env:
   - SCHEME="Valet iOS";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=11.0,name=iPhone 7";ACTION="build test"
   - SCHEME="Valet tvOS";SDK="appletvsimulator11.0";DESTINATION="platform=tvOS Simulator,name=Apple TV";ACTION="build test"
   - SCHEME="Valet Mac";SDK="macosx10.13";DESTINATION="platform=OS X";ACTION="build test"
-  - SCHEME="Valet watchOS";SDK="watchos4.0";DESTINATION="platform=watchOS Simulator,OS=4.0,name=Apple Watch - 42mm";ACTION="build"
+  - SCHEME="Valet watchOS";SDK="watchos4.0";DESTINATION="";ACTION="build"
 install:
   - bundle install
   - brew outdated carthage || brew upgrade carthage
@@ -12,4 +12,4 @@ before_script:
   - bundle exec pod lib lint --verbose --fail-fast
   - carthage build --verbose --no-skip-current
 script:
-  - xcodebuild -project Valet.xcodeproj -scheme "$SCHEME" -sdk $SDK -destination "$DESTINATION" -configuration Debug -PBXBuildsContinueAfterErrors=0 $ACTION
+  - if [ -n "$DESTINATION" ]; then xcodebuild -project Valet.xcodeproj -scheme "$SCHEME" -sdk $SDK -destination "$DESTINATION" -configuration Debug -PBXBuildsContinueAfterErrors=0 $ACTION; else xcodebuild -project Valet.xcodeproj -scheme "$SCHEME" -sdk $SDK -configuration Debug -PBXBuildsContinueAfterErrors=0 $ACTION; fi
