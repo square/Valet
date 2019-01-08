@@ -70,7 +70,7 @@ public final class SecureEnclaveValet: NSObject {
     // MARK: Initialization
     
     @available(*, unavailable)
-    private override init() {
+    public override init() {
         fatalError("Use the class methods above to create usable SecureEnclaveValet objects")
     }
     
