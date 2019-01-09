@@ -90,7 +90,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     // MARK: Initialization
 
     @available(*, unavailable)
-    private override init() {
+    public override init() {
         fatalError("Use the class methods above to create usable Valet objects")
     }
     
