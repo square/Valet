@@ -20,7 +20,6 @@
 		169FC990215ECFCE00C2D6BD /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; };
 		169FC991215ECFCE00C2D6BD /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		169FC992215ECFCE00C2D6BD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D77541215BFC1D004F060C /* XCTest.framework */; };
-		169FC993215ECFCE00C2D6BD /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16D77541215BFC1D004F060C /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		16A0D7352135CDBA008D852B /* SwiftCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CF90CE210A25CF005B7FB2 /* SwiftCompatibility.swift */; };
 		16B5856F1F71DBE00038EE30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B5856E1F71DBE00038EE30 /* AppDelegate.swift */; };
 		16B585711F71DBE00038EE30 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B585701F71DBE00038EE30 /* ViewController.swift */; };
@@ -139,6 +138,7 @@
 		16EB526B1F71BDFF00363869 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDC1F71B6C400E8552D /* Keychain.swift */; };
 		16EB526C1F71BDFF00363869 /* SecItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDE1F71B6C400E8552D /* SecItem.swift */; };
 		16EB526D1F71BDFF00363869 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E04BDB1F71B6C400E8552D /* Service.swift */; };
+		3251BD06224C865E0007453B /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16D77541215BFC1D004F060C /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		371150A81E2962D8004A45D4 /* ValetIOSTestHostAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371150A71E2962D8004A45D4 /* ValetIOSTestHostAppDelegate.swift */; };
 		371150AA1E2962D8004A45D4 /* ValetIOSTestHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371150A91E2962D8004A45D4 /* ValetIOSTestHostViewController.swift */; };
 		371150AD1E2962D8004A45D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150AB1E2962D8004A45D4 /* Main.storyboard */; };
@@ -255,7 +255,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				169FC991215ECFCE00C2D6BD /* Valet.framework in Embed Frameworks */,
-				169FC993215ECFCE00C2D6BD /* XCTest.framework in Embed Frameworks */,
+				3251BD06224C865E0007453B /* XCTest.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
