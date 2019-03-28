@@ -982,12 +982,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Square, Inc.";
 				TargetAttributes = {
 					165CDDC5204B26D400C96C2E = {
 						CreatedOnToolsVersion = 9.2;
 						DevelopmentTeam = 9XUJ7M53NG;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -998,6 +999,7 @@
 					16B5856B1F71DBE00038EE30 = {
 						CreatedOnToolsVersion = 9.0;
 						DevelopmentTeam = 9XUJ7M53NG;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -1011,17 +1013,20 @@
 					16C3B06C204B1DB800B4D0B4 = {
 						CreatedOnToolsVersion = 9.2;
 						DevelopmentTeam = 9XUJ7M53NG;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
 					};
 					16C3B096204B1E4C00B4D0B4 = {
 						CreatedOnToolsVersion = 9.2;
 						DevelopmentTeam = 9XUJ7M53NG;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 165CDDC5204B26D400C96C2E;
 					};
 					16DF6AD9204B45EB00F8E0A4 = {
 						CreatedOnToolsVersion = 9.2;
 						DevelopmentTeam = 9XUJ7M53NG;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
 					};
 					16DF6AF2204B496800F8E0A4 = {
@@ -1032,6 +1037,7 @@
 					16DF6AFE204B496800F8E0A4 = {
 						CreatedOnToolsVersion = 9.2;
 						DevelopmentTeam = 9XUJ7M53NG;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -1042,17 +1048,17 @@
 					26E6827B1BA8B3F900EFF4EA = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 9XUJ7M53NG;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 					};
 					26E682891BA8B4B200EFF4EA = {
 						CreatedOnToolsVersion = 7.0;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
 					};
 					371150A41E2962D8004A45D4 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 9XUJ7M53NG;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -1063,19 +1069,19 @@
 					EA1E1F8D1A8C46090067C991 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 9XUJ7M53NG;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 371150A41E2962D8004A45D4;
 					};
 					EAEAA88B1B167A8700F7AA98 = {
 						CreatedOnToolsVersion = 6.3.2;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					EAF894731B053E0400EDAD6C = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = 9XUJ7M53NG;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 					};
 				};
 			};
