@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "16DF6AF2204B496800F8E0A4"
-               BuildableName = "Valet watchOS Test Host App.app"
-               BlueprintName = "Valet watchOS Test Host App"
+               BlueprintIdentifier = "16DF6AFE204B496800F8E0A4"
+               BuildableName = "Valet watchOS Test Host App Extension.appex"
+               BlueprintName = "Valet watchOS Test Host App Extension"
                ReferencedContainer = "container:Valet.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,6 +34,20 @@
                ReferencedContainer = "container:Valet.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "16DF6AF2204B496800F8E0A4"
+               BuildableName = "Valet watchOS Test Host App.app"
+               BlueprintName = "Valet watchOS Test Host App"
+               ReferencedContainer = "container:Valet.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -46,9 +60,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "16DF6AF2204B496800F8E0A4"
-            BuildableName = "Valet watchOS Test Host App.app"
-            BlueprintName = "Valet watchOS Test Host App"
+            BlueprintIdentifier = "16DF6AFE204B496800F8E0A4"
+            BuildableName = "Valet watchOS Test Host App Extension.appex"
+            BlueprintName = "Valet watchOS Test Host App Extension"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -57,8 +71,8 @@
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      selectedDebuggerIdentifier = ""
+      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -68,21 +82,21 @@
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.Carousel"
-         RemotePath = "/ValetTouchIDTest">
+         RemotePath = "/Valet watchOS Test Host App Extension">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "16DF6AF2204B496800F8E0A4"
-            BuildableName = "Valet watchOS Test Host App.app"
-            BlueprintName = "Valet watchOS Test Host App"
+            BlueprintIdentifier = "16DF6AFE204B496800F8E0A4"
+            BuildableName = "Valet watchOS Test Host App Extension.appex"
+            BlueprintName = "Valet watchOS Test Host App Extension"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "16DF6AF2204B496800F8E0A4"
-            BuildableName = "Valet watchOS Test Host App.app"
-            BlueprintName = "Valet watchOS Test Host App"
+            BlueprintIdentifier = "16DF6AFE204B496800F8E0A4"
+            BuildableName = "Valet watchOS Test Host App Extension.appex"
+            BlueprintName = "Valet watchOS Test Host App Extension"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -98,21 +112,21 @@
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.Carousel"
-         RemotePath = "/ValetTouchIDTest">
+         RemotePath = "/Valet watchOS Test Host App Extension">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "16DF6AF2204B496800F8E0A4"
-            BuildableName = "Valet watchOS Test Host App.app"
-            BlueprintName = "Valet watchOS Test Host App"
+            BlueprintIdentifier = "16DF6AFE204B496800F8E0A4"
+            BuildableName = "Valet watchOS Test Host App Extension.appex"
+            BlueprintName = "Valet watchOS Test Host App Extension"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "16DF6AF2204B496800F8E0A4"
-            BuildableName = "Valet watchOS Test Host App.app"
-            BlueprintName = "Valet watchOS Test Host App"
+            BlueprintIdentifier = "16DF6AFE204B496800F8E0A4"
+            BuildableName = "Valet watchOS Test Host App Extension.appex"
+            BlueprintName = "Valet watchOS Test Host App Extension"
             ReferencedContainer = "container:Valet.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
