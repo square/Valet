@@ -1,5 +1,5 @@
 #!/bin/bash -l
-set -e
+set -ex
 
 if [ -n "$DESTINATION" ]; then
   xcodebuild -project Valet.xcodeproj -scheme "$SCHEME" -sdk $SDK -destination "$DESTINATION" -configuration Debug -PBXBuildsContinueAfterErrors=0 $ACTION
