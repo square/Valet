@@ -1,10 +1,16 @@
 language: objective-c
 osx_image: xcode10.2
 env:
-  - SCHEME="Valet iOS";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=12.2,name=iPhone Xs";ACTION="build test"
-  - SCHEME="Valet tvOS";SDK="appletvsimulator12.2";DESTINATION="platform=tvOS Simulator,name=Apple TV";ACTION="build test"
-  - SCHEME="Valet Mac";SDK="macosx10.13";DESTINATION="platform=OS X";ACTION="build test"
-  - SCHEME="Valet watchOS";SDK="watchos5.2";DESTINATION="";ACTION="build"
+  - PROJECT=Valet.xcodeproj
+  - IOS_FRAMEWORK_SCHEME="Valet iOS"
+  - MACOS_FRAMEWORK_SCHEME="Valet macOS"
+  - TVOS_FRAMEWORK_SCHEME="Valet tvOS"
+  - WATCHOS_FRAMEWORK_SCHEME="Valet watchOS"
+matrix:
+  - SCHEME="$IOS_FRAMEWORK_SCHEME" DESTINATION="OS=12.2,name=iPhone XS" ACTION="build test"
+  - SCHEME="$TVOS_FRAMEWORK_SCHEME" DESTINATION="OS=12.2,name=Apple TV 4K" ACTION="build test"
+  - SCHEME="$WATCHOS_FRAMEWORK_SCHEME" DESTINATION="OS=5.2,name=Apple Watch Series 4 - 44mm" ACTION="build test"
+  - SCHEME="$MACOS_FRAMEWORK_SCHEME" DESTINATION="platform=OS X" ACTION="build"
 install:
   - bundle install
   - brew outdated carthage || brew upgrade carthage
@@ -12,4 +18,4 @@ before_script:
   - bundle exec pod lib lint --verbose --fail-fast
   - carthage build --verbose --no-skip-current
 script:
-  - ./Scripts/ci.sh
+  - xcodebuild -project Valet.xcodeproj -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug -PBXBuildsContinueAfterErrors=0 $ACTION
