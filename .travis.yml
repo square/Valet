@@ -18,4 +18,7 @@ before_script:
   - bundle exec pod lib lint --verbose --fail-fast
   - carthage build --verbose --no-skip-current
 script:
+  - xcodebuild -version
+  - xcodebuild -showsdks
+
   - xcodebuild -project Valet.xcodeproj -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug -PBXBuildsContinueAfterErrors=0 $ACTION
