@@ -20,7 +20,6 @@
 		169FC990215ECFCE00C2D6BD /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; };
 		169FC991215ECFCE00C2D6BD /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		169FC992215ECFCE00C2D6BD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D77541215BFC1D004F060C /* XCTest.framework */; };
-		16A0D7352135CDBA008D852B /* SwiftCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CF90CE210A25CF005B7FB2 /* SwiftCompatibility.swift */; };
 		16B5856F1F71DBE00038EE30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B5856E1F71DBE00038EE30 /* AppDelegate.swift */; };
 		16B585711F71DBE00038EE30 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B585701F71DBE00038EE30 /* ViewController.swift */; };
 		16B585731F71DBE00038EE30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16B585721F71DBE00038EE30 /* Assets.xcassets */; };
@@ -144,9 +143,6 @@
 		371150AD1E2962D8004A45D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150AB1E2962D8004A45D4 /* Main.storyboard */; };
 		371150AF1E2962D8004A45D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 371150AE1E2962D8004A45D4 /* Assets.xcassets */; };
 		371150B21E2962D8004A45D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150B01E2962D8004A45D4 /* LaunchScreen.storyboard */; };
-		38CF90CF210A25CF005B7FB2 /* SwiftCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CF90CE210A25CF005B7FB2 /* SwiftCompatibility.swift */; };
-		38CF90D0210A25CF005B7FB2 /* SwiftCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CF90CE210A25CF005B7FB2 /* SwiftCompatibility.swift */; };
-		38CF90D1210A25CF005B7FB2 /* SwiftCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CF90CE210A25CF005B7FB2 /* SwiftCompatibility.swift */; };
 		AC11C5571F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11C5561F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift */; };
 		AC11C5581F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11C5561F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift */; };
 		AC89A3EC1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */; };
@@ -365,7 +361,6 @@
 		371150B11E2962D8004A45D4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		371150B31E2962D8004A45D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37250B1D1E2DD55D008B4777 /* Valet iOS Test Host App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Valet iOS Test Host App.entitlements"; sourceTree = "<group>"; };
-		38CF90CE210A25CF005B7FB2 /* SwiftCompatibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftCompatibility.swift; sourceTree = "<group>"; };
 		AC11C5561F8197C200AE9842 /* SinglePromptSecureEnclaveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePromptSecureEnclaveTests.swift; sourceTree = "<group>"; };
 		AC89A3EA1CC82426009A7121 /* ValetTouchIDTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ValetTouchIDTest-Bridging-Header.h"; sourceTree = "<group>"; };
 		AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetTouchIDTestAppDelegate.swift; sourceTree = "<group>"; };
@@ -550,7 +545,6 @@
 				16E04BE81F71B6D200E8552D /* SecureEnclaveAccessControl.swift */,
 				16E04BE41F71B6D200E8552D /* SinglePromptSecureEnclaveValet.swift */,
 				16E04BE31F71B6D200E8552D /* SecureEnclaveValet.swift */,
-				38CF90CE210A25CF005B7FB2 /* SwiftCompatibility.swift */,
 				16EB523D1F71BC6B00363869 /* Valet.h */,
 				16E04BE61F71B6D200E8552D /* Valet.swift */,
 				16E04BDA1F71B6AA00E8552D /* Internal */,
@@ -1273,7 +1267,6 @@
 				16C3B08B204B1E1500B4D0B4 /* SecureEnclaveAccessControl.swift in Sources */,
 				16C3B08D204B1E1500B4D0B4 /* SecureEnclaveValet.swift in Sources */,
 				16C3B08E204B1E1500B4D0B4 /* Valet.swift in Sources */,
-				38CF90D1210A25CF005B7FB2 /* SwiftCompatibility.swift in Sources */,
 				16C3B08F204B1E1500B4D0B4 /* Configuration.swift in Sources */,
 				16C3B090204B1E1500B4D0B4 /* Keychain.swift in Sources */,
 				16C3B091204B1E1500B4D0B4 /* SecItem.swift in Sources */,
@@ -1306,7 +1299,6 @@
 				16DF6AE9204B470100F8E0A4 /* SecureEnclaveAccessControl.swift in Sources */,
 				16DF6AEB204B470100F8E0A4 /* SecureEnclaveValet.swift in Sources */,
 				16DF6AEC204B470100F8E0A4 /* Valet.swift in Sources */,
-				16A0D7352135CDBA008D852B /* SwiftCompatibility.swift in Sources */,
 				16DF6AED204B470100F8E0A4 /* Configuration.swift in Sources */,
 				16DF6AEE204B470100F8E0A4 /* Keychain.swift in Sources */,
 				16DF6AEF204B470100F8E0A4 /* SecItem.swift in Sources */,
@@ -1341,7 +1333,6 @@
 				16EB52531F71BDF400363869 /* Identifier.swift in Sources */,
 				16EB52661F71BDFF00363869 /* Configuration.swift in Sources */,
 				16EB52571F71BDF400363869 /* SecureEnclaveAccessControl.swift in Sources */,
-				38CF90CF210A25CF005B7FB2 /* SwiftCompatibility.swift in Sources */,
 				16EB52501F71BDF400363869 /* Accessibility.swift in Sources */,
 				16EB52681F71BDFF00363869 /* SecItem.swift in Sources */,
 				16EB52641F71BDF900363869 /* Valet.swift in Sources */,
@@ -1364,7 +1355,6 @@
 				16EB525D1F71BDF400363869 /* Identifier.swift in Sources */,
 				16EB526A1F71BDFF00363869 /* Configuration.swift in Sources */,
 				16EB52611F71BDF400363869 /* SecureEnclaveAccessControl.swift in Sources */,
-				38CF90D0210A25CF005B7FB2 /* SwiftCompatibility.swift in Sources */,
 				16EB525A1F71BDF400363869 /* Accessibility.swift in Sources */,
 				16EB526C1F71BDFF00363869 /* SecItem.swift in Sources */,
 				16EB52651F71BDFA00363869 /* Valet.swift in Sources */,
