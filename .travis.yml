@@ -1,10 +1,10 @@
 language: objective-c
 osx_image: xcode10.2
 env:
-  - SCHEME="Valet iOS";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=11.0,name=iPhone 7";ACTION="build test"
-  - SCHEME="Valet tvOS";SDK="appletvsimulator11.0";DESTINATION="platform=tvOS Simulator,name=Apple TV";ACTION="build test"
-  - SCHEME="Valet Mac";SDK="macosx10.13";DESTINATION="platform=OS X";ACTION="build test"
-  - SCHEME="Valet watchOS";SDK="watchos4.0";DESTINATION="";ACTION="build"
+  - SCHEME="Valet iOS";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=12.2,name=iPhone Xs";ACTION="build test"
+  - SCHEME="Valet tvOS";SDK="appletvsimulator12.2";DESTINATION="platform=tvOS Simulator,name=Apple TV";ACTION="build test"
+  - SCHEME="Valet Mac";SDK="macosx10.14";DESTINATION="platform=OS X";ACTION="build test"
+  - SCHEME="Valet watchOS";SDK="watchos5.2";DESTINATION="";ACTION="build"
 install:
   - bundle install
   - brew outdated carthage || brew upgrade carthage
