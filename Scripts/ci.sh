@@ -3,9 +3,9 @@ set -ex
 
 if [ $ACTION == "xcode" ]; then
   if [ -n "$DESTINATION" ]; then
-    xcodebuild -project Valet.xcodeproj -scheme "$SCHEME" -sdk $SDK -destination "$DESTINATION" -configuration Debug -PBXBuildsContinueAfterErrors=0 $ACTION
+    xcodebuild -project Valet.xcodeproj -scheme "$SCHEME" -sdk $SDK -destination "$DESTINATION" -configuration Debug -PBXBuildsContinueAfterErrors=0 $XCODE_ACTION
   else
-    xcodebuild -project Valet.xcodeproj -scheme "$SCHEME" -sdk $SDK -configuration Debug -PBXBuildsContinueAfterErrors=0 $ACTION
+    xcodebuild -project Valet.xcodeproj -scheme "$SCHEME" -sdk $SDK -configuration Debug -PBXBuildsContinueAfterErrors=0 $XCODE_ACTION
   fi
 fi
 
