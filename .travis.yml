@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode10
+osx_image: xcode10.2
 env:
   - SCHEME="Valet iOS";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=11.0,name=iPhone 7";ACTION="build test"
   - SCHEME="Valet tvOS";SDK="appletvsimulator11.0";DESTINATION="platform=tvOS Simulator,name=Apple TV";ACTION="build test"
