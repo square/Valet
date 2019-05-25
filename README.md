@@ -157,6 +157,12 @@ This instance also stores and retrieves data in the Secure Enclave, but does not
 
 **In order for your customers not to receive a prompt that your app does not yet support Face ID, you must set a value for the Privacy - Face ID Usage Description [(NSFaceIDUsageDescription)](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW75) key in your app’s Info.plist.**
 
+### Thread Safety
+
+Valet is built to be thread safe: it is possible to use a Valet instance on any queue or thread. Valet instances ensure that code that talks to the Keychain is atomic – it is impossible to corrupt data in Valet by reading and writing on multiple queues simultaneously.
+
+Because Keychain items are stored on disk, it is recommended that you interact with your Valet instance on a background queue to prevent blocking the main queue.
+
 ### Migrating Existing Keychain Values into Valet
 
 Already using the Keychain and no longer want to maintain your own Keychain code? We feel you. That’s why we wrote `migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool)`. This method allows you to migrate all your existing Keychain entries to a Valet instance in one line. Just pass in a Dictionary with the `kSecClass`, `kSecAttrService`, and any other `kSecAttr*` attributes you use – we’ll migrate the data for you.
