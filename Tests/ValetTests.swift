@@ -28,8 +28,8 @@ import XCTest
 /// - The Valet Mac Tests target is left without a host app on master. Mac test host app signing requires CI to have the Developer team credentials down in keychain, which we can't easily accomplish.
 /// - note: In order to test changes locally, set the Valet Mac Tests host to Valet macOS Test Host App, delete all VAL_* keychain items in your keychain via Keychain Access.app, and run Mac tests.
 func testEnvironmentIsSigned() -> Bool {
-    // Our test host apps for iOS and Mac are both signed, so testing for a bundle identifier is analogous to testing signing.
-    guard Bundle.main.bundleIdentifier != nil else {
+    // Our test host apps for iOS and Mac are both signed, so testing for a custom bundle identifier is analogous to testing signing.
+    guard Bundle.main.bundleIdentifier != nil && Bundle.main.bundleIdentifier != "com.apple.dt.xctest.tool" else {
         #if os(iOS) || os(tvOS)
             XCTFail("test bundle should be signed")
         #endif
