@@ -161,7 +161,7 @@ This instance also stores and retrieves data in the Secure Enclave, but does not
 
 Valet is built to be thread safe: it is possible to use a Valet instance on any queue or thread. Valet instances ensure that code that talks to the Keychain is atomic – it is impossible to corrupt data in Valet by reading and writing on multiple queues simultaneously.
 
-Because Keychain items are stored on disk, it is recommended that you interact with your Valet instance on a background queue to prevent blocking the main queue.
+However, because the Keychain is effectively disk storage, there is no guarantee that reading and writing items is fast - accessing a Valet instance from the main queue can result in choppy animations or blocked UI. As a result, we recommend utilizing your Valet instance on a background queue; treat Valet like you treat other code that reads from and writes to disk.
 
 ### Migrating Existing Keychain Values into Valet
 
