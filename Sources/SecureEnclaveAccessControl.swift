@@ -76,14 +76,14 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable 
             return .userPresence
         case .biometricAny:
             if #available(macOS 10.12.1, *) {
-                return .touchIDAny
+                return .init(rawValue: 2) // .biometryAny with Xcode 9 compatibility.
             } else {
                 ErrorHandler.assertionFailure(".biometricAny requires macOS 10.12.1.")
                 return .userPresence
             }
         case .biometricCurrentSet:
             if #available(macOS 10.12.1, *) {
-                return .touchIDCurrentSet
+                return .init(rawValue: 8) // .biometryCurrentSet with Xcode 9 compatibility.
             } else {
                 ErrorHandler.assertionFailure(".biometricCurrentSet requires macOS 10.12.1.")
                 return .userPresence
