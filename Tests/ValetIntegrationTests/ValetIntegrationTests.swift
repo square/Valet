@@ -61,26 +61,10 @@ internal extension Valet {
         return sharedAccessGroupIdentifier
     }()
 
-    // MARK: Permutations
-
-    class func permutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
-        return Accessibility.allValues().map { accessibility in
-            let valet: Valet = shared ? .sharedAccessGroupValet(with: identifier, accessibility: accessibility) : .valet(with: identifier, accessibility: accessibility)
-            return valet
-        }
-    }
-
-    class func iCloudPermutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
-        return CloudAccessibility.allValues().map { cloudAccessibility in
-            let valet: Valet = shared ? .iCloudSharedAccessGroupValet(with: identifier, accessibility: cloudAccessibility) : .iCloudValet(with: identifier, accessibility: cloudAccessibility)
-            return valet
-        }
-    }
-
 }
 
 
-class ValetTests: XCTestCase
+class ValetIntegrationTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = Valet.valet(with: identifier, accessibility: .whenUnlocked)
@@ -528,6 +512,29 @@ class ValetTests: XCTestCase
 
     // MARK: Migration - Query
 
+    func test_migrateObjectsMatching_failsIfQueryHasNoInputClass()
+    {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        valet.set(string: passcode, forKey: key)
+
+        // Test for base query success.
+        XCTAssertEqual(anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: false), .success)
+        XCTAssertEqual(passcode, anotherFlavor.string(forKey: key))
+
+        var mutableQuery = valet.keychainQuery
+        mutableQuery.removeValue(forKey: kSecClass as String)
+
+        // Without a kSecClass, the migration should fail.
+        XCTAssertEqual(.invalidQuery, anotherFlavor.migrateObjects(matching: mutableQuery, removeOnCompletion: false))
+
+        mutableQuery[kSecClass as String] = kSecClassInternetPassword
+        // Without a kSecClass set to something other than kSecClassGenericPassword, the migration should fail.
+        XCTAssertEqual(.invalidQuery, anotherFlavor.migrateObjects(matching: mutableQuery, removeOnCompletion: false))
+    }
+
     func test_migrateObjectsMatching_failsIfNoItemsMatchQuery()
     {
         guard testEnvironmentIsSigned() else {
@@ -547,80 +554,6 @@ class ValetTests: XCTestCase
         // Our test Valet has not yet been written to, migration should fail:
         XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: false))
         XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: true))
-    }
-
-    func test_migrateObjectsMatching_failsIfQueryHasNoInputClass()
-    {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
-        valet.set(string: passcode, forKey: key)
-
-        // Test for base query success.
-        XCTAssertEqual(anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: false), .success)
-        XCTAssertEqual(passcode, anotherFlavor.string(forKey: key))
-
-        var mutableQuery = valet.keychainQuery
-        mutableQuery.removeValue(forKey: kSecClass as String)
-
-        // Without a kSecClass, the migration should fail.
-        XCTAssertEqual(.invalidQuery, anotherFlavor.migrateObjects(matching: mutableQuery, removeOnCompletion: false))
-
-        mutableQuery[kSecClass as String] = kSecClassInternetPassword
-        // Without a kSecClass set to something other than kSecClassGenericPassword, the migration should fail.
-        XCTAssertEqual(.invalidQuery, anotherFlavor.migrateObjects(matching: mutableQuery, removeOnCompletion: false))
-    }
-
-    func test_migrateObjectsMatching_failsForBadQueries()
-    {
-        let invalidQueryError = MigrationResult.invalidQuery
-
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: [:], removeOnCompletion: false))
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: [:], removeOnCompletion: true))
-
-        var invalidQuery: [String: AnyHashable] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecMatchLimit as String: kSecMatchLimitOne
-        ]
-        // Migration queries should have kSecMatchLimit set to .All
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
-
-        invalidQuery = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecReturnData as String: kCFBooleanTrue
-        ]
-        // Migration queries do not support kSecReturnData
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
-
-        invalidQuery = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecReturnRef as String: kCFBooleanTrue
-        ]
-        // Migration queries do not support kSecReturnRef
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
-
-        invalidQuery = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecReturnPersistentRef as String: kCFBooleanFalse
-        ]
-        // Migration queries must have kSecReturnPersistentRef set to true
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
-
-
-        invalidQuery = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecReturnAttributes as String: kCFBooleanFalse
-        ]
-        // Migration queries must have kSecReturnAttributes set to true
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
-        
-        invalidQuery = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccessControl as String: NSNull()
-        ]
-        // Migration queries must not have kSecAttrAccessControl set
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
     }
 
     // FIXME: Looks to me like this test may no longer be valid, need to dig a bit

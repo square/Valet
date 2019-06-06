@@ -20,11 +20,12 @@
 
 import Foundation
 @testable import Valet
+import LegacyValet
 import XCTest
 
 
 @available(tvOS 10.0, *)
-extension SinglePromptSecureEnclaveTests {
+extension SinglePromptSecureEnclaveIntegrationTests {
 
     @available (*, deprecated)
     func test_backwardsCompatibility_withLegacyValet()

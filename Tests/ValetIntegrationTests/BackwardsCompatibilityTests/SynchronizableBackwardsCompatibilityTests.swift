@@ -20,10 +20,11 @@
 
 import Foundation
 @testable import Valet
+import LegacyValet
 import XCTest
 
 
-extension CloudTests {
+extension CloudIntegrationTests {
 
     // MARK: Backwards Compatibility
 

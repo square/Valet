@@ -7,14 +7,14 @@ Pod::Spec.new do |s|
   s.authors  = 'Square'
   s.source   = { :git => 'https://github.com/square/Valet.git', :tag => s.version }
   s.swift_version = '4.0', '4.1', '4.2', '5.0'
-  s.source_files = 'Sources/**/*.{swift,h}'
-  s.public_header_files = 'Sources/*.h'
+  s.source_files = 'Sources/Valet/**/*.{swift,h}'
+  s.public_header_files = 'Sources/Valet/*.h'
   s.frameworks = 'Security'
   s.ios.deployment_target = '9.0'
   s.tvos.deployment_target = '9.0'
   s.watchos.deployment_target = '2.0'
   s.macos.deployment_target = '10.11'
 
-  s.tvos.exclude_files = 'Sources/SinglePromptSecureEnclaveValet.swift'
-  s.watchos.exclude_files = 'Sources/SinglePromptSecureEnclaveValet.swift'
+  s.tvos.exclude_files = 'Sources/Valet/SinglePromptSecureEnclaveValet.swift'
+  s.watchos.exclude_files = 'Sources/Valet/SinglePromptSecureEnclaveValet.swift'
 end

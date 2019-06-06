@@ -20,6 +20,7 @@
 
 import Foundation
 @testable import Valet
+import LegacyValet
 import XCTest
 
 
@@ -83,7 +84,7 @@ internal extension Valet {
 
 // MARK: - Tests
 
-class ValetBackwardsCompatibilityTests: ValetTests {
+class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
 
     // MARK: Tests
 

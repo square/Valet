@@ -309,3 +309,25 @@ extension Valet {
     }
     
 }
+
+// MARK: - Testing
+
+internal extension Valet {
+
+    // MARK: Permutations
+
+    class func permutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
+        return Accessibility.allValues().map { accessibility in
+            let valet: Valet = shared ? .sharedAccessGroupValet(with: identifier, accessibility: accessibility) : .valet(with: identifier, accessibility: accessibility)
+            return valet
+        }
+    }
+
+    class func iCloudPermutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
+        return CloudAccessibility.allValues().map { cloudAccessibility in
+            let valet: Valet = shared ? .iCloudSharedAccessGroupValet(with: identifier, accessibility: cloudAccessibility) : .iCloudValet(with: identifier, accessibility: cloudAccessibility)
+            return valet
+        }
+    }
+
+}

@@ -24,7 +24,7 @@ import XCTest
 @testable import Valet
 
 
-class CloudTests: XCTestCase
+class CloudIntegrationTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     static let accessibility = CloudAccessibility.whenUnlocked
@@ -53,9 +53,7 @@ class CloudTests: XCTestCase
         }
         
         let localValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
-        XCTAssertFalse(valet == localValet)
-        XCTAssertFalse(valet === localValet)
-        
+
         // Setting
         XCTAssertTrue(valet.set(string: "butts", forKey: "cloud"))
         XCTAssertEqual("butts", valet.string(forKey: "cloud"))
@@ -65,16 +63,6 @@ class CloudTests: XCTestCase
         XCTAssertTrue(localValet.set(string: "snake people", forKey: "millennials"))
         XCTAssertTrue(valet.removeObject(forKey: "millennials"))
         XCTAssertEqual("snake people", localValet.string(forKey: "millennials"))
-    }
-    
-    func test_synchronizableValets_withEquivalentConfigurationsAreEqual() {
-        guard case let .iCloud(accessibility) = valet.configuration else {
-            XCTFail()
-            return
-        }
-        let otherValet = Valet.iCloudValet(with: valet.identifier, accessibility: accessibility)
-        XCTAssertEqual(valet, otherValet, "Valet should be equal to otherValet")
-        XCTAssertTrue(valet === otherValet, "Valet and otherValet should be the same object")
     }
     
     func test_setStringForKey()
