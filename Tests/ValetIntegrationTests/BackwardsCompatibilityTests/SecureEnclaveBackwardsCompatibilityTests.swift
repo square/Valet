@@ -20,10 +20,11 @@
 
 import Foundation
 @testable import Valet
+import LegacyValet
 import XCTest
 
 
-extension SecureEnclaveTests {
+extension SecureEnclaveIntegrationTests {
 
     @available (*, deprecated)
     func test_backwardsCompatibility_withLegacyValet()

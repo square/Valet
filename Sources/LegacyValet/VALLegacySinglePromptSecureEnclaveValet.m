@@ -43,22 +43,22 @@
 - (nullable instancetype)initWithIdentifier:(nonnull NSString *)identifier accessControl:(VALAccessControl)accessControl;
 {
     self = [super initWithIdentifier:identifier accessControl:accessControl];
-    
+
     if (self != nil) {
         _context = [LAContext new];
     }
-    
+
     return self;
 }
 
 - (nullable instancetype)initWithSharedAccessGroupIdentifier:(nonnull NSString *)sharedAccessGroupIdentifier accessControl:(VALAccessControl)accessControl;
 {
     self = [super initWithSharedAccessGroupIdentifier:sharedAccessGroupIdentifier accessControl:accessControl];
-    
+
     if (self != nil) {
         _context = [LAContext new];
     }
-    
+
     return self;
 }
 

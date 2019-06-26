@@ -20,10 +20,11 @@
 
 import Foundation
 @testable import Valet
+import LegacyValet
 import XCTest
 
 
-class SinglePromptSecureEnclaveTests: XCTestCase
+class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = SinglePromptSecureEnclaveValet.valet(with: SinglePromptSecureEnclaveTests.identifier, accessControl: .userPresence)
@@ -41,35 +42,8 @@ class SinglePromptSecureEnclaveTests: XCTestCase
         valet.removeObject(forKey: key)
     }
 
-    // MARK: Initialization
-
-    func test_init_createsCorrectBackingService() {
-        let identifier = ValetTests.identifier
-
-        SecureEnclaveAccessControl.allValues().forEach { accessControl in
-            let backingService = SinglePromptSecureEnclaveValet.valet(with: identifier, accessControl: accessControl).service
-            XCTAssertEqual(backingService, Service.standard(identifier, .singlePromptSecureEnclave(accessControl)))
-        }
-    }
-
-    func test_init_createsCorrectBackingService_sharedAccess() {
-        let identifier = ValetTests.identifier
-
-        SecureEnclaveAccessControl.allValues().forEach { accessControl in
-            let backingService = SinglePromptSecureEnclaveValet.sharedAccessGroupValet(with: identifier, accessControl: accessControl).service
-            XCTAssertEqual(backingService, Service.sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)))
-        }
-    }
-
     // MARK: Equality
-    
-    func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_haveEqualPointers()
-    {
-        let equivalentValet = SinglePromptSecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
-        XCTAssertTrue(valet == equivalentValet)
-        XCTAssertTrue(valet === equivalentValet)
-    }
-    
+        
     func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_canAccessSameData()
     {
         guard testEnvironmentIsSigned() else {
