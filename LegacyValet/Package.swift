@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Valet",
+    name: "LegacyValet",
     platforms: [
         .iOS(.v9),
         .tvOS(.v9),
@@ -13,20 +13,14 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "Valet",
-            targets: ["Valet"]),
-    ],
-    dependencies: [
-        Package.Dependency.package(path: "LegacyValet"),
+            name: "LegacyValet",
+            targets: ["LegacyValet"]),
     ],
     targets: [
         .target(
-            name: "Valet",
-            dependencies: []),
-        .testTarget(
-            name: "ValetTests",
-            dependencies: ["Valet", "LegacyValet"])
+            name: "LegacyValet",
+            dependencies: [],
+            publicHeadersPath: "Public"),
     ],
     swiftLanguageVersions: [.v4, .v4_2, .v5]
 )
-let version = Version(3, 2, 5)
