@@ -1,0 +1,4 @@
+module LegacyValet {
+    umbrella "/Users/dan_federman/Documents/source/Valet/Sources/LegacyValet/Public"
+    export *
+}
