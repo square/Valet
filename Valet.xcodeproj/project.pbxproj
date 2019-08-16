@@ -120,70 +120,54 @@
 		1612FE1022A9CC3E00FC1142 /* LegacyValet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1612FE0822A9CC3E00FC1142 /* LegacyValet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1612FE4722A9CD2000FC1142 /* LegacyValet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1612FDD322A9CB2200FC1142 /* LegacyValet.framework */; };
 		1612FE5022A9D2F600FC1142 /* LegacyValet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1612FE0822A9CC3E00FC1142 /* LegacyValet.framework */; };
-		161FB61B22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB60E22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB61C22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB60E22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB61D22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB60E22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB61E22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB60E22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB61F22F8EBD600E8F785 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB60F22F8EBD600E8F785 /* VALLegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB62022F8EBD600E8F785 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB60F22F8EBD600E8F785 /* VALLegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB62122F8EBD600E8F785 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB60F22F8EBD600E8F785 /* VALLegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB62222F8EBD600E8F785 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB60F22F8EBD600E8F785 /* VALLegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB62322F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61022F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB62422F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61022F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB62522F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61022F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB62622F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61022F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB62722F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61122F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m */; };
-		161FB62822F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61122F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m */; };
-		161FB62922F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61122F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m */; };
-		161FB62A22F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61122F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m */; };
-		161FB62F22F8EBD600E8F785 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61322F8EBD600E8F785 /* VALSynchronizableValet.h */; };
-		161FB63022F8EBD600E8F785 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61322F8EBD600E8F785 /* VALSynchronizableValet.h */; };
-		161FB63122F8EBD600E8F785 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61322F8EBD600E8F785 /* VALSynchronizableValet.h */; };
-		161FB63222F8EBD600E8F785 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61322F8EBD600E8F785 /* VALSynchronizableValet.h */; };
-		161FB63322F8EBD600E8F785 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61422F8EBD600E8F785 /* ValetDefines.h */; };
-		161FB63422F8EBD600E8F785 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61422F8EBD600E8F785 /* ValetDefines.h */; };
-		161FB63522F8EBD600E8F785 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61422F8EBD600E8F785 /* ValetDefines.h */; };
-		161FB63622F8EBD600E8F785 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61422F8EBD600E8F785 /* ValetDefines.h */; };
-		161FB63722F8EBD600E8F785 /* VALLegacyValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61522F8EBD600E8F785 /* VALLegacyValet_Protected.h */; };
-		161FB63822F8EBD600E8F785 /* VALLegacyValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61522F8EBD600E8F785 /* VALLegacyValet_Protected.h */; };
-		161FB63922F8EBD600E8F785 /* VALLegacyValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61522F8EBD600E8F785 /* VALLegacyValet_Protected.h */; };
-		161FB63A22F8EBD600E8F785 /* VALLegacyValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61522F8EBD600E8F785 /* VALLegacyValet_Protected.h */; };
-		161FB63B22F8EBD600E8F785 /* LegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61622F8EBD600E8F785 /* LegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB63C22F8EBD600E8F785 /* LegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61622F8EBD600E8F785 /* LegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB63D22F8EBD600E8F785 /* LegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61622F8EBD600E8F785 /* LegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB63E22F8EBD600E8F785 /* LegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61622F8EBD600E8F785 /* LegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB63F22F8EBD600E8F785 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61722F8EBD600E8F785 /* VALSynchronizableValet.m */; };
-		161FB64022F8EBD600E8F785 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61722F8EBD600E8F785 /* VALSynchronizableValet.m */; };
-		161FB64122F8EBD600E8F785 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61722F8EBD600E8F785 /* VALSynchronizableValet.m */; };
-		161FB64222F8EBD600E8F785 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61722F8EBD600E8F785 /* VALSynchronizableValet.m */; };
-		161FB64322F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61822F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h */; };
-		161FB64422F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61822F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h */; };
-		161FB64522F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61822F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h */; };
-		161FB64622F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB61822F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h */; };
-		161FB64722F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61922F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m */; };
-		161FB64822F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61922F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m */; };
-		161FB64922F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61922F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m */; };
-		161FB64A22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61922F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m */; };
-		161FB64B22F8EBD600E8F785 /* VALLegacyValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61A22F8EBD600E8F785 /* VALLegacyValet.m */; };
-		161FB64C22F8EBD600E8F785 /* VALLegacyValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61A22F8EBD600E8F785 /* VALLegacyValet.m */; };
-		161FB64D22F8EBD600E8F785 /* VALLegacyValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61A22F8EBD600E8F785 /* VALLegacyValet.m */; };
-		161FB64E22F8EBD600E8F785 /* VALLegacyValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 161FB61A22F8EBD600E8F785 /* VALLegacyValet.m */; };
-		161FB65422F8EBEA00E8F785 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65022F8EBEA00E8F785 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB65522F8EBEA00E8F785 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65022F8EBEA00E8F785 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB65622F8EBEA00E8F785 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65022F8EBEA00E8F785 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB65722F8EBEA00E8F785 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65022F8EBEA00E8F785 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		161FB65822F8EBEA00E8F785 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65122F8EBEA00E8F785 /* VALLegacyValet.h */; };
-		161FB65922F8EBEA00E8F785 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65122F8EBEA00E8F785 /* VALLegacyValet.h */; };
-		161FB65A22F8EBEA00E8F785 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65122F8EBEA00E8F785 /* VALLegacyValet.h */; };
-		161FB65B22F8EBEA00E8F785 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65122F8EBEA00E8F785 /* VALLegacyValet.h */; };
-		161FB65C22F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65222F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */; };
-		161FB65D22F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65222F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */; };
-		161FB65E22F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65222F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */; };
-		161FB65F22F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65222F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */; };
-		161FB66022F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65322F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h */; };
-		161FB66122F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65322F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h */; };
-		161FB66222F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65322F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h */; };
-		161FB66322F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 161FB65322F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h */; };
+		16212CC323072C5D00C84B17 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CBF23072C5D00C84B17 /* VALLegacySecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CC423072C5D00C84B17 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CBF23072C5D00C84B17 /* VALLegacySecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CC523072C5D00C84B17 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CBF23072C5D00C84B17 /* VALLegacySecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CC623072C5D00C84B17 /* VALLegacySecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CBF23072C5D00C84B17 /* VALLegacySecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CC723072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC023072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CC823072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC023072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CC923072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC023072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CCA23072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC023072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CCB23072C5D00C84B17 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC123072C5D00C84B17 /* VALLegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CCC23072C5D00C84B17 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC123072C5D00C84B17 /* VALLegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CCD23072C5D00C84B17 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC123072C5D00C84B17 /* VALLegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CCE23072C5D00C84B17 /* VALLegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC123072C5D00C84B17 /* VALLegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CCF23072C5D00C84B17 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC223072C5D00C84B17 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CD023072C5D00C84B17 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC223072C5D00C84B17 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CD123072C5D00C84B17 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC223072C5D00C84B17 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CD223072C5D00C84B17 /* VALSynchronizableValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CC223072C5D00C84B17 /* VALSynchronizableValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CDB23072C6F00C84B17 /* VALLegacySecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD323072C6E00C84B17 /* VALLegacySecureEnclaveValet.m */; };
+		16212CDC23072C6F00C84B17 /* VALLegacySecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD323072C6E00C84B17 /* VALLegacySecureEnclaveValet.m */; };
+		16212CDD23072C6F00C84B17 /* VALLegacySecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD323072C6E00C84B17 /* VALLegacySecureEnclaveValet.m */; };
+		16212CDE23072C6F00C84B17 /* VALLegacySecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD323072C6E00C84B17 /* VALLegacySecureEnclaveValet.m */; };
+		16212CDF23072C6F00C84B17 /* VALLegacyValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CD423072C6E00C84B17 /* VALLegacyValet_Protected.h */; };
+		16212CE023072C6F00C84B17 /* VALLegacyValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CD423072C6E00C84B17 /* VALLegacyValet_Protected.h */; };
+		16212CE123072C6F00C84B17 /* VALLegacyValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CD423072C6E00C84B17 /* VALLegacyValet_Protected.h */; };
+		16212CE223072C6F00C84B17 /* VALLegacyValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CD423072C6E00C84B17 /* VALLegacyValet_Protected.h */; };
+		16212CE723072C6F00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD623072C6E00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m */; };
+		16212CE823072C6F00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD623072C6E00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m */; };
+		16212CE923072C6F00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD623072C6E00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m */; };
+		16212CEA23072C6F00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD623072C6E00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m */; };
+		16212CEB23072C6F00C84B17 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD723072C6E00C84B17 /* VALSynchronizableValet.m */; };
+		16212CEC23072C6F00C84B17 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD723072C6E00C84B17 /* VALSynchronizableValet.m */; };
+		16212CED23072C6F00C84B17 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD723072C6E00C84B17 /* VALSynchronizableValet.m */; };
+		16212CEE23072C6F00C84B17 /* VALSynchronizableValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD723072C6E00C84B17 /* VALSynchronizableValet.m */; };
+		16212CEF23072C6F00C84B17 /* VALLegacyValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD823072C6E00C84B17 /* VALLegacyValet.m */; };
+		16212CF023072C6F00C84B17 /* VALLegacyValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD823072C6E00C84B17 /* VALLegacyValet.m */; };
+		16212CF123072C6F00C84B17 /* VALLegacyValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD823072C6E00C84B17 /* VALLegacyValet.m */; };
+		16212CF223072C6F00C84B17 /* VALLegacyValet.m in Sources */ = {isa = PBXBuildFile; fileRef = 16212CD823072C6E00C84B17 /* VALLegacyValet.m */; };
+		16212CF323072C6F00C84B17 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CD923072C6F00C84B17 /* ValetDefines.h */; };
+		16212CF423072C6F00C84B17 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CD923072C6F00C84B17 /* ValetDefines.h */; };
+		16212CF523072C6F00C84B17 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CD923072C6F00C84B17 /* ValetDefines.h */; };
+		16212CF623072C6F00C84B17 /* ValetDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CD923072C6F00C84B17 /* ValetDefines.h */; };
+		16212CF723072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CDA23072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h */; };
+		16212CF823072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CDA23072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h */; };
+		16212CF923072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CDA23072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h */; };
+		16212CFA23072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CDA23072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h */; };
+		16212CFC23072CB700C84B17 /* LegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CFB23072CB700C84B17 /* LegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CFD23072CB700C84B17 /* LegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CFB23072CB700C84B17 /* LegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CFE23072CB700C84B17 /* LegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CFB23072CB700C84B17 /* LegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16212CFF23072CB700C84B17 /* LegacyValet.h in Headers */ = {isa = PBXBuildFile; fileRef = 16212CFB23072CB700C84B17 /* LegacyValet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		165CDDC9204B26D400C96C2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDC8204B26D400C96C2E /* AppDelegate.swift */; };
 		165CDDCB204B26D400C96C2E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165CDDCA204B26D400C96C2E /* ViewController.swift */; };
 		165CDDCE204B26D400C96C2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 165CDDCC204B26D400C96C2E /* Main.storyboard */; };
@@ -457,22 +441,18 @@
 		1612FDF022A9CBC900FC1142 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1612FDF622A9CC0700FC1142 /* LegacyValet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LegacyValet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1612FE0822A9CC3E00FC1142 /* LegacyValet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LegacyValet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		161FB60E22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacySecureEnclaveValet.h; path = LegacyValet/Sources/LegacyValet/Public/VALLegacySecureEnclaveValet.h; sourceTree = SOURCE_ROOT; };
-		161FB60F22F8EBD600E8F785 /* VALLegacyValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacyValet.h; path = LegacyValet/Sources/LegacyValet/Public/VALLegacyValet.h; sourceTree = SOURCE_ROOT; };
-		161FB61022F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacySinglePromptSecureEnclaveValet.h; path = LegacyValet/Sources/LegacyValet/Public/VALLegacySinglePromptSecureEnclaveValet.h; sourceTree = SOURCE_ROOT; };
-		161FB61122F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VALLegacySinglePromptSecureEnclaveValet.m; path = LegacyValet/Sources/LegacyValet/VALLegacySinglePromptSecureEnclaveValet.m; sourceTree = SOURCE_ROOT; };
-		161FB61322F8EBD600E8F785 /* VALSynchronizableValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALSynchronizableValet.h; path = LegacyValet/Sources/LegacyValet/Public/VALSynchronizableValet.h; sourceTree = SOURCE_ROOT; };
-		161FB61422F8EBD600E8F785 /* ValetDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ValetDefines.h; path = LegacyValet/Sources/LegacyValet/ValetDefines.h; sourceTree = SOURCE_ROOT; };
-		161FB61522F8EBD600E8F785 /* VALLegacyValet_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacyValet_Protected.h; path = LegacyValet/Sources/LegacyValet/VALLegacyValet_Protected.h; sourceTree = SOURCE_ROOT; };
-		161FB61622F8EBD600E8F785 /* LegacyValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegacyValet.h; path = LegacyValet/Sources/LegacyValet/LegacyValet.h; sourceTree = SOURCE_ROOT; };
-		161FB61722F8EBD600E8F785 /* VALSynchronizableValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VALSynchronizableValet.m; path = LegacyValet/Sources/LegacyValet/VALSynchronizableValet.m; sourceTree = SOURCE_ROOT; };
-		161FB61822F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacySecureEnclaveValet_Protected.h; path = LegacyValet/Sources/LegacyValet/VALLegacySecureEnclaveValet_Protected.h; sourceTree = SOURCE_ROOT; };
-		161FB61922F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VALLegacySecureEnclaveValet.m; path = LegacyValet/Sources/LegacyValet/VALLegacySecureEnclaveValet.m; sourceTree = SOURCE_ROOT; };
-		161FB61A22F8EBD600E8F785 /* VALLegacyValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VALLegacyValet.m; path = LegacyValet/Sources/LegacyValet/VALLegacyValet.m; sourceTree = SOURCE_ROOT; };
-		161FB65022F8EBEA00E8F785 /* VALSynchronizableValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALSynchronizableValet.h; path = LegacyValet/Sources/LegacyValet/Public/VALSynchronizableValet.h; sourceTree = SOURCE_ROOT; };
-		161FB65122F8EBEA00E8F785 /* VALLegacyValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacyValet.h; path = LegacyValet/Sources/LegacyValet/Public/VALLegacyValet.h; sourceTree = SOURCE_ROOT; };
-		161FB65222F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacySinglePromptSecureEnclaveValet.h; path = LegacyValet/Sources/LegacyValet/Public/VALLegacySinglePromptSecureEnclaveValet.h; sourceTree = SOURCE_ROOT; };
-		161FB65322F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacySecureEnclaveValet.h; path = LegacyValet/Sources/LegacyValet/Public/VALLegacySecureEnclaveValet.h; sourceTree = SOURCE_ROOT; };
+		16212CBF23072C5D00C84B17 /* VALLegacySecureEnclaveValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacySecureEnclaveValet.h; path = LegacyValet/Public/VALLegacySecureEnclaveValet.h; sourceTree = "<group>"; };
+		16212CC023072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacySinglePromptSecureEnclaveValet.h; path = LegacyValet/Public/VALLegacySinglePromptSecureEnclaveValet.h; sourceTree = "<group>"; };
+		16212CC123072C5D00C84B17 /* VALLegacyValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacyValet.h; path = LegacyValet/Public/VALLegacyValet.h; sourceTree = "<group>"; };
+		16212CC223072C5D00C84B17 /* VALSynchronizableValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALSynchronizableValet.h; path = LegacyValet/Public/VALSynchronizableValet.h; sourceTree = "<group>"; };
+		16212CD323072C6E00C84B17 /* VALLegacySecureEnclaveValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VALLegacySecureEnclaveValet.m; path = LegacyValet/VALLegacySecureEnclaveValet.m; sourceTree = "<group>"; };
+		16212CD423072C6E00C84B17 /* VALLegacyValet_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacyValet_Protected.h; path = LegacyValet/VALLegacyValet_Protected.h; sourceTree = "<group>"; };
+		16212CD623072C6E00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VALLegacySinglePromptSecureEnclaveValet.m; path = LegacyValet/VALLegacySinglePromptSecureEnclaveValet.m; sourceTree = "<group>"; };
+		16212CD723072C6E00C84B17 /* VALSynchronizableValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VALSynchronizableValet.m; path = LegacyValet/VALSynchronizableValet.m; sourceTree = "<group>"; };
+		16212CD823072C6E00C84B17 /* VALLegacyValet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VALLegacyValet.m; path = LegacyValet/VALLegacyValet.m; sourceTree = "<group>"; };
+		16212CD923072C6F00C84B17 /* ValetDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ValetDefines.h; path = LegacyValet/ValetDefines.h; sourceTree = "<group>"; };
+		16212CDA23072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacySecureEnclaveValet_Protected.h; path = LegacyValet/VALLegacySecureEnclaveValet_Protected.h; sourceTree = "<group>"; };
+		16212CFB23072CB700C84B17 /* LegacyValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegacyValet.h; path = LegacyValet/Public/LegacyValet.h; sourceTree = "<group>"; };
 		165CDDC6204B26D400C96C2E /* Valet tvOS Test Host App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Valet tvOS Test Host App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		165CDDC8204B26D400C96C2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		165CDDCA204B26D400C96C2E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -723,19 +703,14 @@
 		161FB60D22F8EBB700E8F785 /* LegacyValet */ = {
 			isa = PBXGroup;
 			children = (
+				16212CD923072C6F00C84B17 /* ValetDefines.h */,
+				16212CDA23072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h */,
+				16212CD323072C6E00C84B17 /* VALLegacySecureEnclaveValet.m */,
+				16212CD623072C6E00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m */,
+				16212CD423072C6E00C84B17 /* VALLegacyValet_Protected.h */,
+				16212CD823072C6E00C84B17 /* VALLegacyValet.m */,
+				16212CD723072C6E00C84B17 /* VALSynchronizableValet.m */,
 				161FB64F22F8EBE200E8F785 /* Public */,
-				161FB61622F8EBD600E8F785 /* LegacyValet.h */,
-				161FB61422F8EBD600E8F785 /* ValetDefines.h */,
-				161FB61822F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h */,
-				161FB60E22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h */,
-				161FB61922F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m */,
-				161FB61022F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */,
-				161FB61122F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m */,
-				161FB61522F8EBD600E8F785 /* VALLegacyValet_Protected.h */,
-				161FB60F22F8EBD600E8F785 /* VALLegacyValet.h */,
-				161FB61A22F8EBD600E8F785 /* VALLegacyValet.m */,
-				161FB61322F8EBD600E8F785 /* VALSynchronizableValet.h */,
-				161FB61722F8EBD600E8F785 /* VALSynchronizableValet.m */,
 			);
 			name = LegacyValet;
 			sourceTree = "<group>";
@@ -743,10 +718,11 @@
 		161FB64F22F8EBE200E8F785 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				161FB65322F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h */,
-				161FB65222F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h */,
-				161FB65122F8EBEA00E8F785 /* VALLegacyValet.h */,
-				161FB65022F8EBEA00E8F785 /* VALSynchronizableValet.h */,
+				16212CFB23072CB700C84B17 /* LegacyValet.h */,
+				16212CBF23072C5D00C84B17 /* VALLegacySecureEnclaveValet.h */,
+				16212CC023072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h */,
+				16212CC123072C5D00C84B17 /* VALLegacyValet.h */,
+				16212CC223072C5D00C84B17 /* VALSynchronizableValet.h */,
 			);
 			name = Public;
 			sourceTree = "<group>";
@@ -912,18 +888,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				161FB66022F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h in Headers */,
-				161FB65822F8EBEA00E8F785 /* VALLegacyValet.h in Headers */,
-				161FB62F22F8EBD600E8F785 /* VALSynchronizableValet.h in Headers */,
-				161FB65C22F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
-				161FB61F22F8EBD600E8F785 /* VALLegacyValet.h in Headers */,
-				161FB63322F8EBD600E8F785 /* ValetDefines.h in Headers */,
-				161FB63722F8EBD600E8F785 /* VALLegacyValet_Protected.h in Headers */,
-				161FB63B22F8EBD600E8F785 /* LegacyValet.h in Headers */,
-				161FB65422F8EBEA00E8F785 /* VALSynchronizableValet.h in Headers */,
-				161FB62322F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
-				161FB61B22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h in Headers */,
-				161FB64322F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h in Headers */,
+				16212CCF23072C5D00C84B17 /* VALSynchronizableValet.h in Headers */,
+				16212CC723072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
+				16212CF323072C6F00C84B17 /* ValetDefines.h in Headers */,
+				16212CC323072C5D00C84B17 /* VALLegacySecureEnclaveValet.h in Headers */,
+				16212CFC23072CB700C84B17 /* LegacyValet.h in Headers */,
+				16212CDF23072C6F00C84B17 /* VALLegacyValet_Protected.h in Headers */,
+				16212CCB23072C5D00C84B17 /* VALLegacyValet.h in Headers */,
+				16212CF723072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -931,18 +903,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				161FB66122F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h in Headers */,
-				161FB65922F8EBEA00E8F785 /* VALLegacyValet.h in Headers */,
-				161FB63022F8EBD600E8F785 /* VALSynchronizableValet.h in Headers */,
-				161FB65D22F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
-				161FB62022F8EBD600E8F785 /* VALLegacyValet.h in Headers */,
-				161FB63422F8EBD600E8F785 /* ValetDefines.h in Headers */,
-				161FB63822F8EBD600E8F785 /* VALLegacyValet_Protected.h in Headers */,
-				161FB63C22F8EBD600E8F785 /* LegacyValet.h in Headers */,
-				161FB65522F8EBEA00E8F785 /* VALSynchronizableValet.h in Headers */,
-				161FB62422F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
-				161FB61C22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h in Headers */,
-				161FB64422F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h in Headers */,
+				16212CD023072C5D00C84B17 /* VALSynchronizableValet.h in Headers */,
+				16212CC823072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
+				16212CF423072C6F00C84B17 /* ValetDefines.h in Headers */,
+				16212CC423072C5D00C84B17 /* VALLegacySecureEnclaveValet.h in Headers */,
+				16212CFD23072CB700C84B17 /* LegacyValet.h in Headers */,
+				16212CE023072C6F00C84B17 /* VALLegacyValet_Protected.h in Headers */,
+				16212CCC23072C5D00C84B17 /* VALLegacyValet.h in Headers */,
+				16212CF823072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -950,18 +918,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				161FB66222F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h in Headers */,
-				161FB65A22F8EBEA00E8F785 /* VALLegacyValet.h in Headers */,
-				161FB63122F8EBD600E8F785 /* VALSynchronizableValet.h in Headers */,
-				161FB65E22F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
-				161FB62122F8EBD600E8F785 /* VALLegacyValet.h in Headers */,
-				161FB63522F8EBD600E8F785 /* ValetDefines.h in Headers */,
-				161FB63922F8EBD600E8F785 /* VALLegacyValet_Protected.h in Headers */,
-				161FB63D22F8EBD600E8F785 /* LegacyValet.h in Headers */,
-				161FB65622F8EBEA00E8F785 /* VALSynchronizableValet.h in Headers */,
-				161FB62522F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
-				161FB61D22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h in Headers */,
-				161FB64522F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h in Headers */,
+				16212CD123072C5D00C84B17 /* VALSynchronizableValet.h in Headers */,
+				16212CC923072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
+				16212CF523072C6F00C84B17 /* ValetDefines.h in Headers */,
+				16212CC523072C5D00C84B17 /* VALLegacySecureEnclaveValet.h in Headers */,
+				16212CFE23072CB700C84B17 /* LegacyValet.h in Headers */,
+				16212CE123072C6F00C84B17 /* VALLegacyValet_Protected.h in Headers */,
+				16212CCD23072C5D00C84B17 /* VALLegacyValet.h in Headers */,
+				16212CF923072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -969,18 +933,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				161FB66322F8EBEA00E8F785 /* VALLegacySecureEnclaveValet.h in Headers */,
-				161FB65B22F8EBEA00E8F785 /* VALLegacyValet.h in Headers */,
-				161FB63222F8EBD600E8F785 /* VALSynchronizableValet.h in Headers */,
-				161FB65F22F8EBEA00E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
-				161FB62222F8EBD600E8F785 /* VALLegacyValet.h in Headers */,
-				161FB63622F8EBD600E8F785 /* ValetDefines.h in Headers */,
-				161FB63A22F8EBD600E8F785 /* VALLegacyValet_Protected.h in Headers */,
-				161FB63E22F8EBD600E8F785 /* LegacyValet.h in Headers */,
-				161FB65722F8EBEA00E8F785 /* VALSynchronizableValet.h in Headers */,
-				161FB62622F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
-				161FB61E22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.h in Headers */,
-				161FB64622F8EBD600E8F785 /* VALLegacySecureEnclaveValet_Protected.h in Headers */,
+				16212CD223072C5D00C84B17 /* VALSynchronizableValet.h in Headers */,
+				16212CCA23072C5D00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.h in Headers */,
+				16212CF623072C6F00C84B17 /* ValetDefines.h in Headers */,
+				16212CC623072C5D00C84B17 /* VALLegacySecureEnclaveValet.h in Headers */,
+				16212CFF23072CB700C84B17 /* LegacyValet.h in Headers */,
+				16212CE223072C6F00C84B17 /* VALLegacyValet_Protected.h in Headers */,
+				16212CCE23072C5D00C84B17 /* VALLegacyValet.h in Headers */,
+				16212CFA23072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1672,10 +1632,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				161FB64722F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m in Sources */,
-				161FB62722F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */,
-				161FB63F22F8EBD600E8F785 /* VALSynchronizableValet.m in Sources */,
-				161FB64B22F8EBD600E8F785 /* VALLegacyValet.m in Sources */,
+				16212CEB23072C6F00C84B17 /* VALSynchronizableValet.m in Sources */,
+				16212CDB23072C6F00C84B17 /* VALLegacySecureEnclaveValet.m in Sources */,
+				16212CE723072C6F00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */,
+				16212CEF23072C6F00C84B17 /* VALLegacyValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1683,10 +1643,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				161FB64822F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m in Sources */,
-				161FB62822F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */,
-				161FB64022F8EBD600E8F785 /* VALSynchronizableValet.m in Sources */,
-				161FB64C22F8EBD600E8F785 /* VALLegacyValet.m in Sources */,
+				16212CEC23072C6F00C84B17 /* VALSynchronizableValet.m in Sources */,
+				16212CDC23072C6F00C84B17 /* VALLegacySecureEnclaveValet.m in Sources */,
+				16212CE823072C6F00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */,
+				16212CF023072C6F00C84B17 /* VALLegacyValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1694,10 +1654,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				161FB64922F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m in Sources */,
-				161FB62922F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */,
-				161FB64122F8EBD600E8F785 /* VALSynchronizableValet.m in Sources */,
-				161FB64D22F8EBD600E8F785 /* VALLegacyValet.m in Sources */,
+				16212CED23072C6F00C84B17 /* VALSynchronizableValet.m in Sources */,
+				16212CDD23072C6F00C84B17 /* VALLegacySecureEnclaveValet.m in Sources */,
+				16212CE923072C6F00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */,
+				16212CF123072C6F00C84B17 /* VALLegacyValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1705,10 +1665,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				161FB64A22F8EBD600E8F785 /* VALLegacySecureEnclaveValet.m in Sources */,
-				161FB62A22F8EBD600E8F785 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */,
-				161FB64222F8EBD600E8F785 /* VALSynchronizableValet.m in Sources */,
-				161FB64E22F8EBD600E8F785 /* VALLegacyValet.m in Sources */,
+				16212CEE23072C6F00C84B17 /* VALSynchronizableValet.m in Sources */,
+				16212CDE23072C6F00C84B17 /* VALLegacySecureEnclaveValet.m in Sources */,
+				16212CEA23072C6F00C84B17 /* VALLegacySinglePromptSecureEnclaveValet.m in Sources */,
+				16212CF223072C6F00C84B17 /* VALLegacyValet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
