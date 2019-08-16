@@ -16,16 +16,17 @@ let package = Package(
             name: "Valet",
             targets: ["Valet"]),
     ],
-    dependencies: [
-        Package.Dependency.package(path: "LegacyValet"),
-    ],
     targets: [
         .target(
             name: "Valet",
             dependencies: []),
+        .target(
+            name: "LegacyValet",
+            dependencies: [],
+            publicHeadersPath: "Public"),
         .testTarget(
             name: "ValetTests",
-            dependencies: ["Valet", "LegacyValet"])
+            dependencies: ["Valet"])
     ],
     swiftLanguageVersions: [.v4, .v4_2, .v5]
 )
