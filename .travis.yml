@@ -7,7 +7,7 @@ script:
 matrix:
   include:
   - osx_image: xcode11
-    env: ACTION="swift-package";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=13,name=iPad Pro (12.9-inch) (3rd generation)"
+    env: ACTION="swift-package";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=13.0,name=iPad Pro (12.9-inch) (3rd generation)"
   - osx_image: xcode11
     env: ACTION="swift-package";SDK="appletvsimulator13.0";DESTINATION="platform=tvOS Simulator,name=Apple TV"
   - osx_image: xcode11
@@ -15,7 +15,7 @@ matrix:
   - osx_image: xcode11
     env: ACTION="swift-package";SDK="watchos6.0";DESTINATION=""
   - osx_image: xcode11
-    env: ACTION="xcode";SCHEME="Valet iOS";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=13,name=iPad Pro (12.9-inch) (3rd generation)";XCODE_ACTION="build test"
+    env: ACTION="xcode";SCHEME="Valet iOS";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=13.0,name=iPad Pro (12.9-inch) (3rd generation)";XCODE_ACTION="build test"
   - osx_image: xcode11
     env: ACTION="xcode";SCHEME="Valet tvOS";SDK="appletvsimulator13.0";DESTINATION="platform=tvOS Simulator,name=Apple TV";XCODE_ACTION="build test"
   - osx_image: xcode11
