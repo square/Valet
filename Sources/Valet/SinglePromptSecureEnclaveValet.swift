@@ -18,6 +18,8 @@
 //  limitations under the License.
 //
 
+#if os(iOS) || os(macOS)
+
 import LocalAuthentication
 import Foundation
 
@@ -312,3 +314,5 @@ extension SinglePromptSecureEnclaveValet {
         }
     }
 }
+
+#endif
