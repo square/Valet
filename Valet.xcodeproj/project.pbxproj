@@ -191,6 +191,8 @@
 		16DF6B0D204B496800F8E0A4 /* Valet watchOS Test Host App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 16DF6AF3204B496800F8E0A4 /* Valet watchOS Test Host App.app */; };
 		16DF6B1F204B4DA600F8E0A4 /* Valet.framework in Resources */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; };
 		3251BD06224C865E0007453B /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16D77541215BFC1D004F060C /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		32E7115B2336B03800018E15 /* SinglePromptSecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */; };
+		32E7115C2336B03800018E15 /* SinglePromptSecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */; };
 		371150A81E2962D8004A45D4 /* ValetIOSTestHostAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371150A71E2962D8004A45D4 /* ValetIOSTestHostAppDelegate.swift */; };
 		371150AA1E2962D8004A45D4 /* ValetIOSTestHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371150A91E2962D8004A45D4 /* ValetIOSTestHostViewController.swift */; };
 		371150AD1E2962D8004A45D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150AB1E2962D8004A45D4 /* Main.storyboard */; };
@@ -1698,6 +1700,7 @@
 				1612FD8F22A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9322A9CAAB00FC1142 /* SecItem.swift in Sources */,
 				1612FDB722A9CAAB00FC1142 /* SwiftCompatibility.swift in Sources */,
+				32E7115B2336B03800018E15 /* SinglePromptSecureEnclaveValet.swift in Sources */,
 				1612FDBF22A9CAAB00FC1142 /* Identifier.swift in Sources */,
 				1612FD8B22A9CAAB00FC1142 /* CloudAccessibility.swift in Sources */,
 				1612FD9B22A9CAAB00FC1142 /* Keychain.swift in Sources */,
@@ -1737,6 +1740,7 @@
 				1612FD9022A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9422A9CAAB00FC1142 /* SecItem.swift in Sources */,
 				1612FDB822A9CAAB00FC1142 /* SwiftCompatibility.swift in Sources */,
+				32E7115C2336B03800018E15 /* SinglePromptSecureEnclaveValet.swift in Sources */,
 				1612FDC022A9CAAB00FC1142 /* Identifier.swift in Sources */,
 				1612FD8C22A9CAAB00FC1142 /* CloudAccessibility.swift in Sources */,
 				1612FD9C22A9CAAB00FC1142 /* Keychain.swift in Sources */,
