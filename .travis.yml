@@ -23,8 +23,6 @@ matrix:
   - osx_image: xcode11
     env: ACTION="xcode";SCHEME="Valet watchOS";SDK="watchos6.0";DESTINATION="";XCODE_ACTION="build"
   - osx_image: xcode11
-    env: ACTION="pod-lint";SWIFT_VERSION="5.0"
-  - osx_image: xcode11
     env: ACTION="carthage"
 
   - osx_image: xcode10.2
