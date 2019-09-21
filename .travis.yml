@@ -6,6 +6,15 @@ script:
   - ./Scripts/ci.sh
 matrix:
   include:
+  - osx_image: xcode11
+    env: ACTION="swift-package";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=13,name=iPhone 11"
+  - osx_image: xcode11
+    env: ACTION="swift-package";SDK="appletvsimulator13.0";DESTINATION="platform=tvOS Simulator,name=Apple TV"
+  - osx_image: xcode11
+    env: ACTION="swift-package";SDK="macosx10.15";DESTINATION="platform=OS X"
+  - osx_image: xcode11
+    env: ACTION="swift-package";SDK="watchos6.0";DESTINATION=""
+
   - osx_image: xcode10.2
     env: ACTION="xcode";SCHEME="Valet iOS";SDK="iphonesimulator";DESTINATION="platform=iOS Simulator,OS=12.2,name=iPhone X";XCODE_ACTION="build test"
   - osx_image: xcode10.2

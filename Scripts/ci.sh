@@ -9,6 +9,15 @@ if [ $ACTION == "xcode" ]; then
   fi
 fi
 
+if [ $ACTION == "swift-package" ]; then
+  swift package generate-xcodeproj --output generated/
+  if [ -n "$DESTINATION" ]; then
+    xcodebuild -project generated/Valet.xcodeproj -scheme "Valet-Package" -sdk $SDK -destination "$DESTINATION" -configuration Release -PBXBuildsContinueAfterErrors=0 build
+  else
+    xcodebuild -project generated/Valet.xcodeproj -scheme "Valet-Package" -sdk $SDK -configuration Release -PBXBuildsContinueAfterErrors=0 build
+  fi
+fi
+
 if [ $ACTION == "pod-lint" ]; then
   bundle exec pod lib lint --verbose --fail-fast --swift-version=$SWIFT_VERSION
 fi
