@@ -20,14 +20,7 @@ let package = Package(
         .target(
             name: "Valet",
             dependencies: []),
-        .target(
-            name: "LegacyValet",
-            dependencies: [],
-            publicHeadersPath: "Public"),
-        .testTarget(
-            name: "ValetTests",
-            dependencies: ["Valet"])
     ],
     swiftLanguageVersions: [.v4, .v4_2, .v5]
 )
-let version = Version(3, 2, 5)
+let version = Version(3, 2, 7)

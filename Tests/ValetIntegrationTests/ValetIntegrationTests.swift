@@ -36,8 +36,15 @@ func testEnvironmentIsSigned() -> Bool {
         
         return false
     }
-    
-    return true
+
+    if let simulatorVersionInfo = ProcessInfo.processInfo.environment["SIMULATOR_VERSION_INFO"],
+        simulatorVersionInfo.contains("iOS 13") || simulatorVersionInfo.contains("tvOS 13")
+    {
+        // Xcode 11's simulator does not support code-signing.
+        return false
+    } else {
+        return true
+    }
 }
 
 

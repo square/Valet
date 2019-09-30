@@ -18,6 +18,8 @@
 //  limitations under the License.
 //
 
+#if os(iOS) || os(macOS)
+
 import Foundation
 @testable import Valet
 import XCTest
@@ -66,3 +68,5 @@ class SinglePromptSecureEnclaveTests: XCTestCase
         XCTAssertTrue(valet === equivalentValet)
     }
 }
+
+#endif
