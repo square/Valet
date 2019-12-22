@@ -169,13 +169,11 @@ However, because the Keychain is effectively disk storage, there is no guarantee
 
 ### Choosing a user-friendly identifier for your Valet on macOS
 
-Mac apps signed with a developer ID may see their Valet’s identifier [shown to their users](https://github.com/square/Valet/issues/140). It is possible to set a user-friendly identifier explicitly setting the identifier:
-
 ```swift
 let mySecureEnclaveValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
 ```
 
-Note that when explicitly setting a Valet's identifier, you are allowing Valets of different types to potentially read and write the same key:value pairs. Explicitly set the identifier with caution.
+Mac apps signed with a developer ID may see their Valet’s identifier [shown to their users](https://github.com/square/Valet/issues/140). While it is possible to explicitly set a user-friendly identifier, note that doing so bypasses this project’s guarantee that different Valets will never have access to one anothers’ key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique. Adopt this API with caution.
 
 ### Migrating Existing Keychain Values into Valet
 
