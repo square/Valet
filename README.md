@@ -184,7 +184,7 @@ Valet guarantees it will never fail to write to or read from the keychain unless
 
 ## Requirements
 
-* Xcode 9.0 or later. Earlier versions of Xcode require [Valet version 2.4.2](https://github.com/square/Valet/releases/tag/2.4.2).
+* Xcode 11.0 or later. Xcode 10 and Xcode 9 require [Valet version 3.2.6](https://github.com/square/Valet/releases/tag/3.2.6). Earlier versions of Xcode require [Valet version 2.4.2](https://github.com/square/Valet/releases/tag/2.4.2).
 * iOS 9 or later.
 * tvOS 9 or later.
 * watchOS 2 or later.
