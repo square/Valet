@@ -110,6 +110,10 @@ internal final class Keychain {
         secItemQuery[kSecAttrAccount as String] = key
         
         #if os(macOS)
+            if #available(macOS 10.15, *) {
+                secItemQuery[kSecUseDataProtectionKeychain as String] = true
+            }
+
             // Never update an existing keychain item on OS X, since the existing item could have unauthorized apps in the Access Control List. Fixes zero-day Keychain vuln found here: https://drive.google.com/file/d/0BxxXk1d3yyuZOFlsdkNMSGswSGs/view
             _ = SecItem.deleteItems(matching: secItemQuery)
             secItemQuery[kSecValueData as String] = object

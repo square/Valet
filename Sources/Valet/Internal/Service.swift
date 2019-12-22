@@ -45,10 +45,6 @@ internal enum Service: CustomStringConvertible, Equatable {
             kSecAttrService as String : secService,
         ]
 
-        if #available(macOS 10.15, *) {
-            baseQuery[kSecUseDataProtectionKeychain as String] = true
-        }
-
         let configuration: Configuration
         switch self {
         case let .standard(_, desiredConfiguration):
