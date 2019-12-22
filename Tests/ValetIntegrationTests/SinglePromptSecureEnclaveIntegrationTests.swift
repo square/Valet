@@ -46,7 +46,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         
     func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_canAccessSameData()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -58,7 +58,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_SinglePromptSecureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -73,7 +73,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_allKeys()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -164,7 +164,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -200,7 +200,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
