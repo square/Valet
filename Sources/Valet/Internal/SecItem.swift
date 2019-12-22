@@ -75,7 +75,7 @@ internal final class SecItem {
             kSecAttrAccount : "SharedAccessGroupAlwaysAccessiblePrefixPlaceholder",
             kSecReturnAttributes : true,
             kSecAttrAccessible : Accessibility.alwaysThisDeviceOnly.secAccessibilityAttribute,
-            ]
+        ]
 
         if #available(macOS 10.15, *) {
             query[kSecUseDataProtectionKeychain] = true
