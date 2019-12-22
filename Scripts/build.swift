@@ -160,7 +160,7 @@ enum Platform: String, CustomStringConvertible {
     }
 
     var description: String {
-        return rawValue
+        rawValue
     }
 }
 
@@ -169,7 +169,7 @@ enum Task: String, CustomStringConvertible {
     case xcode
 
     var description: String {
-        return rawValue
+        rawValue
     }
 
     var project: String {

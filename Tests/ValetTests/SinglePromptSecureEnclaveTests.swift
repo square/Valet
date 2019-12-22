@@ -18,13 +18,14 @@
 //  limitations under the License.
 //
 
-#if os(iOS) || os(macOS)
+#if canImport(LocalAuthentication)
 
 import Foundation
 @testable import Valet
 import XCTest
 
 
+@available(tvOS 10.0, *)
 class SinglePromptSecureEnclaveTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
