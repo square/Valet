@@ -21,6 +21,6 @@ let package = Package(
             name: "Valet",
             dependencies: []),
     ],
-    swiftLanguageVersions: [.v4, .v4_2, .v5]
+    swiftLanguageVersions: [.v5]
 )
 let version = Version(3, 2, 7)
