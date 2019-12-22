@@ -91,5 +91,28 @@ class ValetMacTests: XCTestCase
         // If you add a breakpoint here then manually inspect the keychain via Keychain.app (search for "MacOSVulnTest"), "xctest" should be the only member of the Access Control list.
         // This is not be the case upon setting a breakpoint and inspecting before the valet.setString(, forKey:) call above.
     }
+
+    func test_withExplicitlySet_identifierHasExplicitlySetIdentifier() {
+        let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
+        XCTAssertEqual(
+            Valet.valet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery[kSecAttrService as String],
+            explicitlySetIdentifier.description)
+
+        XCTAssertEqual(
+            Valet.iCloudValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery[kSecAttrService as String],
+            explicitlySetIdentifier.description)
+
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        XCTAssertEqual(
+            Valet.sharedAccessGroupValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery[kSecAttrService as String],
+            explicitlySetIdentifier.description)
+
+        XCTAssertEqual(
+            Valet.iCloudSharedAccessGroupValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery[kSecAttrService as String],
+            explicitlySetIdentifier.description)
+    }
 }
 #endif
