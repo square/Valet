@@ -42,9 +42,13 @@ internal enum Service: CustomStringConvertible, Equatable {
     internal func generateBaseQuery() -> [String : AnyHashable] {
         var baseQuery: [String : AnyHashable] = [
             kSecClass as String : kSecClassGenericPassword as String,
-            kSecAttrService as String : secService
+            kSecAttrService as String : secService,
         ]
-        
+
+        if #available(macOS 10.15, *) {
+            baseQuery[kSecUseDataProtectionKeychain as String] = true
+        }
+
         let configuration: Configuration
         switch self {
         case let .standard(_, desiredConfiguration):
