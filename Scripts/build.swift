@@ -37,7 +37,7 @@ enum Platform: String, CustomStringConvertible {
     var destination: String {
         switch self {
         case .iOS_11:
-            return "platform=iOS Simulator,OS=11.0,name=iPad Pro (12.9-inch) (2nd generation)"
+            return "platform=iOS Simulator,OS=11.0.1,name=iPad Pro (12.9-inch) (2nd generation)"
         case .iOS_12:
             return "platform=iOS Simulator,OS=12.2,name=iPad Pro (12.9-inch) (3rd generation)"
         case .iOS_13:
