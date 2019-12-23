@@ -603,10 +603,6 @@ class ValetIntegrationTests: XCTestCase
 
     func test_migrateObjectsMatching_bailsOutIfConflictExistsInQueryResult()
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
         let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
         migrationValet.removeAllObjects()
         
