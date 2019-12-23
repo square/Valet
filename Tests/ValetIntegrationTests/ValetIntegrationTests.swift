@@ -84,7 +84,6 @@ class ValetIntegrationTests: XCTestCase
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = Valet.valet(with: identifier, accessibility: .whenUnlocked)
 
-    // FIXME: Need a different flavor (Synchronizable can't be tested on Mac currently
     let anotherFlavor = Valet.iCloudValet(with: identifier, accessibility: .whenUnlocked)
 
     let key = "key"
