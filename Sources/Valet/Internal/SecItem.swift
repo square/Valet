@@ -77,10 +77,10 @@ internal final class SecItem {
             kSecAttrAccessible : Accessibility.alwaysThisDeviceOnly.secAccessibilityAttribute,
         ]
 
-        if #available(macOS 10.15, *) {
+        if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             query[kSecUseDataProtectionKeychain] = true
         }
-        
+
         secItemLock.lock()
         defer {
             secItemLock.unlock()
