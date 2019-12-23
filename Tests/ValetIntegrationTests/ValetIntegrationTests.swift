@@ -144,33 +144,6 @@ class ValetIntegrationTests: XCTestCase
         }
     }
 
-    // MARK: Equality
-
-    func test_valetsWithSameConfiguration_areEqual()
-    {
-        let equalValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
-        XCTAssertTrue(equalValet == valet)
-        XCTAssertTrue(equalValet === valet)
-    }
-
-    func test_differentValetFlavorsWithEquivalentConfiguration_areNotEqual()
-    {
-        XCTAssertFalse(valet == anotherFlavor)
-        XCTAssertFalse(valet === anotherFlavor)
-    }
-
-    func test_valetsWithDifferingIdentifier_areNotEqual()
-    {
-        let differingIdentifier = Valet.valet(with: Identifier(nonEmpty: "nope")!, accessibility: valet.accessibility)
-        XCTAssertNotEqual(valet, differingIdentifier)
-    }
-
-    func test_valetsWithDifferingAccessibility_areNotEqual()
-    {
-        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .always)
-        XCTAssertNotEqual(valet, differingAccessibility)
-    }
-
     // MARK: canAccessKeychain
 
     func test_canAccessKeychain()
