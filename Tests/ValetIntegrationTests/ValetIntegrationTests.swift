@@ -616,6 +616,7 @@ class ValetIntegrationTests: XCTestCase
         ]
 
         XCTAssertEqual(.duplicateKeyInQueryResult, migrationValet.migrateObjects(matching: conflictingQuery, removeOnCompletion: false))
+        anotherValet.removeAllObjects()
     }
 
     func test_migrateObjectsMatching_withAccountNameAsData_doesNotRaiseException()
