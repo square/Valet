@@ -611,7 +611,8 @@ class ValetIntegrationTests: XCTestCase
         migrationValet.removeAllObjects()
         
         XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertTrue(anotherFlavor.set(string: passcode, forKey:key))
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
+        XCTAssertTrue(anotherValet.set(string: passcode, forKey: key))
 
         let conflictingQuery = [
             kSecClass as String: kSecClassGenericPassword as String,
