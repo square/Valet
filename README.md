@@ -91,7 +91,15 @@ This `myValet` instance can be used to store and retrieve data securely on this 
 
 #### Choosing the Best Identifier
 
-The identifier you choose for your Valet is used to create a sandbox for the data your Valet writes to the keychain. Two Valets of the same type created via the same initializer, accessibility value, and identifier will be able to read and write the same key:value pairs; Valets with different identifiers each have their own sandbox. Choose an identifier that describes the kind of data your Valet will protect. You do not need to include your application name or bundleIdentifier in your Valet’s identifier.
+The identifier you choose for your Valet is used to create a sandbox for the data your Valet writes to the keychain. Two Valets of the same type created via the same initializer, accessibility value, and identifier will be able to read and write the same key:value pairs; Valets with different identifiers each have their own sandbox. Choose an identifier that describes the kind of data your Valet will protect. You do not need to include your application name or bundle identifier in your Valet’s identifier.
+
+#### Choosing a User-friendly Identifier on macOS
+
+```swift
+let mySecureEnclaveValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
+```
+
+Mac apps signed with a developer ID may see their Valet’s identifier [shown to their users](https://github.com/square/Valet/issues/140). While it is possible to explicitly set a user-friendly identifier, note that doing so bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
 
 #### Choosing the Best Accessibility Value
 
@@ -166,14 +174,6 @@ This instance also stores and retrieves data in the Secure Enclave, but does not
 Valet is built to be thread safe: it is possible to use a Valet instance on any queue or thread. Valet instances ensure that code that talks to the Keychain is atomic – it is impossible to corrupt data in Valet by reading and writing on multiple queues simultaneously.
 
 However, because the Keychain is effectively disk storage, there is no guarantee that reading and writing items is fast - accessing a Valet instance from the main queue can result in choppy animations or blocked UI. As a result, we recommend utilizing your Valet instance on a background queue; treat Valet like you treat other code that reads from and writes to disk.
-
-### Choosing a user-friendly identifier for your Valet on macOS
-
-```swift
-let mySecureEnclaveValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
-```
-
-Mac apps signed with a developer ID may see their Valet’s identifier [shown to their users](https://github.com/square/Valet/issues/140). While it is possible to explicitly set a user-friendly identifier, note that doing so bypasses this project’s guarantee that different Valets will never have access to one anothers’ key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique. Adopt this API with caution.
 
 ### Migrating Existing Keychain Values into Valet
 
