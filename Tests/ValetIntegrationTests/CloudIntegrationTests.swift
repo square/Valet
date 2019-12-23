@@ -30,7 +30,7 @@ class CloudIntegrationTests: XCTestCase
     static let accessibility = CloudAccessibility.whenUnlocked
     let valet = Valet.iCloudValet(with: identifier, accessibility: accessibility)
     var allPermutations: [Valet] {
-        (testEnvironmentIsSigned()
+        return (testEnvironmentIsSigned()
             ? Valet.iCloudPermutations(with: CloudIntegrationTests.identifier) + Valet.iCloudPermutations(with: ValetIntegrationTests.identifier, shared: true)
             : [])
     }

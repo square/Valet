@@ -76,7 +76,7 @@ class ValetIntegrationTests: XCTestCase
     static let identifier = Valet.sharedAccessGroupIdentifier
     let valet = Valet.valet(with: identifier, accessibility: .whenUnlocked)
     var allPermutations: [Valet] {
-        Valet.permutations(with: ValetIntegrationTests.identifier)
+        return Valet.permutations(with: ValetIntegrationTests.identifier)
             + (testEnvironmentIsSigned() ? Valet.permutations(with: ValetIntegrationTests.identifier, shared: true) : [])
     }
 
