@@ -73,8 +73,12 @@ internal extension Valet {
 
 class ValetIntegrationTests: XCTestCase
 {
-    static let identifier = Identifier(nonEmpty: "valet_testing")!
+    static let identifier = Valet.sharedAccessGroupIdentifier
     let valet = Valet.valet(with: identifier, accessibility: .whenUnlocked)
+    var allPermutations: [Valet] {
+        Valet.permutations(with: ValetIntegrationTests.identifier)
+            + (testEnvironmentIsSigned() ? Valet.permutations(with: ValetIntegrationTests.identifier, shared: true) : [])
+    }
 
     // FIXME: Need a different flavor (Synchronizable can't be tested on Mac currently
     let anotherFlavor = Valet.iCloudValet(with: identifier, accessibility: .whenUnlocked)
@@ -96,8 +100,6 @@ class ValetIntegrationTests: XCTestCase
         valet.removeAllObjects()
         anotherFlavor.removeAllObjects()
 
-        let identifier = ValetTests.identifier
-        let allPermutations = Valet.permutations(with: identifier) + Valet.permutations(with: identifier, shared: true)
         allPermutations.forEach { testingValet in testingValet.removeAllObjects() }
 
         XCTAssertTrue(valet.allKeys().isEmpty)
@@ -200,35 +202,41 @@ class ValetIntegrationTests: XCTestCase
 
     func test_containsObjectForKey()
     {
-        XCTAssertFalse(valet.containsObject(forKey: key))
+        allPermutations.forEach { valet in
+            XCTAssertFalse(valet.containsObject(forKey: key), "\(valet) found object for key that should not exist")
 
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertTrue(valet.containsObject(forKey: key))
+            XCTAssertTrue(valet.set(string: passcode, forKey: key), "\(valet) could not set item in keychain")
+            XCTAssertTrue(valet.containsObject(forKey: key), "\(valet) could not find item it has set in keychain")
 
-        XCTAssertTrue(valet.removeObject(forKey: key))
-        XCTAssertFalse(valet.containsObject(forKey: key))
+            XCTAssertTrue(valet.removeObject(forKey: key), "\(valet) could not remove item in keychain")
+            XCTAssertFalse(valet.containsObject(forKey: key), "\(valet) found removed item in keychain")
+        }
     }
 
     // MARK: allKeys
 
     func test_allKeys()
     {
-        XCTAssertEqual(valet.allKeys(), Set())
+        allPermutations.forEach { valet in
+            XCTAssertEqual(valet.allKeys(), Set(), "\(valet) found keys that should not exist")
 
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertEqual(valet.allKeys(), Set(arrayLiteral: key))
+            XCTAssertTrue(valet.set(string: passcode, forKey: key), "\(valet) could not set item in keychain")
+            XCTAssertEqual(valet.allKeys(), Set(arrayLiteral: key))
 
-        XCTAssertTrue(valet.set(string: "monster", forKey: "cookie"))
-        XCTAssertEqual(valet.allKeys(), Set(arrayLiteral: key, "cookie"))
+            XCTAssertTrue(valet.set(string: "monster", forKey: "cookie"), "\(valet) could not set item in keychain")
+            XCTAssertEqual(valet.allKeys(), Set(arrayLiteral: key, "cookie"))
 
-        valet.removeAllObjects()
-        XCTAssertEqual(valet.allKeys(), Set())
+            valet.removeAllObjects()
+            XCTAssertEqual(valet.allKeys(), Set(), "\(valet) found keys that should not exist")
+        }
     }
     
     func test_allKeys_doesNotReflectValetImplementationDetails() {
-        // Under the hood, Valet inserts a canary when calling `canAccessKeychain()` - this should not appear in `allKeys()`.
-        _ = valet.canAccessKeychain()
-        XCTAssertEqual(valet.allKeys(), Set())
+        allPermutations.forEach { valet in
+            // Under the hood, Valet inserts a canary when calling `canAccessKeychain()` - this should not appear in `allKeys()`.
+            _ = valet.canAccessKeychain()
+            XCTAssertEqual(valet.allKeys(), Set())
+        }
     }
 
     func test_allKeys_remainsUntouchedForUnequalValets()
@@ -252,13 +260,17 @@ class ValetIntegrationTests: XCTestCase
 
     func test_stringForKey_isNilForInvalidKey()
     {
-        XCTAssertNil(valet.string(forKey: key))
+        allPermutations.forEach { valet in
+            XCTAssertNil(valet.string(forKey: key), "\(valet) found item that should not exit")
+        }
     }
 
     func test_stringForKey_retrievesStringForValidKey()
     {
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertEqual(passcode, valet.string(forKey: key))
+        allPermutations.forEach { valet in
+            XCTAssertTrue(valet.set(string: passcode, forKey: key), "\(valet) could not set item in keychain")
+            XCTAssertEqual(passcode, valet.string(forKey: key))
+        }
     }
 
     func test_stringForKey_equivalentValetsCanAccessSameData()
@@ -304,30 +316,40 @@ class ValetIntegrationTests: XCTestCase
 
     func test_setStringForKey_successfullyUpdatesExistingKey()
     {
-        XCTAssertNil(valet.string(forKey: key))
-        valet.set(string: "1", forKey: key)
-        XCTAssertEqual("1", valet.string(forKey: key))
-        valet.set(string: "2", forKey: key)
-        XCTAssertEqual("2", valet.string(forKey: key))
+        allPermutations.forEach { valet in
+            XCTAssertNil(valet.string(forKey: key))
+            valet.set(string: "1", forKey: key)
+            XCTAssertEqual("1", valet.string(forKey: key))
+            valet.set(string: "2", forKey: key)
+            XCTAssertEqual("2", valet.string(forKey: key))
+        }
     }
     
     func test_setStringForKey_failsForInvalidValue() {
-        XCTAssertFalse(valet.set(string: "", forKey: key))
+        allPermutations.forEach { valet in
+            XCTAssertFalse(valet.set(string: "", forKey: key))
+        }
     }
     
     func test_setStringForKey_failsForInvalidKey() {
-        XCTAssertFalse(valet.set(string: passcode, forKey: ""))
+        allPermutations.forEach { valet in
+            XCTAssertFalse(valet.set(string: passcode, forKey: ""))
+        }
     }
     
     // MARK: object(forKey:)
     
     func test_objectForKey_isNilForInvalidKey() {
-        XCTAssertNil(valet.object(forKey: key))
+        allPermutations.forEach { valet in
+            XCTAssertNil(valet.object(forKey: key))
+        }
     }
     
     func test_objectForKey_succeedsForValidKey() {
-        valet.set(object: passcodeData, forKey: key)
-        XCTAssertEqual(passcodeData, valet.object(forKey: key))
+        allPermutations.forEach { valet in
+            valet.set(object: passcodeData, forKey: key)
+            XCTAssertEqual(passcodeData, valet.object(forKey: key))
+        }
     }
     
     func test_objectForKey_equivalentValetsCanAccessSameData() {
@@ -368,41 +390,53 @@ class ValetIntegrationTests: XCTestCase
     // MARK: set(object:forKey:)
     
     func test_setObjectForKey_successfullyUpdatesExistingKey() {
-        let firstValue = Data("first".utf8)
-        let secondValue = Data("second".utf8)
-        valet.set(object: firstValue, forKey: key)
-        XCTAssertEqual(firstValue, valet.object(forKey: key))
-        valet.set(object: secondValue, forKey: key)
-        XCTAssertEqual(secondValue, valet.object(forKey: key))
+        allPermutations.forEach { valet in
+            let firstValue = Data("first".utf8)
+            let secondValue = Data("second".utf8)
+            valet.set(object: firstValue, forKey: key)
+            XCTAssertEqual(firstValue, valet.object(forKey: key))
+            valet.set(object: secondValue, forKey: key)
+            XCTAssertEqual(secondValue, valet.object(forKey: key))
+        }
     }
     
     func test_setObjectForKey_failsForInvalidKey() {
-        XCTAssertFalse(valet.set(object: passcodeData, forKey: ""))
+        allPermutations.forEach { valet in
+            XCTAssertFalse(valet.set(object: passcodeData, forKey: ""))
+        }
     }
     
     func test_setObjectForKey_failsForEmptyData() {
-        let emptyData = Data()
-        XCTAssertTrue(emptyData.isEmpty)
-        XCTAssertFalse(valet.set(object: emptyData, forKey: key))
+        allPermutations.forEach { valet in
+            let emptyData = Data()
+            XCTAssertTrue(emptyData.isEmpty)
+            XCTAssertFalse(valet.set(object: emptyData, forKey: key))
+        }
     }
     
     // Mark: String/Object Equivalence
     
     func test_stringForKey_succeedsForDataBackedByString() {
-        XCTAssertTrue(valet.set(object: passcodeData, forKey: key))
-        XCTAssertEqual(passcode, valet.string(forKey: key))
+        allPermutations.forEach { valet in
+            XCTAssertTrue(valet.set(object: passcodeData, forKey: key))
+            XCTAssertEqual(passcode, valet.string(forKey: key))
+        }
     }
     
     func test_stringForKey_failsForDataNotBackedByString() {
-        let dictionary = [ "that's no" : "moon" ]
-        let nonStringData = NSKeyedArchiver.archivedData(withRootObject: dictionary)
-        XCTAssertTrue(valet.set(object: nonStringData, forKey: key))
-        XCTAssertNil(valet.string(forKey: key))
+        allPermutations.forEach { valet in
+            let dictionary = [ "that's no" : "moon" ]
+            let nonStringData = NSKeyedArchiver.archivedData(withRootObject: dictionary)
+            XCTAssertTrue(valet.set(object: nonStringData, forKey: key))
+            XCTAssertNil(valet.string(forKey: key))
+        }
     }
     
     func test_objectForKey_succeedsForStrings() {
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertEqual(passcodeData, valet.object(forKey: key))
+        allPermutations.forEach { valet in
+            XCTAssertTrue(valet.set(string: passcode, forKey: key))
+            XCTAssertEqual(passcodeData, valet.object(forKey: key))
+        }
     }
 
     // MARK: Concurrency
@@ -472,14 +506,18 @@ class ValetIntegrationTests: XCTestCase
 
     func test_removeObjectForKey_succeedsWhenKeyIsNotPresent()
     {
-        XCTAssertTrue(valet.removeObject(forKey: "derp"))
+        allPermutations.forEach { valet in
+            XCTAssertTrue(valet.removeObject(forKey: "derp"))
+        }
     }
 
     func test_removeObjectForKey_succeedsWhenKeyIsPresent()
     {
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertTrue(valet.removeObject(forKey: key))
-        XCTAssertNil(valet.string(forKey: key))
+        allPermutations.forEach { valet in
+            XCTAssertTrue(valet.set(string: passcode, forKey: key))
+            XCTAssertTrue(valet.removeObject(forKey: key))
+            XCTAssertNil(valet.string(forKey: key))
+        }
     }
 
     func test_removeObjectForKey_isDistinctForDifferingAccessibility()
@@ -563,8 +601,7 @@ class ValetIntegrationTests: XCTestCase
         XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: true))
     }
 
-    // FIXME: Looks to me like this test may no longer be valid, need to dig a bit
-    func disabled_test_migrateObjectsMatching_bailsOutIfConflictExistsInQueryResult()
+    func test_migrateObjectsMatching_bailsOutIfConflictExistsInQueryResult()
     {
         guard testEnvironmentIsSigned() else {
             return
