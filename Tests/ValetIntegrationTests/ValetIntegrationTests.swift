@@ -80,7 +80,7 @@ class ValetIntegrationTests: XCTestCase
             + (testEnvironmentIsSigned() ? Valet.permutations(with: ValetIntegrationTests.identifier, shared: true) : [])
     }
 
-    // FIXME: Need a different flavor (Synchronizable can't be tested on Mac currently
+    // FIXME: Need a different flavor (Synchronizable must be tested in a signed environment)
     let anotherFlavor = Valet.iCloudValet(with: identifier, accessibility: .whenUnlocked)
 
     let key = "key"
