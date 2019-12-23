@@ -26,3 +26,8 @@ matrix:
     env: ACTION="pod-lint";SWIFT_VERSION="4.0"
   - osx_image: xcode9
     env: ACTION="carthage"
+
+branches:
+  only:
+  - master
+  - develop--4.0
