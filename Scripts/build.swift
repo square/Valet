@@ -243,6 +243,9 @@ for rawPlatform in rawPlatforms {
     if task.shouldUseLegacyBuildSystem {
         xcodeBuildArguments.append("-UseModernBuildSystem=0")
     }
+
+    xcodeBuildArguments.append("-allowProvisioningUpdates")
+
     xcodeBuildArguments.append("build")
     if task.shouldTest(on: platform) {
         xcodeBuildArguments.append("test")
