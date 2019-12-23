@@ -9,6 +9,7 @@ if [ $ACTION == "swift-package" ]; then
 fi
 
 if [ $ACTION == "xcode" ]; then
+  mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
   cp Valet\ macOS\ Test\ Host\ App/58f4a46d-9ea5-4134-bb2d-46b5ef0ad765.provisionprofile ~/Library/MobileDevice/Provisioning\ Profiles
   $DIR/build.swift $PLATFORMS xcode
 fi
