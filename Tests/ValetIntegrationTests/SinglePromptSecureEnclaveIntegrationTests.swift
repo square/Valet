@@ -46,7 +46,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         
     func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_canAccessSameData()
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -58,7 +58,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_SinglePromptSecureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -73,7 +73,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_allKeys()
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -99,10 +99,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_canAccessKeychain()
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-
         #if swift(>=4.1)
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
             return .valet(with: valet.identifier, accessControl: accessControl)
@@ -119,10 +115,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_canAccessKeychain_sharedAccessGroup() {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
         let sharedAccessGroupIdentifier: Identifier
         #if os(iOS)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
@@ -151,10 +143,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsMatchingQuery_failsForBadQuery()
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
         let invalidQuery = [
             kSecClass as String: kSecClassGenericPassword as String,
             kSecAttrAccessControl as String: "Fake access control"
@@ -164,7 +152,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave()
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -200,7 +188,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         

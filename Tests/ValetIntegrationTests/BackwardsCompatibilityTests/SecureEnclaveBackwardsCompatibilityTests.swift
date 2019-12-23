@@ -29,7 +29,7 @@ extension SecureEnclaveIntegrationTests {
     @available (*, deprecated)
     func test_backwardsCompatibility_withLegacyValet()
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
 

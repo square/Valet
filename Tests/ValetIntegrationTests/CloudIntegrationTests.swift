@@ -48,10 +48,6 @@ class CloudIntegrationTests: XCTestCase
     
     func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
         let localValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
 
         // Setting
@@ -67,10 +63,6 @@ class CloudIntegrationTests: XCTestCase
     
     func test_setStringForKey()
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
         XCTAssertNil(valet.string(forKey: key))
         XCTAssertTrue(valet.set(string: passcode, forKey: key))
         XCTAssertEqual(passcode, valet.string(forKey: key))
@@ -78,10 +70,6 @@ class CloudIntegrationTests: XCTestCase
     
     func test_removeObjectForKey()
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
         XCTAssertTrue(valet.set(string: passcode, forKey: key))
         XCTAssertEqual(passcode, valet.string(forKey: key))
         
@@ -93,10 +81,6 @@ class CloudIntegrationTests: XCTestCase
     
     func test_canAccessKeychain()
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
         Valet.iCloudPermutations(with: valet.identifier).forEach { permutation in
             XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
         }
@@ -104,10 +88,6 @@ class CloudIntegrationTests: XCTestCase
     
     func test_canAccessKeychain_sharedAccessGroup()
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
         Valet.iCloudPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation in
             XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
         }
