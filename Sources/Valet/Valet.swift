@@ -384,6 +384,64 @@ extension Valet {
         }
         return iCloudSharedAccessGroupValet(with: identifier, accessibility: accessibility)
     }
+
+    #if os(macOS)
+    /// Creates a Valet with an explicitly set kSecAttrService.
+    /// See https://github.com/square/Valet/issues/140 for more information.
+    /// - parameter identifier: A non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
+    /// - parameter accessibility: The desired accessibility for the Valet.
+    /// - returns: A Valet that reads/writes keychain elements with the desired accessibility and identifier.
+    @available(swift, obsoleted: 1.0)
+    @objc(valetWithExplicitlySetIdentifier:accessibility:)
+    public class func 🚫swift_valet(withExplicitlySet identifier: String, accessibility: Accessibility) -> Valet? {
+        guard let identifier = Identifier(nonEmpty: identifier) else {
+            return nil
+        }
+        return findOrCreate(explicitlySet: identifier, configuration: .valet(accessibility))
+    }
+
+    /// Creates an iCloud Valet with an explicitly set kSecAttrService.
+    /// See https://github.com/square/Valet/issues/140 for more information.
+    /// - parameter identifier: A non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
+    /// - parameter accessibility: The desired accessibility for the Valet.
+    /// - returns: A Valet (synchronized with iCloud) that reads/writes keychain elements with the desired accessibility and identifier.
+    @available(swift, obsoleted: 1.0)
+    @objc(iCloudValetWithExplicitlySetIdentifier:accessibility:)
+    public class func 🚫swift_iCloudValet(withExplicitlySet identifier: String, accessibility: CloudAccessibility) -> Valet? {
+        guard let identifier = Identifier(nonEmpty: identifier) else {
+            return nil
+        }
+        return findOrCreate(explicitlySet: identifier, configuration: .iCloud(accessibility))
+    }
+
+    /// Creates a shared-access-group Valet with an explicitly set kSecAttrService.
+    /// See https://github.com/square/Valet/issues/140 for more information.
+    /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    /// - parameter accessibility: The desired accessibility for the Valet.
+    /// - returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
+    @available(swift, obsoleted: 1.0)
+    @objc(valetWithExplicitlySetSharedAccessGroupIdentifier:accessibility:)
+    public class func 🚫swift_sharedAccessGroupValet(withExplicitlySet identifier: String, accessibility: Accessibility) -> Valet? {
+        guard let identifier = Identifier(nonEmpty: identifier) else {
+            return nil
+        }
+        return findOrCreate(explicitlySet: identifier, configuration: .valet(accessibility), sharedAccessGroup: true)
+    }
+
+    /// Creates an iCloud-shared-access-group Valet with an explicitly set kSecAttrService.
+    /// See https://github.com/square/Valet/issues/140 for more information.
+    /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    /// - parameter accessibility: The desired accessibility for the Valet.
+    /// - returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
+    @available(swift, obsoleted: 1.0)
+    @objc(iCloudValetWithExplicitlySetSharedAccessGroupIdentifier:accessibility:)
+    public class func 🚫swift_iCloudSharedAccessGroupValet(withExplicitlySet identifier: String, accessibility: CloudAccessibility) -> Valet? {
+        guard let identifier = Identifier(nonEmpty: identifier) else {
+            return nil
+        }
+        return findOrCreate(explicitlySet: identifier, configuration: .iCloud(accessibility), sharedAccessGroup: true)
+    }
+    #endif
     
 }
 
