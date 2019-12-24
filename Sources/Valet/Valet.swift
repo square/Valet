@@ -141,7 +141,9 @@ public final class Valet: NSObject {
     @objc
     public func canAccessKeychain() -> Bool {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return false }
+            guard let keychainQuery = keychainQuery else {
+                return false
+            }
             return Keychain.canAccess(attributes: keychainQuery)
         }
     }
@@ -153,7 +155,9 @@ public final class Valet: NSObject {
     @discardableResult
     public func set(object: Data, forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return false }
+            guard let keychainQuery = keychainQuery else {
+                return false
+            }
             return Keychain.set(object: object, forKey: key, options: keychainQuery).didSucceed
         }
     }
@@ -163,7 +167,9 @@ public final class Valet: NSObject {
     @objc(objectForKey:)
     public func object(forKey key: String) -> Data? {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return nil }
+            guard let keychainQuery = keychainQuery else {
+                return nil
+            }
             return Keychain.object(forKey: key, options: keychainQuery).value
         }
     }
@@ -173,7 +179,9 @@ public final class Valet: NSObject {
     @objc(containsObjectForKey:)
     public func containsObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return false }
+            guard let keychainQuery = keychainQuery else {
+                return false
+            }
             return Keychain.containsObject(forKey: key, options: keychainQuery).didSucceed
         }
     }
@@ -185,7 +193,9 @@ public final class Valet: NSObject {
     @discardableResult
     public func set(string: String, forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return false }
+            guard let keychainQuery = keychainQuery else {
+                return false
+            }
             return Keychain.set(string: string, forKey: key, options: keychainQuery).didSucceed
         }
     }
@@ -195,7 +205,9 @@ public final class Valet: NSObject {
     @objc(stringForKey:)
     public func string(forKey key: String) -> String? {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return nil }
+            guard let keychainQuery = keychainQuery else {
+                return nil
+            }
             return Keychain.string(forKey: key, options: keychainQuery).value
         }
     }
@@ -204,7 +216,9 @@ public final class Valet: NSObject {
     @objc
     public func allKeys() -> Set<String> {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return Set() }
+            guard let keychainQuery = keychainQuery else {
+                return Set()
+            }
             return Keychain.allKeys(options: keychainQuery).value ?? Set()
         }
     }
@@ -215,7 +229,9 @@ public final class Valet: NSObject {
     @discardableResult
     public func removeObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return false }
+            guard let keychainQuery = keychainQuery else {
+                return false
+            }
             return Keychain.removeObject(forKey: key, options: keychainQuery).didSucceed
         }
     }
@@ -226,7 +242,9 @@ public final class Valet: NSObject {
     @discardableResult
     public func removeAllObjects() -> Bool {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return false }
+            guard let keychainQuery = keychainQuery else {
+                return false
+            }
             return Keychain.removeAllObjects(matching: keychainQuery).didSucceed
         }
     }
@@ -239,7 +257,9 @@ public final class Valet: NSObject {
     @objc(migrateObjectsMatchingQuery:removeOnCompletion:)
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) -> MigrationResult {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return .couldNotReadKeychain }
+            guard let keychainQuery = keychainQuery else {
+                return .couldNotReadKeychain
+            }
             return Keychain.migrateObjects(matching: query, into: keychainQuery, removeOnCompletion: removeOnCompletion)
         }
     }
@@ -251,7 +271,9 @@ public final class Valet: NSObject {
     /// - note: The keychain is not modified if a failure occurs.
     @objc(migrateObjectsFromValet:removeOnCompletion:)
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) -> MigrationResult {
-        guard let keychainQuery = valet.keychainQuery else { return .couldNotReadKeychain }
+        guard let keychainQuery = valet.keychainQuery else {
+            return .couldNotReadKeychain
+        }
         return migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
     }
 

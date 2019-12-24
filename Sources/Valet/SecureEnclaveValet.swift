@@ -123,7 +123,9 @@ public final class SecureEnclaveValet: NSObject {
     @discardableResult
     public func set(object: Data, forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return false }
+            guard let keychainQuery = keychainQuery else {
+                return false
+            }
             return SecureEnclave.set(object: object, forKey: key, options: keychainQuery)
         }
     }
@@ -133,7 +135,9 @@ public final class SecureEnclaveValet: NSObject {
     /// - returns: The data currently stored in the keychain for the provided key. Returns `.itemNotFound` if no object exists in the keychain for the specified key, or if the keychain is inaccessible. Returns `.userCancelled` if the user cancels the user-presence prompt.
     public func object(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<Data> {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return .itemNotFound }
+            guard let keychainQuery = keychainQuery else {
+                return .itemNotFound
+            }
             return SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: keychainQuery)
         }
     }
@@ -144,7 +148,9 @@ public final class SecureEnclaveValet: NSObject {
     @objc(containsObjectForKey:)
     public func containsObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return false }
+            guard let keychainQuery = keychainQuery else {
+                return false
+            }
             return SecureEnclave.containsObject(forKey: key, options: keychainQuery)
         }
     }
@@ -156,7 +162,9 @@ public final class SecureEnclaveValet: NSObject {
     @discardableResult
     public func set(string: String, forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return false }
+            guard let keychainQuery = keychainQuery else {
+                return false
+            }
             return SecureEnclave.set(string: string, forKey: key, options: keychainQuery)
         }
     }
@@ -166,7 +174,9 @@ public final class SecureEnclaveValet: NSObject {
     /// - returns: The string currently stored in the keychain for the provided key. Returns `itemNotFound` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     public func string(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<String> {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return .itemNotFound }
+            guard let keychainQuery = keychainQuery else {
+                return .itemNotFound
+            }
             return SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: keychainQuery)
         }
     }
@@ -177,7 +187,9 @@ public final class SecureEnclaveValet: NSObject {
     @discardableResult
     public func removeObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return false }
+            guard let keychainQuery = keychainQuery else {
+                return false
+            }
             return Keychain.removeObject(forKey: key, options: keychainQuery).didSucceed
         }
     }
@@ -188,7 +200,9 @@ public final class SecureEnclaveValet: NSObject {
     @discardableResult
     public func removeAllObjects() -> Bool {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return false }
+            guard let keychainQuery = keychainQuery else {
+                return false
+            }
             return Keychain.removeAllObjects(matching: keychainQuery).didSucceed
         }
     }
@@ -201,7 +215,9 @@ public final class SecureEnclaveValet: NSObject {
     @objc(migrateObjectsMatchingQuery:removeOnCompletion:)
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) -> MigrationResult {
         return execute(in: lock) {
-            guard let keychainQuery = keychainQuery else { return .couldNotReadKeychain }
+            guard let keychainQuery = keychainQuery else {
+                return .couldNotReadKeychain
+            }
             return Keychain.migrateObjects(matching: query, into: keychainQuery, removeOnCompletion: removeOnCompletion)
         }
     }
@@ -213,7 +229,9 @@ public final class SecureEnclaveValet: NSObject {
     /// - note: The keychain is not modified if a failure occurs.
     @objc(migrateObjectsFromValet:removeOnCompletion:)
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) -> MigrationResult {
-        guard let keychainQuery = valet.keychainQuery else { return .couldNotReadKeychain }
+        guard let keychainQuery = valet.keychainQuery else {
+            return .couldNotReadKeychain
+        }
         return migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
@@ -222,9 +240,9 @@ public final class SecureEnclaveValet: NSObject {
     internal let service: Service
 
     // MARK: Private Properties
-    
+
     private let lock = NSLock()
-    internal var keychainQuery: [String : AnyHashable]? {
+    private var keychainQuery: [String : AnyHashable]? {
         if let keychainQuery = _keychainQuery {
             return keychainQuery
         } else {

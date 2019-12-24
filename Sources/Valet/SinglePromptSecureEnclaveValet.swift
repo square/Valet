@@ -126,7 +126,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @discardableResult
     public func set(object: Data, forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let baseKeychainQuery = baseKeychainQuery else { return false }
+            guard let baseKeychainQuery = baseKeychainQuery else {
+                return false
+            }
             return SecureEnclave.set(object: object, forKey: key, options: baseKeychainQuery)
         }
     }
@@ -136,7 +138,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - returns: The data currently stored in the keychain for the provided key. Returns `.itemNotFound` if no object exists in the keychain for the specified key, or if the keychain is inaccessible. Returns `.userCancelled` if the user cancels the user-presence prompt.
     public func object(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<Data> {
         return execute(in: lock) {
-            guard let continuedAuthenticationKeychainQuery = continuedAuthenticationKeychainQuery else { return .itemNotFound }
+            guard let continuedAuthenticationKeychainQuery = continuedAuthenticationKeychainQuery else {
+                return .itemNotFound
+            }
             return SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: continuedAuthenticationKeychainQuery)
         }
     }
@@ -147,7 +151,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc(containsObjectForKey:)
     public func containsObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let baseKeychainQuery = baseKeychainQuery else { return false }
+            guard let baseKeychainQuery = baseKeychainQuery else {
+                return false
+            }
             return SecureEnclave.containsObject(forKey: key, options: baseKeychainQuery)
         }
     }
@@ -159,7 +165,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @discardableResult
     public func set(string: String, forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let baseKeychainQuery = baseKeychainQuery else { return false }
+            guard let baseKeychainQuery = baseKeychainQuery else {
+                return false
+            }
             return SecureEnclave.set(string: string, forKey: key, options: baseKeychainQuery)
         }
     }
@@ -169,7 +177,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - returns: The string currently stored in the keychain for the provided key. Returns `itemNotFound` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     public func string(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<String> {
         return execute(in: lock) {
-            guard let continuedAuthenticationKeychainQuery = continuedAuthenticationKeychainQuery else { return .itemNotFound }
+            guard let continuedAuthenticationKeychainQuery = continuedAuthenticationKeychainQuery else {
+                return .itemNotFound
+            }
             return SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: continuedAuthenticationKeychainQuery)
         }
     }
@@ -188,7 +198,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc(allKeysWithUserPrompt:)
     public func allKeys(userPrompt: String) -> Set<String> {
         return execute(in: lock) {
-            guard let continuedAuthenticationKeychainQuery = continuedAuthenticationKeychainQuery else { return Set() }
+            guard let continuedAuthenticationKeychainQuery = continuedAuthenticationKeychainQuery else {
+                return Set()
+            }
             var secItemQuery = continuedAuthenticationKeychainQuery
             if !userPrompt.isEmpty {
                 secItemQuery[kSecUseOperationPrompt as String] = userPrompt
@@ -204,7 +216,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @discardableResult
     public func removeObject(forKey key: String) -> Bool {
         return execute(in: lock) {
-            guard let baseKeychainQuery = baseKeychainQuery else { return false }
+            guard let baseKeychainQuery = baseKeychainQuery else {
+                return false
+            }
             return Keychain.removeObject(forKey: key, options: baseKeychainQuery).didSucceed
         }
     }
@@ -215,7 +229,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @discardableResult
     public func removeAllObjects() -> Bool {
         return execute(in: lock) {
-            guard let baseKeychainQuery = baseKeychainQuery else { return false }
+            guard let baseKeychainQuery = baseKeychainQuery else {
+                return false
+            }
             return Keychain.removeAllObjects(matching: baseKeychainQuery).didSucceed
         }
     }
@@ -228,7 +244,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc(migrateObjectsMatchingQuery:removeOnCompletion:)
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) -> MigrationResult {
         return execute(in: lock) {
-            guard let baseKeychainQuery = baseKeychainQuery else { return .couldNotReadKeychain }
+            guard let baseKeychainQuery = baseKeychainQuery else {
+                return .couldNotReadKeychain
+            }
             return Keychain.migrateObjects(matching: query, into: baseKeychainQuery, removeOnCompletion: removeOnCompletion)
         }
     }
@@ -240,7 +258,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - note: The keychain is not modified if a failure occurs.
     @objc(migrateObjectsFromValet:removeOnCompletion:)
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) -> MigrationResult {
-        guard let keychainQuery = valet.keychainQuery else { return .couldNotReadKeychain }
+        guard let keychainQuery = valet.keychainQuery else {
+            return .couldNotReadKeychain
+        }
         return migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
@@ -268,7 +288,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// Using this query in a `containsObject` check can cause a false positive in the case where an element has been removed from
     /// the keychain by the operating system due to a face, fingerprint, or password change.
     private var continuedAuthenticationKeychainQuery: [String : AnyHashable]? {
-        guard let baseKeychainQuery = baseKeychainQuery else { return nil }
+        guard let baseKeychainQuery = baseKeychainQuery else {
+            return nil
+        }
         var keychainQuery = baseKeychainQuery
         keychainQuery[kSecUseAuthenticationContext as String] = localAuthenticationContext
         return keychainQuery
