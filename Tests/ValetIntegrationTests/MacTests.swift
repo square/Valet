@@ -20,7 +20,8 @@
 
 import Foundation
 import XCTest
-import Valet
+
+@testable import Valet
 
 #if os(macOS)
 class ValetMacTests: XCTestCase
