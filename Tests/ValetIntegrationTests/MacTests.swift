@@ -36,7 +36,11 @@ class ValetMacTests: XCTestCase
         let vulnValue = "Secret"
         valet.removeObject(forKey: vulnKey)
 
-        var query = valet.keychainQuery
+        guard let keychainQuery = valet.keychainQuery else {
+            XCTFail()
+            return
+        }
+        var query = keychainQuery
         query[kSecAttrAccount as String] = vulnKey
 
         var accessList: SecAccess?
