@@ -21,21 +21,27 @@ enum TaskError: Error {
 }
 
 enum Platform: String, CustomStringConvertible {
+    case iOS_10
     case iOS_11
     case iOS_12
     case iOS_13
+    case tvOS_10
     case tvOS_11
     case tvOS_12
     case tvOS_13
+    case macOS_10_12
     case macOS_10_13
     case macOS_10_14
     case macOS_10_15
+    case watchOS_3
     case watchOS_4
     case watchOS_5
     case watchOS_6
 
     var destination: String {
         switch self {
+        case .iOS_10:
+            return "platform=iOS Simulator,OS=10.3.1,name=iPad Pro (12.9 inch)"
         case .iOS_11:
             return "platform=iOS Simulator,OS=11.0.1,name=iPad Pro (12.9-inch) (2nd generation)"
         case .iOS_12:
@@ -43,6 +49,8 @@ enum Platform: String, CustomStringConvertible {
         case .iOS_13:
             return "platform=iOS Simulator,OS=13.0,name=iPad Pro (12.9-inch) (3rd generation)"
 
+        case .tvOS_10:
+            return "platform=tvOS Simulator,OS=10.2,name=Apple TV 1080p"
         case .tvOS_11:
             return "platform=tvOS Simulator,OS=11.0,name=Apple TV"
         case .tvOS_12:
@@ -50,11 +58,14 @@ enum Platform: String, CustomStringConvertible {
         case .tvOS_13:
             return "platform=tvOS Simulator,OS=13.0,name=Apple TV"
 
-        case .macOS_10_13,
+        case .macOS_10_12,
+             .macOS_10_13,
              .macOS_10_14,
              .macOS_10_15:
             return "platform=OS X"
 
+        case .watchOS_3:
+            return "OS=3.2,name=Apple Watch Series 2 - 42mm"
         case .watchOS_4:
             return "OS=4.0,name=Apple Watch Series 2 - 42mm"
         case .watchOS_5:
@@ -66,16 +77,20 @@ enum Platform: String, CustomStringConvertible {
 
     var sdk: String {
         switch self {
-        case .iOS_11,
+        case .iOS_10,
+             .iOS_11,
              .iOS_12,
              .iOS_13:
             return "iphonesimulator"
 
-        case .tvOS_11,
+        case .tvOS_10,
+             .tvOS_11,
              .tvOS_12,
              .tvOS_13:
             return "appletvsimulator"
 
+        case .macOS_10_12:
+            return "macosx10.12"
         case .macOS_10_13:
             return "macosx10.13"
         case .macOS_10_14:
@@ -83,7 +98,8 @@ enum Platform: String, CustomStringConvertible {
         case .macOS_10_15:
             return "macosx10.15"
 
-        case .watchOS_4,
+        case .watchOS_3,
+             .watchOS_4,
              .watchOS_5,
              .watchOS_6:
             return "watchsimulator"
@@ -92,18 +108,22 @@ enum Platform: String, CustomStringConvertible {
 
     var shouldTest: Bool {
         switch self {
-        case .iOS_11,
+        case .iOS_10,
+             .iOS_11,
              .iOS_12,
              .iOS_13,
+             .tvOS_10,
              .tvOS_11,
              .tvOS_12,
              .tvOS_13,
+             .macOS_10_12,
              .macOS_10_13,
              .macOS_10_14,
              .macOS_10_15:
             return true
 
-        case .watchOS_4,
+        case .watchOS_3,
+             .watchOS_4,
              .watchOS_5,
              .watchOS_6:
             // watchOS does not support unit testing (yet?).
@@ -113,22 +133,26 @@ enum Platform: String, CustomStringConvertible {
 
     var scheme: String {
         switch self {
-        case .iOS_11,
+        case .iOS_10,
+             .iOS_11,
              .iOS_12,
              .iOS_13:
             return "Valet iOS"
 
-        case .tvOS_11,
+        case .tvOS_10,
+             .tvOS_11,
              .tvOS_12,
              .tvOS_13:
             return "Valet tvOS"
 
-        case .macOS_10_13,
+        case .macOS_10_12,
+             .macOS_10_13,
              .macOS_10_14,
              .macOS_10_15:
             return "Valet Mac"
 
-        case .watchOS_4,
+        case .watchOS_3,
+             .watchOS_4,
              .watchOS_5,
              .watchOS_6:
             return "Valet watchOS"
