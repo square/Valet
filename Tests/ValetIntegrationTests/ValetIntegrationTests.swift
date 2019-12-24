@@ -173,7 +173,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_valetsWithDifferingAccessibility_areNotEqual()
     {
-        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .always)
+        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .whenUnlockedThisDeviceOnly)
         XCTAssertNotEqual(valet, differingAccessibility)
     }
 
@@ -249,7 +249,7 @@ class ValetIntegrationTests: XCTestCase
         XCTAssertEqual(differingIdentifier.allKeys(), Set())
 
         // Different Accessibility
-        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .always)
+        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .whenUnlockedThisDeviceOnly)
         XCTAssertEqual(differingAccessibility.allKeys(), Set())
 
         // Different Kind
@@ -492,7 +492,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_removeObjectForKey_isDistinctForDifferingAccessibility()
     {
-        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .always)
+        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .whenUnlockedThisDeviceOnly)
         XCTAssertTrue(valet.set(string: passcode, forKey: key))
 
         XCTAssertTrue(differingAccessibility.removeObject(forKey: key))
@@ -535,11 +535,15 @@ class ValetIntegrationTests: XCTestCase
 
         valet.set(string: passcode, forKey: key)
 
+        guard let valetKeychainQuery = valet.keychainQuery else {
+            XCTFail()
+            return
+        }
         // Test for base query success.
-        XCTAssertEqual(anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: false), .success)
+        XCTAssertEqual(anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: false), .success)
         XCTAssertEqual(passcode, anotherFlavor.string(forKey: key))
 
-        var mutableQuery = valet.keychainQuery
+        var mutableQuery = valetKeychainQuery
         mutableQuery.removeValue(forKey: kSecClass as String)
 
         // Without a kSecClass, the migration should fail.
@@ -566,9 +570,14 @@ class ValetIntegrationTests: XCTestCase
         XCTAssertEqual(noItemsFoundError, valet.migrateObjects(matching: queryWithNoMatches, removeOnCompletion: false))
         XCTAssertEqual(noItemsFoundError, valet.migrateObjects(matching: queryWithNoMatches, removeOnCompletion: true))
 
+        guard let valetKeychainQuery = valet.keychainQuery else {
+            XCTFail()
+            return
+        }
+
         // Our test Valet has not yet been written to, migration should fail:
-        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: false))
-        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: true))
+        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: false))
+        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: true))
     }
 
     // FIXME: Looks to me like this test may no longer be valid, need to dig a bit

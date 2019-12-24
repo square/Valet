@@ -37,8 +37,6 @@ internal extension Valet {
         switch accessibility {
         case .afterFirstUnlock: return .afterFirstUnlock
         case .afterFirstUnlockThisDeviceOnly: return .afterFirstUnlockThisDeviceOnly
-        case .always: return .always
-        case .alwaysThisDeviceOnly: return .alwaysThisDeviceOnly
         case .whenPasscodeSetThisDeviceOnly: return .whenPasscodeSetThisDeviceOnly
         case .whenUnlocked: return .whenUnlocked
         case .whenUnlockedThisDeviceOnly: return .whenUnlockedThisDeviceOnly

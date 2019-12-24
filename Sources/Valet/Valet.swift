@@ -23,7 +23,7 @@ import Foundation
 
 /// Reads and writes keychain elements.
 @objc(VALValet)
-public final class Valet: NSObject, KeychainQueryConvertible {
+public final class Valet: NSObject {
 
     // MARK: Public Class Methods
     
@@ -94,20 +94,26 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         fatalError("Use the class methods above to create usable Valet objects")
     }
     
-    private init(identifier: Identifier, configuration: Configuration) {
-        self.identifier = identifier
-        self.configuration = configuration
-        service = .standard(identifier, configuration)
-        accessibility = configuration.accessibility
-        keychainQuery = service.generateBaseQuery()
+    private convenience init(identifier: Identifier, configuration: Configuration) {
+        self.init(
+            identifier: identifier,
+            service: .standard(identifier, configuration),
+            configuration: configuration)
     }
     
-    private init(sharedAccess identifier: Identifier, configuration: Configuration) {
+    private convenience init(sharedAccess identifier: Identifier, configuration: Configuration) {
+        self.init(
+            identifier: identifier,
+            service: .sharedAccessGroup(identifier, configuration),
+            configuration: configuration)
+    }
+
+    private init(identifier: Identifier, service: Service, configuration: Configuration) {
         self.identifier = identifier
         self.configuration = configuration
-        service = .sharedAccessGroup(identifier, configuration)
+        self.service = service
         accessibility = configuration.accessibility
-        keychainQuery = service.generateBaseQuery()
+        _keychainQuery = service.generateBaseQuery()
     }
 
     // MARK: CustomStringConvertible
@@ -115,11 +121,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     public override var description: String {
         return "\(super.description) \(identifier.description) \(configuration.prettyDescription)"
     }
-    
-    // MARK: KeychainQueryConvertible
-    
-    public let keychainQuery: [String : AnyHashable]
-    
+
     // MARK: Hashable
     
     public override var hash: Int {
@@ -139,6 +141,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @objc
     public func canAccessKeychain() -> Bool {
         return execute(in: lock) {
+            guard let keychainQuery = keychainQuery else { return false }
             return Keychain.canAccess(attributes: keychainQuery)
         }
     }
@@ -150,6 +153,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @discardableResult
     public func set(object: Data, forKey key: String) -> Bool {
         return execute(in: lock) {
+            guard let keychainQuery = keychainQuery else { return false }
             return Keychain.set(object: object, forKey: key, options: keychainQuery).didSucceed
         }
     }
@@ -159,6 +163,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @objc(objectForKey:)
     public func object(forKey key: String) -> Data? {
         return execute(in: lock) {
+            guard let keychainQuery = keychainQuery else { return nil }
             return Keychain.object(forKey: key, options: keychainQuery).value
         }
     }
@@ -168,6 +173,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @objc(containsObjectForKey:)
     public func containsObject(forKey key: String) -> Bool {
         return execute(in: lock) {
+            guard let keychainQuery = keychainQuery else { return false }
             return Keychain.containsObject(forKey: key, options: keychainQuery).didSucceed
         }
     }
@@ -179,6 +185,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @discardableResult
     public func set(string: String, forKey key: String) -> Bool {
         return execute(in: lock) {
+            guard let keychainQuery = keychainQuery else { return false }
             return Keychain.set(string: string, forKey: key, options: keychainQuery).didSucceed
         }
     }
@@ -188,6 +195,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @objc(stringForKey:)
     public func string(forKey key: String) -> String? {
         return execute(in: lock) {
+            guard let keychainQuery = keychainQuery else { return nil }
             return Keychain.string(forKey: key, options: keychainQuery).value
         }
     }
@@ -196,6 +204,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @objc
     public func allKeys() -> Set<String> {
         return execute(in: lock) {
+            guard let keychainQuery = keychainQuery else { return Set() }
             return Keychain.allKeys(options: keychainQuery).value ?? Set()
         }
     }
@@ -206,6 +215,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @discardableResult
     public func removeObject(forKey key: String) -> Bool {
         return execute(in: lock) {
+            guard let keychainQuery = keychainQuery else { return false }
             return Keychain.removeObject(forKey: key, options: keychainQuery).didSucceed
         }
     }
@@ -216,6 +226,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @discardableResult
     public func removeAllObjects() -> Bool {
         return execute(in: lock) {
+            guard let keychainQuery = keychainQuery else { return false }
             return Keychain.removeAllObjects(matching: keychainQuery).didSucceed
         }
     }
@@ -228,6 +239,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     @objc(migrateObjectsMatchingQuery:removeOnCompletion:)
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) -> MigrationResult {
         return execute(in: lock) {
+            guard let keychainQuery = keychainQuery else { return .couldNotReadKeychain }
             return Keychain.migrateObjects(matching: query, into: keychainQuery, removeOnCompletion: removeOnCompletion)
         }
     }
@@ -238,18 +250,28 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
     @objc(migrateObjectsFromValet:removeOnCompletion:)
-    public func migrateObjects(from keychain: KeychainQueryConvertible, removeOnCompletion: Bool) -> MigrationResult {
-        return migrateObjects(matching: keychain.keychainQuery, removeOnCompletion: removeOnCompletion)
+    public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) -> MigrationResult {
+        guard let keychainQuery = valet.keychainQuery else { return .couldNotReadKeychain }
+        return migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
     // MARK: Internal Properties
 
     internal let configuration: Configuration
     internal let service: Service
+    internal var keychainQuery: [String : AnyHashable]? {
+        if let keychainQuery = _keychainQuery {
+            return keychainQuery
+        } else {
+            _keychainQuery = service.generateBaseQuery()
+            return _keychainQuery
+        }
+    }
 
     // MARK: Private Properties
 
     private let lock = NSLock()
+    private var _keychainQuery: [String : AnyHashable]?
 }
 
 
