@@ -30,7 +30,7 @@ extension SinglePromptSecureEnclaveIntegrationTests {
     @available (*, deprecated)
     func test_backwardsCompatibility_withLegacyValet()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
 

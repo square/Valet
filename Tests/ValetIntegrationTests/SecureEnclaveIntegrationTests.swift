@@ -46,7 +46,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     
     func test_secureEnclaveValetsWithEqualConfiguration_canAccessSameData()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -58,7 +58,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     
     func test_secureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -142,7 +142,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -178,7 +178,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
