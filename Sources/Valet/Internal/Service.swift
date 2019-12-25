@@ -54,8 +54,12 @@ internal enum Service: CustomStringConvertible, Equatable {
             guard let sharedAccessGroupPrefix = SecItem.sharedAccessGroupPrefix else {
                 throw ValetError.couldNotReadKeychain
             }
-            ErrorHandler.assert(!identifier.description.hasPrefix("\(sharedAccessGroupPrefix)."), "Do not add the Bundle Seed ID as a prefix to your identifier. Valet prepends this value for you. Your Valet will not be able to access the keychain with the provided configuration")
-            baseQuery[kSecAttrAccessGroup as String] = "\(sharedAccessGroupPrefix).\(identifier.description)"
+            if identifier.description.hasPrefix("\(sharedAccessGroupPrefix).") {
+                // The Bundle Seed ID was passed in as a prefix to the identifier.
+                baseQuery[kSecAttrAccessGroup as String] = identifier.description
+            } else {
+                baseQuery[kSecAttrAccessGroup as String] = "\(sharedAccessGroupPrefix).\(identifier.description)"
+            }
             configuration = desiredConfiguration
         }
         

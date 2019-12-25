@@ -53,14 +53,14 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable 
             if #available(macOS 10.12.1, *) {
                 return "_AccessControlTouchIDAnyFingerprint"
             } else {
-                ErrorHandler.assertionFailure(".biometricAny requires macOS 10.12.1.")
+                assertionFailure(".biometricAny requires macOS 10.12.1.")
                 return ""
             }
         case .biometricCurrentSet:
             if #available(macOS 10.12.1, *) {
                 return "_AccessControlTouchIDCurrentFingerprintSet"
             } else {
-                ErrorHandler.assertionFailure(".biometricCurrentSet requires macOS 10.12.1.")
+                assertionFailure(".biometricCurrentSet requires macOS 10.12.1.")
                 return ""
             }
         case .devicePasscode:
@@ -78,21 +78,21 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable 
             if #available(macOS 10.12.1, *) {
                 return .init(rawValue: 2) // .biometryAny with Xcode 9 compatibility.
             } else {
-                ErrorHandler.assertionFailure(".biometricAny requires macOS 10.12.1.")
+                assertionFailure(".biometricAny requires macOS 10.12.1.")
                 return .userPresence
             }
         case .biometricCurrentSet:
             if #available(macOS 10.12.1, *) {
                 return .init(rawValue: 8) // .biometryCurrentSet with Xcode 9 compatibility.
             } else {
-                ErrorHandler.assertionFailure(".biometricCurrentSet requires macOS 10.12.1.")
+                assertionFailure(".biometricCurrentSet requires macOS 10.12.1.")
                 return .userPresence
             }
         case .devicePasscode:
             if #available(macOS 10.11, *) {
                 return .devicePasscode
             } else {
-                ErrorHandler.assertionFailure(".devicePasscode requires macOS 10.11.")
+                assertionFailure(".devicePasscode requires macOS 10.11.")
                 return .userPresence
             }
         }

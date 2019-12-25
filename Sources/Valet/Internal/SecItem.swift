@@ -76,7 +76,7 @@ internal final class SecItem {
     
     internal static func copy<DesiredType>(matching query: [String : AnyHashable]) throws -> DesiredType {
         if query.isEmpty {
-            ErrorHandler.assertionFailure("Must provide a query with at least one item")
+            assertionFailure("Must provide a query with at least one item")
         }
         
         var status = errSecNotAvailable
@@ -96,15 +96,13 @@ internal final class SecItem {
             }
             
         } else {
-            ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
-            
             throw ValetError(status: status)
         }
     }
     
     internal static func containsObject(matching query: [String : AnyHashable]) -> OSStatus {
         guard query.count > 0 else {
-            ErrorHandler.assertionFailure("Must provide a query with at least one item")
+            // "Must provide a query with at least one item
             return errSecParam
         }
         
@@ -112,14 +110,14 @@ internal final class SecItem {
         execute(in: secItemLock) {
             status = SecItemCopyMatching(query as CFDictionary, nil)
         }
-        ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
+        assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
 
         return status
     }
     
     internal static func add(attributes: [String : AnyHashable]) throws {
         if attributes.isEmpty {
-            ErrorHandler.assertionFailure("Must provide attributes with at least one item")
+            assertionFailure("Must provide attributes with at least one item")
         }
         
         var status = errSecNotAvailable
@@ -139,11 +137,11 @@ internal final class SecItem {
     
     internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) throws {
         if attributes.isEmpty {
-            ErrorHandler.assertionFailure("Must provide attributes with at least one item")
+            assertionFailure("Must provide attributes with at least one item")
         }
         
         if query.isEmpty {
-            ErrorHandler.assertionFailure("Must provide a query with at least one item")
+            assertionFailure("Must provide a query with at least one item")
         }
         
         var status = errSecNotAvailable
@@ -162,7 +160,7 @@ internal final class SecItem {
     
     internal static func deleteItems(matching query: [String : AnyHashable]) throws {
         if query.isEmpty {
-            ErrorHandler.assertionFailure("Must provide a query with at least one item")
+            assertionFailure("Must provide a query with at least one item")
         }
         
         var secItemQuery = query

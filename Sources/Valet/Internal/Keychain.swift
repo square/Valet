@@ -67,7 +67,6 @@ internal final class Keychain {
     
     internal static func object(forKey key: String, options: [String : AnyHashable]) throws -> Data {
         guard !key.isEmpty else {
-            ErrorHandler.assertionFailure("Can not set a value with an empty key.")
             throw ValetError.emptyKey
         }
         
@@ -88,12 +87,10 @@ internal final class Keychain {
     
     internal static func set(object: Data, forKey key: String, options: [String: AnyHashable]) throws {
         guard !key.isEmpty else {
-            ErrorHandler.assertionFailure("Can not set a value with an empty key.")
             throw ValetError.emptyKey
         }
         
         guard !object.isEmpty else {
-            ErrorHandler.assertionFailure("Can not set an empty value.")
             throw ValetError.emptyValue
         }
         
@@ -120,7 +117,6 @@ internal final class Keychain {
     
     internal static func removeObject(forKey key: String, options: [String : AnyHashable]) throws {
         guard !key.isEmpty else {
-            ErrorHandler.assertionFailure("Can not set a value with an empty key.")
             throw ValetError.emptyKey
         }
         
@@ -138,7 +134,6 @@ internal final class Keychain {
     
     internal static func containsObject(forKey key: String, options: [String : AnyHashable]) -> OSStatus {
         guard !key.isEmpty else {
-            ErrorHandler.assertionFailure("Can not set a value with an empty key.")
             return errSecParam
         }
         
@@ -174,42 +169,42 @@ internal final class Keychain {
     
     internal static func migrateObjects(matching query: [String : AnyHashable], into destinationAttributes: [String : AnyHashable], removeOnCompletion: Bool) throws {
         guard query.count > 0 else {
-            ErrorHandler.assertionFailure("Migration requires secItemQuery to contain values.")
+            // Migration requires secItemQuery to contain values.
             throw MigrationError.invalidQuery
         }
         
         guard query[kSecMatchLimit as String] as? String as CFString? != kSecMatchLimitOne else {
-            ErrorHandler.assertionFailure("Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.")
+            // Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.
             throw MigrationError.invalidQuery
         }
         
         guard query[kSecReturnData as String] as? Bool != true else {
-            ErrorHandler.assertionFailure("kSecReturnData is not supported in a migration query.")
+            // kSecReturnData is not supported in a migration query.
             throw MigrationError.invalidQuery
         }
         
         guard query[kSecReturnAttributes as String] as? Bool != false else {
-            ErrorHandler.assertionFailure("Migration requires kSecReturnAttributes to be set to kCFBooleanTrue.")
+            // Migration requires kSecReturnAttributes to be set to kCFBooleanTrue.
             throw MigrationError.invalidQuery
         }
         
         guard query[kSecReturnRef as String] as? Bool != true else {
-            ErrorHandler.assertionFailure("kSecReturnRef is not supported in a migration query.")
+            // kSecReturnRef is not supported in a migration query.
             throw MigrationError.invalidQuery
         }
         
         guard query[kSecReturnPersistentRef as String] as? Bool != false else {
-            ErrorHandler.assertionFailure("Migration requires kSecReturnPersistentRef to be set to kCFBooleanTrue.")
+            // Migration requires kSecReturnPersistentRef to be set to kCFBooleanTrue.
             throw MigrationError.invalidQuery
         }
         
         guard query[kSecClass as String] as? String as CFString? == kSecClassGenericPassword else {
-            ErrorHandler.assertionFailure("Migration requires kSecClass to be set to kSecClassGenericPassword to avoid data loss.")
+            // Migration requires kSecClass to be set to kSecClassGenericPassword to avoid data loss.
             throw MigrationError.invalidQuery
         }
         
         guard query[kSecAttrAccessControl as String] == nil else {
-            ErrorHandler.assertionFailure("kSecAttrAccessControl is not supported in a migration query. Keychain items can not be migrated en masse from the Secure Enclave.")
+            // kSecAttrAccessControl is not supported in a migration query. Keychain items can not be migrated en masse from the Secure Enclave.
             throw MigrationError.invalidQuery
         }
         

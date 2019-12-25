@@ -77,10 +77,6 @@
 		1612FDA222A9CAAB00FC1142 /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7522A9CAAB00FC1142 /* Accessibility.swift */; };
 		1612FDA322A9CAAB00FC1142 /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7522A9CAAB00FC1142 /* Accessibility.swift */; };
 		1612FDA422A9CAAB00FC1142 /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7522A9CAAB00FC1142 /* Accessibility.swift */; };
-		1612FDA522A9CAAB00FC1142 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7622A9CAAB00FC1142 /* ErrorHandler.swift */; };
-		1612FDA622A9CAAB00FC1142 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7622A9CAAB00FC1142 /* ErrorHandler.swift */; };
-		1612FDA722A9CAAB00FC1142 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7622A9CAAB00FC1142 /* ErrorHandler.swift */; };
-		1612FDA822A9CAAB00FC1142 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7622A9CAAB00FC1142 /* ErrorHandler.swift */; };
 		1612FDA922A9CAAB00FC1142 /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = 1612FD7722A9CAAB00FC1142 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1612FDAA22A9CAAB00FC1142 /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = 1612FD7722A9CAAB00FC1142 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1612FDAB22A9CAAB00FC1142 /* Valet.h in Headers */ = {isa = PBXBuildFile; fileRef = 1612FD7722A9CAAB00FC1142 /* Valet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -377,7 +373,6 @@
 		1612FD7322A9CAAB00FC1142 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		1612FD7422A9CAAB00FC1142 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		1612FD7522A9CAAB00FC1142 /* Accessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accessibility.swift; sourceTree = "<group>"; };
-		1612FD7622A9CAAB00FC1142 /* ErrorHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		1612FD7722A9CAAB00FC1142 /* Valet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Valet.h; sourceTree = "<group>"; };
 		1612FD7822A9CAAB00FC1142 /* SecureEnclaveAccessControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureEnclaveAccessControl.swift; sourceTree = "<group>"; };
 		1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SinglePromptSecureEnclaveValet.swift; sourceTree = "<group>"; };
@@ -608,7 +603,6 @@
 				1612FD6F22A9CAAB00FC1142 /* Valet.swift */,
 				1612FD7522A9CAAB00FC1142 /* Accessibility.swift */,
 				1693E29423B2D24600F8D97A /* ValetError.swift */,
-				1612FD7622A9CAAB00FC1142 /* ErrorHandler.swift */,
 				1612FD7722A9CAAB00FC1142 /* Valet.h */,
 				1612FD7822A9CAAB00FC1142 /* SecureEnclaveAccessControl.swift */,
 				1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */,
@@ -1522,7 +1516,6 @@
 				1612FDA322A9CAAB00FC1142 /* Accessibility.swift in Sources */,
 				1612FD7F22A9CAAB00FC1142 /* MigrationError.swift in Sources */,
 				1612FD9722A9CAAB00FC1142 /* Service.swift in Sources */,
-				1612FDA722A9CAAB00FC1142 /* ErrorHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1560,7 +1553,6 @@
 				1612FDA422A9CAAB00FC1142 /* Accessibility.swift in Sources */,
 				1612FD8022A9CAAB00FC1142 /* MigrationError.swift in Sources */,
 				1612FD9822A9CAAB00FC1142 /* Service.swift in Sources */,
-				1612FDA822A9CAAB00FC1142 /* ErrorHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1592,7 +1584,6 @@
 				1612FDA122A9CAAB00FC1142 /* Accessibility.swift in Sources */,
 				1612FD7D22A9CAAB00FC1142 /* MigrationError.swift in Sources */,
 				1612FD9522A9CAAB00FC1142 /* Service.swift in Sources */,
-				1612FDA522A9CAAB00FC1142 /* ErrorHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1615,7 +1606,6 @@
 				1612FDA222A9CAAB00FC1142 /* Accessibility.swift in Sources */,
 				1612FD7E22A9CAAB00FC1142 /* MigrationError.swift in Sources */,
 				1612FD9622A9CAAB00FC1142 /* Service.swift in Sources */,
-				1612FDA622A9CAAB00FC1142 /* ErrorHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

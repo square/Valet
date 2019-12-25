@@ -36,10 +36,6 @@ class CloudIntegrationTests: XCTestCase
     {
         super.setUp()
         
-        ErrorHandler.customAssertBody = { _, _, _, _ in
-            // Nothing to do here.
-        }
-        
         valet.removeAllObjects()
         let identifier = CloudTests.identifier
         let allPermutations = Valet.iCloudPermutations(with: identifier) + Valet.iCloudPermutations(with: identifier, shared: true)

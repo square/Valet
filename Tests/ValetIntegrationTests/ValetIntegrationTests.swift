@@ -97,10 +97,7 @@ class ValetIntegrationTests: XCTestCase
     {
         super.setUp()
         
-        ErrorHandler.customAssertBody = { _, _, _, _ in
-            // Nothing to do here.
-        }
-        
+
         valet.removeAllObjects()
         anotherFlavor.removeAllObjects()
 

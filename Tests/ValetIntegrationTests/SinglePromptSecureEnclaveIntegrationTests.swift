@@ -35,10 +35,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     {
         super.setUp()
         
-        ErrorHandler.customAssertBody = { _, _, _, _ in
-            // Nothing to do here.
-        }
-
         valet.removeObject(forKey: key)
     }
 
