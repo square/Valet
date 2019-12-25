@@ -96,6 +96,9 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
     }
 
     func test_backwardsCompatibility_withLegacySharedAccessGroupValet() {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
         Valet.currentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
