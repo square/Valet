@@ -21,50 +21,16 @@
 import Foundation
 
 
-internal func execute<ReturnType>(in lock: NSLock, block: () -> ReturnType) -> ReturnType {
+internal func execute<ReturnType>(in lock: NSLock, block: () throws -> ReturnType) rethrows -> ReturnType {
     lock.lock()
     defer {
         lock.unlock()
     }
-    return block()
+    return try block()
 }
 
 
 internal final class SecItem {
-    
-    // MARK: Internal Enum
-    
-    internal enum DataResult<SuccessType> {
-        case success(SuccessType)
-        case error(OSStatus)
-
-        var value: SuccessType? {
-            switch self {
-            case let .success(value):
-                return value
-
-            case .error:
-                return nil
-            }
-
-        }
-    }
-    
-    internal enum Result {
-        case success
-        case error(OSStatus)
-
-        var didSucceed: Bool {
-            switch self {
-            case .success:
-                return true
-
-            case .error:
-                return false
-            }
-
-        }
-    }
     
     // MARK: Internal Class Properties
 
@@ -108,10 +74,9 @@ internal final class SecItem {
     
     // MARK: Internal Class Methods
     
-    internal static func copy<DesiredType>(matching query: [String : AnyHashable]) -> DataResult<DesiredType> {
-        guard query.count > 0 else {
+    internal static func copy<DesiredType>(matching query: [String : AnyHashable]) throws -> DesiredType {
+        if query.isEmpty {
             ErrorHandler.assertionFailure("Must provide a query with at least one item")
-            return .error(errSecParam)
         }
         
         var status = errSecNotAvailable
@@ -122,46 +87,39 @@ internal final class SecItem {
         
         if status == errSecSuccess {
             if let result = result as? DesiredType {
-                return .success(result)
+                return result
                 
             } else {
                 // The query failed to pull out a value object of the desired type, but did find metadata matching this query.
                 // This can happen because either the query didn't ask for return data via [kSecReturnData : true], or because a metadata-only item existed in the keychain.
-                return .error(errSecItemNotFound)
+                throw ValetError.itemNotFound
             }
             
         } else {
             ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
             
-            return .error(status)
+            throw ValetError(status: status)
         }
     }
     
-    internal static func containsObject(matching query: [String : AnyHashable]) -> Result {
+    internal static func containsObject(matching query: [String : AnyHashable]) -> OSStatus {
         guard query.count > 0 else {
             ErrorHandler.assertionFailure("Must provide a query with at least one item")
-            return .error(errSecParam)
+            return errSecParam
         }
         
         var status = errSecNotAvailable
         execute(in: secItemLock) {
             status = SecItemCopyMatching(query as CFDictionary, nil)
         }
-        
-        if status == errSecSuccess {
-            return .success
-            
-        } else {
-            ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
-            
-            return .error(status)
-        }
+        ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
+
+        return status
     }
     
-    internal static func add(attributes: [String : AnyHashable]) -> Result {
-        guard attributes.count > 0 else {
+    internal static func add(attributes: [String : AnyHashable]) throws {
+        if attributes.isEmpty {
             ErrorHandler.assertionFailure("Must provide attributes with at least one item")
-            return .error(errSecParam)
         }
         
         var status = errSecNotAvailable
@@ -170,25 +128,22 @@ internal final class SecItem {
             status = SecItemAdd(attributes as CFDictionary, &result)
         }
         
-        if status == errSecSuccess {
-            return .success
-            
-        } else {
-            ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
-            
-            return .error(status)
+        switch status {
+        case errSecSuccess:
+            // We're done!
+            break
+        default:
+            throw ValetError(status: status)
         }
     }
     
-    internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) -> Result {
-        guard attributes.count > 0 else {
+    internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) throws {
+        if attributes.isEmpty {
             ErrorHandler.assertionFailure("Must provide attributes with at least one item")
-            return .error(errSecParam)
         }
         
-        guard query.count > 0 else {
+        if query.isEmpty {
             ErrorHandler.assertionFailure("Must provide a query with at least one item")
-            return .error(errSecParam)
         }
         
         var status = errSecNotAvailable
@@ -196,20 +151,18 @@ internal final class SecItem {
             status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
         }
         
-        if status == errSecSuccess {
-            return .success
-            
-        } else {
-            ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
-            
-            return .error(status)
+        switch status {
+        case errSecSuccess:
+            // We're done!
+            break
+        default:
+            throw ValetError(status: status)
         }
     }
     
-    internal static func deleteItems(matching query: [String : AnyHashable]) -> Result {
-        guard query.count > 0 else {
+    internal static func deleteItems(matching query: [String : AnyHashable]) throws {
+        if query.isEmpty {
             ErrorHandler.assertionFailure("Must provide a query with at least one item")
-            return .error(errSecParam)
         }
         
         var secItemQuery = query
@@ -223,12 +176,19 @@ internal final class SecItem {
         }
         
         if status == errSecSuccess {
-            return .success
+            // We're done!
             
         } else {
-            ErrorHandler.assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
-            
-            return .error(status)
+            switch ValetError(status: status) {
+            case .couldNotReadKeychain:
+                throw ValetError.couldNotReadKeychain
+            case .missingEntitlement:
+                throw ValetError.missingEntitlement
+
+            default:
+                // We succeeded as long as we can confirm that the item is not in the keychain.
+                break
+            }
         }
     }
     

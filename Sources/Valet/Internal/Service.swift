@@ -39,7 +39,7 @@ internal enum Service: CustomStringConvertible, Equatable {
     
     // MARK: Internal Methods
     
-    internal func generateBaseQuery() -> [String : AnyHashable]? {
+    internal func generateBaseQuery() throws -> [String : AnyHashable] {
         var baseQuery: [String : AnyHashable] = [
             kSecClass as String : kSecClassGenericPassword as String,
             kSecAttrService as String : secService
@@ -52,7 +52,7 @@ internal enum Service: CustomStringConvertible, Equatable {
             
         case let .sharedAccessGroup(identifier, desiredConfiguration):
             guard let sharedAccessGroupPrefix = SecItem.sharedAccessGroupPrefix else {
-                return nil
+                throw ValetError.couldNotReadKeychain
             }
             ErrorHandler.assert(!identifier.description.hasPrefix("\(sharedAccessGroupPrefix)."), "Do not add the Bundle Seed ID as a prefix to your identifier. Valet prepends this value for you. Your Valet will not be able to access the keychain with the provided configuration")
             baseQuery[kSecAttrAccessGroup as String] = "\(sharedAccessGroupPrefix).\(identifier.description)"
