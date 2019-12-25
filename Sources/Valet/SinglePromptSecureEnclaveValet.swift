@@ -300,7 +300,7 @@ extension SinglePromptSecureEnclaveValet {
     public func 🚫swift_object(forKey key: String, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> Data? {
         do {
             return try object(forKey: key, withPrompt: userPrompt)
-        } catch ValetError.userCancelled {
+        } catch KeychainError.userCancelled {
             userCancelled?.pointee = true
             return nil
         } catch {
@@ -316,7 +316,7 @@ extension SinglePromptSecureEnclaveValet {
     public func 🚫swift_string(forKey key: String, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> String? {
         do {
             return try string(forKey: key, withPrompt: userPrompt)
-        } catch ValetError.userCancelled {
+        } catch KeychainError.userCancelled {
             userCancelled?.pointee = true
             return nil
         } catch {

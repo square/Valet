@@ -52,7 +52,7 @@ internal enum Service: CustomStringConvertible, Equatable {
             
         case let .sharedAccessGroup(identifier, desiredConfiguration):
             guard let sharedAccessGroupPrefix = SecItem.sharedAccessGroupPrefix else {
-                throw ValetError.couldNotAccessKeychain
+                throw KeychainError.couldNotAccessKeychain
 
             }
             if identifier.description.hasPrefix("\(sharedAccessGroupPrefix).") {

@@ -61,13 +61,13 @@ internal final class Keychain {
         if let string = String(data: data, encoding: .utf8) {
             return string
         } else {
-            throw ValetError.itemNotFound
+            throw KeychainError.itemNotFound
         }
     }
     
     internal static func object(forKey key: String, options: [String : AnyHashable]) throws -> Data {
         guard !key.isEmpty else {
-            throw ValetError.emptyKey
+            throw KeychainError.emptyKey
         }
         
         var secItemQuery = options
@@ -87,11 +87,11 @@ internal final class Keychain {
     
     internal static func set(object: Data, forKey key: String, options: [String: AnyHashable]) throws {
         guard !key.isEmpty else {
-            throw ValetError.emptyKey
+            throw KeychainError.emptyKey
         }
         
         guard !object.isEmpty else {
-            throw ValetError.emptyValue
+            throw KeychainError.emptyValue
         }
         
         var secItemQuery = options
@@ -117,7 +117,7 @@ internal final class Keychain {
     
     internal static func removeObject(forKey key: String, options: [String : AnyHashable]) throws {
         guard !key.isEmpty else {
-            throw ValetError.emptyKey
+            throw KeychainError.emptyKey
         }
         
         var secItemQuery = options
@@ -231,7 +231,7 @@ internal final class Keychain {
         var retrievedItemsToMigrateWithData = [[String : AnyHashable]]()
         for retrievedItem in retrievedItemsToMigrate {
             guard let retrievedPersistentRef = retrievedItem[kSecValuePersistentRef as String] else {
-                throw ValetError.couldNotAccessKeychain
+                throw KeychainError.couldNotAccessKeychain
 
             }
             
@@ -249,7 +249,7 @@ internal final class Keychain {
                 var retrievedItemToMigrateWithData = retrievedItem
                 retrievedItemToMigrateWithData[kSecValueData as String] = data
                 retrievedItemsToMigrateWithData.append(retrievedItemToMigrateWithData)
-            } catch ValetError.itemNotFound {
+            } catch KeychainError.itemNotFound {
                 // It is possible for metadata-only items to exist in the keychain that do not have data associated with them. Ignore this entry.
                 continue
 

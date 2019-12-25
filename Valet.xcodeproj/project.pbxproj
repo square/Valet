@@ -134,10 +134,10 @@
 		165CDDD0204B26D500C96C2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 165CDDCF204B26D500C96C2E /* Assets.xcassets */; };
 		168909381F7199D60057F636 /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; };
 		168909391F7199D60057F636 /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		1693E29523B2D24600F8D97A /* ValetError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* ValetError.swift */; };
-		1693E29623B2D24600F8D97A /* ValetError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* ValetError.swift */; };
-		1693E29723B2D24600F8D97A /* ValetError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* ValetError.swift */; };
-		1693E29823B2D24600F8D97A /* ValetError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* ValetError.swift */; };
+		1693E29523B2D24600F8D97A /* KeychainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* KeychainError.swift */; };
+		1693E29623B2D24600F8D97A /* KeychainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* KeychainError.swift */; };
+		1693E29723B2D24600F8D97A /* KeychainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* KeychainError.swift */; };
+		1693E29823B2D24600F8D97A /* KeychainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* KeychainError.swift */; };
 		169FC990215ECFCE00C2D6BD /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; };
 		169FC991215ECFCE00C2D6BD /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		169FC992215ECFCE00C2D6BD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D77541215BFC1D004F060C /* XCTest.framework */; };
@@ -400,7 +400,7 @@
 		165CDDCF204B26D500C96C2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		165CDDD1204B26D500C96C2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		165CDDD5204B26F700C96C2E /* Valet tvOS Test Host App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Valet tvOS Test Host App.entitlements"; sourceTree = "<group>"; };
-		1693E29423B2D24600F8D97A /* ValetError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetError.swift; sourceTree = "<group>"; };
+		1693E29423B2D24600F8D97A /* KeychainError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainError.swift; sourceTree = "<group>"; };
 		16B5856C1F71DBE00038EE30 /* Valet macOS Test Host App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Valet macOS Test Host App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		16B5856E1F71DBE00038EE30 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		16B585701F71DBE00038EE30 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -602,7 +602,7 @@
 				1612FD6E22A9CAAB00FC1142 /* CloudAccessibility.swift */,
 				1612FD6F22A9CAAB00FC1142 /* Valet.swift */,
 				1612FD7522A9CAAB00FC1142 /* Accessibility.swift */,
-				1693E29423B2D24600F8D97A /* ValetError.swift */,
+				1693E29423B2D24600F8D97A /* KeychainError.swift */,
 				1612FD7722A9CAAB00FC1142 /* Valet.h */,
 				1612FD7822A9CAAB00FC1142 /* SecureEnclaveAccessControl.swift */,
 				1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */,
@@ -1501,7 +1501,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1693E29723B2D24600F8D97A /* ValetError.swift in Sources */,
+				1693E29723B2D24600F8D97A /* KeychainError.swift in Sources */,
 				1612FDBB22A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */,
 				1612FD8F22A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9322A9CAAB00FC1142 /* SecItem.swift in Sources */,
@@ -1538,7 +1538,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1693E29823B2D24600F8D97A /* ValetError.swift in Sources */,
+				1693E29823B2D24600F8D97A /* KeychainError.swift in Sources */,
 				1612FDBC22A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */,
 				1612FD9022A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9422A9CAAB00FC1142 /* SecItem.swift in Sources */,
@@ -1569,7 +1569,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1693E29523B2D24600F8D97A /* ValetError.swift in Sources */,
+				1693E29523B2D24600F8D97A /* KeychainError.swift in Sources */,
 				1612FDB922A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */,
 				1612FD8D22A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9122A9CAAB00FC1142 /* SecItem.swift in Sources */,
@@ -1591,7 +1591,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1693E29623B2D24600F8D97A /* ValetError.swift in Sources */,
+				1693E29623B2D24600F8D97A /* KeychainError.swift in Sources */,
 				1612FDBA22A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */,
 				1612FD8E22A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9222A9CAAB00FC1142 /* SecItem.swift in Sources */,
