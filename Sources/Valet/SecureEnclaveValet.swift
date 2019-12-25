@@ -128,6 +128,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - returns: The data currently stored in the keychain for the provided key.
+    @objc(objectForKey:withPrompt:error:)
     public func object(forKey key: String, withPrompt userPrompt: String) throws -> Data {
         try execute(in: lock) {
             return try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: try keychainQuery())
@@ -159,6 +160,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - returns: The string currently stored in the keychain for the provided key.
+    @objc(stringForKey:withPrompt:error:)
     public func string(forKey key: String, withPrompt userPrompt: String) throws -> String {
         try execute(in: lock) {
             return try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: try keychainQuery())
@@ -250,39 +252,5 @@ extension SecureEnclaveValet {
             return nil
         }
         return sharedAccessGroupValet(with: identifier, accessControl: accessControl)
-    }
-    
-    // MARK: Public Methods
-    
-    /// - parameter key: A Key used to retrieve the desired object from the keychain.
-    /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
-    /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
-    @available(swift, obsoleted: 1.0)
-    @objc(objectForKey:userPrompt:userCancelled:)
-    public func 🚫swift_object(forKey key: String, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> Data? {
-        do {
-            return try object(forKey: key, withPrompt: userPrompt)
-        } catch KeychainError.userCancelled {
-            userCancelled?.pointee = true
-            return nil
-        } catch {
-            return nil
-        }
-    }
-    
-    /// - parameter key: A Key used to retrieve the desired object from the keychain.
-    /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
-    /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
-    @available(swift, obsoleted: 1.0)
-    @objc(stringForKey:userPrompt:userCancelled:)
-    public func 🚫swift_string(forKey key: String, withPrompt userPrompt: String, userCancelled: UnsafeMutablePointer<ObjCBool>?) -> String? {
-        do {
-            return try string(forKey: key, withPrompt: userPrompt)
-        } catch KeychainError.userCancelled {
-            userCancelled?.pointee = true
-            return nil
-        } catch {
-            return nil
-        }
     }
 }

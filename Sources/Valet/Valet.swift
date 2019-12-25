@@ -174,7 +174,12 @@ public final class Valet: NSObject {
             guard let keychainQuery = try? self.keychainQuery() else {
                 return false
             }
-            return Keychain.containsObject(forKey: key, options: keychainQuery) == errSecSuccess
+            switch Keychain.containsObject(forKey: key, options: keychainQuery) {
+            case errSecSuccess:
+                return true
+            default:
+                return false
+            }
         }
     }
     

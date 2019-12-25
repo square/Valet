@@ -73,12 +73,12 @@ public final class SecureEnclave {
         var secItemQuery = options
         secItemQuery[kSecUseAuthenticationUI as String] = kSecUseAuthenticationUIFail
 
-        let status = Keychain.containsObject(forKey: key, options: secItemQuery)
-        if status == errSecSuccess {
+        switch Keychain.containsObject(forKey: key, options: secItemQuery) {
+        case errSecSuccess,
+             errSecInteractionNotAllowed:
             return true
-        } else {
-            let keyAlreadyInKeychain = (status == errSecInteractionNotAllowed || status == errSecSuccess)
-            return keyAlreadyInKeychain
+        default:
+            return false
         }
     }
     
