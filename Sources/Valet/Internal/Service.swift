@@ -52,7 +52,8 @@ internal enum Service: CustomStringConvertible, Equatable {
             
         case let .sharedAccessGroup(identifier, desiredConfiguration):
             guard let sharedAccessGroupPrefix = SecItem.sharedAccessGroupPrefix else {
-                throw ValetError.couldNotReadKeychain
+                throw ValetError.couldNotAccessKeychain
+
             }
             if identifier.description.hasPrefix("\(sharedAccessGroupPrefix).") {
                 // The Bundle Seed ID was passed in as a prefix to the identifier.

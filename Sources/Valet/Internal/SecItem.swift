@@ -178,8 +178,10 @@ internal final class SecItem {
             
         } else {
             switch ValetError(status: status) {
-            case .couldNotReadKeychain:
-                throw ValetError.couldNotReadKeychain
+            case .couldNotAccessKeychain
+:
+                throw ValetError.couldNotAccessKeychain
+
             case .missingEntitlement:
                 throw ValetError.missingEntitlement
 

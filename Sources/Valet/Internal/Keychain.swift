@@ -231,7 +231,8 @@ internal final class Keychain {
         var retrievedItemsToMigrateWithData = [[String : AnyHashable]]()
         for retrievedItem in retrievedItemsToMigrate {
             guard let retrievedPersistentRef = retrievedItem[kSecValuePersistentRef as String] else {
-                throw ValetError.couldNotReadKeychain
+                throw ValetError.couldNotAccessKeychain
+
             }
             
             let retrieveDataQuery: [String : AnyHashable] = [
