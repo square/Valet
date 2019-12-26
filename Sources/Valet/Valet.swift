@@ -26,40 +26,44 @@ import Foundation
 public final class Valet: NSObject {
 
     // MARK: Public Class Methods
-    
-    /// - parameter identifier: A non-empty string that uniquely identifies a Valet.
-    /// - parameter accessibility: The desired accessibility for the Valet.
-    /// - returns: A Valet that reads/writes keychain elements with the desired accessibility and identifier.
+
+    /// - Parameters:
+    ///   - identifier: A non-empty string that uniquely identifies a Valet.
+    ///   - accessibility: The desired accessibility for the Valet.
+    /// - Returns: A Valet that reads/writes keychain elements with the desired accessibility and identifier.
     public class func valet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        return findOrCreate(identifier, configuration: .valet(accessibility))
+        findOrCreate(identifier, configuration: .valet(accessibility))
     }
 
-    /// - parameter identifier: A non-empty string that uniquely identifies a Valet.
-    /// - parameter accessibility: The desired accessibility for the Valet.
-    /// - returns: A Valet (synchronized with iCloud) that reads/writes keychain elements with the desired accessibility and identifier.
+    /// - Parameters:
+    ///   - identifier: A non-empty string that uniquely identifies a Valet.
+    ///   - accessibility: The desired accessibility for the Valet.
+    /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements with the desired accessibility and identifier.
     public class func iCloudValet(with identifier: Identifier, accessibility: CloudAccessibility) -> Valet {
-        return findOrCreate(identifier, configuration: .iCloud(accessibility))
+        findOrCreate(identifier, configuration: .iCloud(accessibility))
     }
 
-    /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
-    /// - parameter accessibility: The desired accessibility for the Valet.
-    /// - returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
+    /// - Parameters:
+    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - accessibility: The desired accessibility for the Valet.
+    /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedAccessGroupValet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        return findOrCreate(identifier, configuration: .valet(accessibility), sharedAccessGroup: true)
+        findOrCreate(identifier, configuration: .valet(accessibility), sharedAccessGroup: true)
     }
 
-    /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
-    /// - parameter accessibility: The desired accessibility for the Valet.
-    /// - returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
+    /// - Parameters:
+    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - accessibility: The desired accessibility for the Valet.
+    /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func iCloudSharedAccessGroupValet(with identifier: Identifier, accessibility: CloudAccessibility) -> Valet {
-        return findOrCreate(identifier, configuration: .iCloud(accessibility), sharedAccessGroup: true)
+        findOrCreate(identifier, configuration: .iCloud(accessibility), sharedAccessGroup: true)
     }
     
     // MARK: Equatable
     
-    /// - returns: `true` if lhs and rhs both read from and write to the same sandbox within the keychain.
+    /// - Returns: `true` if lhs and rhs both read from and write to the same sandbox within the keychain.
     public static func ==(lhs: Valet, rhs: Valet) -> Bool {
-        return lhs.service == rhs.service
+        lhs.service == rhs.service
     }
     
     // MARK: Private Class Properties
@@ -68,7 +72,7 @@ public final class Valet: NSObject {
 
     // MARK: Private Class Functions
 
-    /// - returns: a Valet with the given Identifier, Flavor (and a shared access group service if requested)
+    /// - Returns: a Valet with the given Identifier, Flavor (and a shared access group service if requested)
     private class func findOrCreate(_ identifier: Identifier, configuration: Configuration, sharedAccessGroup: Bool = false) -> Valet {
         let service: Service = sharedAccessGroup ? .sharedAccessGroup(identifier, configuration) : .standard(identifier, configuration)
         let key = service.description as NSString
@@ -119,13 +123,13 @@ public final class Valet: NSObject {
     // MARK: CustomStringConvertible
 
     public override var description: String {
-        return "\(super.description) \(identifier.description) \(configuration.prettyDescription)"
+        "\(super.description) \(identifier.description) \(configuration.prettyDescription)"
     }
 
     // MARK: Hashable
     
     public override var hash: Int {
-        return service.description.hashValue
+        service.description.hashValue
     }
     
     // MARK: Public Properties
@@ -136,11 +140,11 @@ public final class Valet: NSObject {
 
     // MARK: Public Methods
     
-    /// - returns: `true` if the keychain is accessible for reading and writing, `false` otherwise.
-    /// - note: Determined by writing a value to the keychain and then reading it back out.
+    /// - Returns: `true` if the keychain is accessible for reading and writing, `false` otherwise.
+    /// - Note: Determined by writing a value to the keychain and then reading it back out.
     @objc
     public func canAccessKeychain() -> Bool {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let keychainQuery = try? keychainQuery() else {
                 return false
             }
@@ -148,8 +152,10 @@ public final class Valet: NSObject {
         }
     }
     
-    /// - parameter object: A Data value to be inserted into the keychain.
-    /// - parameter key: A Key that can be used to retrieve the `object` from the keychain.
+    /// - Parameters:
+    ///   - object: A Data value to be inserted into the keychain.
+    ///   - key: A key that can be used to retrieve the `object` from the keychain.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc(setObject:forKey:error:)
     public func set(object: Data, forKey key: String) throws {
         try execute(in: lock) {
@@ -157,17 +163,19 @@ public final class Valet: NSObject {
         }
     }
     
-    /// - parameter key: A Key used to retrieve the desired object from the keychain.
-    /// - returns: The data currently stored in the keychain for the provided key.
+    /// - Parameter key: A Key used to retrieve the desired object from the keychain.
+    /// - Returns: The data currently stored in the keychain for the provided key.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc(objectForKey:error:)
     public func object(forKey key: String) throws -> Data {
         try execute(in: lock) {
-            return try Keychain.object(forKey: key, options: try keychainQuery())
+            try Keychain.object(forKey: key, options: try keychainQuery())
         }
     }
     
-    /// - parameter key: The key to look up in the keychain.
-    /// - returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
+    /// - Parameter key: The key to look up in the keychain.
+    /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc(containsObjectForKey:)
     public func containsObject(forKey key: String) -> Bool {
         execute(in: lock) {
@@ -183,25 +191,28 @@ public final class Valet: NSObject {
         }
     }
     
-    /// - parameter string: A String value to be inserted into the keychain.
-    /// - parameter key: A Key that can be used to retrieve the `string` from the keychain.
+    /// - Parameters:
+    ///   - string: A String value to be inserted into the keychain.
+    ///   - key: A key that can be used to retrieve the `string` from the keychain.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc(setString:forKey:error:)
     public func set(string: String, forKey key: String) throws {
         try execute(in: lock) {
             try Keychain.set(string: string, forKey: key, options: try keychainQuery())
         }
     }
-    
-    /// - parameter key: A Key used to retrieve the desired object from the keychain.
-    /// - returns: The string currently stored in the keychain for the provided key.
+
+    /// - Parameter key: A key used to retrieve the desired object from the keychain.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc(stringForKey:error:)
     public func string(forKey key: String) throws -> String {
         try execute(in: lock) {
-            return try Keychain.string(forKey: key, options: try keychainQuery())
+            try Keychain.string(forKey: key, options: try keychainQuery())
         }
     }
     
-    /// - returns: The set of all (String) keys currently stored in this Valet instance. Will return an empty set if the keychain is not accessible.
+    /// - Returns: The set of all (String) keys currently stored in this Valet instance. If no items are found, will return an empty set.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
     public func allKeys() throws -> Set<String> {
         try execute(in: lock) {
@@ -210,6 +221,8 @@ public final class Valet: NSObject {
     }
     
     /// Removes a key/object pair from the keychain.
+    /// - Parameter key: A key used to remove the desired object from the keychain.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc(removeObjectForKey:error:)
     public func removeObject(forKey key: String) throws {
         try execute(in: lock) {
@@ -218,17 +231,19 @@ public final class Valet: NSObject {
     }
     
     /// Removes all key/object pairs accessible by this Valet instance from the keychain.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
     public func removeAllObjects() throws {
         try execute(in: lock) {
             try Keychain.removeAllObjects(matching: try keychainQuery())
         }
     }
-    
+
     /// Migrates objects matching the input query into the receiving Valet instance.
-    /// - parameter query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
-    /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
-    /// - note: The keychain is not modified if a failure occurs.
+    /// - Parameters:
+    ///   - query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
+    ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
+    /// - Note: The keychain is not modified if an error is thrown. Method will throw a `KeychainError` or `MigrationError` if an error occurs.
     @objc(migrateObjectsMatchingQuery:removeOnCompletion:error:)
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) throws {
         try execute(in: lock) {
@@ -237,9 +252,10 @@ public final class Valet: NSObject {
     }
     
     /// Migrates objects in the input Valet into the receiving Valet instance.
-    /// - parameter valet: A Valet whose objects should be migrated.
-    /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
-    /// - note: The keychain is not modified if a failure occurs.
+    /// - Parameters:
+    ///   - valet: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
+    ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
+    /// - Note: The keychain is not modified if an error is thrown. Method will throw a `KeychainError` or `MigrationError` if an error occurs.
     @objc(migrateObjectsFromValet:removeOnCompletion:error:)
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) throws {
         try migrateObjects(matching: try valet.keychainQuery(), removeOnCompletion: removeOnCompletion)
@@ -303,10 +319,11 @@ public final class Valet: NSObject {
 extension Valet {
 
     // MARK: Public Class Methods
-    
-    /// - parameter identifier: A non-empty string that uniquely identifies a Valet.
-    /// - parameter accessibility: The desired accessibility for the Valet.
-    /// - returns: A Valet that reads/writes keychain elements with the desired accessibility.
+
+    /// - Parameters:
+    ///   - identifier: A non-empty string that uniquely identifies a Valet.
+    ///   - accessibility: The desired accessibility for the Valet.
+    /// - Returns: A Valet that reads/writes keychain elements with the desired accessibility.
     @available(swift, obsoleted: 1.0)
     @objc(valetWithIdentifier:accessibility:)
     public class func 🚫swift_vanillaValet(with identifier: String, accessibility: Accessibility) -> Valet? {
@@ -316,9 +333,10 @@ extension Valet {
         return valet(with: identifier, accessibility: accessibility)
     }
     
-    /// - parameter identifier: A non-empty string that uniquely identifies a Valet.
-    /// - parameter accessibility: The desired accessibility for the Valet.
-    /// - returns: A Valet that reads/writes iCloud-shared keychain elements with the desired accessibility.
+    /// - Parameters:
+    ///   - identifier: A non-empty string that uniquely identifies a Valet.
+    ///   - accessibility: The desired accessibility for the Valet.
+    /// - Returns: A Valet that reads/writes iCloud-shared keychain elements with the desired accessibility.
     @available(swift, obsoleted: 1.0)
     @objc(iCloudValetWithIdentifier:accessibility:)
     public class func 🚫swift_iCloudValet(with identifier: String, accessibility: CloudAccessibility) -> Valet? {
@@ -327,10 +345,11 @@ extension Valet {
         }
         return iCloudValet(with: identifier, accessibility: accessibility)
     }
-    
-    /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
-    /// - parameter accessibility: The desired accessibility for the Valet.
-    /// - returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
+
+    /// - Parameters:
+    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - accessibility: The desired accessibility for the Valet.
+    /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     @available(swift, obsoleted: 1.0)
     @objc(valetWithSharedAccessGroupIdentifier:accessibility:)
     public class func 🚫swift_vanillaSharedAccessGroupValet(with identifier: String, accessibility: Accessibility) -> Valet? {
@@ -339,10 +358,11 @@ extension Valet {
         }
         return sharedAccessGroupValet(with: identifier, accessibility: accessibility)
     }
-    
-    /// - parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
-    /// - parameter accessibility: The desired accessibility for the Valet.
-    /// - returns: A Valet that reads/writes iCloud-shared keychain elements that can be shared across applications written by the same development team.
+
+    /// - Parameters:
+    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - accessibility: The desired accessibility for the Valet.
+    /// - Returns: A Valet that reads/writes iCloud-shared keychain elements that can be shared across applications written by the same development team.
     @available(swift, obsoleted: 1.0)
     @objc(iCloudValetWithSharedAccessGroupIdentifier:accessibility:)
     public class func 🚫swift_iCloudSharedAccessGroupValet(with identifier: String, accessibility: CloudAccessibility) -> Valet? {
@@ -367,7 +387,7 @@ internal extension Valet {
     }
 
     class func iCloudPermutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
-        return CloudAccessibility.allValues().map { cloudAccessibility in
+        CloudAccessibility.allValues().map { cloudAccessibility in
             shared ? .iCloudSharedAccessGroupValet(with: identifier, accessibility: cloudAccessibility) : .iCloudValet(with: identifier, accessibility: cloudAccessibility)
         }
     }

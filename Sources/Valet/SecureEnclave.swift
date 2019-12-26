@@ -26,10 +26,10 @@ public final class SecureEnclave {
         
     // MARK: Internal Methods
     
-    /// - parameter service: The service of the keychain slice we want to check if we can access.
-    /// - parameter identifier: A non-empty identifier that scopes the slice of keychain we want to access.
-    /// - returns: `true` if the keychain is accessible for reading and writing, `false` otherwise.
-    /// - note: Determined by writing a value to the keychain and then reading it back out.
+    /// - Parameter service: The service of the keychain slice we want to check if we can access.
+    /// - Parameter identifier: A non-empty identifier that scopes the slice of keychain we want to access.
+    /// - Returns: `true` if the keychain is accessible for reading and writing, `false` otherwise.
+    /// - Note: Determined by writing a value to the keychain and then reading it back out.
     internal static func canAccessKeychain(with service: Service, identifier: Identifier) -> Bool {
         // To avoid prompting the user for Touch ID or passcode, create a Valet with our identifier and accessibility and ask it if it can access the keychain.
         let noPromptValet: Valet
@@ -43,9 +43,9 @@ public final class SecureEnclave {
         return noPromptValet.canAccessKeychain()
     }
     
-    /// - parameter object: A Data value to be inserted into the keychain.
-    /// - parameter key: A Key that can be used to retrieve the `object` from the keychain.
-    /// - parameter options: A base query used to scope the calls in the keychain.
+    /// - Parameter object: A Data value to be inserted into the keychain.
+    /// - Parameter key: A Key that can be used to retrieve the `object` from the keychain.
+    /// - Parameter options: A base query used to scope the calls in the keychain.
     internal static func set(object: Data, forKey key: String, options: [String : AnyHashable]) throws {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         try? Keychain.removeObject(forKey: key, options: options)
@@ -53,10 +53,10 @@ public final class SecureEnclave {
         try Keychain.set(object: object, forKey: key, options: options)
     }
     
-    /// - parameter key: A Key used to retrieve the desired object from the keychain.
-    /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
-    /// - parameter options: A base query used to scope the calls in the keychain.
-    /// - returns: The data currently stored in the keychain for the provided key.
+    /// - Parameter key: A Key used to retrieve the desired object from the keychain.
+    /// - Parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
+    /// - Parameter options: A base query used to scope the calls in the keychain.
+    /// - Returns: The data currently stored in the keychain for the provided key.
     internal static func object(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws -> Data {
         var secItemQuery = options
         if !userPrompt.isEmpty {
@@ -66,9 +66,9 @@ public final class SecureEnclave {
         return try Keychain.object(forKey: key, options: secItemQuery)
     }
     
-    /// - parameter key: The key to look up in the keychain.
-    /// - parameter options: A base query used to scope the calls in the keychain.
-    /// - returns: `true` if a value has been set for the given key, `false` otherwise.
+    /// - Parameter key: The key to look up in the keychain.
+    /// - Parameter options: A base query used to scope the calls in the keychain.
+    /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
     internal static func containsObject(forKey key: String, options: [String : AnyHashable]) -> Bool {
         var secItemQuery = options
         secItemQuery[kSecUseAuthenticationUI as String] = kSecUseAuthenticationUIFail
@@ -82,9 +82,9 @@ public final class SecureEnclave {
         }
     }
     
-    /// - parameter string: A String value to be inserted into the keychain.
-    /// - parameter key: A Key that can be used to retrieve the `string` from the keychain.
-    /// - parameter options: A base query used to scope the calls in the keychain.
+    /// - Parameter string: A String value to be inserted into the keychain.
+    /// - Parameter key: A Key that can be used to retrieve the `string` from the keychain.
+    /// - Parameter options: A base query used to scope the calls in the keychain.
     internal static func set(string: String, forKey key: String, options: [String : AnyHashable]) throws {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         try? Keychain.removeObject(forKey: key, options: options)
@@ -92,10 +92,10 @@ public final class SecureEnclave {
         try Keychain.set(string: string, forKey: key, options: options)
     }
     
-    /// - parameter key: A Key used to retrieve the desired object from the keychain.
-    /// - parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
-    /// - parameter options: A base query used to scope the calls in the keychain.
-    /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
+    /// - Parameter key: A Key used to retrieve the desired object from the keychain.
+    /// - Parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
+    /// - Parameter options: A base query used to scope the calls in the keychain.
+    /// - Returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     internal static func string(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws -> String {
         var secItemQuery = options
         if !userPrompt.isEmpty {

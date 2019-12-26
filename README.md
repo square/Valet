@@ -101,17 +101,17 @@ The Accessibility enum is used to determine when your secrets can be accessed. I
 
 ```swift
 let username = "Skroob"
-myValet.set(string: "12345", forKey: username)
+try? myValet.set(string: "12345", forKey: username)
 let myLuggageCombination = myValet.string(forKey: username)
 ```
 
 ```objc
 NSString *const username = @"Skroob";
-[myValet setString:@"12345" forKey:username];
+[myValet setString:@"12345" forKey:username error:nil];
 NSString *const myLuggageCombination = [myValet stringForKey:username];
 ```
 
-In addition to allowing the storage of strings, Valet allows the storage of `Data` objects via `set(object: Data, forKey key: Key)` and `-objectForKey:`. Valets created with a different class type, via a different initializer, or with a different accessibility attribute will not be able to read or modify values in `myValet`.
+In addition to allowing the storage of strings, Valet allows the storage of `Data` objects via `set(object: Data, forKey key: String)` and `object(forKey key: String)`. Valets created with a different class type, via a different initializer, or with a different accessibility attribute will not be able to read or modify values in `myValet`.
 
 ### Sharing Secrets Among Multiple Applications
 
