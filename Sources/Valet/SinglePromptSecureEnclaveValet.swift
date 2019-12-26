@@ -146,7 +146,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
     @objc(containsObjectForKey:)
     public func containsObject(forKey key: String) -> Bool {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let baseKeychainQuery = try? self.baseKeychainQuery() else {
                 return false
             }
