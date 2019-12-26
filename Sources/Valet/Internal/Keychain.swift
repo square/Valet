@@ -149,9 +149,17 @@ internal final class Keychain {
         var secItemQuery = options
         secItemQuery[kSecMatchLimit as String] = kSecMatchLimitAll
         secItemQuery[kSecReturnAttributes as String] = true
-        
-        let collection: Any = try SecItem.copy(matching: secItemQuery)
-        if let singleMatch = collection as? [String : AnyHashable], let singleKey = singleMatch[kSecAttrAccount as String] as? String, singleKey != canaryKey {
+
+        let collection: Any
+        do {
+            collection = try SecItem.copy(matching: secItemQuery)
+        } catch KeychainError.itemNotFound {
+            collection = [String: AnyHashable]()
+        } catch {
+            throw error
+        }
+
+        if let singleMatch = collection as? [String: AnyHashable], let singleKey = singleMatch[kSecAttrAccount as String] as? String, singleKey != canaryKey {
             return Set([singleKey])
 
         } else if let multipleMatches = collection as? [[String: AnyHashable]] {
