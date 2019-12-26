@@ -19,6 +19,7 @@
 //
 import Foundation
 
+
 @objc(VALMigrationResult)
 public enum MigrationError: Int, Error, Equatable {
     /// Migration failed because the keychain query was not valid.

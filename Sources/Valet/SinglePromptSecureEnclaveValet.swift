@@ -123,7 +123,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - object: A Data value to be inserted into the keychain.
     ///   - key: A Key that can be used to retrieve the `object` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc(setObject:forKey:error:)
+    @objc
     public func set(object: Data, forKey key: String) throws {
         try execute(in: lock) {
             try SecureEnclave.set(object: object, forKey: key, options: try baseKeychainQuery())
@@ -134,7 +134,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - key: A Key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc(objectForKey:withPrompt:error:)
+    @objc
     public func object(forKey key: String, withPrompt userPrompt: String) throws -> Data {
         try execute(in: lock) {
             try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: try continuedAuthenticationKeychainQuery())
@@ -144,7 +144,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
-    @objc(containsObjectForKey:)
+    @objc
     public func containsObject(forKey key: String) -> Bool {
         execute(in: lock) {
             guard let baseKeychainQuery = try? self.baseKeychainQuery() else {
@@ -158,7 +158,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - string: A String value to be inserted into the keychain.
     ///   - key: A Key that can be used to retrieve the `string` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc(setString:forKey:error:)
+    @objc
     public func set(string: String, forKey key: String) throws {
         try execute(in: lock) {
             try SecureEnclave.set(string: string, forKey: key, options: try baseKeychainQuery())
@@ -169,7 +169,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - key: A Key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc(stringForKey:withPrompt:error:)
+    @objc
     public func string(forKey key: String, withPrompt userPrompt: String) throws -> String {
         try execute(in: lock) {
             try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: try continuedAuthenticationKeychainQuery())
@@ -188,7 +188,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - Parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown. If no items are found, will return an empty set.
     /// - Returns: The set of all (String) keys currently stored in this Valet instance.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc(allKeysWithUserPrompt:error:)
+    @objc
     public func allKeys(userPrompt: String) throws -> Set<String> {
         try execute(in: lock) {
             var secItemQuery = try continuedAuthenticationKeychainQuery()
@@ -203,7 +203,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// Removes a key/object pair from the keychain.
     /// - Parameter key: A key used to remove the desired object from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc(removeObjectForKey:error:)
+    @objc
     public func removeObject(forKey key: String) throws {
         try execute(in: lock) {
             try Keychain.removeObject(forKey: key, options: try baseKeychainQuery())
@@ -224,7 +224,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - Note: The keychain is not modified if an error is thrown. Method will throw a `KeychainError` or `MigrationError` if an error occurs.
-    @objc(migrateObjectsMatchingQuery:removeOnCompletion:error:)
+    @objc
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) throws {
         try execute(in: lock) {
             try Keychain.migrateObjects(matching: query, into: try baseKeychainQuery(), removeOnCompletion: removeOnCompletion)
@@ -236,7 +236,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - keychain: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
     /// - Note: The keychain is not modified if an error is thrown. Method will throw a `KeychainError` or `MigrationError` if an error occurs.
-    @objc(migrateObjectsFromValet:removeOnCompletion:error:)
+    @objc
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) throws {
         try migrateObjects(matching: try valet.keychainQuery(), removeOnCompletion: removeOnCompletion)
     }

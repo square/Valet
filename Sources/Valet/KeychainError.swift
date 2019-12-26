@@ -19,6 +19,7 @@
 //
 import Foundation
 
+
 @objc(VALKeychainError)
 public enum KeychainError: Int, Error, Equatable {
     /// The keychain could not be accessed.

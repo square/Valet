@@ -156,7 +156,7 @@ public final class Valet: NSObject {
     ///   - object: A Data value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc(setObject:forKey:error:)
+    @objc
     public func set(object: Data, forKey key: String) throws {
         try execute(in: lock) {
             try Keychain.set(object: object, forKey: key, options: try keychainQuery())
@@ -166,7 +166,7 @@ public final class Valet: NSObject {
     /// - Parameter key: A Key used to retrieve the desired object from the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc(objectForKey:error:)
+    @objc
     public func object(forKey key: String) throws -> Data {
         try execute(in: lock) {
             try Keychain.object(forKey: key, options: try keychainQuery())
@@ -175,7 +175,7 @@ public final class Valet: NSObject {
     
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
-    @objc(containsObjectForKey:)
+    @objc
     public func containsObject(forKey key: String) -> Bool {
         execute(in: lock) {
             guard let keychainQuery = try? self.keychainQuery() else {
@@ -194,7 +194,7 @@ public final class Valet: NSObject {
     ///   - string: A String value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `string` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc(setString:forKey:error:)
+    @objc
     public func set(string: String, forKey key: String) throws {
         try execute(in: lock) {
             try Keychain.set(string: string, forKey: key, options: try keychainQuery())
@@ -203,7 +203,7 @@ public final class Valet: NSObject {
 
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc(stringForKey:error:)
+    @objc
     public func string(forKey key: String) throws -> String {
         try execute(in: lock) {
             try Keychain.string(forKey: key, options: try keychainQuery())
@@ -222,7 +222,7 @@ public final class Valet: NSObject {
     /// Removes a key/object pair from the keychain.
     /// - Parameter key: A key used to remove the desired object from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc(removeObjectForKey:error:)
+    @objc
     public func removeObject(forKey key: String) throws {
         try execute(in: lock) {
             try Keychain.removeObject(forKey: key, options: try keychainQuery())
@@ -243,7 +243,7 @@ public final class Valet: NSObject {
     ///   - query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - Note: The keychain is not modified if an error is thrown. Method will throw a `KeychainError` or `MigrationError` if an error occurs.
-    @objc(migrateObjectsMatchingQuery:removeOnCompletion:error:)
+    @objc
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) throws {
         try execute(in: lock) {
             try Keychain.migrateObjects(matching: query, into: try keychainQuery(), removeOnCompletion: removeOnCompletion)
@@ -255,7 +255,7 @@ public final class Valet: NSObject {
     ///   - valet: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
     /// - Note: The keychain is not modified if an error is thrown. Method will throw a `KeychainError` or `MigrationError` if an error occurs.
-    @objc(migrateObjectsFromValet:removeOnCompletion:error:)
+    @objc
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) throws {
         try migrateObjects(matching: try valet.keychainQuery(), removeOnCompletion: removeOnCompletion)
     }

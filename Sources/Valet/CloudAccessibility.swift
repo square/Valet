@@ -35,7 +35,7 @@ public enum CloudAccessibility: Int, CustomStringConvertible, Equatable {
     }
     
     // MARK: Public Properties
-    
+
     public var accessibility: Accessibility {
         switch self {
         case .whenUnlocked:
@@ -44,7 +44,7 @@ public enum CloudAccessibility: Int, CustomStringConvertible, Equatable {
             return .afterFirstUnlock
         }
     }
-    
+
     public var secAccessibilityAttribute: String {
         return accessibility.secAccessibilityAttribute
     }
