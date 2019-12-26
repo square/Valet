@@ -141,7 +141,7 @@ public final class SecureEnclaveValet: NSObject {
     
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
-    /// - Note: Will never prompt the user for Face ID, Touch ID, or password. Method will throw a `KeychainError` if an error occurs.
+    /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
     @objc(containsObjectForKey:)
     public func containsObject(forKey key: String) -> Bool {
         execute(in: lock) {
