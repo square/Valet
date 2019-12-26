@@ -157,9 +157,9 @@ public final class Valet: NSObject {
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
-    public func set(object: Data, forKey key: String) throws {
+    public func setObject(_ object: Data, forKey key: String) throws {
         try execute(in: lock) {
-            try Keychain.set(object: object, forKey: key, options: try keychainQuery())
+            try Keychain.setObject(object, forKey: key, options: try keychainQuery())
         }
     }
     
@@ -195,9 +195,9 @@ public final class Valet: NSObject {
     ///   - key: A key that can be used to retrieve the `string` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
-    public func set(string: String, forKey key: String) throws {
+    public func setString(_ string: String, forKey key: String) throws {
         try execute(in: lock) {
-            try Keychain.set(string: string, forKey: key, options: try keychainQuery())
+            try Keychain.setString(string, forKey: key, options: try keychainQuery())
         }
     }
 

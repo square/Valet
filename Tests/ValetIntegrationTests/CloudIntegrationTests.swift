@@ -51,14 +51,14 @@ class CloudIntegrationTests: XCTestCase
         let localValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
 
         // Setting
-        try valet.set(string: "butts", forKey: "cloud")
+        try valet.setString("butts", forKey: "cloud")
         XCTAssertEqual("butts", try valet.string(forKey: "cloud"))
         XCTAssertThrowsError(try localValet.string(forKey: "cloud")) { error in
             XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
         
         // Removal
-        try localValet.set(string: "snake people", forKey: "millennials")
+        try localValet.setString("snake people", forKey: "millennials")
         try valet.removeObject(forKey: "millennials")
         XCTAssertEqual("snake people", try localValet.string(forKey: "millennials"))
     }
@@ -72,7 +72,7 @@ class CloudIntegrationTests: XCTestCase
         XCTAssertThrowsError(try valet.string(forKey: key)) { error in
             XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
-        try valet.set(string: passcode, forKey: key)
+        try valet.setString(passcode, forKey: key)
         XCTAssertEqual(passcode, try valet.string(forKey: key))
     }
     
@@ -82,7 +82,7 @@ class CloudIntegrationTests: XCTestCase
             return
         }
         
-        try valet.set(string: passcode, forKey: key)
+        try valet.setString(passcode, forKey: key)
         XCTAssertEqual(passcode, try valet.string(forKey: key))
         
         try valet.removeObject(forKey: key)

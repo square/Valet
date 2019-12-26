@@ -46,7 +46,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             return
         }
         
-        try valet.set(string: passcode, forKey: key)
+        try valet.setString(passcode, forKey: key)
         let equivalentValet = SinglePromptSecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertEqual(valet, equivalentValet)
         XCTAssertEqual(passcode, try equivalentValet.string(forKey: key, withPrompt: ""))
@@ -58,7 +58,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             return
         }
         
-        try valet.set(string: passcode, forKey: key)
+        try valet.setString(passcode, forKey: key)
         let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
         XCTAssertNotEqual(valet, equivalentValet)
         XCTAssertEqual(passcode, try valet.string(forKey: key, withPrompt: ""))
@@ -77,10 +77,10 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         
         XCTAssertEqual(try valet.allKeys(userPrompt: ""), Set())
         
-        try valet.set(string: passcode, forKey: key)
+        try valet.setString(passcode, forKey: key)
         XCTAssertEqual(try valet.allKeys(userPrompt: ""), Set(arrayLiteral: key))
         
-        try valet.set(string: "monster", forKey: "cookie")
+        try valet.setString("monster", forKey: "cookie")
         XCTAssertEqual(try valet.allKeys(userPrompt: ""), Set(arrayLiteral: key, "cookie"))
         
         try valet.removeAllObjects()
@@ -183,7 +183,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         ]
         
         for (key, value) in keyValuePairs {
-            try plainOldValet.set(string: value, forKey: key)
+            try plainOldValet.setString(value, forKey: key)
         }
         
         try valet.migrateObjects(from: plainOldValet, removeOnCompletion: true)
@@ -214,7 +214,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         
         let keyStringPairToMigrateMap = ["foo" : "bar", "testing" : "migration", "is" : "quite", "entertaining" : "if", "you" : "don't", "screw" : "up"]
         for (key, value) in keyStringPairToMigrateMap {
-            try otherValet.set(string: value, forKey: key)
+            try otherValet.setString(value, forKey: key)
         }
         
         XCTAssertTrue(valet.canAccessKeychain())

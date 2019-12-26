@@ -124,9 +124,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - key: A Key that can be used to retrieve the `object` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
-    public func set(object: Data, forKey key: String) throws {
+    public func setObject(_ object: Data, forKey key: String) throws {
         try execute(in: lock) {
-            try SecureEnclave.set(object: object, forKey: key, options: try baseKeychainQuery())
+            try SecureEnclave.setObject(object, forKey: key, options: try baseKeychainQuery())
         }
     }
 
@@ -159,9 +159,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - key: A Key that can be used to retrieve the `string` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
-    public func set(string: String, forKey key: String) throws {
+    public func setString(_ string: String, forKey key: String) throws {
         try execute(in: lock) {
-            try SecureEnclave.set(string: string, forKey: key, options: try baseKeychainQuery())
+            try SecureEnclave.setString(string, forKey: key, options: try baseKeychainQuery())
         }
     }
 

@@ -47,7 +47,7 @@ final class ValetTouchIDTestViewController : UIViewController
         let stringToSet = "I am here! " + NSUUID().uuidString
         let setOrUpdatedItem: Bool
         do {
-            try singlePromptSecureEnclaveValet.set(string: stringToSet, forKey: username)
+            try singlePromptSecureEnclaveValet.setString(stringToSet, forKey: username)
             setOrUpdatedItem = true
         } catch {
             setOrUpdatedItem = false

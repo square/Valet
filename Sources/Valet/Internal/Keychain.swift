@@ -80,12 +80,12 @@ internal final class Keychain {
     
     // MARK: Setters
     
-    internal static func set(string: String, forKey key: String, options: [String: AnyHashable]) throws {
+    internal static func setString(_ string: String, forKey key: String, options: [String: AnyHashable]) throws {
         let data = Data(string.utf8)
-        try set(object: data, forKey: key, options: options)
+        try setObject(data, forKey: key, options: options)
     }
     
-    internal static func set(object: Data, forKey key: String, options: [String: AnyHashable]) throws {
+    internal static func setObject(_ object: Data, forKey key: String, options: [String: AnyHashable]) throws {
         guard !key.isEmpty else {
             throw KeychainError.emptyKey
         }
@@ -315,7 +315,7 @@ internal final class Keychain {
             }
 
             do {
-                try Keychain.set(object: value, forKey: key, options: destinationAttributes)
+                try Keychain.setObject(value, forKey: key, options: destinationAttributes)
                 alreadyMigratedKeys.append(key)
             } catch {
                 revertMigration()
