@@ -448,13 +448,17 @@ class ValetIntegrationTests: XCTestCase
         for _ in 1...50 {
             setQueue.async {
                 do {
-                    XCTAssertNoThrow(try self.valet.set(string: self.passcode, forKey: self.key))
-                } catch {}
+                    try self.valet.set(string: self.passcode, forKey: self.key)
+                } catch {
+                    XCTFail("Threw \(error) trying to write value")
+                }
             }
             removeQueue.async {
                 do {
-                    XCTAssertNoThrow(try self.valet.removeObject(forKey: self.key))
-                } catch {}
+                    try self.valet.removeObject(forKey: self.key)
+                } catch {
+                    XCTFail("Threw \(error) trying to remove value")
+                }
             }
         }
         
@@ -480,12 +484,15 @@ class ValetIntegrationTests: XCTestCase
 
         setStringQueue.async {
             do {
-                XCTAssertNoThrow(try self.valet.set(string: self.passcode, forKey: self.key))
-            } catch {}
+                try self.valet.set(string: self.passcode, forKey: self.key)
+            } catch {
+                XCTFail("Threw \(error) trying to set value")
+            }
 
             stringForKeyQueue.async {
                 do {
-                    XCTAssertEqual(try self.valet.string(forKey: self.key), self.passcode)
+                    let stringForKey = try self.valet.string(forKey: self.key)
+                    XCTAssertEqual(stringForKey, self.passcode)
                 } catch {
                     XCTFail("Threw \(error) trying to read value")
                 }
@@ -508,14 +515,15 @@ class ValetIntegrationTests: XCTestCase
         setStringQueue.async {
             let backgroundValet = Valet.valet(with: backgroundIdentifier, accessibility: .whenUnlocked)
             do {
-                XCTAssertNoThrow(try backgroundValet.set(string: self.passcode, forKey: self.key))
+                try backgroundValet.set(string: self.passcode, forKey: self.key)
             } catch {
                 XCTFail("Threw \(error) trying to write value")
                 expectation.fulfill()
             }
             stringForKeyQueue.async {
                 do {
-                    XCTAssertEqual(try backgroundValet.string(forKey: self.key), self.passcode)
+                    let stringForKey = try backgroundValet.string(forKey: self.key)
+                    XCTAssertEqual(stringForKey, self.passcode)
                     expectation.fulfill()
                 } catch {
                     XCTFail("Threw \(error) trying to read value")
