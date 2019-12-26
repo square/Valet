@@ -150,26 +150,27 @@ internal final class Keychain {
         secItemQuery[kSecMatchLimit as String] = kSecMatchLimitAll
         secItemQuery[kSecReturnAttributes as String] = true
 
-        let collection: Any
         do {
-            collection = try SecItem.copy(matching: secItemQuery)
+            let collection: Any = try SecItem.copy(matching: secItemQuery)
+            if let singleMatch = collection as? [String: AnyHashable], let singleKey = singleMatch[kSecAttrAccount as String] as? String, singleKey != canaryKey {
+                return Set([singleKey])
+
+            } else if let multipleMatches = collection as? [[String: AnyHashable]] {
+                return Set(multipleMatches.compactMap({ attributes in
+                    let key = attributes[kSecAttrAccount as String] as? String
+                    return key != canaryKey ? key : nil
+                }))
+
+            } else {
+                return Set()
+            }
+
         } catch KeychainError.itemNotFound {
-            collection = [String: AnyHashable]()
-        } catch {
-            throw error
-        }
-
-        if let singleMatch = collection as? [String: AnyHashable], let singleKey = singleMatch[kSecAttrAccount as String] as? String, singleKey != canaryKey {
-            return Set([singleKey])
-
-        } else if let multipleMatches = collection as? [[String: AnyHashable]] {
-            return Set(multipleMatches.compactMap({ attributes in
-                let key = attributes[kSecAttrAccount as String] as? String
-                return key != canaryKey ? key : nil
-            }))
-
-        } else {
+            // Nothing was found. That's fine.
             return Set()
+        } catch {
+            // This isn't a recoverable error. Throw.
+            throw error
         }
     }
     
