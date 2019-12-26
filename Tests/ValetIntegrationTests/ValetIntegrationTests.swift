@@ -96,17 +96,16 @@ class ValetIntegrationTests: XCTestCase
     override func setUp()
     {
         super.setUp()
-        
 
-        valet.removeAllObjects()
-        anotherFlavor.removeAllObjects()
+        try? valet.removeAllObjects()
+        try? anotherFlavor.removeAllObjects()
 
         let identifier = ValetTests.identifier
         let allPermutations = Valet.permutations(with: identifier) + Valet.permutations(with: identifier, shared: true)
-        allPermutations.forEach { testingValet in testingValet.removeAllObjects() }
+        allPermutations.forEach { testingValet in try? testingValet.removeAllObjects() }
 
-        XCTAssertTrue(valet.allKeys().isEmpty)
-        XCTAssertTrue(anotherFlavor.allKeys().isEmpty)
+        XCTAssertEqual(try? valet.allKeys(), Set())
+        XCTAssertEqual(try? anotherFlavor.allKeys(), Set())
     }
 
     // MARK: Initialization
@@ -203,211 +202,240 @@ class ValetIntegrationTests: XCTestCase
 
     // MARK: containsObjectForKey
 
-    func test_containsObjectForKey()
+    func test_containsObjectForKey() throws
     {
         XCTAssertFalse(valet.containsObject(forKey: key))
 
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        try valet.set(string: passcode, forKey: key)
         XCTAssertTrue(valet.containsObject(forKey: key))
 
-        XCTAssertTrue(valet.removeObject(forKey: key))
+        try valet.removeObject(forKey: key)
         XCTAssertFalse(valet.containsObject(forKey: key))
     }
 
     // MARK: allKeys
 
-    func test_allKeys()
+    func test_allKeys() throws
     {
-        XCTAssertEqual(valet.allKeys(), Set())
+        XCTAssertEqual(try valet.allKeys(), Set())
 
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertEqual(valet.allKeys(), Set(arrayLiteral: key))
+        try valet.set(string: passcode, forKey: key)
+        XCTAssertEqual(try valet.allKeys(), Set(arrayLiteral: key))
 
-        XCTAssertTrue(valet.set(string: "monster", forKey: "cookie"))
-        XCTAssertEqual(valet.allKeys(), Set(arrayLiteral: key, "cookie"))
+        try valet.set(string: "monster", forKey: "cookie")
+        XCTAssertEqual(try valet.allKeys(), Set(arrayLiteral: key, "cookie"))
 
-        valet.removeAllObjects()
-        XCTAssertEqual(valet.allKeys(), Set())
+        try valet.removeAllObjects()
+        XCTAssertEqual(try valet.allKeys(), Set())
     }
     
-    func test_allKeys_doesNotReflectValetImplementationDetails() {
+    func test_allKeys_doesNotReflectValetImplementationDetails() throws {
         // Under the hood, Valet inserts a canary when calling `canAccessKeychain()` - this should not appear in `allKeys()`.
         _ = valet.canAccessKeychain()
-        XCTAssertEqual(valet.allKeys(), Set())
+        XCTAssertEqual(try valet.allKeys(), Set())
     }
 
-    func test_allKeys_remainsUntouchedForUnequalValets()
+    func test_allKeys_remainsUntouchedForUnequalValets() throws
     {
-        valet.set(string: passcode, forKey: key)
-        XCTAssertEqual(valet.allKeys(), Set(arrayLiteral: key))
+        try valet.set(string: passcode, forKey: key)
+        XCTAssertEqual(try valet.allKeys(), Set(arrayLiteral: key))
 
         // Different Identifier
         let differingIdentifier = Valet.valet(with: Identifier(nonEmpty: "nope")!, accessibility: valet.accessibility)
-        XCTAssertEqual(differingIdentifier.allKeys(), Set())
+        XCTAssertEqual(try differingIdentifier.allKeys(), Set())
 
         // Different Accessibility
         let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .whenUnlockedThisDeviceOnly)
-        XCTAssertEqual(differingAccessibility.allKeys(), Set())
+        XCTAssertEqual(try differingAccessibility.allKeys(), Set())
 
         // Different Kind
-        XCTAssertEqual(anotherFlavor.allKeys(), Set())
+        XCTAssertEqual(try anotherFlavor.allKeys(), Set())
     }
 
     // MARK: string(forKey:)
 
-    func test_stringForKey_isNilForInvalidKey()
+    func test_stringForKey_throwsItemNotFoundForKeyWithNoValue()
     {
-        XCTAssertNil(valet.string(forKey: key))
+        XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
 
-    func test_stringForKey_retrievesStringForValidKey()
+    func test_stringForKey_retrievesStringForValidKey() throws
     {
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertEqual(passcode, valet.string(forKey: key))
+        try valet.set(string: passcode, forKey: key)
+        XCTAssertEqual(passcode, try valet.string(forKey: key))
     }
 
-    func test_stringForKey_equivalentValetsCanAccessSameData()
+    func test_stringForKey_equivalentValetsCanAccessSameData() throws
     {
         let equalValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
-        XCTAssertEqual(0, equalValet.allKeys().count)
+        XCTAssertEqual(0, try equalValet.allKeys().count)
         XCTAssertEqual(valet, equalValet)
-        XCTAssertTrue(valet.set(string: "monster", forKey: "cookie"))
-        XCTAssertEqual("monster", equalValet.string(forKey: "cookie"))
+        try valet.set(string: "monster", forKey: "cookie")
+        XCTAssertEqual("monster", try equalValet.string(forKey: "cookie"))
     }
 
-    func test_stringForKey_withDifferingIdentifier_isNil()
+    func test_stringForKey_withDifferingIdentifier_throwsItemNotFound() throws
     {
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertEqual(passcode, valet.string(forKey: key))
+        try valet.set(string: passcode, forKey: key)
+        XCTAssertEqual(passcode, try valet.string(forKey: key))
         
         let differingIdentifier = Valet.valet(with: Identifier(nonEmpty: "wat")!, accessibility: valet.accessibility)
-        XCTAssertNil(differingIdentifier.string(forKey: key))
+        XCTAssertThrowsError(try differingIdentifier.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
 
-    func test_stringForKey_withDifferingAccessibility_isNil()
+    func test_stringForKey_withDifferingAccessibility_throwsItemNotFound() throws
     {
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertEqual(passcode, valet.string(forKey: key))
+        try valet.set(string: passcode, forKey: key)
+        XCTAssertEqual(passcode, try valet.string(forKey: key))
         
         let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .afterFirstUnlockThisDeviceOnly)
-        XCTAssertNil(differingAccessibility.string(forKey: key))
+        XCTAssertThrowsError(try differingAccessibility.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
 
-    func test_stringForKey_withEquivalentConfigurationButDifferingFlavor_isNil()
+    func test_stringForKey_withEquivalentConfigurationButDifferingFlavor_throwsItemNotFound() throws
     {
         guard testEnvironmentIsSigned() else {
             return
         }
         
-        XCTAssertTrue(valet.set(string: "monster", forKey: "cookie"))
-        XCTAssertEqual("monster", valet.string(forKey: "cookie"))
+        try valet.set(string: "monster", forKey: "cookie")
+        XCTAssertEqual("monster", try valet.string(forKey: "cookie"))
 
-        XCTAssertNil(anotherFlavor.string(forKey: "cookie"))
+        XCTAssertThrowsError(try anotherFlavor.string(forKey: "cookie")) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
     
     // MARK: set(string:forKey:)
 
-    func test_setStringForKey_successfullyUpdatesExistingKey()
+    func test_setStringForKey_successfullyUpdatesExistingKey() throws
     {
-        XCTAssertNil(valet.string(forKey: key))
-        valet.set(string: "1", forKey: key)
-        XCTAssertEqual("1", valet.string(forKey: key))
-        valet.set(string: "2", forKey: key)
-        XCTAssertEqual("2", valet.string(forKey: key))
+        XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+
+        try valet.set(string: "1", forKey: key)
+        XCTAssertEqual("1", try valet.string(forKey: key))
+        try valet.set(string: "2", forKey: key)
+        XCTAssertEqual("2", try valet.string(forKey: key))
     }
     
-    func test_setStringForKey_failsForInvalidValue() {
-        XCTAssertFalse(valet.set(string: "", forKey: key))
+    func test_setStringForKey_throwsEmptyValueOnInvalidValue() {
+        XCTAssertThrowsError(try valet.set(string: "", forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, KeychainError.emptyValue)
+        }
     }
     
-    func test_setStringForKey_failsForInvalidKey() {
-        XCTAssertFalse(valet.set(string: passcode, forKey: ""))
+    func test_setStringForKey_throwsEmptyKeyOnInvalidKey() throws {
+        XCTAssertThrowsError(try valet.set(string: passcode, forKey: "")) { error in
+            XCTAssertEqual(error as? KeychainError, KeychainError.emptyKey)
+        }
     }
     
     // MARK: object(forKey:)
     
-    func test_objectForKey_isNilForInvalidKey() {
-        XCTAssertNil(valet.object(forKey: key))
+    func test_objectForKey_throwsItemNotFound() {
+        XCTAssertThrowsError(try valet.object(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
     
-    func test_objectForKey_succeedsForValidKey() {
-        valet.set(object: passcodeData, forKey: key)
-        XCTAssertEqual(passcodeData, valet.object(forKey: key))
+    func test_objectForKey_succeedsForValidKey() throws {
+        try valet.set(object: passcodeData, forKey: key)
+        XCTAssertEqual(passcodeData, try valet.object(forKey: key))
     }
     
-    func test_objectForKey_equivalentValetsCanAccessSameData() {
+    func test_objectForKey_equivalentValetsCanAccessSameData() throws {
         let equalValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
-        XCTAssertEqual(0, equalValet.allKeys().count)
+        XCTAssertEqual(0, try equalValet.allKeys().count)
         XCTAssertEqual(valet, equalValet)
-        XCTAssertTrue(valet.set(object: passcodeData, forKey: key))
-        XCTAssertEqual(passcodeData, equalValet.object(forKey: key))
+        try valet.set(object: passcodeData, forKey: key)
+        XCTAssertEqual(passcodeData, try equalValet.object(forKey: key))
     }
     
-    func test_objectForKey_withDifferingIdentifier_isNil() {
-        XCTAssertTrue(valet.set(object: passcodeData, forKey: key))
-        XCTAssertEqual(passcodeData, valet.object(forKey: key))
+    func test_objectForKey_withDifferingIdentifier_throwsItemNotFound() throws {
+        try valet.set(object: passcodeData, forKey: key)
+        XCTAssertEqual(passcodeData, try valet.object(forKey: key))
         
         let differingIdentifier = Valet.valet(with: Identifier(nonEmpty: "wat")!, accessibility: valet.accessibility)
-        XCTAssertNil(differingIdentifier.object(forKey: key))
+        XCTAssertThrowsError(try differingIdentifier.object(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
     
-    func test_objectForKey_withDifferingAccessibility_isNil() {
-        XCTAssertTrue(valet.set(object: passcodeData, forKey: key))
-        XCTAssertEqual(passcodeData, valet.object(forKey: key))
+    func test_objectForKey_withDifferingAccessibility_throwsItemNotFound() throws {
+        try valet.set(object: passcodeData, forKey: key)
+        XCTAssertEqual(passcodeData, try valet.object(forKey: key))
         
         let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .afterFirstUnlockThisDeviceOnly)
-        XCTAssertNil(differingAccessibility.object(forKey: key))
+        XCTAssertThrowsError(try differingAccessibility.object(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
     
-    func test_objectForKey_withEquivalentConfigurationButDifferingFlavor_isNil() {
+    func test_objectForKey_withEquivalentConfigurationButDifferingFlavor_throwsItemNotFound() throws {
         guard testEnvironmentIsSigned() else {
             return
         }
         
-        XCTAssertTrue(valet.set(object: passcodeData, forKey: key))
-        XCTAssertEqual(passcodeData, valet.object(forKey: key))
-        
-        XCTAssertNil(anotherFlavor.object(forKey: key))
+        try valet.set(object: passcodeData, forKey: key)
+        XCTAssertEqual(passcodeData, try valet.object(forKey: key))
+
+        XCTAssertThrowsError(try anotherFlavor.object(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
     
     // MARK: set(object:forKey:)
     
-    func test_setObjectForKey_successfullyUpdatesExistingKey() {
+    func test_setObjectForKey_successfullyUpdatesExistingKey() throws {
         let firstValue = Data("first".utf8)
         let secondValue = Data("second".utf8)
-        valet.set(object: firstValue, forKey: key)
-        XCTAssertEqual(firstValue, valet.object(forKey: key))
-        valet.set(object: secondValue, forKey: key)
-        XCTAssertEqual(secondValue, valet.object(forKey: key))
+        try valet.set(object: firstValue, forKey: key)
+        XCTAssertEqual(firstValue, try valet.object(forKey: key))
+        try valet.set(object: secondValue, forKey: key)
+        XCTAssertEqual(secondValue, try valet.object(forKey: key))
     }
     
-    func test_setObjectForKey_failsForInvalidKey() {
-        XCTAssertFalse(valet.set(object: passcodeData, forKey: ""))
+    func test_setObjectForKey_throwsEmptyKeyOnInvalidKey() {
+        XCTAssertThrowsError(try valet.set(object: passcodeData, forKey: "")) { error in
+            XCTAssertEqual(error as? KeychainError, .emptyKey)
+        }
     }
     
-    func test_setObjectForKey_failsForEmptyData() {
+    func test_setObjectForKey_throwsEmptyValueOnEmptyData() {
         let emptyData = Data()
         XCTAssertTrue(emptyData.isEmpty)
-        XCTAssertFalse(valet.set(object: emptyData, forKey: key))
+        XCTAssertThrowsError(try valet.set(object: emptyData, forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .emptyValue)
+        }
     }
     
     // Mark: String/Object Equivalence
     
-    func test_stringForKey_succeedsForDataBackedByString() {
-        XCTAssertTrue(valet.set(object: passcodeData, forKey: key))
-        XCTAssertEqual(passcode, valet.string(forKey: key))
+    func test_stringForKey_succeedsForDataBackedByString() throws {
+        try valet.set(object: passcodeData, forKey: key)
+        XCTAssertEqual(passcode, try valet.string(forKey: key))
     }
     
-    func test_stringForKey_failsForDataNotBackedByString() {
+    func test_stringForKey_failsForDataNotBackedByString() throws {
         let dictionary = [ "that's no" : "moon" ]
         let nonStringData = NSKeyedArchiver.archivedData(withRootObject: dictionary)
-        XCTAssertTrue(valet.set(object: nonStringData, forKey: key))
-        XCTAssertNil(valet.string(forKey: key))
+        try valet.set(object: nonStringData, forKey: key)
+        XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
     
-    func test_objectForKey_succeedsForStrings() {
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertEqual(passcodeData, valet.object(forKey: key))
+    func test_objectForKey_succeedsForStrings() throws {
+        try valet.set(string: passcode, forKey: key)
+        XCTAssertEqual(passcodeData, try valet.object(forKey: key))
     }
 
     // MARK: Concurrency
@@ -418,8 +446,16 @@ class ValetIntegrationTests: XCTestCase
         let removeQueue = DispatchQueue(label: "Remove Object Queue", attributes: .concurrent)
 
         for _ in 1...50 {
-            setQueue.async { XCTAssertTrue(self.valet.set(string: self.passcode, forKey: self.key)) }
-            removeQueue.async { XCTAssertTrue(self.valet.removeObject(forKey: self.key)) }
+            setQueue.async {
+                do {
+                    XCTAssertNoThrow(try self.valet.set(string: self.passcode, forKey: self.key))
+                } catch {}
+            }
+            removeQueue.async {
+                do {
+                    XCTAssertNoThrow(try self.valet.removeObject(forKey: self.key))
+                } catch {}
+            }
         }
         
         let setQueueExpectation = expectation(description: "\(#function): Set String Queue")
@@ -443,9 +479,17 @@ class ValetIntegrationTests: XCTestCase
         let expectation = self.expectation(description: #function)
 
         setStringQueue.async {
-            XCTAssertTrue(self.valet.set(string: self.passcode, forKey: self.key))
+            do {
+                XCTAssertNoThrow(try self.valet.set(string: self.passcode, forKey: self.key))
+            } catch {}
+
             stringForKeyQueue.async {
-                XCTAssertEqual(self.valet.string(forKey: self.key), self.passcode)
+                do {
+                    XCTAssertEqual(try self.valet.string(forKey: self.key), self.passcode)
+                } catch {
+                    XCTFail("Threw \(error) trying to read value")
+                }
+
                 expectation.fulfill()
             }
         }
@@ -463,10 +507,20 @@ class ValetIntegrationTests: XCTestCase
 
         setStringQueue.async {
             let backgroundValet = Valet.valet(with: backgroundIdentifier, accessibility: .whenUnlocked)
-            XCTAssertTrue(backgroundValet.set(string: self.passcode, forKey: self.key))
-            stringForKeyQueue.async {
-                XCTAssertEqual(backgroundValet.string(forKey: self.key), self.passcode)
+            do {
+                XCTAssertNoThrow(try backgroundValet.set(string: self.passcode, forKey: self.key))
+            } catch {
+                XCTFail("Threw \(error) trying to write value")
                 expectation.fulfill()
+            }
+            stringForKeyQueue.async {
+                do {
+                    XCTAssertEqual(try backgroundValet.string(forKey: self.key), self.passcode)
+                    expectation.fulfill()
+                } catch {
+                    XCTFail("Threw \(error) trying to read value")
+                    expectation.fulfill()
+                }
             }
         }
 
@@ -475,130 +529,140 @@ class ValetIntegrationTests: XCTestCase
 
     // MARK: Removal
 
-    func test_removeObjectForKey_succeedsWhenKeyIsNotPresent()
+    func test_removeObjectForKey_succeedsWhenKeyIsNotPresent() throws
     {
-        XCTAssertTrue(valet.removeObject(forKey: "derp"))
+        try valet.removeObject(forKey: "derp")
     }
 
-    func test_removeObjectForKey_succeedsWhenKeyIsPresent()
+    func test_removeObjectForKey_succeedsWhenKeyIsPresent() throws
     {
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertTrue(valet.removeObject(forKey: key))
-        XCTAssertNil(valet.string(forKey: key))
+        try valet.set(string: passcode, forKey: key)
+        try valet.removeObject(forKey: key)
+        XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
 
-    func test_removeObjectForKey_isDistinctForDifferingAccessibility()
+    func test_removeObjectForKey_isDistinctForDifferingAccessibility() throws
     {
         let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .whenUnlockedThisDeviceOnly)
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        try valet.set(string: passcode, forKey: key)
 
-        XCTAssertTrue(differingAccessibility.removeObject(forKey: key))
+        try differingAccessibility.removeObject(forKey: key)
 
-        XCTAssertEqual(passcode, valet.string(forKey: key))
+        XCTAssertEqual(passcode, try valet.string(forKey: key))
     }
 
-    func test_removeObjectForKey_isDistinctForDifferingIdentifier()
+    func test_removeObjectForKey_isDistinctForDifferingIdentifier() throws
     {
         let differingIdentifier = Valet.valet(with: Identifier(nonEmpty: "no")!, accessibility: valet.accessibility)
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        try valet.set(string: passcode, forKey: key)
 
-        XCTAssertTrue(differingIdentifier.removeObject(forKey: key))
+        try differingIdentifier.removeObject(forKey: key)
 
-        XCTAssertEqual(passcode, valet.string(forKey: key))
+        XCTAssertEqual(passcode, try valet.string(forKey: key))
     }
 
-    func test_removeObjectForKey_isDistinctForDifferingClasses()
+    func test_removeObjectForKey_isDistinctForDifferingClasses() throws
     {
         guard testEnvironmentIsSigned() else {
             return
         }
         
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertTrue(anotherFlavor.set(string: passcode, forKey: key))
+        try valet.set(string: passcode, forKey: key)
+        try anotherFlavor.set(string: passcode, forKey: key)
 
-        XCTAssertTrue(valet.removeObject(forKey: key))
+        try valet.removeObject(forKey: key)
 
-        XCTAssertNil(valet.string(forKey: key))
-        XCTAssertEqual(passcode, anotherFlavor.string(forKey: key))
+        XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+        XCTAssertEqual(passcode, try anotherFlavor.string(forKey: key))
     }
 
     // MARK: Migration - Query
 
-    func test_migrateObjectsMatching_failsIfQueryHasNoInputClass()
+    func test_migrateObjectsMatching_failsIfQueryHasNoInputClass() throws
     {
         guard testEnvironmentIsSigned() else {
             return
         }
 
-        valet.set(string: passcode, forKey: key)
+        try valet.set(string: passcode, forKey: key)
 
-        guard let valetKeychainQuery = valet.keychainQuery else {
-            XCTFail()
-            return
-        }
+        let valetKeychainQuery = try valet.keychainQuery()
         // Test for base query success.
-        XCTAssertEqual(anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: false), .success)
-        XCTAssertEqual(passcode, anotherFlavor.string(forKey: key))
+        try anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: false)
+        XCTAssertEqual(passcode, try anotherFlavor.string(forKey: key))
 
         var mutableQuery = valetKeychainQuery
         mutableQuery.removeValue(forKey: kSecClass as String)
 
         // Without a kSecClass, the migration should fail.
-        XCTAssertEqual(.invalidQuery, anotherFlavor.migrateObjects(matching: mutableQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try anotherFlavor.migrateObjects(matching: mutableQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
 
         mutableQuery[kSecClass as String] = kSecClassInternetPassword
         // Without a kSecClass set to something other than kSecClassGenericPassword, the migration should fail.
-        XCTAssertEqual(.invalidQuery, anotherFlavor.migrateObjects(matching: mutableQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try anotherFlavor.migrateObjects(matching: mutableQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
     }
 
-    func test_migrateObjectsMatching_failsIfNoItemsMatchQuery()
+    func test_migrateObjectsMatching_failsIfNoItemsMatchQuery() throws
     {
         guard testEnvironmentIsSigned() else {
             return
         }
-        
-        let noItemsFoundError = MigrationResult.noItemsToMigrateFound
 
         let queryWithNoMatches = [
             kSecClass as String: kSecClassGenericPassword as String,
             kSecAttrService as String: "Valet_Does_Not_Exist"
         ]
 
-        XCTAssertEqual(noItemsFoundError, valet.migrateObjects(matching: queryWithNoMatches, removeOnCompletion: false))
-        XCTAssertEqual(noItemsFoundError, valet.migrateObjects(matching: queryWithNoMatches, removeOnCompletion: true))
-
-        guard let valetKeychainQuery = valet.keychainQuery else {
-            XCTFail()
-            return
+        XCTAssertThrowsError(try valet.migrateObjects(matching: queryWithNoMatches, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+        XCTAssertThrowsError(try valet.migrateObjects(matching: queryWithNoMatches, removeOnCompletion: true)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
 
+        let valetKeychainQuery = try valet.keychainQuery()
+
         // Our test Valet has not yet been written to, migration should fail:
-        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: false))
-        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: true))
+        XCTAssertThrowsError(try anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+        XCTAssertThrowsError(try anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: true)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
 
     // FIXME: Looks to me like this test may no longer be valid, need to dig a bit
-    func disabled_test_migrateObjectsMatching_bailsOutIfConflictExistsInQueryResult()
+    func disabled_test_migrateObjectsMatching_bailsOutIfConflictExistsInQueryResult() throws
     {
         guard testEnvironmentIsSigned() else {
             return
         }
         
         let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
-        migrationValet.removeAllObjects()
+        try migrationValet.removeAllObjects()
         
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertTrue(anotherFlavor.set(string: passcode, forKey:key))
+        try valet.set(string: passcode, forKey: key)
+        try anotherFlavor.set(string: passcode, forKey:key)
 
         let conflictingQuery = [
             kSecClass as String: kSecClassGenericPassword as String,
             kSecAttrAccount as String: key
         ]
 
-        XCTAssertEqual(.duplicateKeyInQueryResult, migrationValet.migrateObjects(matching: conflictingQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try migrationValet.migrateObjects(matching: conflictingQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .duplicateKeyInQueryResult)
+        }
     }
 
-    func test_migrateObjectsMatching_withAccountNameAsData_doesNotRaiseException()
+    func test_migrateObjectsMatching_withAccountNameAsData_doesNotRaiseException() throws
     {
         let identifier = "Keychain_With_Account_Name_As_NSData"
         
@@ -618,26 +682,26 @@ class ValetIntegrationTests: XCTestCase
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: identifier
         ]
-        let migrationResult = valet.migrateObjects(matching: query, removeOnCompletion: false)
-        
-        XCTAssertEqual(migrationResult, .keyInQueryResultInvalid)
+        XCTAssertThrowsError(try valet.migrateObjects(matching: query, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .keyInQueryResultInvalid)
+        }
     }
     
     // MARK: Migration - Valet
     
-    func test_migrateObjectsFromValet_migratesSingleKeyValuePairSuccessfully()
+    func test_migrateObjectsFromValet_migratesSingleKeyValuePairSuccessfully() throws
     {
         guard testEnvironmentIsSigned() else {
             return
         }
         
-        anotherFlavor.set(string: "foo", forKey: "bar")
-        _ = valet.migrateObjects(from: anotherFlavor, removeOnCompletion: false)
-        _ = valet.allKeys()
-        XCTAssertEqual("foo", valet.string(forKey: "bar"))
+        try anotherFlavor.set(string: "foo", forKey: "bar")
+        try valet.migrateObjects(from: anotherFlavor, removeOnCompletion: false)
+        _ = try valet.allKeys()
+        XCTAssertEqual("foo", try valet.string(forKey: "bar"))
     }
     
-    func test_migrateObjectsFromValet_migratesMultipleKeyValuePairsSuccessfully()
+    func test_migrateObjectsFromValet_migratesMultipleKeyValuePairsSuccessfully() throws
     {
         guard testEnvironmentIsSigned() else {
             return
@@ -652,20 +716,20 @@ class ValetIntegrationTests: XCTestCase
         ]
 
         for (key, value) in keyValuePairs {
-            anotherFlavor.set(string: value, forKey: key)
+            try anotherFlavor.set(string: value, forKey: key)
         }
 
-        XCTAssertEqual(valet.migrateObjects(from: anotherFlavor, removeOnCompletion: false), .success)
+        try valet.migrateObjects(from: anotherFlavor, removeOnCompletion: false)
 
         // Both the migration target and the previous Valet should hold all key/value pairs.
-        XCTAssertEqual(valet.allKeys(), anotherFlavor.allKeys())
+        XCTAssertEqual(try valet.allKeys(), try anotherFlavor.allKeys())
         for (key, value) in keyValuePairs {
-            XCTAssertEqual(valet.string(forKey: key), value)
-            XCTAssertEqual(anotherFlavor.string(forKey: key), value)
+            XCTAssertEqual(try valet.string(forKey: key), value)
+            XCTAssertEqual(try anotherFlavor.string(forKey: key), value)
         }
     }
 
-    func test_migrateObjectsFromValet_removesOnCompletionWhenRequested()
+    func test_migrateObjectsFromValet_removesOnCompletionWhenRequested() throws
     {
         guard testEnvironmentIsSigned() else {
             return
@@ -680,20 +744,22 @@ class ValetIntegrationTests: XCTestCase
         ]
 
         for (key, value) in keyValuePairs {
-            anotherFlavor.set(string: value, forKey: key)
+            try anotherFlavor.set(string: value, forKey: key)
         }
 
-        XCTAssertEqual(valet.migrateObjects(from: anotherFlavor, removeOnCompletion: true), .success)
+        try valet.migrateObjects(from: anotherFlavor, removeOnCompletion: true)
 
         // The migration target should hold all key/value pairs, the previous Valet should be empty.
-        XCTAssertEqual(0, anotherFlavor.allKeys().count)
+        XCTAssertEqual(0, try anotherFlavor.allKeys().count)
         for (key, value) in keyValuePairs {
-            XCTAssertEqual(valet.string(forKey: key), value)
-            XCTAssertNil(anotherFlavor.string(forKey: key))
+            XCTAssertEqual(try valet.string(forKey: key), value)
+            XCTAssertThrowsError(try anotherFlavor.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
     }
 
-    func test_migrateObjectsFromValet_leavesKeychainUntouchedWhenConflictsExist()
+    func test_migrateObjectsFromValet_leavesKeychainUntouchedWhenConflictsExist() throws
     {
         guard testEnvironmentIsSigned() else {
             return
@@ -708,44 +774,46 @@ class ValetIntegrationTests: XCTestCase
         ]
 
         for (key, value) in keyValuePairs {
-            anotherFlavor.set(string: value, forKey: key)
+            try anotherFlavor.set(string: value, forKey: key)
         }
 
-        valet.set(string: "adrian", forKey: "yo")
+        try valet.set(string: "adrian", forKey: "yo")
 
-        XCTAssertEqual(1, valet.allKeys().count)
-        XCTAssertEqual(keyValuePairs.count, anotherFlavor.allKeys().count)
+        XCTAssertEqual(1, try valet.allKeys().count)
+        XCTAssertEqual(keyValuePairs.count, try anotherFlavor.allKeys().count)
 
-        XCTAssertEqual(.keyInQueryResultAlreadyExistsInValet, valet.migrateObjects(from: anotherFlavor, removeOnCompletion: true))
+        XCTAssertThrowsError(try valet.migrateObjects(from: anotherFlavor, removeOnCompletion: true)) { error in
+            XCTAssertEqual(error as? MigrationError, .keyInQueryResultAlreadyExistsInValet)
+        }
 
         // Neither Valet should have seen any changes.
-        XCTAssertEqual(1, valet.allKeys().count)
-        XCTAssertEqual(keyValuePairs.count, anotherFlavor.allKeys().count)
+        XCTAssertEqual(1, try valet.allKeys().count)
+        XCTAssertEqual(keyValuePairs.count, try anotherFlavor.allKeys().count)
         
-        XCTAssertEqual("adrian", valet.string(forKey: "yo"))
+        XCTAssertEqual("adrian", try valet.string(forKey: "yo"))
         for (key, value) in keyValuePairs {
-            XCTAssertEqual(anotherFlavor.string(forKey: key), value)
+            XCTAssertEqual(try anotherFlavor.string(forKey: key), value)
         }
     }
 
-    func test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenBothValetsHavePreviouslyCalled_canAccessKeychain() {
+    func test_migrateObjectsFromValetRemoveOnCompletion_migratesDataSuccessfullyWhenBothValetsHavePreviouslyCalled_canAccessKeychain() throws {
         let otherValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me_To_Valet")!, accessibility: .afterFirstUnlock)
 
         // Clean up any dangling keychain items before we start this test.
-        otherValet.removeAllObjects()
+        try otherValet.removeAllObjects()
 
         let keyStringPairToMigrateMap = ["foo" : "bar", "testing" : "migration", "is" : "quite", "entertaining" : "if", "you" : "don't", "screw" : "up"]
         for (key, value) in keyStringPairToMigrateMap {
-            XCTAssertTrue(otherValet.set(string: value, forKey: key))
+            try otherValet.set(string: value, forKey: key)
         }
 
         XCTAssertTrue(valet.canAccessKeychain())
         XCTAssertTrue(otherValet.canAccessKeychain())
-        XCTAssertEqual(valet.migrateObjects(from: otherValet, removeOnCompletion: false), .success)
+        try valet.migrateObjects(from: otherValet, removeOnCompletion: false)
 
         for (key, value) in keyStringPairToMigrateMap {
-            XCTAssertEqual(valet.string(forKey: key), value )
-            XCTAssertEqual(otherValet.string(forKey: key), value)
+            XCTAssertEqual(try valet.string(forKey: key), value)
+            XCTAssertEqual(try otherValet.string(forKey: key), value)
         }
     }
 

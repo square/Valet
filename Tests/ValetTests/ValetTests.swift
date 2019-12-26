@@ -39,8 +39,8 @@ class ValetTests: XCTestCase
         super.setUp()
         
 
-        valet.removeAllObjects()
-        anotherFlavor.removeAllObjects()
+        try? valet.removeAllObjects()
+        try? anotherFlavor.removeAllObjects()
     }
 
     // MARK: Initialization
@@ -112,38 +112,48 @@ class ValetTests: XCTestCase
 
     func test_migrateObjectsMatching_failsForBadQueries()
     {
-        let invalidQueryError = MigrationResult.invalidQuery
-
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: [:], removeOnCompletion: false))
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: [:], removeOnCompletion: true))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: [:], removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
+        XCTAssertThrowsError(try valet.migrateObjects(matching: [:], removeOnCompletion: true)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
 
         var invalidQuery: [String: AnyHashable] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecMatchLimit as String: kSecMatchLimitOne
         ]
         // Migration queries should have kSecMatchLimit set to .All
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
 
         invalidQuery = [
             kSecClass as String: kSecClassGenericPassword,
             kSecReturnData as String: kCFBooleanTrue
         ]
         // Migration queries do not support kSecReturnData
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
 
         invalidQuery = [
             kSecClass as String: kSecClassGenericPassword,
             kSecReturnRef as String: kCFBooleanTrue
         ]
         // Migration queries do not support kSecReturnRef
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
 
         invalidQuery = [
             kSecClass as String: kSecClassGenericPassword,
             kSecReturnPersistentRef as String: kCFBooleanFalse
         ]
         // Migration queries must have kSecReturnPersistentRef set to true
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
 
 
         invalidQuery = [
@@ -151,14 +161,18 @@ class ValetTests: XCTestCase
             kSecReturnAttributes as String: kCFBooleanFalse
         ]
         // Migration queries must have kSecReturnAttributes set to true
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
         
         invalidQuery = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccessControl as String: NSNull()
         ]
         // Migration queries must not have kSecAttrAccessControl set
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
     }
 
 }

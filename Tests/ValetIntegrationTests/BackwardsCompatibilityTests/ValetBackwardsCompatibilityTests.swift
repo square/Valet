@@ -86,24 +86,24 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
 
     // MARK: Tests
 
-    func test_backwardsCompatibility_withLegacyValet() {
-        Valet.currentAndLegacyPermutations(with: valet.identifier).forEach { permutation, legacyValet in
+    func test_backwardsCompatibility_withLegacyValet() throws {
+        try Valet.currentAndLegacyPermutations(with: valet.identifier).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
-            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
+            XCTAssertEqual(legacyValet.string(forKey: key), try permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
         }
     }
 
-    func test_backwardsCompatibility_withLegacySharedAccessGroupValet() {
+    func test_backwardsCompatibility_withLegacySharedAccessGroupValet() throws {
         guard testEnvironmentIsSigned() else {
             return
         }
-        Valet.currentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
+        try Valet.currentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
-            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
+            XCTAssertEqual(legacyValet.string(forKey: key), try permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
         }
     }
 

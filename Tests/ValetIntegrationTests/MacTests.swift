@@ -29,18 +29,14 @@ class ValetMacTests: XCTestCase
     // This test verifies that we are neutralizing the zero-day Mac OS X Access Control List vulnerability.
     // Whitepaper: https://drive.google.com/file/d/0BxxXk1d3yyuZOFlsdkNMSGswSGs/view
     // Square Corner blog post: https://corner.squareup.com/2015/06/valet-beats-the-ox-x-keychain-access-control-list-zero-day-vulnerability.html
-    func test_setStringForKey_neutralizesMacOSAccessControlListVuln()
+    func test_setStringForKey_neutralizesMacOSAccessControlListVuln() throws
     {
         let valet = Valet.valet(with: Identifier(nonEmpty: "MacOSVulnTest")!, accessibility: .whenUnlocked)
         let vulnKey = "KeepIt"
         let vulnValue = "Secret"
-        valet.removeObject(forKey: vulnKey)
+        try valet.removeObject(forKey: vulnKey)
 
-        guard let keychainQuery = valet.keychainQuery else {
-            XCTFail()
-            return
-        }
-        var query = keychainQuery
+        var query = try valet.keychainQuery()
         query[kSecAttrAccount as String] = vulnKey
 
         var accessList: SecAccess?
@@ -84,7 +80,7 @@ class ValetMacTests: XCTestCase
 
         // Update the vulnerable value with Valet - we should have deleted the existing item, making the entry no longer vulnerable.
         let updatedValue = "Safe"
-        XCTAssertTrue(valet.set(string: updatedValue, forKey: vulnKey))
+        try valet.set(string: updatedValue, forKey: vulnKey)
 
         // We should no longer be able to access the keychain item via the ref.
         let queryWithVulnerableReferenceAndAttributes = [

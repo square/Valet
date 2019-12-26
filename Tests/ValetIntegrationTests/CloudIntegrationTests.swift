@@ -36,13 +36,13 @@ class CloudIntegrationTests: XCTestCase
     {
         super.setUp()
         
-        valet.removeAllObjects()
+        try? valet.removeAllObjects()
         let identifier = CloudTests.identifier
         let allPermutations = Valet.iCloudPermutations(with: identifier) + Valet.iCloudPermutations(with: identifier, shared: true)
-        allPermutations.forEach { testValet in testValet.removeAllObjects() }
+        allPermutations.forEach { testValet in try? testValet.removeAllObjects() }
     }
     
-    func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
+    func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration() throws
     {
         guard testEnvironmentIsSigned() else {
             return
@@ -51,38 +51,44 @@ class CloudIntegrationTests: XCTestCase
         let localValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
 
         // Setting
-        XCTAssertTrue(valet.set(string: "butts", forKey: "cloud"))
-        XCTAssertEqual("butts", valet.string(forKey: "cloud"))
-        XCTAssertNil(localValet.string(forKey: "cloud"))
+        try valet.set(string: "butts", forKey: "cloud")
+        XCTAssertEqual("butts", try valet.string(forKey: "cloud"))
+        XCTAssertThrowsError(try localValet.string(forKey: "cloud")) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
         
         // Removal
-        XCTAssertTrue(localValet.set(string: "snake people", forKey: "millennials"))
-        XCTAssertTrue(valet.removeObject(forKey: "millennials"))
-        XCTAssertEqual("snake people", localValet.string(forKey: "millennials"))
+        try localValet.set(string: "snake people", forKey: "millennials")
+        try valet.removeObject(forKey: "millennials")
+        XCTAssertEqual("snake people", try localValet.string(forKey: "millennials"))
     }
     
-    func test_setStringForKey()
+    func test_setStringForKey() throws
+    {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+        try valet.set(string: passcode, forKey: key)
+        XCTAssertEqual(passcode, try valet.string(forKey: key))
+    }
+    
+    func test_removeObjectForKey() throws
     {
         guard testEnvironmentIsSigned() else {
             return
         }
         
-        XCTAssertNil(valet.string(forKey: key))
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertEqual(passcode, valet.string(forKey: key))
-    }
-    
-    func test_removeObjectForKey()
-    {
-        guard testEnvironmentIsSigned() else {
-            return
+        try valet.set(string: passcode, forKey: key)
+        XCTAssertEqual(passcode, try valet.string(forKey: key))
+        
+        try valet.removeObject(forKey: key)
+        XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
-        
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertEqual(passcode, valet.string(forKey: key))
-        
-        XCTAssertTrue(valet.removeObject(forKey: key))
-        XCTAssertNil(valet.string(forKey: key))
     }
     
     // MARK: canAccessKeychain

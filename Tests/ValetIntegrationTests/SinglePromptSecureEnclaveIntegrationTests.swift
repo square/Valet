@@ -35,60 +35,62 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     {
         super.setUp()
         
-        valet.removeObject(forKey: key)
+        try? valet.removeObject(forKey: key)
     }
 
     // MARK: Equality
         
-    func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_canAccessSameData()
+    func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_canAccessSameData() throws
     {
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        try valet.set(string: passcode, forKey: key)
         let equivalentValet = SinglePromptSecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertEqual(valet, equivalentValet)
-        XCTAssertEqual(.success(passcode), equivalentValet.string(forKey: key, withPrompt: ""))
+        XCTAssertEqual(passcode, try equivalentValet.string(forKey: key, withPrompt: ""))
     }
     
-    func test_SinglePromptSecureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
+    func test_SinglePromptSecureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData() throws
     {
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        try valet.set(string: passcode, forKey: key)
         let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
         XCTAssertNotEqual(valet, equivalentValet)
-        XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
-        XCTAssertEqual(.itemNotFound, equivalentValet.string(forKey: key, withPrompt: ""))
+        XCTAssertEqual(passcode, try valet.string(forKey: key, withPrompt: ""))
+        XCTAssertThrowsError(try equivalentValet.string(forKey: key, withPrompt: "")) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
 
     // MARK: allKeys
     
-    func test_allKeys()
+    func test_allKeys() throws
     {
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
-        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set())
+        XCTAssertEqual(try valet.allKeys(userPrompt: ""), Set())
         
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
-        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set(arrayLiteral: key))
+        try valet.set(string: passcode, forKey: key)
+        XCTAssertEqual(try valet.allKeys(userPrompt: ""), Set(arrayLiteral: key))
         
-        XCTAssertTrue(valet.set(string: "monster", forKey: "cookie"))
-        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set(arrayLiteral: key, "cookie"))
+        try valet.set(string: "monster", forKey: "cookie")
+        XCTAssertEqual(try valet.allKeys(userPrompt: ""), Set(arrayLiteral: key, "cookie"))
         
-        valet.removeAllObjects()
-        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set())
+        try valet.removeAllObjects()
+        XCTAssertEqual(try valet.allKeys(userPrompt: ""), Set())
     }
     
-    func test_allKeys_doesNotReflectValetImplementationDetails() {
+    func test_allKeys_doesNotReflectValetImplementationDetails() throws {
         // Under the hood, Valet inserts a canary when calling `canAccessKeychain()` - this should not appear in `allKeys()`.
         _ = valet.canAccessKeychain()
-        XCTAssertEqual(valet.allKeys(userPrompt: "it me"), Set())
+        XCTAssertEqual(try valet.allKeys(userPrompt: "it me"), Set())
     }
     
     // MARK: canAccessKeychain
@@ -155,10 +157,12 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             kSecClass as String: kSecClassGenericPassword as String,
             kSecAttrAccessControl as String: "Fake access control"
         ]
-        XCTAssertEqual(.invalidQuery, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, MigrationError.invalidQuery)
+        }
     }
     
-    func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave()
+    func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave() throws
     {
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
@@ -167,8 +171,8 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         let plainOldValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
         
         // Clean up any dangling keychain items before we start this test.
-        valet.removeAllObjects()
-        plainOldValet.removeAllObjects()
+        try valet.removeAllObjects()
+        try plainOldValet.removeAllObjects()
         
         let keyValuePairs = [
             "yo": "dawg",
@@ -179,23 +183,25 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         ]
         
         for (key, value) in keyValuePairs {
-            plainOldValet.set(string: value, forKey: key)
+            try plainOldValet.set(string: value, forKey: key)
         }
         
-        XCTAssertEqual(.success, valet.migrateObjects(from: plainOldValet, removeOnCompletion: true))
+        try valet.migrateObjects(from: plainOldValet, removeOnCompletion: true)
         
         for (key, value) in keyValuePairs {
-            XCTAssertEqual(.success(value), valet.string(forKey: key, withPrompt: ""))
-            XCTAssertNil(plainOldValet.string(forKey: key))
+            XCTAssertEqual(value, try valet.string(forKey: key, withPrompt: ""))
+            XCTAssertThrowsError(try plainOldValet.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
         
         // Clean up items for the next test run (allKeys and removeAllObjects are unsupported in VALSecureEnclaveValet.
         for key in keyValuePairs.keys {
-            XCTAssertTrue(valet.removeObject(forKey: key))
+            try valet.removeObject(forKey: key)
         }
     }
     
-    func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() {
+    func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() throws {
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
@@ -203,21 +209,21 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         let otherValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me_To_Valet")!, accessibility: .afterFirstUnlock)
         
         // Clean up any dangling keychain items before we start this test.
-        valet.removeAllObjects()
-        otherValet.removeAllObjects()
+        try valet.removeAllObjects()
+        try otherValet.removeAllObjects()
         
         let keyStringPairToMigrateMap = ["foo" : "bar", "testing" : "migration", "is" : "quite", "entertaining" : "if", "you" : "don't", "screw" : "up"]
         for (key, value) in keyStringPairToMigrateMap {
-            XCTAssertTrue(otherValet.set(string: value, forKey: key))
+            try otherValet.set(string: value, forKey: key)
         }
         
         XCTAssertTrue(valet.canAccessKeychain())
         XCTAssertTrue(otherValet.canAccessKeychain())
-        XCTAssertEqual(.success, valet.migrateObjects(from: otherValet, removeOnCompletion: false))
+        try valet.migrateObjects(from: otherValet, removeOnCompletion: false)
         
         for (key, value) in keyStringPairToMigrateMap {
-            XCTAssertEqual(valet.string(forKey: key, withPrompt: ""), .success(value))
-            XCTAssertEqual(otherValet.string(forKey: key), value)
+            XCTAssertEqual(try valet.string(forKey: key, withPrompt: ""), value)
+            XCTAssertEqual(try otherValet.string(forKey: key), value)
         }
     }
 }

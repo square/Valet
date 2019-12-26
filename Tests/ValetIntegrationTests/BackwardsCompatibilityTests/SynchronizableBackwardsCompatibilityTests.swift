@@ -28,29 +28,29 @@ extension CloudIntegrationTests {
 
     // MARK: Backwards Compatibility
 
-    func test_backwardsCompatibility_withLegacyValet() {
+    func test_backwardsCompatibility_withLegacyValet() throws {
         guard testEnvironmentIsSigned() else {
             return
         }
 
-        Valet.iCloudCurrentAndLegacyPermutations(with: valet.identifier).forEach { permutation, legacyValet in
+        try Valet.iCloudCurrentAndLegacyPermutations(with: valet.identifier).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
-            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
+            XCTAssertEqual(legacyValet.string(forKey: key), try permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
         }
     }
 
-    func test_backwardsCompatibility_withSharedAccessGroupLegacyValet() {
+    func test_backwardsCompatibility_withSharedAccessGroupLegacyValet() throws {
         guard testEnvironmentIsSigned() else {
             return
         }
 
-        Valet.iCloudCurrentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
+        try Valet.iCloudCurrentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
-            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
+            XCTAssertEqual(legacyValet.string(forKey: key), try permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
         }
     }
   
