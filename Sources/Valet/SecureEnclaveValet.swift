@@ -60,7 +60,7 @@ public final class SecureEnclaveValet: NSObject {
     
     /// - returns: `true` if lhs and rhs both read from and write to the same sandbox within the keychain.
     public static func ==(lhs: SecureEnclaveValet, rhs: SecureEnclaveValet) -> Bool {
-        return lhs.service == rhs.service
+        lhs.service == rhs.service
     }
     
     // MARK: Private Class Properties
@@ -98,7 +98,7 @@ public final class SecureEnclaveValet: NSObject {
     // MARK: Hashable
     
     public override var hash: Int {
-        return service.description.hashValue
+        service.description.hashValue
     }
     
     // MARK: Public Properties
@@ -113,7 +113,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - note: Determined by writing a value to the keychain and then reading it back out. Will never prompt the user for Face ID, Touch ID, or password.
     @objc
     public func canAccessKeychain() -> Bool {
-        return SecureEnclave.canAccessKeychain(with: service, identifier: identifier)
+        SecureEnclave.canAccessKeychain(with: service, identifier: identifier)
     }
     
     /// - parameter object: A Data value to be inserted into the keychain.
@@ -131,7 +131,7 @@ public final class SecureEnclaveValet: NSObject {
     @objc(objectForKey:withPrompt:error:)
     public func object(forKey key: String, withPrompt userPrompt: String) throws -> Data {
         try execute(in: lock) {
-            return try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: try keychainQuery())
+            try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: try keychainQuery())
         }
     }
     
@@ -163,7 +163,7 @@ public final class SecureEnclaveValet: NSObject {
     @objc(stringForKey:withPrompt:error:)
     public func string(forKey key: String, withPrompt userPrompt: String) throws -> String {
         try execute(in: lock) {
-            return try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: try keychainQuery())
+            try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: try keychainQuery())
         }
     }
     
