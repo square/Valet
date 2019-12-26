@@ -175,7 +175,6 @@ public final class Valet: NSObject {
     
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc(containsObjectForKey:)
     public func containsObject(forKey key: String) -> Bool {
         execute(in: lock) {

@@ -187,6 +187,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
 
     /// - Parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown. If no items are found, will return an empty set.
     /// - Returns: The set of all (String) keys currently stored in this Valet instance.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc(allKeysWithUserPrompt:error:)
     public func allKeys(userPrompt: String) throws -> Set<String> {
         try execute(in: lock) {
@@ -200,6 +201,8 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     }
 
     /// Removes a key/object pair from the keychain.
+    /// - Parameter key: A key used to remove the desired object from the keychain.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc(removeObjectForKey:error:)
     public func removeObject(forKey key: String) throws {
         try execute(in: lock) {
@@ -208,6 +211,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     }
 
     /// Removes all key/object pairs accessible by this Valet instance from the keychain.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
     public func removeAllObjects() throws {
         try execute(in: lock) {
@@ -268,7 +272,6 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
         keychainQuery[kSecUseAuthenticationContext as String] = localAuthenticationContext
         return keychainQuery
     }
-
 }
 
 

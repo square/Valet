@@ -186,6 +186,7 @@ public final class SecureEnclaveValet: NSObject {
     }
     
     /// Removes all key/object pairs accessible by this Valet instance from the keychain.
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
     public func removeAllObjects() throws {
         try execute(in: lock) {
