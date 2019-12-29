@@ -110,7 +110,11 @@ internal final class Keychain {
         secItemQuery[kSecAttrAccount as String] = key
         
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+            #if swift(>=5.1)
+            secItemQuery[kSecUseDataProtectionKeychain as String] = true
+            #else
             secItemQuery["nleg"] = true // kSecUseDataProtectionKeychain for Xcode 9 and Xcode 10 compatibility.
+            #endif
         }
 
         #if os(macOS)

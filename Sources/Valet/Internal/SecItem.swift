@@ -78,7 +78,11 @@ internal final class SecItem {
         ]
 
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+            #if swift(>=5.1)
+            query[kSecUseDataProtectionKeychain] = true
+            #else
             query["nleg" as CFString] = true // kSecUseDataProtectionKeychain for Xcode 9 and Xcode 10 compatibility.
+            #endif
         }
 
         secItemLock.lock()
