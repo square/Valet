@@ -175,7 +175,7 @@ public final class Valet: NSObject {
     }
     
     /// - parameter key: The key to look up in the keychain.
-    /// - returns: `true` if a value has been set for the given key, `false` otherwise.
+    /// - returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
     @objc(containsObjectForKey:)
     public func containsObject(forKey key: String) -> Bool {
         return execute(in: lock) {
@@ -212,7 +212,7 @@ public final class Valet: NSObject {
         }
     }
     
-    /// - returns: The set of all (String) keys currently stored in this Valet instance.
+    /// - returns: The set of all (String) keys currently stored in this Valet instance. Will return an empty set if the keychain is not accessible.
     @objc
     public func allKeys() -> Set<String> {
         return execute(in: lock) {
