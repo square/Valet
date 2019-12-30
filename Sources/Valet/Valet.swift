@@ -262,30 +262,24 @@ public final class Valet: NSObject {
 
     /// Call this method if your Valet used to have its accessibility set to `always`.
     /// This method migrates objects set on a Valet with the same type and identifier, but with its accessibility set to `always` (which was possible prior to Valet 4.0) to the current Valet.
-    /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
-    /// - returns: Whether the migration succeeded or failed.
-    /// - note: The keychain is not modified if a failure occurs.
-    @objc(migrateObjectsFromAlwaysAccessibleValetAndRemoveOnCompletion:)
-    public func migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion: Bool) -> MigrationResult {
-        guard var keychainQuery = keychainQuery else {
-            return .couldNotReadKeychain
-        }
+    /// - Parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
+    /// - Note: The keychain is not modified if an error is thrown. Method will throw a `KeychainError` or `MigrationError` if an error occurs.
+    @objc
+    public func migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion: Bool) throws {
+        var keychainQuery = try execute(in: lock) { try self.keychainQuery() }
         keychainQuery[kSecAttrAccessible as String] = "dk" // kSecAttrAccessibleAlways, but with the value hardcoded to avoid a build warning.
-        return migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
+        return try migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
     /// Call this method if your Valet used to have its accessibility set to `alwaysThisDeviceOnly`.
     /// This method migrates objects set on a Valet with the same type and identifier, but with its accessibility set to `alwaysThisDeviceOnly` (which was possible prior to Valet 4.0) to the current Valet.
-    /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
-    /// - returns: Whether the migration succeeded or failed.
-    /// - note: The keychain is not modified if a failure occurs.
-    @objc(migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValetAndRemoveOnCompletion:)
-    public func migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion: Bool) -> MigrationResult {
-        guard var keychainQuery = keychainQuery else {
-            return .couldNotReadKeychain
-        }
+    /// - Parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
+    /// - Note: The keychain is not modified if an error is thrown. Method will throw a `KeychainError` or `MigrationError` if an error occurs.
+    @objc
+    public func migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion: Bool) throws {
+        var keychainQuery = try execute(in: lock) { try self.keychainQuery() }
         keychainQuery[kSecAttrAccessible as String] = "dku" // kSecAttrAccessibleAlwaysThisDeviceOnly, but with the value hardcoded to avoid a build warning.
-        return migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
+        return try migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
     // MARK: Internal Properties
