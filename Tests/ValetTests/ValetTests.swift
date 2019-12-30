@@ -107,7 +107,7 @@ class ValetTests: XCTestCase
 
     func test_valetsWithDifferingAccessibility_areNotEqual()
     {
-        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .always)
+        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .whenUnlockedThisDeviceOnly)
         XCTAssertNotEqual(valet, differingAccessibility)
     }
 
