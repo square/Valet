@@ -168,7 +168,9 @@ class SecureEnclaveIntegrationTests: XCTestCase
         
         for (key, value) in keyValuePairs {
             XCTAssertEqual(value, try valet.string(forKey: key, withPrompt: ""))
-            XCTAssertNil(try plainOldValet.string(forKey: key))
+            XCTAssertThrowsError(try plainOldValet.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
         
         // Clean up items for the next test run (allKeys and removeAllObjects are unsupported in VALSecureEnclaveValet).
