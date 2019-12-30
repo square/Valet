@@ -45,10 +45,6 @@
 		1612FD7E22A9CAAB00FC1142 /* MigrationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD6B22A9CAAB00FC1142 /* MigrationResult.swift */; };
 		1612FD7F22A9CAAB00FC1142 /* MigrationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD6B22A9CAAB00FC1142 /* MigrationResult.swift */; };
 		1612FD8022A9CAAB00FC1142 /* MigrationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD6B22A9CAAB00FC1142 /* MigrationResult.swift */; };
-		1612FD8122A9CAAB00FC1142 /* KeychainQueryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD6C22A9CAAB00FC1142 /* KeychainQueryConvertible.swift */; };
-		1612FD8222A9CAAB00FC1142 /* KeychainQueryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD6C22A9CAAB00FC1142 /* KeychainQueryConvertible.swift */; };
-		1612FD8322A9CAAB00FC1142 /* KeychainQueryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD6C22A9CAAB00FC1142 /* KeychainQueryConvertible.swift */; };
-		1612FD8422A9CAAB00FC1142 /* KeychainQueryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD6C22A9CAAB00FC1142 /* KeychainQueryConvertible.swift */; };
 		1612FD8522A9CAAB00FC1142 /* SecureEnclave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD6D22A9CAAB00FC1142 /* SecureEnclave.swift */; };
 		1612FD8622A9CAAB00FC1142 /* SecureEnclave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD6D22A9CAAB00FC1142 /* SecureEnclave.swift */; };
 		1612FD8722A9CAAB00FC1142 /* SecureEnclave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD6D22A9CAAB00FC1142 /* SecureEnclave.swift */; };
@@ -369,7 +365,6 @@
 		1612FD0C22A9C95500FC1142 /* CloudTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudTests.swift; sourceTree = "<group>"; };
 		1612FD0D22A9C95500FC1142 /* ValetTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetTests.swift; sourceTree = "<group>"; };
 		1612FD6B22A9CAAB00FC1142 /* MigrationResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MigrationResult.swift; sourceTree = "<group>"; };
-		1612FD6C22A9CAAB00FC1142 /* KeychainQueryConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainQueryConvertible.swift; sourceTree = "<group>"; };
 		1612FD6D22A9CAAB00FC1142 /* SecureEnclave.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureEnclave.swift; sourceTree = "<group>"; };
 		1612FD6E22A9CAAB00FC1142 /* CloudAccessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudAccessibility.swift; sourceTree = "<group>"; };
 		1612FD6F22A9CAAB00FC1142 /* Valet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Valet.swift; sourceTree = "<group>"; };
@@ -603,7 +598,6 @@
 			isa = PBXGroup;
 			children = (
 				1612FD6B22A9CAAB00FC1142 /* MigrationResult.swift */,
-				1612FD6C22A9CAAB00FC1142 /* KeychainQueryConvertible.swift */,
 				1612FD6D22A9CAAB00FC1142 /* SecureEnclave.swift */,
 				1612FD6E22A9CAAB00FC1142 /* CloudAccessibility.swift */,
 				1612FD6F22A9CAAB00FC1142 /* Valet.swift */,
@@ -1522,7 +1516,6 @@
 				1612FD7F22A9CAAB00FC1142 /* MigrationResult.swift in Sources */,
 				1612FD9722A9CAAB00FC1142 /* Service.swift in Sources */,
 				1612FDA722A9CAAB00FC1142 /* ErrorHandler.swift in Sources */,
-				1612FD8322A9CAAB00FC1142 /* KeychainQueryConvertible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1560,7 +1553,6 @@
 				1612FD8022A9CAAB00FC1142 /* MigrationResult.swift in Sources */,
 				1612FD9822A9CAAB00FC1142 /* Service.swift in Sources */,
 				1612FDA822A9CAAB00FC1142 /* ErrorHandler.swift in Sources */,
-				1612FD8422A9CAAB00FC1142 /* KeychainQueryConvertible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1592,7 +1584,6 @@
 				1612FD7D22A9CAAB00FC1142 /* MigrationResult.swift in Sources */,
 				1612FD9522A9CAAB00FC1142 /* Service.swift in Sources */,
 				1612FDA522A9CAAB00FC1142 /* ErrorHandler.swift in Sources */,
-				1612FD8122A9CAAB00FC1142 /* KeychainQueryConvertible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1615,7 +1606,6 @@
 				1612FD7E22A9CAAB00FC1142 /* MigrationResult.swift in Sources */,
 				1612FD9622A9CAAB00FC1142 /* Service.swift in Sources */,
 				1612FDA622A9CAAB00FC1142 /* ErrorHandler.swift in Sources */,
-				1612FD8222A9CAAB00FC1142 /* KeychainQueryConvertible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

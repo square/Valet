@@ -37,19 +37,11 @@ func testEnvironmentIsSigned() -> Bool {
         return false
     }
 
-    return true
-}
-
-func testEnvironmentSupportsWhenPasscodeSet() -> Bool {
     if let simulatorVersionInfo = ProcessInfo.processInfo.environment["SIMULATOR_VERSION_INFO"],
         simulatorVersionInfo.contains("iOS 13") || simulatorVersionInfo.contains("tvOS 13")
     {
-        // iOS and tvOS 13 simulators fail to store items in a Valet that has a
-        // kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly flag. The documentation for this flag says:
-        // "No items can be stored in this class on devices without a passcode". I currently do not
-        // understand why prior simulators work with this flag, given that no simulators have a passcode.
+        // Xcode 11's simulator does not support code-signing.
         return false
-
     } else {
         return true
     }
@@ -173,7 +165,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_valetsWithDifferingAccessibility_areNotEqual()
     {
-        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .whenUnlockedThisDeviceOnly)
+        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .always)
         XCTAssertNotEqual(valet, differingAccessibility)
     }
 
@@ -249,7 +241,7 @@ class ValetIntegrationTests: XCTestCase
         XCTAssertEqual(differingIdentifier.allKeys(), Set())
 
         // Different Accessibility
-        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .whenUnlockedThisDeviceOnly)
+        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .always)
         XCTAssertEqual(differingAccessibility.allKeys(), Set())
 
         // Different Kind
@@ -492,7 +484,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_removeObjectForKey_isDistinctForDifferingAccessibility()
     {
-        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .whenUnlockedThisDeviceOnly)
+        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .always)
         XCTAssertTrue(valet.set(string: passcode, forKey: key))
 
         XCTAssertTrue(differingAccessibility.removeObject(forKey: key))
@@ -535,15 +527,11 @@ class ValetIntegrationTests: XCTestCase
 
         valet.set(string: passcode, forKey: key)
 
-        guard let valetKeychainQuery = valet.keychainQuery else {
-            XCTFail()
-            return
-        }
         // Test for base query success.
-        XCTAssertEqual(anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: false), .success)
+        XCTAssertEqual(anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: false), .success)
         XCTAssertEqual(passcode, anotherFlavor.string(forKey: key))
 
-        var mutableQuery = valetKeychainQuery
+        var mutableQuery = valet.keychainQuery
         mutableQuery.removeValue(forKey: kSecClass as String)
 
         // Without a kSecClass, the migration should fail.
@@ -570,14 +558,9 @@ class ValetIntegrationTests: XCTestCase
         XCTAssertEqual(noItemsFoundError, valet.migrateObjects(matching: queryWithNoMatches, removeOnCompletion: false))
         XCTAssertEqual(noItemsFoundError, valet.migrateObjects(matching: queryWithNoMatches, removeOnCompletion: true))
 
-        guard let valetKeychainQuery = valet.keychainQuery else {
-            XCTFail()
-            return
-        }
-
         // Our test Valet has not yet been written to, migration should fail:
-        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: false))
-        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: true))
+        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: false))
+        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: true))
     }
 
     // FIXME: Looks to me like this test may no longer be valid, need to dig a bit

@@ -69,12 +69,12 @@ internal final class SecItem {
     // MARK: Internal Class Properties
 
     /// Programatically grab the required prefix for the shared access group (i.e. Bundle Seed ID). The value for the kSecAttrAccessGroup key in queries for data that is shared between apps must be of the format bundleSeedID.sharedAccessGroup. For more information on the Bundle Seed ID, see https://developer.apple.com/library/ios/qa/qa1713/_index.html
-    internal static var sharedAccessGroupPrefix: String {
+    internal static var sharedAccessGroupPrefix: String? {
         let query = [
             kSecClass : kSecClassGenericPassword,
-            kSecAttrAccount : "SharedAccessGroupAlwaysAccessiblePrefixPlaceholder",
+            kSecAttrAccount : "SharedAccessGroupPrefixPlaceholder",
             kSecReturnAttributes : true,
-            kSecAttrAccessible : Accessibility.alwaysThisDeviceOnly.secAccessibilityAttribute
+            kSecAttrAccessible : Accessibility.afterFirstUnlockThisDeviceOnly.secAccessibilityAttribute
             ] as CFDictionary
         
         secItemLock.lock()
@@ -90,11 +90,9 @@ internal final class SecItem {
         }
         
         guard status == errSecSuccess, let queryResult = result as? [CFString : AnyHashable], let accessGroup = queryResult[kSecAttrAccessGroup] as? String else {
-            ErrorHandler.assertionFailure("Could not find shared access group prefix.")
-            // We should always be able to access the shared access group prefix because the accessibility of the above keychain data is set to `always`.
-            // In other words, we should never hit this code. This code is here as a failsafe to prevent a crash in a scenario where the keychain is entirely hosed.
+            // We may not be able to access the shared access group prefix because the accessibility of the above keychain data is set to `afterFirstUnlock`.
             // Consumers should always check `canAccessKeychain()` after creating a Valet and before using it. Doing so will catch this error.
-            return "INVALID_SHARED_ACCESS_GROUP_PREFIX"
+            return nil
         }
         
         let components = accessGroup.components(separatedBy: ".")
@@ -102,10 +100,9 @@ internal final class SecItem {
             return bundleSeedIdentifier
             
         } else {
-            // We should always be able to access the shared access group prefix because the accessibility of the above keychain data is set to `always`.
-            // In other words, we should never hit this code. This code is here as a failsafe to prevent a crash in a scenario where the keychain is entirely hosed.
+            // We may not be able to access the shared access group prefix because the accessibility of the above keychain data is set to `afterFirstUnlock`.
             // Consumers should always check `canAccessKeychain()` after creating a Valet and before using it. Doing so will catch this error.
-            return "INVALID_SHARED_ACCESS_GROUP_PREFIX"
+            return nil
         }
     }
     

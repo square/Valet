@@ -24,7 +24,7 @@ import Foundation
 internal enum Service: CustomStringConvertible, Equatable {
     case standard(Identifier, Configuration)
     case sharedAccessGroup(Identifier, Configuration)
-    
+
     // MARK: Equatable
     
     internal static func ==(lhs: Service, rhs: Service) -> Bool {
@@ -39,7 +39,7 @@ internal enum Service: CustomStringConvertible, Equatable {
     
     // MARK: Internal Methods
     
-    internal func generateBaseQuery() -> [String : AnyHashable] {
+    internal func generateBaseQuery() -> [String : AnyHashable]? {
         var baseQuery: [String : AnyHashable] = [
             kSecClass as String : kSecClassGenericPassword as String,
             kSecAttrService as String : secService
@@ -51,8 +51,11 @@ internal enum Service: CustomStringConvertible, Equatable {
             configuration = desiredConfiguration
             
         case let .sharedAccessGroup(identifier, desiredConfiguration):
-            ErrorHandler.assert(!identifier.description.hasPrefix("\(SecItem.sharedAccessGroupPrefix)."), "Do not add the Bundle Seed ID as a prefix to your identifier. Valet prepends this value for you. Your Valet will not be able to access the keychain with the provided configuration")
-            baseQuery[kSecAttrAccessGroup as String] = "\(SecItem.sharedAccessGroupPrefix).\(identifier.description)"
+            guard let sharedAccessGroupPrefix = SecItem.sharedAccessGroupPrefix else {
+                return nil
+            }
+            ErrorHandler.assert(!identifier.description.hasPrefix("\(sharedAccessGroupPrefix)."), "Do not add the Bundle Seed ID as a prefix to your identifier. Valet prepends this value for you. Your Valet will not be able to access the keychain with the provided configuration")
+            baseQuery[kSecAttrAccessGroup as String] = "\(sharedAccessGroupPrefix).\(identifier.description)"
             configuration = desiredConfiguration
         }
         

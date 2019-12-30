@@ -37,8 +37,6 @@ internal extension Valet {
         switch accessibility {
         case .afterFirstUnlock: return .afterFirstUnlock
         case .afterFirstUnlockThisDeviceOnly: return .afterFirstUnlockThisDeviceOnly
-        case .always: return .always
-        case .alwaysThisDeviceOnly: return .alwaysThisDeviceOnly
         case .whenPasscodeSetThisDeviceOnly: return .whenPasscodeSetThisDeviceOnly
         case .whenUnlocked: return .whenUnlocked
         case .whenUnlockedThisDeviceOnly: return .whenUnlockedThisDeviceOnly
@@ -98,6 +96,9 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
     }
 
     func test_backwardsCompatibility_withLegacySharedAccessGroupValet() {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
         Valet.currentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
