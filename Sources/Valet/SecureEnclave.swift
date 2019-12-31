@@ -21,7 +21,6 @@
 import Foundation
 
 
-@available(macOS 10.11, *)
 public final class SecureEnclave {
     
     // MARK: Result
