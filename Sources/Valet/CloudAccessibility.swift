@@ -31,7 +31,7 @@ public enum CloudAccessibility: Int, CustomStringConvertible, Equatable {
     // MARK: CustomStringConvertible
     
     public var description: String {
-        return accessibility.description
+        accessibility.description
     }
     
     // MARK: Public Properties
@@ -46,13 +46,13 @@ public enum CloudAccessibility: Int, CustomStringConvertible, Equatable {
     }
 
     public var secAccessibilityAttribute: String {
-        return accessibility.secAccessibilityAttribute
+        accessibility.secAccessibilityAttribute
     }
-    
+
     // MARK: Internal
-    
+
     internal static func allValues() -> [CloudAccessibility] {
-        return [
+        [
             .whenUnlocked,
             .afterFirstUnlock,
         ]

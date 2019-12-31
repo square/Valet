@@ -28,13 +28,13 @@ internal enum Service: CustomStringConvertible, Equatable {
     // MARK: Equatable
     
     internal static func ==(lhs: Service, rhs: Service) -> Bool {
-        return lhs.description == rhs.description
+        lhs.description == rhs.description
     }
 
     // MARK: CustomStringConvertible
     
     internal var description: String {
-        return secService
+        secService
     }
     
     // MARK: Internal Methods

@@ -75,15 +75,19 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable 
         case .userPresence:
             return .userPresence
         case .biometricAny:
-            if #available(macOS 10.12.1, *) {
-                return .init(rawValue: 2) // .biometryAny with Xcode 9 compatibility.
+            if #available(iOS 11.3, tvOS 11.3, watchOS 4.3, macOS 10.13.4, *) {
+                return .biometryAny
+            } else if #available(macOS 10.12.1, *) {
+                return .touchIDAny
             } else {
                 assertionFailure(".biometricAny requires macOS 10.12.1.")
                 return .userPresence
             }
         case .biometricCurrentSet:
-            if #available(macOS 10.12.1, *) {
-                return .init(rawValue: 8) // .biometryCurrentSet with Xcode 9 compatibility.
+            if #available(iOS 11.3, tvOS 11.3, watchOS 4.3, macOS 10.13.4, *) {
+                return .biometryCurrentSet
+            } else if #available(macOS 10.12.1, *) {
+                return .touchIDCurrentSet
             } else {
                 assertionFailure(".biometricCurrentSet requires macOS 10.12.1.")
                 return .userPresence
@@ -97,7 +101,7 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable 
             }
         }
     }
-    
+
     internal static func allValues() -> [SecureEnclaveAccessControl] {
         if #available(macOS 10.12.1, *) {
             return [
