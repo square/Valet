@@ -397,7 +397,6 @@ internal extension Valet {
     class func iCloudPermutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
         CloudAccessibility.allValues().map { cloudAccessibility in
             shared ? .iCloudSharedAccessGroupValet(with: identifier, accessibility: cloudAccessibility) : .iCloudValet(with: identifier, accessibility: cloudAccessibility)
-
         }
     }
 
