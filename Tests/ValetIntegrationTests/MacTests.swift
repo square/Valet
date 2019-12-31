@@ -100,15 +100,15 @@ class ValetMacTests: XCTestCase
     func test_withExplicitlySet_identifierHasExplicitlySetIdentifier() {
         let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
-            XCTAssertEqual($0.keychainQuery[kSecAttrService as String], explicitlySetIdentifier.description)
+            XCTAssertEqual($0.keychainQuery?[kSecAttrService as String], explicitlySetIdentifier.description)
         }
 
         Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
-            XCTAssertEqual($0.keychainQuery[kSecAttrService as String], explicitlySetIdentifier.description)
+            XCTAssertEqual($0.keychainQuery?[kSecAttrService as String], explicitlySetIdentifier.description)
         }
 
         XCTAssertEqual(
-            Valet.iCloudValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery[kSecAttrService as String],
+            Valet.iCloudValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery?[kSecAttrService as String],
             explicitlySetIdentifier.description)
 
         guard testEnvironmentIsSigned() else {
@@ -116,11 +116,11 @@ class ValetMacTests: XCTestCase
         }
 
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
-            XCTAssertEqual($0.keychainQuery[kSecAttrService as String], explicitlySetIdentifier.description)
+            XCTAssertEqual($0.keychainQuery?[kSecAttrService as String], explicitlySetIdentifier.description)
         }
 
         Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
-            XCTAssertEqual($0.keychainQuery[kSecAttrService as String], explicitlySetIdentifier.description)
+            XCTAssertEqual($0.keychainQuery?[kSecAttrService as String], explicitlySetIdentifier.description)
         }
     }
 
@@ -135,7 +135,7 @@ class ValetMacTests: XCTestCase
         }
 
         XCTAssertEqual(
-            Valet.iCloudValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery[kSecAttrService as String],
+            Valet.iCloudValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery?[kSecAttrService as String],
             explicitlySetIdentifier.description)
 
         guard testEnvironmentIsSigned() else {
@@ -167,7 +167,7 @@ class ValetMacTests: XCTestCase
         }
 
         XCTAssertEqual(
-            Valet.iCloudValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery[kSecAttrService as String],
+            Valet.iCloudValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery?[kSecAttrService as String],
             explicitlySetIdentifier.description)
 
         guard testEnvironmentIsSigned() else {
