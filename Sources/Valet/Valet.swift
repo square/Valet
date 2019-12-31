@@ -119,13 +119,13 @@ public final class Valet: NSObject {
     // MARK: CustomStringConvertible
 
     public override var description: String {
-        return "\(super.description) \(identifier.description) \(configuration.prettyDescription)"
+        "\(super.description) \(identifier.description) \(configuration.prettyDescription)"
     }
 
     // MARK: Hashable
     
     public override var hash: Int {
-        return service.description.hashValue
+        service.description.hashValue
     }
     
     // MARK: Public Properties
@@ -140,7 +140,7 @@ public final class Valet: NSObject {
     /// - note: Determined by writing a value to the keychain and then reading it back out.
     @objc
     public func canAccessKeychain() -> Bool {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return false
             }
@@ -154,7 +154,7 @@ public final class Valet: NSObject {
     @objc(setObject:forKey:)
     @discardableResult
     public func set(object: Data, forKey key: String) -> Bool {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return false
             }
@@ -166,7 +166,7 @@ public final class Valet: NSObject {
     /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
     @objc(objectForKey:)
     public func object(forKey key: String) -> Data? {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return nil
             }
@@ -178,7 +178,7 @@ public final class Valet: NSObject {
     /// - returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
     @objc(containsObjectForKey:)
     public func containsObject(forKey key: String) -> Bool {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return false
             }
@@ -192,7 +192,7 @@ public final class Valet: NSObject {
     @objc(setString:forKey:)
     @discardableResult
     public func set(string: String, forKey key: String) -> Bool {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return false
             }
@@ -204,7 +204,7 @@ public final class Valet: NSObject {
     /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     @objc(stringForKey:)
     public func string(forKey key: String) -> String? {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return nil
             }
@@ -215,7 +215,7 @@ public final class Valet: NSObject {
     /// - returns: The set of all (String) keys currently stored in this Valet instance. Will return an empty set if the keychain is not accessible.
     @objc
     public func allKeys() -> Set<String> {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return Set()
             }
@@ -228,7 +228,7 @@ public final class Valet: NSObject {
     @objc(removeObjectForKey:)
     @discardableResult
     public func removeObject(forKey key: String) -> Bool {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return false
             }
@@ -241,7 +241,7 @@ public final class Valet: NSObject {
     @objc
     @discardableResult
     public func removeAllObjects() -> Bool {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return false
             }
@@ -256,7 +256,7 @@ public final class Valet: NSObject {
     /// - note: The keychain is not modified if a failure occurs.
     @objc(migrateObjectsMatchingQuery:removeOnCompletion:)
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) -> MigrationResult {
-        return execute(in: lock) {
+        execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return .couldNotReadKeychain
             }
@@ -389,16 +389,14 @@ internal extension Valet {
     // MARK: Permutations
 
     class func permutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
-        return Accessibility.allValues().map { accessibility in
-            let valet: Valet = shared ? .sharedAccessGroupValet(with: identifier, accessibility: accessibility) : .valet(with: identifier, accessibility: accessibility)
-            return valet
+        Accessibility.allValues().map { accessibility in
+            shared ? .sharedAccessGroupValet(with: identifier, accessibility: accessibility) : .valet(with: identifier, accessibility: accessibility)
         }
     }
 
     class func iCloudPermutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
-        return CloudAccessibility.allValues().map { cloudAccessibility in
-            let valet: Valet = shared ? .iCloudSharedAccessGroupValet(with: identifier, accessibility: cloudAccessibility) : .iCloudValet(with: identifier, accessibility: cloudAccessibility)
-            return valet
+        CloudAccessibility.allValues().map { cloudAccessibility in
+            shared ? .iCloudSharedAccessGroupValet(with: identifier, accessibility: cloudAccessibility) : .iCloudValet(with: identifier, accessibility: cloudAccessibility)
         }
     }
 

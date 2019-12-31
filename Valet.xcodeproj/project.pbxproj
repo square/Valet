@@ -91,10 +91,6 @@
 		1612FDB022A9CAAB00FC1142 /* SecureEnclaveAccessControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7822A9CAAB00FC1142 /* SecureEnclaveAccessControl.swift */; };
 		1612FDB122A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */; };
 		1612FDB222A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */; };
-		1612FDB522A9CAAB00FC1142 /* SwiftCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7A22A9CAAB00FC1142 /* SwiftCompatibility.swift */; };
-		1612FDB622A9CAAB00FC1142 /* SwiftCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7A22A9CAAB00FC1142 /* SwiftCompatibility.swift */; };
-		1612FDB722A9CAAB00FC1142 /* SwiftCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7A22A9CAAB00FC1142 /* SwiftCompatibility.swift */; };
-		1612FDB822A9CAAB00FC1142 /* SwiftCompatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7A22A9CAAB00FC1142 /* SwiftCompatibility.swift */; };
 		1612FDB922A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7B22A9CAAB00FC1142 /* SecureEnclaveValet.swift */; };
 		1612FDBA22A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7B22A9CAAB00FC1142 /* SecureEnclaveValet.swift */; };
 		1612FDBB22A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7B22A9CAAB00FC1142 /* SecureEnclaveValet.swift */; };
@@ -377,7 +373,6 @@
 		1612FD7722A9CAAB00FC1142 /* Valet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Valet.h; sourceTree = "<group>"; };
 		1612FD7822A9CAAB00FC1142 /* SecureEnclaveAccessControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureEnclaveAccessControl.swift; sourceTree = "<group>"; };
 		1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SinglePromptSecureEnclaveValet.swift; sourceTree = "<group>"; };
-		1612FD7A22A9CAAB00FC1142 /* SwiftCompatibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftCompatibility.swift; sourceTree = "<group>"; };
 		1612FD7B22A9CAAB00FC1142 /* SecureEnclaveValet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureEnclaveValet.swift; sourceTree = "<group>"; };
 		1612FD7C22A9CAAB00FC1142 /* Identifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
 		1612FDD322A9CB2200FC1142 /* LegacyValet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LegacyValet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -606,7 +601,6 @@
 				1612FD7722A9CAAB00FC1142 /* Valet.h */,
 				1612FD7822A9CAAB00FC1142 /* SecureEnclaveAccessControl.swift */,
 				1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */,
-				1612FD7A22A9CAAB00FC1142 /* SwiftCompatibility.swift */,
 				1612FD7B22A9CAAB00FC1142 /* SecureEnclaveValet.swift */,
 				1612FD7C22A9CAAB00FC1142 /* Identifier.swift */,
 				1612FD7022A9CAAB00FC1142 /* Internal */,
@@ -1504,7 +1498,6 @@
 				1612FDBB22A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */,
 				1612FD8F22A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9322A9CAAB00FC1142 /* SecItem.swift in Sources */,
-				1612FDB722A9CAAB00FC1142 /* SwiftCompatibility.swift in Sources */,
 				32E7115B2336B03800018E15 /* SinglePromptSecureEnclaveValet.swift in Sources */,
 				1612FDBF22A9CAAB00FC1142 /* Identifier.swift in Sources */,
 				1612FD8B22A9CAAB00FC1142 /* CloudAccessibility.swift in Sources */,
@@ -1541,7 +1534,6 @@
 				1612FDBC22A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */,
 				1612FD9022A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9422A9CAAB00FC1142 /* SecItem.swift in Sources */,
-				1612FDB822A9CAAB00FC1142 /* SwiftCompatibility.swift in Sources */,
 				32E7115C2336B03800018E15 /* SinglePromptSecureEnclaveValet.swift in Sources */,
 				1612FDC022A9CAAB00FC1142 /* Identifier.swift in Sources */,
 				1612FD8C22A9CAAB00FC1142 /* CloudAccessibility.swift in Sources */,
@@ -1572,7 +1564,6 @@
 				1612FDB922A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */,
 				1612FD8D22A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9122A9CAAB00FC1142 /* SecItem.swift in Sources */,
-				1612FDB522A9CAAB00FC1142 /* SwiftCompatibility.swift in Sources */,
 				1612FDBD22A9CAAB00FC1142 /* Identifier.swift in Sources */,
 				1612FDB122A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift in Sources */,
 				1612FD8922A9CAAB00FC1142 /* CloudAccessibility.swift in Sources */,
@@ -1594,7 +1585,6 @@
 				1612FDBA22A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */,
 				1612FD8E22A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9222A9CAAB00FC1142 /* SecItem.swift in Sources */,
-				1612FDB622A9CAAB00FC1142 /* SwiftCompatibility.swift in Sources */,
 				1612FDBE22A9CAAB00FC1142 /* Identifier.swift in Sources */,
 				1612FDB222A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift in Sources */,
 				1612FD8A22A9CAAB00FC1142 /* CloudAccessibility.swift in Sources */,

@@ -103,15 +103,9 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             return
         }
 
-        #if swift(>=4.1)
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
             return .valet(with: valet.identifier, accessControl: accessControl)
         }
-        #else
-        let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().flatMap { accessControl in
-            return .valet(with: valet.identifier, accessControl: accessControl)
-        }
-        #endif
 
         for permutation in permutations {
             XCTAssertTrue(permutation.canAccessKeychain())
@@ -132,15 +126,9 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             XCTFail()
         #endif
 
-        #if swift(>=4.1)
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
             return .sharedAccessGroupValet(with: sharedAccessGroupIdentifier, accessControl: accessControl)
         }
-        #else
-        let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().flatMap { accessControl in
-            return .sharedAccessGroupValet(with: sharedAccessGroupIdentifier, accessControl: accessControl)
-        }
-        #endif
 
         for permutation in permutations {
             XCTAssertTrue(permutation.canAccessKeychain())
