@@ -242,6 +242,25 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         return migrateObjects(matching: keychain.keychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
+    #if os(macOS)
+    /// Migrates objects that were written to this Valet prior to macOS 10.15 to a format that can be read from macOS 10.15 and later.
+    /// - returns: Whether the migration succeeded or failed.
+    /// - note: The keychain is not modified if a failure occurs. This method can only be called from macOS 10.15 or later.
+    /// - warning: Due to how Apple changed the mechanics of the keychain in macOS 10.15, this method may migrate objects written to the keychain prior to macOS 10.15 from Valets with the same identifier but different accessibility. This method may also migrate keychain objects written to the keychain prior to macOS 10.15 from an iCloud Valet with the same identifier.
+    @available(macOS 10.15, *)
+    @objc(migrateObjectsFromPreCatalina)
+    public func migrateObjectsFromPreCatalina() -> MigrationResult {
+        var baseQuery = keychainQuery
+        #if swift(>=5.1)
+        baseQuery[kSecUseDataProtectionKeychain as String] = false
+        #else
+        baseQuery["nleg"] = false // kSecUseDataProtectionKeychain for Xcode 9 and Xcode 10 compatibility.
+        #endif
+
+        return migrateObjects(matching: baseQuery, removeOnCompletion: true)
+    }
+    #endif
+
     // MARK: Internal Properties
 
     internal let configuration: Configuration

@@ -91,5 +91,33 @@ class ValetMacTests: XCTestCase
         // If you add a breakpoint here then manually inspect the keychain via Keychain.app (search for "MacOSVulnTest"), "xctest" should be the only member of the Access Control list.
         // This is not be the case upon setting a breakpoint and inspecting before the valet.setString(, forKey:) call above.
     }
+
+    // MARK: Migration - PreCatalina
+
+    func test_migrateObjectsFromPreCatalina_migratesDataWrittenPreCatalina() {
+        guard #available(macOS 10.15, *) else { return }
+
+        let valet = Valet.valet(with: Identifier(nonEmpty: "PreCatalinaTest")!, accessibility: .afterFirstUnlock)
+        var preCatalinaWriteQuery = valet.keychainQuery
+        #if swift(>=5.1)
+        preCatalinaWriteQuery[kSecUseDataProtectionKeychain as String] = nil
+        #else
+        preCatalinaWriteQuery["nleg"] = nil // kSecUseDataProtectionKeychain for Xcode 9 and Xcode 10 compatibility.
+        #endif
+
+        let key = "PreCatalinaKey"
+        let object = Data("PreCatalinaValue".utf8)
+        preCatalinaWriteQuery[kSecAttrAccount as String] = key
+        preCatalinaWriteQuery[kSecValueData as String] = object
+
+        // Make sure the item is not in the keychain before we start this test
+        SecItemDelete(preCatalinaWriteQuery as CFDictionary)
+
+        XCTAssertEqual(SecItemAdd(preCatalinaWriteQuery as CFDictionary, nil), errSecSuccess)
+        XCTAssertNil(valet.object(forKey: key))
+        XCTAssertEqual(valet.migrateObjectsFromPreCatalina(), .success)
+        XCTAssertEqual(valet.object(forKey: key), object)
+    }
+
 }
 #endif
