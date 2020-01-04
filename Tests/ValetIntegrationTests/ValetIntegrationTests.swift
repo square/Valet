@@ -222,7 +222,7 @@ class ValetIntegrationTests: XCTestCase
         XCTAssertEqual(differingIdentifier.allKeys(), Set())
 
         // Different Accessibility
-        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .always)
+        let differingAccessibility = Valet.valet(with: vanillaValet.identifier, accessibility: .always)
         XCTAssertEqual(differingAccessibility.allKeys(), Set())
 
         // Different Kind
@@ -495,7 +495,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_removeObjectForKey_isDistinctForDifferingAccessibility()
     {
-        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .always)
+        let differingAccessibility = Valet.valet(with: vanillaValet.identifier, accessibility: .always)
         XCTAssertTrue(vanillaValet.set(string: passcode, forKey: key))
 
         XCTAssertTrue(differingAccessibility.removeObject(forKey: key))
@@ -539,7 +539,7 @@ class ValetIntegrationTests: XCTestCase
         vanillaValet.set(string: passcode, forKey: key)
 
         // Test for base query success.
-        XCTAssertEqual(anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: false), .success)
+        XCTAssertEqual(anotherFlavor.migrateObjects(matching: vanillaValet.keychainQuery, removeOnCompletion: false), .success)
         XCTAssertEqual(passcode, anotherFlavor.string(forKey: key))
 
         var mutableQuery = vanillaValet.keychainQuery
@@ -570,8 +570,8 @@ class ValetIntegrationTests: XCTestCase
         XCTAssertEqual(noItemsFoundError, vanillaValet.migrateObjects(matching: queryWithNoMatches, removeOnCompletion: true))
 
         // Our test Valet has not yet been written to, migration should fail:
-        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: false))
-        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: valet.keychainQuery, removeOnCompletion: true))
+        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: vanillaValet.keychainQuery, removeOnCompletion: false))
+        XCTAssertEqual(noItemsFoundError, anotherFlavor.migrateObjects(matching: vanillaValet.keychainQuery, removeOnCompletion: true))
     }
 
     func test_migrateObjectsMatching_bailsOutIfConflictExistsInQueryResult()

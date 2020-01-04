@@ -33,7 +33,8 @@ extension CloudIntegrationTests {
             return
         }
 
-        Valet.iCloudCurrentAndLegacyPermutations(with: valet.identifier).forEach { permutation, legacyValet in
+        let identifier = Identifier(nonEmpty: "BackwardsCompatibilityTest")!
+        Valet.iCloudCurrentAndLegacyPermutations(with: identifier).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))

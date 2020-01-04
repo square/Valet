@@ -53,8 +53,9 @@ class CloudIntegrationTests: XCTestCase
             return
         }
 
-        let iCloudValet = Valet.iCloudValet(with: identifier, accessibility: accessibility)
-        let vanillaValet = Valet.valet(with: iCloudValet.identifier, accessibility: iCloudValet.accessibility)
+        let identifier = Identifier(nonEmpty: "DistinctTest")!
+        let vanillaValet = Valet.valet(with: identifier, accessibility: .afterFirstUnlock)
+        let iCloudValet = Valet.iCloudValet(with: identifier, accessibility: .afterFirstUnlock)
 
         // Setting
         XCTAssertTrue(iCloudValet.set(string: "butts", forKey: "cloud"))
