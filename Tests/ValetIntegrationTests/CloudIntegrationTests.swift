@@ -28,7 +28,6 @@ class CloudIntegrationTests: XCTestCase
 {
     static let identifier = Valet.sharedAccessGroupIdentifier
     static let accessibility = CloudAccessibility.whenUnlocked
-    let valet = Valet.iCloudValet(with: identifier, accessibility: accessibility)
     var allPermutations: [Valet] {
         return (testEnvironmentIsSigned()
             ? Valet.iCloudPermutations(with: CloudIntegrationTests.identifier) + Valet.iCloudPermutations(with: ValetIntegrationTests.identifier, shared: true)
@@ -44,8 +43,7 @@ class CloudIntegrationTests: XCTestCase
         ErrorHandler.customAssertBody = { _, _, _, _ in
             // Nothing to do here.
         }
-        
-        valet.removeAllObjects()
+
         allPermutations.forEach { testValet in testValet.removeAllObjects() }
     }
     
@@ -54,18 +52,19 @@ class CloudIntegrationTests: XCTestCase
         guard testEnvironmentIsSigned() else {
             return
         }
-        
-        let localValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
+
+        let iCloudValet = Valet.iCloudValet(with: identifier, accessibility: accessibility)
+        let vanillaValet = Valet.valet(with: iCloudValet.identifier, accessibility: iCloudValet.accessibility)
 
         // Setting
-        XCTAssertTrue(valet.set(string: "butts", forKey: "cloud"))
-        XCTAssertEqual("butts", valet.string(forKey: "cloud"))
-        XCTAssertNil(localValet.string(forKey: "cloud"))
+        XCTAssertTrue(iCloudValet.set(string: "butts", forKey: "cloud"))
+        XCTAssertEqual("butts", iCloudValet.string(forKey: "cloud"))
+        XCTAssertNil(vanillaValet.string(forKey: "cloud"))
         
         // Removal
-        XCTAssertTrue(localValet.set(string: "snake people", forKey: "millennials"))
-        XCTAssertTrue(valet.removeObject(forKey: "millennials"))
-        XCTAssertEqual("snake people", localValet.string(forKey: "millennials"))
+        XCTAssertTrue(vanillaValet.set(string: "snake people", forKey: "millennials"))
+        XCTAssertTrue(iCloudValet.removeObject(forKey: "millennials"))
+        XCTAssertEqual("snake people", vanillaValet.string(forKey: "millennials"))
     }
     
     func test_setStringForKey()
