@@ -87,7 +87,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
     // MARK: Tests
 
     func test_backwardsCompatibility_withLegacyValet() throws {
-        try Valet.currentAndLegacyPermutations(with: valet.identifier).forEach { permutation, legacyValet in
+        try Valet.currentAndLegacyPermutations(with: vanillaValet.identifier).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))

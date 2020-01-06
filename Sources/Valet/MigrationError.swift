@@ -21,7 +21,7 @@ import Foundation
 
 
 @objc(VALMigrationResult)
-public enum MigrationError: Int, Error, Equatable {
+public enum MigrationError: Int, Error, Equatable, CustomStringConvertible {
     /// Migration failed because the keychain query was not valid.
     case invalidQuery
     /// Migration failed because a key in the query result could not be read.
@@ -34,4 +34,17 @@ public enum MigrationError: Int, Error, Equatable {
     case keyInQueryResultAlreadyExistsInValet
     /// Migration failed because removing the migrated data from the keychain failed.
     case removalFailed
+
+    // MARK: CustomStringConvertible
+
+    public var description: String {
+        switch self {
+        case .invalidQuery: return "invalidQuery"
+        case .keyInQueryResultInvalid: return "keyInQueryResultInvalid"
+        case .dataInQueryResultInvalid: return "dataInQueryResultInvalid"
+        case .duplicateKeyInQueryResult: return "duplicateKeyInQueryResult"
+        case .keyInQueryResultAlreadyExistsInValet: return "keyInQueryResultAlreadyExistsInValet"
+        case .removalFailed: return "removalFailed"
+        }
+    }
 }

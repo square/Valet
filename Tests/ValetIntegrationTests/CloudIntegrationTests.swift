@@ -26,9 +26,13 @@ import XCTest
 
 class CloudIntegrationTests: XCTestCase
 {
-    static let identifier = Identifier(nonEmpty: "valet_testing")!
+    static let identifier = Valet.sharedAccessGroupIdentifier
     static let accessibility = CloudAccessibility.whenUnlocked
-    let valet = Valet.iCloudValet(with: identifier, accessibility: accessibility)
+    var allPermutations: [Valet] {
+        return (testEnvironmentIsSigned()
+            ? Valet.iCloudPermutations(with: CloudIntegrationTests.identifier) + Valet.iCloudPermutations(with: ValetIntegrationTests.identifier, shared: true)
+            : [])
+    }
     let key = "key"
     let passcode = "topsecret"
     
@@ -36,9 +40,6 @@ class CloudIntegrationTests: XCTestCase
     {
         super.setUp()
         
-        try? valet.removeAllObjects()
-        let identifier = CloudTests.identifier
-        let allPermutations = Valet.iCloudPermutations(with: identifier) + Valet.iCloudPermutations(with: identifier, shared: true)
         allPermutations.forEach { testValet in try? testValet.removeAllObjects() }
     }
     
@@ -47,47 +48,45 @@ class CloudIntegrationTests: XCTestCase
         guard testEnvironmentIsSigned() else {
             return
         }
-        
-        let localValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
+
+        let identifier = Identifier(nonEmpty: "DistinctTest")!
+        let vanillaValet = Valet.valet(with: identifier, accessibility: .afterFirstUnlock)
+        let iCloudValet = Valet.iCloudValet(with: identifier, accessibility: .afterFirstUnlock)
 
         // Setting
-        try valet.setString("butts", forKey: "cloud")
-        XCTAssertEqual("butts", try valet.string(forKey: "cloud"))
-        XCTAssertThrowsError(try localValet.string(forKey: "cloud")) { error in
+        try iCloudValet.setString("butts", forKey: "cloud")
+        XCTAssertEqual("butts", try iCloudValet.string(forKey: "cloud"))
+        XCTAssertThrowsError(try vanillaValet.string(forKey: "cloud")) { error in
             XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
         
         // Removal
-        try localValet.setString("snake people", forKey: "millennials")
-        try valet.removeObject(forKey: "millennials")
-        XCTAssertEqual("snake people", try localValet.string(forKey: "millennials"))
+        try vanillaValet.setString("snake people", forKey: "millennials")
+        try iCloudValet.removeObject(forKey: "millennials")
+        XCTAssertEqual("snake people", try vanillaValet.string(forKey: "millennials"))
     }
     
     func test_setStringForKey() throws
     {
-        guard testEnvironmentIsSigned() else {
-            return
+        try allPermutations.forEach { valet in
+            XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
+            try valet.setString(passcode, forKey: key)
+            XCTAssertEqual(passcode, try valet.string(forKey: key))
         }
-
-        XCTAssertThrowsError(try valet.string(forKey: key)) { error in
-            XCTAssertEqual(error as? KeychainError, .itemNotFound)
-        }
-        try valet.setString(passcode, forKey: key)
-        XCTAssertEqual(passcode, try valet.string(forKey: key))
     }
     
     func test_removeObjectForKey() throws
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
-        try valet.setString(passcode, forKey: key)
-        XCTAssertEqual(passcode, try valet.string(forKey: key))
-        
-        try valet.removeObject(forKey: key)
-        XCTAssertThrowsError(try valet.string(forKey: key)) { error in
-            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+       try allPermutations.forEach { valet in
+            try valet.setString(passcode, forKey: key)
+            XCTAssertEqual(passcode, try valet.string(forKey: key))
+
+            try valet.removeObject(forKey: key)
+            XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
     }
     
@@ -95,23 +94,8 @@ class CloudIntegrationTests: XCTestCase
     
     func test_canAccessKeychain()
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
-        Valet.iCloudPermutations(with: valet.identifier).forEach { permutation in
-            XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
+       try allPermutations.forEach { valet in
+            XCTAssertTrue(valet.canAccessKeychain(), "\(valet) could not access keychain.")
         }
     }
-    
-    func test_canAccessKeychain_sharedAccessGroup()
-    {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-        
-        Valet.iCloudPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation in
-            XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
-        }
-    }    
 }
