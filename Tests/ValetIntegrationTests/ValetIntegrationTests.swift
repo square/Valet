@@ -665,9 +665,10 @@ class ValetIntegrationTests: XCTestCase
     {
         let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
         try migrationValet.removeAllObjects()
-        
+
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
         try vanillaValet.setString(passcode, forKey: key)
-        try anotherFlavor.setString(passcode, forKey:key)
+        try anotherValet.setString(passcode, forKey:key)
 
         let conflictingQuery = [
             kSecClass as String: kSecClassGenericPassword as String,
