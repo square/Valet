@@ -286,7 +286,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     #if !os(macOS)
-    func test_objectForKey_canReadItemsWithout_kSecUseDataProtectionKeychain_when_kSecUseDataProtectionKeychain_isSetToTrue() {
+    func test_objectForKey_canReadItemsWithout_kSecUseDataProtectionKeychain_when_kSecUseDataProtectionKeychain_isSetToTrueInKeychainQuery() {
         let valet = Valet.valet(with: Identifier(nonEmpty: "DataProtectionTest")!, accessibility: .afterFirstUnlock)
         var dataProtectionWriteQuery = valet.keychainQuery
         #if swift(>=5.1)
