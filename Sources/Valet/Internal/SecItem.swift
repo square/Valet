@@ -78,8 +78,6 @@ internal final class SecItem {
         ]
 
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
-            // Update the account to be distinct, since we're changing the query.
-            query[kSecAttrAccount] = "SharedAccessGroupAlwaysAccessiblePrefixPlaceholderWithDataProtection"
             // Add kSecUseDataProtectionKeychain to the query to ensure we can retrieve the shared access group prefix.
             #if swift(>=5.1)
             query[kSecUseDataProtectionKeychain] = true
