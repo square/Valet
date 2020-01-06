@@ -95,7 +95,12 @@ class ValetMacTests: XCTestCase
     // MARK: Migration - PreCatalina
 
     func test_migrateObjectsFromPreCatalina_migratesDataWrittenPreCatalina() {
-        guard #available(macOS 10.15, *) else { return }
+        guard #available(macOS 10.15, *) else {
+            return
+        }
+        guard testEnvironmentIsSigned() else {
+            return
+        }
 
         let valet = Valet.valet(with: Identifier(nonEmpty: "PreCatalinaTest")!, accessibility: .afterFirstUnlock)
         var preCatalinaWriteQuery = valet.keychainQuery
