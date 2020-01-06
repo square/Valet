@@ -256,7 +256,8 @@ public final class Valet: NSObject, KeychainQueryConvertible {
         baseQuery["nleg"] = false // kSecUseDataProtectionKeychain for Xcode 9 and Xcode 10 compatibility.
         #endif
 
-        return migrateObjects(matching: baseQuery, removeOnCompletion: true)
+        // We do not need to remove these items on completion, since we are updating the kSecUseDataProtectionKeychain attribute in-place.
+        return migrateObjects(matching: baseQuery, removeOnCompletion: false)
     }
     #endif
 
