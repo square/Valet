@@ -288,6 +288,15 @@ public final class Valet: NSObject {
             return .couldNotReadKeychain
         }
         keychainQuery[kSecAttrAccessible as String] = "dk" // kSecAttrAccessibleAlways, but with the value hardcoded to avoid a build warning.
+        let accessibilityDescription = "AccessibleAlways"
+        let serviceAttribute: String
+        switch service {
+        case .sharedAccessGroup:
+            serviceAttribute = Service.sharedAccessGroup(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
+        case .standard:
+            serviceAttribute = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
+        }
+        keychainQuery[kSecAttrService as String] = serviceAttribute
         return migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
@@ -302,6 +311,15 @@ public final class Valet: NSObject {
             return .couldNotReadKeychain
         }
         keychainQuery[kSecAttrAccessible as String] = "dku" // kSecAttrAccessibleAlwaysThisDeviceOnly, but with the value hardcoded to avoid a build warning.
+        let accessibilityDescription = "AccessibleAlwaysThisDeviceOnly"
+        let serviceAttribute: String
+        switch service {
+        case .sharedAccessGroup:
+            serviceAttribute = Service.sharedAccessGroup(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
+        case .standard:
+            serviceAttribute = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
+        }
+        keychainQuery[kSecAttrService as String] = serviceAttribute
         return migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
     }
 

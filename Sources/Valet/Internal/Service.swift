@@ -36,7 +36,17 @@ internal enum Service: CustomStringConvertible, Equatable {
     internal var description: String {
         secService
     }
-    
+
+    // MARK: Internal Static Methods
+
+    internal static func standard(with configuration: Configuration, identifier: Identifier, accessibilityDescription: String) -> String {
+        "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
+    }
+
+    internal static func sharedAccessGroup(with configuration: Configuration, identifier: Identifier, accessibilityDescription: String) -> String {
+        "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
+    }
+
     // MARK: Internal Methods
     
     internal func generateBaseQuery() -> [String : AnyHashable]? {
@@ -82,9 +92,9 @@ internal enum Service: CustomStringConvertible, Equatable {
         var service: String
         switch self {
         case let .standard(identifier, configuration):
-            service = "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(configuration.accessibility.description)"
+            service = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
         case let .sharedAccessGroup(identifier, configuration):
-            service = "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(configuration.accessibility.description)"
+            service = Service.sharedAccessGroup(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
         }
         
         let configuration: Configuration
