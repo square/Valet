@@ -290,7 +290,7 @@ class ValetIntegrationTests: XCTestCase
         let valet = Valet.valet(with: Identifier(nonEmpty: "DataProtectionTest")!, accessibility: .afterFirstUnlock)
         var dataProtectionWriteQuery = valet.keychainQuery
         #if swift(>=5.1)
-        preCatalinaWriteQuery[kSecUseDataProtectionKeychain as String] = nil
+        dataProtectionWriteQuery[kSecUseDataProtectionKeychain as String] = nil
         #else
         dataProtectionWriteQuery["nleg"] = nil // kSecUseDataProtectionKeychain for Xcode 9 and Xcode 10 compatibility.
         #endif
