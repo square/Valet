@@ -70,23 +70,32 @@ internal final class SecItem {
 
     /// Programatically grab the required prefix for the shared access group (i.e. Bundle Seed ID). The value for the kSecAttrAccessGroup key in queries for data that is shared between apps must be of the format bundleSeedID.sharedAccessGroup. For more information on the Bundle Seed ID, see https://developer.apple.com/library/ios/qa/qa1713/_index.html
     internal static var sharedAccessGroupPrefix: String {
-        let query = [
+        var query: [CFString : Any] = [
             kSecClass : kSecClassGenericPassword,
             kSecAttrAccount : "SharedAccessGroupAlwaysAccessiblePrefixPlaceholder",
             kSecReturnAttributes : true,
-            kSecAttrAccessible : Accessibility.alwaysThisDeviceOnly.secAccessibilityAttribute
-            ] as CFDictionary
-        
+            kSecAttrAccessible : Accessibility.alwaysThisDeviceOnly.secAccessibilityAttribute,
+        ]
+
+        if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+            // Add kSecUseDataProtectionKeychain to the query to ensure we can retrieve the shared access group prefix.
+            #if swift(>=5.1)
+            query[kSecUseDataProtectionKeychain] = true
+            #else
+            query["nleg" as CFString] = true // kSecUseDataProtectionKeychain for Xcode 9 and Xcode 10 compatibility.
+            #endif
+        }
+
         secItemLock.lock()
         defer {
             secItemLock.unlock()
         }
         
         var result: AnyObject? = nil
-        var status = SecItemCopyMatching(query, &result)
+        var status = SecItemCopyMatching(query as CFDictionary, &result)
         
         if status == errSecItemNotFound {
-            status = SecItemAdd(query, &result)
+            status = SecItemAdd(query as CFDictionary, &result)
         }
         
         guard status == errSecSuccess, let queryResult = result as? [CFString : AnyHashable], let accessGroup = queryResult[kSecAttrAccessGroup] as? String else {
