@@ -287,6 +287,14 @@ public final class Valet: NSObject {
         guard var keychainQuery = keychainQuery else {
             return .couldNotReadKeychain
         }
+
+        #if os(macOS)
+        if #available(OSX 10.15, *) {
+            // Don't over-specify our query. We don't know if the values were written post-Catalina.
+            keychainQuery[kSecUseDataProtectionKeychain as String] = nil
+        }
+        #endif
+
         keychainQuery[kSecAttrAccessible as String] = "dk" // kSecAttrAccessibleAlways, but with the value hardcoded to avoid a build warning.
         let accessibilityDescription = "AccessibleAlways"
         let serviceAttribute: String
@@ -310,6 +318,14 @@ public final class Valet: NSObject {
         guard var keychainQuery = keychainQuery else {
             return .couldNotReadKeychain
         }
+
+        #if os(macOS)
+        if #available(OSX 10.15, *) {
+            // Don't over-specify our query. We don't know if the values were written post-Catalina.
+            keychainQuery[kSecUseDataProtectionKeychain as String] = nil
+        }
+        #endif
+
         keychainQuery[kSecAttrAccessible as String] = "dku" // kSecAttrAccessibleAlwaysThisDeviceOnly, but with the value hardcoded to avoid a build warning.
         let accessibilityDescription = "AccessibleAlwaysThisDeviceOnly"
         let serviceAttribute: String
