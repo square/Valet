@@ -138,10 +138,6 @@ class ValetMacTests: XCTestCase
             Valet.iCloudValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery?[kSecAttrService as String],
             explicitlySetIdentifier.description)
 
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
             XCTAssertTrue($0.canAccessKeychain())
         }
@@ -183,6 +179,37 @@ class ValetMacTests: XCTestCase
             XCTAssertTrue($0.set(string: passcode, forKey: key))
             XCTAssertEqual($0.string(forKey: key), passcode)
         }
+    }
+
+    // MARK: Migration - PreCatalina
+
+    func test_migrateObjectsFromPreCatalina_migratesDataWrittenPreCatalina() {
+        guard #available(macOS 10.15, *) else {
+            return
+        }
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let valet = Valet.valet(with: Identifier(nonEmpty: "PreCatalinaTest")!, accessibility: .afterFirstUnlock)
+        guard var preCatalinaWriteQuery = valet.keychainQuery else {
+            XCTFail()
+            return
+        }
+        preCatalinaWriteQuery[kSecUseDataProtectionKeychain as String] = nil
+
+        let key = "PreCatalinaKey"
+        let object = Data("PreCatalinaValue".utf8)
+        preCatalinaWriteQuery[kSecAttrAccount as String] = key
+        preCatalinaWriteQuery[kSecValueData as String] = object
+
+        // Make sure the item is not in the keychain before we start this test
+        SecItemDelete(preCatalinaWriteQuery as CFDictionary)
+
+        XCTAssertEqual(SecItemAdd(preCatalinaWriteQuery as CFDictionary, nil), errSecSuccess)
+        XCTAssertNil(valet.object(forKey: key))
+        XCTAssertEqual(valet.migrateObjectsFromPreCatalina(), .success)
+        XCTAssertEqual(valet.object(forKey: key), object)
     }
 
 }

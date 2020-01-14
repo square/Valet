@@ -29,9 +29,6 @@ class ValetTests: XCTestCase
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = Valet.valet(with: identifier, accessibility: .whenUnlocked)
 
-    // FIXME: Need a different flavor (Synchronizable can't be tested on Mac currently
-    let anotherFlavor = Valet.iCloudValet(with: identifier, accessibility: .whenUnlocked)
-
     // MARK: XCTestCase
 
     override func setUp()
@@ -43,7 +40,6 @@ class ValetTests: XCTestCase
         }
         
         valet.removeAllObjects()
-        anotherFlavor.removeAllObjects()
     }
 
     // MARK: Initialization
@@ -95,6 +91,7 @@ class ValetTests: XCTestCase
 
     func test_differentValetFlavorsWithEquivalentConfiguration_areNotEqual()
     {
+        let anotherFlavor = Valet.iCloudValet(with: ValetTests.identifier, accessibility: .whenUnlocked)
         XCTAssertFalse(valet == anotherFlavor)
         XCTAssertFalse(valet === anotherFlavor)
     }

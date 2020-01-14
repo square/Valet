@@ -34,7 +34,10 @@ class SecItemTests: XCTestCase {
                 XCTAssertEqual(SecItem.sharedAccessGroupPrefix, "9XUJ7M53NG")
             #endif
         #elseif os(macOS)
-            // Do nothing.
+            guard testEnvironmentIsSigned() else {
+                return
+            }
+            XCTAssertEqual(SecItem.sharedAccessGroupPrefix, "9XUJ7M53NG")
         #else
             // Currently unsupported build configuration. This next line will compile-time error.
             doNotCommentOutThisLine()
