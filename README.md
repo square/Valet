@@ -62,7 +62,7 @@ Install with [Swift Package Manager](https://github.com/apple/swift-package-mana
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Square/Valet", from: "3.0.0"),
+    .package(url: "https://github.com/Square/Valet", from: "4.0.0"),
 ],
 ```
 
@@ -188,7 +188,7 @@ Valet guarantees it will never fail to write to or read from the keychain unless
 
 ## Requirements
 
-* Xcode 11.0 or later. Xcode 10 and Xcode 9 require [Valet version 3.2.6](https://github.com/square/Valet/releases/tag/3.2.6). Earlier versions of Xcode require [Valet version 2.4.2](https://github.com/square/Valet/releases/tag/2.4.2).
+* Xcode 11.0 or later. Xcode 10 and Xcode 9 require [Valet version 3.2.8](https://github.com/square/Valet/releases/tag/3.2.8). Earlier versions of Xcode require [Valet version 2.4.2](https://github.com/square/Valet/releases/tag/2.4.2).
 * iOS 9 or later.
 * tvOS 9 or later.
 * watchOS 2 or later.
