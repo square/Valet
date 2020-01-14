@@ -300,7 +300,9 @@ class ValetIntegrationTests: XCTestCase
             XCTFail()
             return
         }
-        dataProtectionWriteQuery[kSecUseDataProtectionKeychain as String] = nil
+        if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+            dataProtectionWriteQuery[kSecUseDataProtectionKeychain as String] = nil
+        }
 
         let key = "DataProtectionKey"
         let object = Data("DataProtectionValue".utf8)
