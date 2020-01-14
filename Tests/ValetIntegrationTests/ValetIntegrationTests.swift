@@ -292,6 +292,28 @@ class ValetIntegrationTests: XCTestCase
 
         XCTAssertNil(anotherFlavor.string(forKey: "cookie"))
     }
+
+    #if !os(macOS)
+    func test_objectForKey_canReadItemsWithout_kSecUseDataProtectionKeychain_when_kSecUseDataProtectionKeychain_isSetToTrueInKeychainQuery() {
+        let valet = Valet.valet(with: Identifier(nonEmpty: "DataProtectionTest")!, accessibility: .afterFirstUnlock)
+        guard var dataProtectionWriteQuery = valet.keychainQuery else {
+            XCTFail()
+            return
+        }
+        dataProtectionWriteQuery[kSecUseDataProtectionKeychain as String] = nil
+
+        let key = "DataProtectionKey"
+        let object = Data("DataProtectionValue".utf8)
+        dataProtectionWriteQuery[kSecAttrAccount as String] = key
+        dataProtectionWriteQuery[kSecValueData as String] = object
+
+        // Make sure the item is not in the keychain before we start this test
+        SecItemDelete(dataProtectionWriteQuery as CFDictionary)
+
+        XCTAssertEqual(SecItemAdd(dataProtectionWriteQuery as CFDictionary, nil), errSecSuccess)
+        XCTAssertEqual(valet.object(forKey: key), object) // If this breaks, it means Apple has changed behavior of SecItemCopy. It means that we need to remove `kSecUseDataProtectionKeychain` from our query on non-Mac platforms.
+    }
+    #endif
     
     // MARK: set(string:forKey:)
 
