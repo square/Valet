@@ -267,8 +267,25 @@ public final class Valet: NSObject {
     @objc
     public func migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion: Bool) throws {
         var keychainQuery = try execute(in: lock) { try self.keychainQuery() }
+
+        #if os(macOS)
+        if #available(OSX 10.15, *) {
+            // Don't over-specify our query. We don't know if the values were written post-Catalina.
+            keychainQuery[kSecUseDataProtectionKeychain as String] = nil
+        }
+        #endif
+
         keychainQuery[kSecAttrAccessible as String] = "dk" // kSecAttrAccessibleAlways, but with the value hardcoded to avoid a build warning.
-        return try migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
+        let accessibilityDescription = "AccessibleAlways"
+        let serviceAttribute: String
+        switch service {
+        case .sharedAccessGroup:
+            serviceAttribute = Service.sharedAccessGroup(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
+        case .standard:
+            serviceAttribute = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
+        }
+        keychainQuery[kSecAttrService as String] = serviceAttribute
+        try migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
     /// Call this method if your Valet used to have its accessibility set to `alwaysThisDeviceOnly`.
@@ -278,9 +295,40 @@ public final class Valet: NSObject {
     @objc
     public func migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion: Bool) throws {
         var keychainQuery = try execute(in: lock) { try self.keychainQuery() }
+
+        #if os(macOS)
+        if #available(OSX 10.15, *) {
+            // Don't over-specify our query. We don't know if the values were written post-Catalina.
+            keychainQuery[kSecUseDataProtectionKeychain as String] = nil
+        }
+        #endif
+
         keychainQuery[kSecAttrAccessible as String] = "dku" // kSecAttrAccessibleAlwaysThisDeviceOnly, but with the value hardcoded to avoid a build warning.
-        return try migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
+        let accessibilityDescription = "AccessibleAlwaysThisDeviceOnly"
+        let serviceAttribute: String
+        switch service {
+        case .sharedAccessGroup:
+            serviceAttribute = Service.sharedAccessGroup(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
+        case .standard:
+            serviceAttribute = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
+        }
+        keychainQuery[kSecAttrService as String] = serviceAttribute
+        try migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
     }
+
+    #if os(macOS)
+    /// Migrates objects that were written to this Valet prior to macOS 10.15 to a format that can be read on macOS 10.15 and later. The new format is backwards compatible, allowing these values to be read on older operating systems.
+    /// - Note: The keychain is not modified if an error is thrown. Method will throw a `KeychainError` or `MigrationError` if an error occurs.
+    @available(macOS 10.15, *)
+    @objc
+    public func migrateObjectsFromPreCatalina() throws {
+        var keychainQuery = try execute(in: lock) { try self.keychainQuery() }
+        keychainQuery[kSecUseDataProtectionKeychain as String] = false
+
+        // We do not need to remove these items on completion, since we are updating the kSecUseDataProtectionKeychain attribute in-place.
+        try migrateObjects(matching: keychainQuery, removeOnCompletion: false)
+    }
+    #endif
 
     // MARK: Internal Properties
 

@@ -296,6 +296,27 @@ class ValetIntegrationTests: XCTestCase
             XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
     }
+
+    #if !os(macOS)
+    func test_objectForKey_canReadItemsWithout_kSecUseDataProtectionKeychain_when_kSecUseDataProtectionKeychain_isSetToTrueInKeychainQuery() throws {
+        let valet = Valet.valet(with: Identifier(nonEmpty: "DataProtectionTest")!, accessibility: .afterFirstUnlock)
+        var dataProtectionWriteQuery = try valet.keychainQuery()
+        if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+            dataProtectionWriteQuery[kSecUseDataProtectionKeychain as String] = nil
+        }
+
+        let key = "DataProtectionKey"
+        let object = Data("DataProtectionValue".utf8)
+        dataProtectionWriteQuery[kSecAttrAccount as String] = key
+        dataProtectionWriteQuery[kSecValueData as String] = object
+
+        // Make sure the item is not in the keychain before we start this test
+        SecItemDelete(dataProtectionWriteQuery as CFDictionary)
+
+        XCTAssertEqual(SecItemAdd(dataProtectionWriteQuery as CFDictionary, nil), errSecSuccess)
+        XCTAssertEqual(try valet.object(forKey: key), object) // If this breaks, it means Apple has changed behavior of SecItemCopy. It means that we need to remove `kSecUseDataProtectionKeychain` from our query on non-Mac platforms.
+    }
+    #endif
     
     // MARK: set(string:forKey:)
 

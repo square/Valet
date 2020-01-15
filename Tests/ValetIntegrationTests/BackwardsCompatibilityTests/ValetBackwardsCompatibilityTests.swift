@@ -68,14 +68,14 @@ internal extension Valet {
     // MARK: Permutations
 
     class func currentAndLegacyPermutations(with identifier: Identifier, shared: Bool = false) -> [(Valet, VALLegacyValet)] {
-        return permutations(with: identifier, shared: shared).map {
-            return ($0, $0.legacyValet)
+        permutations(with: identifier, shared: shared).map {
+            ($0, $0.legacyValet)
         }
     }
 
     class func iCloudCurrentAndLegacyPermutations(with identifier: Identifier, shared: Bool = false) -> [(Valet, VALSynchronizableValet)] {
-        return iCloudPermutations(with: identifier, shared: shared).map {
-            return ($0, $0.legacyValet as! VALSynchronizableValet)
+        iCloudPermutations(with: identifier, shared: shared).map {
+            ($0, $0.legacyValet as! VALSynchronizableValet)
         }
     }
 }
@@ -91,6 +91,11 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
+            if #available(OSX 10.15, *) {
+                #if os(macOS)
+                try permutation.migrateObjectsFromPreCatalina()
+                #endif
+            }
             XCTAssertEqual(legacyValet.string(forKey: key), try permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
         }
     }
@@ -103,8 +108,55 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
+            if #available(OSX 10.15, *) {
+                #if os(macOS)
+                try permutation.migrateObjectsFromPreCatalina()
+                #endif
+            }
             XCTAssertEqual(legacyValet.string(forKey: key), try permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
         }
+    }
+
+    func test_migrateObjectsFromAlwaysAccessibleValet_forwardsCompatibility_fromLegacyValet() throws {
+        let alwaysAccessibleLegacyValet = VALLegacyValet(identifier: vanillaValet.identifier.description, accessibility: .always)!
+        alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
+
+        let valet = Valet.valet(with: vanillaValet.identifier, accessibility: .afterFirstUnlock)
+        XCTAssertNoThrow(try valet.migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion: true))
+        XCTAssertEqual(try valet.string(forKey: key), passcode)
+    }
+
+    func test_migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet_forwardsCompatibility_fromLegacyValet() throws {
+        let alwaysAccessibleLegacyValet = VALLegacyValet(identifier: vanillaValet.identifier.description, accessibility: .alwaysThisDeviceOnly)!
+        alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
+
+        let valet = Valet.valet(with: vanillaValet.identifier, accessibility: .afterFirstUnlockThisDeviceOnly)
+        XCTAssertNoThrow(try valet.migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion: true))
+        XCTAssertEqual(try valet.string(forKey: key), passcode)
+    }
+
+    func test_migrateObjectsFromAlwaysAccessibleValet_forwardsCompatibility_withLegacySharedAccessGroupValet() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.description, accessibility: .always)!
+        alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
+
+        let valet = Valet.sharedAccessGroupValet(with: Valet.sharedAccessGroupIdentifier, accessibility: .afterFirstUnlock)
+        XCTAssertNoThrow(try valet.migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion: true))
+        XCTAssertEqual(try valet.string(forKey: key), passcode)
+    }
+
+    func test_migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet_forwardsCompatibility_withLegacySharedAccessGroupValet() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+        let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.description, accessibility: .alwaysThisDeviceOnly)!
+        alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
+
+        let valet = Valet.sharedAccessGroupValet(with: Valet.sharedAccessGroupIdentifier, accessibility: .afterFirstUnlockThisDeviceOnly)
+        XCTAssertNoThrow(try valet.migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion: true))
+        XCTAssertEqual(try valet.string(forKey: key), passcode)
     }
 
 }
