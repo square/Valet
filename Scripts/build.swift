@@ -131,31 +131,6 @@ enum Platform: String, CustomStringConvertible {
         }
     }
 
-    var enableCodeCoverage: Bool {
-        switch self {
-        case .tvOS_10,
-             .tvOS_11,
-             .tvOS_12,
-             .tvOS_13,
-             .macOS_10_12,
-             .macOS_10_13,
-             .macOS_10_14,
-             .macOS_10_15:
-            // We only enable code coverage on our tvOS and macOS targets.
-            return true
-
-        case .iOS_10,
-             .iOS_11,
-             .iOS_12,
-             .iOS_13,
-             .watchOS_3,
-             .watchOS_4,
-             .watchOS_5,
-             .watchOS_6:
-            return false
-        }
-    }
-
     var derivedDataPath: String {
         ".build/derivedData/" + description
     }
@@ -249,16 +224,6 @@ enum Task: String, CustomStringConvertible {
         }
     }
 
-    func enableCodeCoverage(on platform: Platform) -> Bool {
-        switch self {
-        case .spm:
-            // Our Package isn't set up with unit test targets, becuase SPM can't run unit tests in a codesigned environment.
-            return false
-        case .xcode:
-            return platform.enableCodeCoverage
-        }
-    }
-
     func shouldTest(on platform: Platform) -> Bool {
         switch self {
         case .spm:
@@ -306,14 +271,15 @@ for rawPlatform in rawPlatforms {
     if task.shouldUseLegacyBuildSystem {
         xcodeBuildArguments.append("-UseModernBuildSystem=0")
     }
-    if task.enableCodeCoverage(on: platform) {
+    let shouldTest = task.shouldTest(on: platform)
+    if shouldTest {
         xcodeBuildArguments.append("-enableCodeCoverage")
         xcodeBuildArguments.append("YES")
         xcodeBuildArguments.append("-derivedDataPath")
         xcodeBuildArguments.append(platform.derivedDataPath)
     }
     xcodeBuildArguments.append("build")
-    if task.shouldTest(on: platform) {
+    if shouldTest {
         xcodeBuildArguments.append("test")
     }
 

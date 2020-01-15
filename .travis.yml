@@ -7,21 +7,26 @@ script:
 matrix:
   include:
   - osx_image: xcode11.3
-    env: ACTION="xcode";PLATFORMS="iOS_10,watchOS_3";
-  - osx_image: xcode11.3
-    env: ACTION="xcode";PLATFORMS="iOS_11,watchOS_4";
-  - osx_image: xcode11.3
-    env: ACTION="xcode";PLATFORMS="iOS_12,watchOS_5";
-  - osx_image: xcode11.3
-    env: ACTION="xcode";PLATFORMS="iOS_13,watchOS_6";
-  - osx_image: xcode11.3
-    env: ACTION="xcode";PLATFORMS="macOS_10_15,tvOS_10,tvOS_11,tvOS_12,tvOS_13";
+    env: ACTION="xcode";PLATFORMS="iOS_10,tvOS_10,watchOS_3";
     after_success:
-       - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/macOS_10_15 -t 5165deef-da9c-443d-90ea-bb0620bffe44
-       - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/tvOS_10 -t 5165deef-da9c-443d-90ea-bb0620bffe44
-       - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/tvOS_11 -t 5165deef-da9c-443d-90ea-bb0620bffe44
-       - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/tvOS_12 -t 5165deef-da9c-443d-90ea-bb0620bffe44
-       - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/tvOS_13 -t 5165deef-da9c-443d-90ea-bb0620bffe44
+        - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/iOS_10 -t 5165deef-da9c-443d-90ea-bb0620bffe44
+        - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/tvOS_10 -t 5165deef-da9c-443d-90ea-bb0620bffe44
+  - osx_image: xcode11.3
+    env: ACTION="xcode";PLATFORMS="iOS_11,tvOS_11,watchOS_4";
+    after_success:
+        - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/iOS_11 -t 5165deef-da9c-443d-90ea-bb0620bffe44
+        - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/tvOS_11 -t 5165deef-da9c-443d-90ea-bb0620bffe44
+  - osx_image: xcode11.3
+    env: ACTION="xcode";PLATFORMS="iOS_12,tvOS_12,watchOS_5";
+    after_success:
+        - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/iOS_12 -t 5165deef-da9c-443d-90ea-bb0620bffe44
+        - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/tvOS_12 -t 5165deef-da9c-443d-90ea-bb0620bffe44
+  - osx_image: xcode11.3
+    env: ACTION="xcode";PLATFORMS="iOS_13,tvOS_13,macOS_10_15,watchOS_6";
+    after_success:
+        - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/iOS_13 -t 5165deef-da9c-443d-90ea-bb0620bffe44
+        - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/tvOS_13 -t 5165deef-da9c-443d-90ea-bb0620bffe44
+        - bash <(curl -s https://codecov.io/bash) -J '^Valet$' -D .build/derivedData/macOS_10_15 -t 5165deef-da9c-443d-90ea-bb0620bffe44
   - osx_image: xcode11.3
     env: ACTION="swift-package";PLATFORMS="iOS_13,tvOS_13,macOS_10_15,watchOS_6";
   - osx_image: xcode11.3
