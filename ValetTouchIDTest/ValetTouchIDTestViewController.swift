@@ -45,7 +45,7 @@ final class ValetTouchIDTestViewController : UIViewController
     @IBAction func setOrUpdateItem(sender: UIResponder)
     {
         let stringToSet = "I am here! " + NSUUID().uuidString
-        let setOrUpdatedItem = singlePromptSecureEnclaveValet.set(string: stringToSet, forKey: username)
+        let setOrUpdatedItem = singlePromptSecureEnclaveValet.setString(stringToSet, forKey: username)
         updateTextView(messageComponents: #function, (setOrUpdatedItem ? "Success" : "Failure"))
     }
     

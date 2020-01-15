@@ -151,20 +151,20 @@ public final class Valet: NSObject {
     /// - parameter object: A Data value to be inserted into the keychain.
     /// - parameter key: A Key that can be used to retrieve the `object` from the keychain.
     /// - returns: `false` if the keychain is not accessible.
-    @objc(setObject:forKey:)
+    @objc
     @discardableResult
-    public func set(object: Data, forKey key: String) -> Bool {
+    public func setObject(_ object: Data, forKey key: String) -> Bool {
         execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return false
             }
-            return Keychain.set(object: object, forKey: key, options: keychainQuery).didSucceed
+            return Keychain.setObject(object, forKey: key, options: keychainQuery).didSucceed
         }
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
-    @objc(objectForKey:)
+    @objc
     public func object(forKey key: String) -> Data? {
         execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
@@ -176,7 +176,7 @@ public final class Valet: NSObject {
     
     /// - parameter key: The key to look up in the keychain.
     /// - returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
-    @objc(containsObjectForKey:)
+    @objc
     public func containsObject(forKey key: String) -> Bool {
         execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
@@ -189,20 +189,20 @@ public final class Valet: NSObject {
     /// - parameter string: A String value to be inserted into the keychain.
     /// - parameter key: A Key that can be used to retrieve the `string` from the keychain.
     /// - returns: `true` if the operation succeeded, or `false` if the keychain is not accessible.
-    @objc(setString:forKey:)
+    @objc
     @discardableResult
-    public func set(string: String, forKey key: String) -> Bool {
+    public func setString(_ string: String, forKey key: String) -> Bool {
         execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return false
             }
-            return Keychain.set(string: string, forKey: key, options: keychainQuery).didSucceed
+            return Keychain.setString(string, forKey: key, options: keychainQuery).didSucceed
         }
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
     /// - returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
-    @objc(stringForKey:)
+    @objc
     public func string(forKey key: String) -> String? {
         execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
@@ -225,7 +225,7 @@ public final class Valet: NSObject {
     
     /// Removes a key/object pair from the keychain.
     /// - returns: `false` if the keychain is not accessible.
-    @objc(removeObjectForKey:)
+    @objc
     @discardableResult
     public func removeObject(forKey key: String) -> Bool {
         execute(in: lock) {
@@ -254,7 +254,7 @@ public final class Valet: NSObject {
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
-    @objc(migrateObjectsMatchingQuery:removeOnCompletion:)
+    @objc
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) -> MigrationResult {
         execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
@@ -269,7 +269,7 @@ public final class Valet: NSObject {
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
-    @objc(migrateObjectsFromValet:removeOnCompletion:)
+    @objc
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) -> MigrationResult {
         guard let keychainQuery = valet.keychainQuery else {
             return .couldNotReadKeychain
@@ -282,7 +282,7 @@ public final class Valet: NSObject {
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
-    @objc(migrateObjectsFromAlwaysAccessibleValetAndRemoveOnCompletion:)
+    @objc
     public func migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion: Bool) -> MigrationResult {
         guard var keychainQuery = keychainQuery else {
             return .couldNotReadKeychain
@@ -313,7 +313,7 @@ public final class Valet: NSObject {
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
-    @objc(migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValetAndRemoveOnCompletion:)
+    @objc
     public func migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion: Bool) -> MigrationResult {
         guard var keychainQuery = keychainQuery else {
             return .couldNotReadKeychain
@@ -344,7 +344,7 @@ public final class Valet: NSObject {
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs. This method can only be called from macOS 10.15 or later.
     @available(macOS 10.15, *)
-    @objc(migrateObjectsFromPreCatalina)
+    @objc
     public func migrateObjectsFromPreCatalina() -> MigrationResult {
         guard var keychainQuery = keychainQuery else {
             return .couldNotReadKeychain

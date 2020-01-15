@@ -92,11 +92,11 @@ public final class SecureEnclave {
     /// - parameter options: A base query used to scope the calls in the keychain.
     /// - returns: `false` if the keychain is not accessible.
     @discardableResult
-    internal static func set(object: Data, forKey key: String, options: [String : AnyHashable]) -> Bool {
+    internal static func setObject(_ object: Data, forKey key: String, options: [String : AnyHashable]) -> Bool {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         _ = Keychain.removeObject(forKey: key, options: options)
         
-        return Keychain.set(object: object, forKey: key, options: options).didSucceed
+        return Keychain.setObject(object, forKey: key, options: options).didSucceed
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
@@ -134,11 +134,11 @@ public final class SecureEnclave {
     /// - parameter options: A base query used to scope the calls in the keychain.
     /// - returns: `true` if the operation succeeded, or `false` if the keychain is not accessible.
     @discardableResult
-    internal static func set(string: String, forKey key: String, options: [String : AnyHashable]) -> Bool {
+    internal static func setString(_ string: String, forKey key: String, options: [String : AnyHashable]) -> Bool {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         _ = Keychain.removeObject(forKey: key, options: options)
         
-        return Keychain.set(string: string, forKey: key, options: options).didSucceed
+        return Keychain.setString(string, forKey: key, options: options).didSucceed
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
