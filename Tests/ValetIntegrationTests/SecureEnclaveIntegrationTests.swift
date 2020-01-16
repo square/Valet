@@ -50,7 +50,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
             return
         }
         
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        XCTAssertTrue(valet.setString(passcode, forKey: key))
         let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertEqual(valet, equivalentValet)
         XCTAssertEqual(.success(passcode), equivalentValet.string(forKey: key, withPrompt: ""))
@@ -62,7 +62,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
             return
         }
         
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        XCTAssertTrue(valet.setString(passcode, forKey: key))
         let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
         XCTAssertNotEqual(valet, equivalentValet)
         XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
@@ -149,7 +149,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
         ]
         
         for (key, value) in keyValuePairs {
-            plainOldValet.set(string: value, forKey: key)
+            plainOldValet.setString(value, forKey: key)
         }
         
         XCTAssertEqual(.success, valet.migrateObjects(from: plainOldValet, removeOnCompletion: true))
@@ -178,7 +178,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
         
         let keyStringPairToMigrateMap = ["foo" : "bar", "testing" : "migration", "is" : "quite", "entertaining" : "if", "you" : "don't", "screw" : "up"]
         for (key, value) in keyStringPairToMigrateMap {
-            XCTAssertTrue(otherValet.set(string: value, forKey: key))
+            XCTAssertTrue(otherValet.setString(value, forKey: key))
         }
         
         XCTAssertTrue(valet.canAccessKeychain())

@@ -50,7 +50,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             return
         }
         
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        XCTAssertTrue(valet.setString(passcode, forKey: key))
         let equivalentValet = SinglePromptSecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertEqual(valet, equivalentValet)
         XCTAssertEqual(.success(passcode), equivalentValet.string(forKey: key, withPrompt: ""))
@@ -62,7 +62,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             return
         }
         
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        XCTAssertTrue(valet.setString(passcode, forKey: key))
         let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
         XCTAssertNotEqual(valet, equivalentValet)
         XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
@@ -79,10 +79,10 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         
         XCTAssertEqual(valet.allKeys(userPrompt: ""), Set())
         
-        XCTAssertTrue(valet.set(string: passcode, forKey: key))
+        XCTAssertTrue(valet.setString(passcode, forKey: key))
         XCTAssertEqual(valet.allKeys(userPrompt: ""), Set(arrayLiteral: key))
         
-        XCTAssertTrue(valet.set(string: "monster", forKey: "cookie"))
+        XCTAssertTrue(valet.setString("monster", forKey: "cookie"))
         XCTAssertEqual(valet.allKeys(userPrompt: ""), Set(arrayLiteral: key, "cookie"))
         
         valet.removeAllObjects()
@@ -171,7 +171,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         ]
         
         for (key, value) in keyValuePairs {
-            plainOldValet.set(string: value, forKey: key)
+            plainOldValet.setString(value, forKey: key)
         }
         
         XCTAssertEqual(.success, valet.migrateObjects(from: plainOldValet, removeOnCompletion: true))
@@ -200,7 +200,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         
         let keyStringPairToMigrateMap = ["foo" : "bar", "testing" : "migration", "is" : "quite", "entertaining" : "if", "you" : "don't", "screw" : "up"]
         for (key, value) in keyStringPairToMigrateMap {
-            XCTAssertTrue(otherValet.set(string: value, forKey: key))
+            XCTAssertTrue(otherValet.setString(value, forKey: key))
         }
         
         XCTAssertTrue(valet.canAccessKeychain())

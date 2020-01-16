@@ -131,6 +131,10 @@ enum Platform: String, CustomStringConvertible {
         }
     }
 
+    var derivedDataPath: String {
+        ".build/derivedData/" + description
+    }
+
     var scheme: String {
         switch self {
         case .iOS_10,
@@ -267,8 +271,15 @@ for rawPlatform in rawPlatforms {
     if task.shouldUseLegacyBuildSystem {
         xcodeBuildArguments.append("-UseModernBuildSystem=0")
     }
+    let shouldTest = task.shouldTest(on: platform)
+    if shouldTest {
+        xcodeBuildArguments.append("-enableCodeCoverage")
+        xcodeBuildArguments.append("YES")
+        xcodeBuildArguments.append("-derivedDataPath")
+        xcodeBuildArguments.append(platform.derivedDataPath)
+    }
     xcodeBuildArguments.append("build")
-    if task.shouldTest(on: platform) {
+    if shouldTest {
         xcodeBuildArguments.append("test")
     }
 

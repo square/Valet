@@ -84,7 +84,7 @@ class ValetMacTests: XCTestCase
 
         // Update the vulnerable value with Valet - we should have deleted the existing item, making the entry no longer vulnerable.
         let updatedValue = "Safe"
-        XCTAssertTrue(valet.set(string: updatedValue, forKey: vulnKey))
+        XCTAssertTrue(valet.setString(updatedValue, forKey: vulnKey))
 
         // We should no longer be able to access the keychain item via the ref.
         let queryWithVulnerableReferenceAndAttributes = [

@@ -118,14 +118,14 @@ public final class SecureEnclaveValet: NSObject {
     /// - parameter object: A Data value to be inserted into the keychain.
     /// - parameter key: A Key that can be used to retrieve the `object` from the keychain.
     /// - returns: `false` if the keychain is not accessible.
-    @objc(setObject:forKey:)
+    @objc
     @discardableResult
-    public func set(object: Data, forKey key: String) -> Bool {
+    public func setObject(_ object: Data, forKey key: String) -> Bool {
         execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return false
             }
-            return SecureEnclave.set(object: object, forKey: key, options: keychainQuery)
+            return SecureEnclave.setObject(object, forKey: key, options: keychainQuery)
         }
     }
     
@@ -144,7 +144,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - parameter key: The key to look up in the keychain.
     /// - returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
     /// - note: Will never prompt the user for Face ID, Touch ID, or password.
-    @objc(containsObjectForKey:)
+    @objc
     public func containsObject(forKey key: String) -> Bool {
         execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
@@ -157,14 +157,14 @@ public final class SecureEnclaveValet: NSObject {
     /// - parameter string: A String value to be inserted into the keychain.
     /// - parameter key: A Key that can be used to retrieve the `string` from the keychain.
     /// - returns: `true` if the operation succeeded, or `false` if the keychain is not accessible.
-    @objc(setString:forKey:)
+    @objc
     @discardableResult
-    public func set(string: String, forKey key: String) -> Bool {
+    public func setString(_ string: String, forKey key: String) -> Bool {
         execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
                 return false
             }
-            return SecureEnclave.set(string: string, forKey: key, options: keychainQuery)
+            return SecureEnclave.setString(string, forKey: key, options: keychainQuery)
         }
     }
     
@@ -182,7 +182,7 @@ public final class SecureEnclaveValet: NSObject {
     
     /// Removes a key/object pair from the keychain.
     /// - returns: `false` if the keychain is not accessible.
-    @objc(removeObjectForKey:)
+    @objc
     @discardableResult
     public func removeObject(forKey key: String) -> Bool {
         execute(in: lock) {
@@ -211,7 +211,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
-    @objc(migrateObjectsMatchingQuery:removeOnCompletion:)
+    @objc
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) -> MigrationResult {
         execute(in: lock) {
             guard let keychainQuery = keychainQuery else {
@@ -226,7 +226,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
     /// - returns: Whether the migration succeeded or failed.
     /// - note: The keychain is not modified if a failure occurs.
-    @objc(migrateObjectsFromValet:removeOnCompletion:)
+    @objc
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) -> MigrationResult {
         guard let keychainQuery = valet.keychainQuery else {
             return .couldNotReadKeychain

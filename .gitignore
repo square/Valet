@@ -19,3 +19,4 @@ DerivedData
 .idea/
 .swiftpm/
 generated/
+*coverage.txt
