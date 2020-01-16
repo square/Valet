@@ -151,12 +151,13 @@ class ValetMacTests: XCTestCase
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
             XCTAssertTrue($0.set(string: passcode, forKey: key))
             XCTAssertEqual($0.string(forKey: key), passcode)
+
+            XCTAssertTrue($0.removeAllObjects())
         }
 
         Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
             XCTAssertTrue($0.set(string: passcode, forKey: key))
             XCTAssertEqual($0.string(forKey: key), passcode)
-        }
 
             XCTAssertTrue($0.removeAllObjects())
         }
@@ -164,11 +165,15 @@ class ValetMacTests: XCTestCase
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
             XCTAssertTrue($0.set(string: passcode, forKey: key))
             XCTAssertEqual($0.string(forKey: key), passcode)
+
+            XCTAssertTrue($0.removeAllObjects())
         }
 
         Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
             XCTAssertTrue($0.set(string: passcode, forKey: key))
             XCTAssertEqual($0.string(forKey: key), passcode)
+
+            XCTAssertTrue($0.removeAllObjects())
         }
     }
 
