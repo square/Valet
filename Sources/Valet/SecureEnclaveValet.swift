@@ -121,7 +121,7 @@ public final class SecureEnclaveValet: NSObject {
 
     /// - Parameters:
     ///   - object: A Data value to be inserted into the keychain.
-    ///   - key: A Key that can be used to retrieve the `object` from the keychain.
+    ///   - key: A key that can be used to retrieve the `object` from the keychain.
     /// - Returns: `false` if the keychain is not accessible.
     @objc
     @discardableResult
@@ -135,7 +135,7 @@ public final class SecureEnclaveValet: NSObject {
     }
 
     /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - Returns: The data currently stored in the keychain for the provided key. Returns `.itemNotFound` if no object exists in the keychain for the specified key, or if the keychain is inaccessible. Returns `.userCancelled` if the user cancels the user-presence prompt.
     public func object(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<Data> {
@@ -163,7 +163,7 @@ public final class SecureEnclaveValet: NSObject {
 
     /// - Parameters:
     ///   - string: A String value to be inserted into the keychain.
-    ///   - key: A Key that can be used to retrieve the `string` from the keychain.
+    ///   - key: A key that can be used to retrieve the `string` from the keychain.
     /// - Returns: `true` if the operation succeeded, or `false` if the keychain is not accessible.
     @objc
     @discardableResult
@@ -177,7 +177,7 @@ public final class SecureEnclaveValet: NSObject {
     }
 
     /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - Returns: The string currently stored in the keychain for the provided key. Returns `itemNotFound` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     public func string(forKey key: String, withPrompt userPrompt: String) -> SecureEnclave.Result<String> {
@@ -295,7 +295,7 @@ extension SecureEnclaveValet {
     // MARK: Public Methods
 
     /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - Returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
     @available(swift, obsoleted: 1.0)
@@ -313,7 +313,7 @@ extension SecureEnclaveValet {
     }
 
     /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - Returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     @available(swift, obsoleted: 1.0)
