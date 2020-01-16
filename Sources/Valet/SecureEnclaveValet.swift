@@ -189,6 +189,7 @@ public final class SecureEnclaveValet: NSObject {
     }
     
     /// Removes a key/object pair from the keychain.
+    /// - Parameter key: The key whose value should be removed from the keychain.
     /// - Returns: `false` if the keychain is not accessible.
     @objc
     @discardableResult
@@ -271,6 +272,7 @@ extension SecureEnclaveValet {
 
     /// - Parameters:
     ///   - identifier: A non-empty string that uniquely identifies a SecureEnclaveValet.
+    ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     @objc(valetWithIdentifier:accessControl:)
     public class func 🚫swift_valet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet? {
@@ -282,6 +284,7 @@ extension SecureEnclaveValet {
 
     /// - Parameters:
     ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     @objc(sharedAccessGroupValetWithIdentifier:accessControl:)
     public class func 🚫swift_sharedAccessGroupValet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet? {
