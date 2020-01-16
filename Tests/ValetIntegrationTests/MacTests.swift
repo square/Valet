@@ -196,26 +196,26 @@ class ValetMacTests: XCTestCase
         var permutations1 = Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false)
         var permutations2 = Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false)
         for (index, permutation) in permutations1.enumerated() {
-            XCTAssertTrue(permutation === permutations2[index])
+            XCTAssertTrue(permutation === permutations2[index], "Two Valets with \(accessibilityValues[index]) were not identical")
         }
 
         permutations1 = Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false)
         permutations2 = Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false)
         for (index, permutation) in permutations1.enumerated() {
-            XCTAssertTrue(permutation === permutations2[index])
+            XCTAssertTrue(permutation === permutations2[index], "Two iCloud Valets with \(accessibilityValues[index]) were not identical")
         }
 
         let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
         permutations1 = Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
         permutations2 = Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
         for (index, permutation) in permutations1.enumerated() {
-            XCTAssertTrue(permutation === permutations2[index])
+            XCTAssertTrue(permutation === permutations2[index], "Two shared Valets with \(accessibilityValues[index]) were not identical")
         }
 
         permutations1 = Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
         permutations2 = Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
         for (index, permutation) in permutations1.enumerated() {
-            XCTAssertTrue(permutation === permutations2[index])
+            XCTAssertTrue(permutation === permutations2[index], "Two shared iCloud Valets with \(accessibilityValues[index]) were not identical")
         }
     }
 
@@ -223,26 +223,25 @@ class ValetMacTests: XCTestCase
         let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
         var permutations = Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false)
         for (index, permutation) in permutations.enumerated() {
-            XCTAssertEqual(Accessibility.allValues()[index], permutation.accessibility)
+            XCTAssertEqual(accessibilityValues[index], permutation.accessibility)
         }
 
         permutations = Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false)
         for (index, permutation) in permutations.enumerated() {
-            XCTAssertEqual(Accessibility.allValues()[index], permutation.accessibility)
+            XCTAssertEqual(accessibilityValues[index], permutation.accessibility)
         }
 
         let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
         permutations = Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
         for (index, permutation) in permutations.enumerated() {
-            XCTAssertEqual(Accessibility.allValues()[index], permutation.accessibility)
+            XCTAssertEqual(accessibilityValues[index], permutation.accessibility)
         }
 
         permutations = Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
         for (index, permutation) in permutations.enumerated() {
-            XCTAssertEqual(Accessibility.allValues()[index], permutation.accessibility)
+            XCTAssertEqual(accessibilityValues[index], permutation.accessibility)
         }
     }
-
 
     // MARK: Migration - PreCatalina
 
@@ -274,6 +273,8 @@ class ValetMacTests: XCTestCase
         XCTAssertEqual(valet.migrateObjectsFromPreCatalina(), .success)
         XCTAssertEqual(valet.object(forKey: key), object)
     }
+
+    private let accessibilityValues = Accessibility.allValues()
 
 }
 #endif
