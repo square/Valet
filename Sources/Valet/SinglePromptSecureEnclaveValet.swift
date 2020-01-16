@@ -219,6 +219,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     }
     
     /// Removes a key/object pair from the keychain.
+    /// - Parameter key: The key whose value should be removed from the keychain.
     /// - Returns: `false` if the keychain is not accessible.
     @objc
     @discardableResult
