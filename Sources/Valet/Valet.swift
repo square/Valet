@@ -179,8 +179,7 @@ public final class Valet: NSObject {
         }
     }
 
-    /// - Parameters:
-    ///   - key: The key to look up in the keychain.
+    /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
     @objc
     public func containsObject(forKey key: String) -> Bool {
