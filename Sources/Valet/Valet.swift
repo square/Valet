@@ -61,6 +61,7 @@ public final class Valet: NSObject {
     ///   - identifier: A non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements with the desired accessibility and identifier.
+    /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
     /// - SeeAlso: https://github.com/square/Valet/issues/140
     public class func valet(withExplicitlySet identifier: Identifier, accessibility: Accessibility) -> Valet {
         return findOrCreate(explicitlySet: identifier, configuration: .valet(accessibility))
@@ -71,6 +72,7 @@ public final class Valet: NSObject {
     ///   - identifier: A non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements with the desired accessibility and identifier.
+    /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
     /// - SeeAlso: https://github.com/square/Valet/issues/140
     public class func iCloudValet(withExplicitlySet identifier: Identifier, accessibility: CloudAccessibility) -> Valet {
         return findOrCreate(explicitlySet: identifier, configuration: .iCloud(accessibility))
@@ -81,6 +83,7 @@ public final class Valet: NSObject {
     ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
+    /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
     /// - SeeAlso: https://github.com/square/Valet/issues/140
     public class func sharedAccessGroupValet(withExplicitlySet identifier: Identifier, accessibility: Accessibility) -> Valet {
         return findOrCreate(explicitlySet: identifier, configuration: .valet(accessibility), sharedAccessGroup: true)
@@ -91,6 +94,7 @@ public final class Valet: NSObject {
     ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
+    /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
     /// - SeeAlso: https://github.com/square/Valet/issues/140
     public class func iCloudSharedAccessGroupValet(withExplicitlySet identifier: Identifier, accessibility: CloudAccessibility) -> Valet {
         return findOrCreate(explicitlySet: identifier, configuration: .iCloud(accessibility), sharedAccessGroup: true)
@@ -530,6 +534,7 @@ extension Valet {
     ///   - identifier: A non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements with the desired accessibility and identifier.
+    /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
     /// - SeeAlso: https://github.com/square/Valet/issues/140
     @available(swift, obsoleted: 1.0)
     @objc(valetWithExplicitlySetIdentifier:accessibility:)
@@ -545,6 +550,7 @@ extension Valet {
     ///   - identifier: A non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements with the desired accessibility and identifier.
+    /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
     /// - SeeAlso: https://github.com/square/Valet/issues/140
     @available(swift, obsoleted: 1.0)
     @objc(iCloudValetWithExplicitlySetIdentifier:accessibility:)
@@ -560,6 +566,7 @@ extension Valet {
     ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
+    /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
     /// - SeeAlso: https://github.com/square/Valet/issues/140
     @available(swift, obsoleted: 1.0)
     @objc(valetWithExplicitlySetSharedAccessGroupIdentifier:accessibility:)
@@ -575,6 +582,7 @@ extension Valet {
     ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
+    /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
     /// - SeeAlso: https://github.com/square/Valet/issues/140
     @available(swift, obsoleted: 1.0)
     @objc(iCloudValetWithExplicitlySetSharedAccessGroupIdentifier:accessibility:)
