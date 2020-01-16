@@ -32,7 +32,7 @@ public final class Valet: NSObject {
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements with the desired accessibility and identifier.
     public class func valet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        return findOrCreate(identifier, configuration: .valet(accessibility))
+        findOrCreate(identifier, configuration: .valet(accessibility))
     }
 
     /// - Parameters:
@@ -40,7 +40,7 @@ public final class Valet: NSObject {
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements with the desired accessibility and identifier.
     public class func iCloudValet(with identifier: Identifier, accessibility: CloudAccessibility) -> Valet {
-        return findOrCreate(identifier, configuration: .iCloud(accessibility))
+        findOrCreate(identifier, configuration: .iCloud(accessibility))
     }
 
     /// - Parameters:
@@ -48,7 +48,7 @@ public final class Valet: NSObject {
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedAccessGroupValet(with identifier: Identifier, accessibility: Accessibility) -> Valet {
-        return findOrCreate(identifier, configuration: .valet(accessibility), sharedAccessGroup: true)
+        findOrCreate(identifier, configuration: .valet(accessibility), sharedAccessGroup: true)
     }
 
     /// - Parameters:
@@ -56,14 +56,14 @@ public final class Valet: NSObject {
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func iCloudSharedAccessGroupValet(with identifier: Identifier, accessibility: CloudAccessibility) -> Valet {
-        return findOrCreate(identifier, configuration: .iCloud(accessibility), sharedAccessGroup: true)
+        findOrCreate(identifier, configuration: .iCloud(accessibility), sharedAccessGroup: true)
     }
     
     // MARK: Equatable
     
     /// - Returns: `true` if lhs and rhs both read from and write to the same sandbox within the keychain.
     public static func ==(lhs: Valet, rhs: Valet) -> Bool {
-        return lhs.service == rhs.service
+        lhs.service == rhs.service
     }
     
     // MARK: Private Class Properties
