@@ -97,7 +97,7 @@ class ValetMacTests: XCTestCase
         // This is not be the case upon setting a breakpoint and inspecting before the valet.setString(, forKey:) call above.
     }
 
-    func test_withExplicitlySet_identifierHasExplicitlySetIdentifier() {
+    func test_withExplicitlySet_assignsExplicitIdentifier() {
         let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
             XCTAssertEqual($0.keychainQuery?[kSecAttrService as String], explicitlySetIdentifier.description)
