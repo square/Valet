@@ -163,7 +163,7 @@ public final class Valet: NSObject {
         }
     }
     
-    /// - Parameter key: A Key used to retrieve the desired object from the keychain.
+    /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc

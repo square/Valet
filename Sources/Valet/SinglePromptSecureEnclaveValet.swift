@@ -121,7 +121,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
 
     /// - Parameters:
     ///   - object: A Data value to be inserted into the keychain.
-    ///   - key: A Key that can be used to retrieve the `object` from the keychain.
+    ///   - key: A key that can be used to retrieve the `object` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
     public func setObject(_ object: Data, forKey key: String) throws {
@@ -131,7 +131,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     }
 
     /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
@@ -156,7 +156,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
 
     /// - Parameters:
     ///   - string: A String value to be inserted into the keychain.
-    ///   - key: A Key that can be used to retrieve the `string` from the keychain.
+    ///   - key: A key that can be used to retrieve the `string` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
     public func setString(_ string: String, forKey key: String) throws {
@@ -166,7 +166,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     }
 
     /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc

@@ -117,7 +117,7 @@ public final class SecureEnclaveValet: NSObject {
     
     /// - Parameters:
     ///   - object: A Data value to be inserted into the keychain.
-    ///   - key: A Key that can be used to retrieve the `object` from the keychain.
+    ///   - key: A key that can be used to retrieve the `object` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
     public func setObject(_ object: Data, forKey key: String) throws {
@@ -127,7 +127,7 @@ public final class SecureEnclaveValet: NSObject {
     }
 
     /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    ///   - key: A key used to retrieve the desired object from the keychain.
     ///   -  userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
@@ -153,7 +153,7 @@ public final class SecureEnclaveValet: NSObject {
 
     /// - Parameters:
     ///   - string: A String value to be inserted into the keychain.
-    ///   - key: A Key that can be used to retrieve the `string` from the keychain.
+    ///   - key: A key that can be used to retrieve the `string` from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
     public func setString(_ string: String, forKey key: String) throws {
@@ -163,7 +163,7 @@ public final class SecureEnclaveValet: NSObject {
     }
 
     /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
