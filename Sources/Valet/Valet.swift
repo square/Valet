@@ -257,6 +257,7 @@ public final class Valet: NSObject {
     }
     
     /// Migrates objects matching the input query into the receiving Valet instance.
+    /// - Parameters:
     ///   - query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - Returns: Whether the migration succeeded or failed.
@@ -272,6 +273,7 @@ public final class Valet: NSObject {
     }
     
     /// Migrates objects in the input Valet into the receiving Valet instance.
+    /// - Parameters:
     ///   - valet: A Valet whose objects should be migrated.
     ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - Returns: Whether the migration succeeded or failed.
@@ -286,7 +288,7 @@ public final class Valet: NSObject {
 
     /// Call this method if your Valet used to have its accessibility set to `always`.
     /// This method migrates objects set on a Valet with the same type and identifier, but with its accessibility set to `always` (which was possible prior to Valet 4.0) to the current Valet.
-    ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
+    /// - Parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - Returns: Whether the migration succeeded or failed.
     /// - Note: The keychain is not modified if a failure occurs.
     @objc
@@ -317,7 +319,7 @@ public final class Valet: NSObject {
 
     /// Call this method if your Valet used to have its accessibility set to `alwaysThisDeviceOnly`.
     /// This method migrates objects set on a Valet with the same type and identifier, but with its accessibility set to `alwaysThisDeviceOnly` (which was possible prior to Valet 4.0) to the current Valet.
-    ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
+    /// - Parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - Returns: Whether the migration succeeded or failed.
     /// - Note: The keychain is not modified if a failure occurs.
     @objc
