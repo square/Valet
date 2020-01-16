@@ -107,10 +107,6 @@ class ValetMacTests: XCTestCase
             XCTAssertEqual($0.keychainQuery?[kSecAttrService as String], explicitlySetIdentifier.description)
         }
 
-        XCTAssertEqual(
-            Valet.iCloudValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery?[kSecAttrService as String],
-            explicitlySetIdentifier.description)
-
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -134,9 +130,9 @@ class ValetMacTests: XCTestCase
             XCTAssertTrue($0.canAccessKeychain())
         }
 
-        XCTAssertEqual(
-            Valet.iCloudValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery?[kSecAttrService as String],
-            explicitlySetIdentifier.description)
+        guard testEnvironmentIsSigned() else {
+            return
+        }
 
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
             XCTAssertTrue($0.canAccessKeychain())
@@ -162,9 +158,8 @@ class ValetMacTests: XCTestCase
             XCTAssertEqual($0.string(forKey: key), passcode)
         }
 
-        XCTAssertEqual(
-            Valet.iCloudValet(withExplicitlySet: explicitlySetIdentifier, accessibility: .whenUnlocked).keychainQuery?[kSecAttrService as String],
-            explicitlySetIdentifier.description)
+            XCTAssertTrue($0.removeAllObjects())
+        }
 
         guard testEnvironmentIsSigned() else {
             return
