@@ -107,6 +107,10 @@ class ValetMacTests: XCTestCase
             XCTAssertEqual($0.keychainQuery?[kSecAttrService as String], explicitlySetIdentifier.description)
         }
 
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
             XCTAssertEqual($0.keychainQuery?[kSecAttrService as String], explicitlySetIdentifier.description)
         }
