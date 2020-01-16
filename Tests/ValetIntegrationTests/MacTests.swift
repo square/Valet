@@ -107,10 +107,6 @@ class ValetMacTests: XCTestCase
             XCTAssertEqual($0.keychainQuery?[kSecAttrService as String], explicitlySetIdentifier.description)
         }
 
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
             XCTAssertEqual($0.keychainQuery?[kSecAttrService as String], explicitlySetIdentifier.description)
         }
@@ -121,6 +117,10 @@ class ValetMacTests: XCTestCase
     }
 
     func test_withExplicitlySet_canAccessKeychain() {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
         let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
             XCTAssertTrue($0.canAccessKeychain())
@@ -128,10 +128,6 @@ class ValetMacTests: XCTestCase
 
         Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
             XCTAssertTrue($0.canAccessKeychain())
-        }
-
-        guard testEnvironmentIsSigned() else {
-            return
         }
 
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
@@ -144,6 +140,10 @@ class ValetMacTests: XCTestCase
     }
 
     func test_withExplicitlySet_canReadWrittenString() {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
         let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
         let key = "key"
         let passcode = "12345"
@@ -159,10 +159,6 @@ class ValetMacTests: XCTestCase
         }
 
             XCTAssertTrue($0.removeAllObjects())
-        }
-
-        guard testEnvironmentIsSigned() else {
-            return
         }
 
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
