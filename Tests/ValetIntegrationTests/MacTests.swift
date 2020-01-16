@@ -103,9 +103,6 @@ class ValetMacTests: XCTestCase
         guard #available(macOS 10.15, *) else {
             return
         }
-        guard testEnvironmentIsSigned() else {
-            return
-        }
 
         let valet = Valet.valet(with: Identifier(nonEmpty: "PreCatalinaTest")!, accessibility: .afterFirstUnlock)
         guard var preCatalinaWriteQuery = valet.keychainQuery else {
