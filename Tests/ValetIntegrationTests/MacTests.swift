@@ -191,6 +191,59 @@ class ValetMacTests: XCTestCase
         }
     }
 
+    func test_withExplicitlySet_vendsSameObjectWhenSameConfigurationRequested() {
+        let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
+        var permutations1 = Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        var permutations2 = Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        for (index, permutation) in permutations1.enumerated() {
+            XCTAssertTrue(permutation === permutations2[index])
+        }
+
+        permutations1 = Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        permutations2 = Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        for (index, permutation) in permutations1.enumerated() {
+            XCTAssertTrue(permutation === permutations2[index])
+        }
+
+        let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        permutations1 = Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        permutations2 = Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        for (index, permutation) in permutations1.enumerated() {
+            XCTAssertTrue(permutation === permutations2[index])
+        }
+
+        permutations1 = Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        permutations2 = Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        for (index, permutation) in permutations1.enumerated() {
+            XCTAssertTrue(permutation === permutations2[index])
+        }
+    }
+
+    func test_withExplicitlySet_createsObjectWithCorrectAccessibility() {
+        let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
+        var permutations = Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        for (index, permutation) in permutations.enumerated() {
+            XCTAssertEqual(Accessibility.allValues()[index], permutation.accessibility)
+        }
+
+        permutations = Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        for (index, permutation) in permutations.enumerated() {
+            XCTAssertEqual(Accessibility.allValues()[index], permutation.accessibility)
+        }
+
+        let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        permutations = Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        for (index, permutation) in permutations.enumerated() {
+            XCTAssertEqual(Accessibility.allValues()[index], permutation.accessibility)
+        }
+
+        permutations = Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        for (index, permutation) in permutations.enumerated() {
+            XCTAssertEqual(Accessibility.allValues()[index], permutation.accessibility)
+        }
+    }
+
+
     // MARK: Migration - PreCatalina
 
     func test_migrateObjectsFromPreCatalina_migratesDataWrittenPreCatalina() {
