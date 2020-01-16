@@ -28,7 +28,7 @@ import Foundation
 @available(tvOS 10.0, *)
 @objc(VALSinglePromptSecureEnclaveValet)
 public final class SinglePromptSecureEnclaveValet: NSObject {
-
+    
     // MARK: Public Class Methods
 
     /// - Parameters:
@@ -39,7 +39,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
         let key = Service.standard(identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
-
+            
         } else {
             let valet = SinglePromptSecureEnclaveValet(identifier: identifier, accessControl: accessControl)
             identifierToValetMap.setObject(valet, forKey: key)
@@ -55,39 +55,39 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
         let key = Service.sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
-
+            
         } else {
             let valet = SinglePromptSecureEnclaveValet(sharedAccess: identifier, accessControl: accessControl)
             identifierToValetMap.setObject(valet, forKey: key)
             return valet
         }
     }
-
+    
     // MARK: Equatable
-
+    
     /// - Returns: `true` if lhs and rhs both read from and write to the same sandbox within the keychain.
     public static func ==(lhs: SinglePromptSecureEnclaveValet, rhs: SinglePromptSecureEnclaveValet) -> Bool {
         lhs.service == rhs.service
     }
-
+    
     // MARK: Private Class Properties
-
+    
     private static let identifierToValetMap = NSMapTable<NSString, SinglePromptSecureEnclaveValet>.strongToWeakObjects()
-
+    
     // MARK: Initialization
-
+    
     @available(*, unavailable)
     public override init() {
         fatalError("Use the class methods above to create usable SinglePromptSecureEnclaveValet objects")
     }
-
+    
     private convenience init(identifier: Identifier, accessControl: SecureEnclaveAccessControl) {
         self.init(
             identifier: identifier,
             service: .standard(identifier, .singlePromptSecureEnclave(accessControl)),
             accessControl: accessControl)
     }
-
+    
     private convenience init(sharedAccess identifier: Identifier, accessControl: SecureEnclaveAccessControl) {
         self.init(
             identifier: identifier,
@@ -101,21 +101,21 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
         self.accessControl = accessControl
         _baseKeychainQuery = try? service.generateBaseQuery()
     }
-
+    
     // MARK: Hashable
-
+    
     public override var hash: Int {
         service.description.hashValue
     }
-
+    
     // MARK: Public Properties
-
+    
     public let identifier: Identifier
     @objc
     public let accessControl: SecureEnclaveAccessControl
-
+    
     // MARK: Public Methods
-
+    
     /// - Returns: `true` if the keychain is accessible for reading and writing, `false` otherwise.
     /// - Note: Determined by writing a value to the keychain and then reading it back out. Will never prompt the user for Face ID, Touch ID, or password.
     @objc
@@ -179,7 +179,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
             try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: try continuedAuthenticationKeychainQuery())
         }
     }
-
+    
     /// Forces a prompt for Face ID, Touch ID, or passcode entry on the next data retrieval from the Secure Enclave.
     @objc
     public func requirePromptOnNextAccess() {
@@ -188,7 +188,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
             localAuthenticationContext = LAContext()
         }
     }
-
+    
     /// - Parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown. If no items are found, will return an empty set.
     /// - Returns: The set of all (String) keys currently stored in this Valet instance.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
@@ -199,11 +199,11 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
             if !userPrompt.isEmpty {
                 secItemQuery[kSecUseOperationPrompt as String] = userPrompt
             }
-
+            
             return try Keychain.allKeys(options: secItemQuery)
         }
     }
-
+    
     /// Removes a key/object pair from the keychain.
     /// - Parameter key: A key used to remove the desired object from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
@@ -213,7 +213,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
             try Keychain.removeObject(forKey: key, options: try baseKeychainQuery())
         }
     }
-
+    
     /// Removes all key/object pairs accessible by this Valet instance from the keychain.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
     @objc
@@ -222,7 +222,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
             try Keychain.removeAllObjects(matching: try baseKeychainQuery())
         }
     }
-
+    
     /// Migrates objects matching the input query into the receiving SinglePromptSecureEnclaveValet instance.
     /// - Parameters:
     ///   - query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
@@ -234,7 +234,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
             try Keychain.migrateObjects(matching: query, into: try baseKeychainQuery(), removeOnCompletion: removeOnCompletion)
         }
     }
-
+    
     /// Migrates objects matching the vended keychain query into the receiving SinglePromptSecureEnclaveValet instance.
     /// - Parameters:
     ///   - keychain: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
@@ -254,9 +254,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     private let lock = NSLock()
     private var localAuthenticationContext = LAContext()
     private var _baseKeychainQuery: [String : AnyHashable]?
-
+    
     // MARK: Private Methods
-
+    
     private func baseKeychainQuery() throws -> [String : AnyHashable] {
         if let baseKeychainQuery = _baseKeychainQuery {
             return baseKeychainQuery
@@ -266,7 +266,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
             return baseKeychainQuery
         }
     }
-
+    
     /// A keychain query dictionary that allows for continued read access to the Secure Enclave after the a single unlock event.
     /// This query should be used when retrieving keychain data, but should not be used for keychain writes or `containsObject` checks.
     /// Using this query in a `containsObject` check can cause a false positive in the case where an element has been removed from
@@ -284,7 +284,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
 
 @available(tvOS 10.0, *)
 extension SinglePromptSecureEnclaveValet {
-
+    
     // MARK: Public Class Methods
 
     /// - Parameters:
@@ -296,7 +296,7 @@ extension SinglePromptSecureEnclaveValet {
         guard let identifier = Identifier(nonEmpty: identifier) else {
             return nil
         }
-
+        
         return valet(with: identifier, accessControl: accessControl)
     }
 
