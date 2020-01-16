@@ -53,7 +53,7 @@ public enum Accessibility: Int, CustomStringConvertible, Equatable {
     }
     
     // MARK: Public Properties
-
+    
     public var secAccessibilityAttribute: String {
         let accessibilityAttribute: CFString
         

@@ -77,7 +77,7 @@ public final class SecureEnclave {
     internal static func containsObject(forKey key: String, options: [String : AnyHashable]) -> Bool {
         var secItemQuery = options
         secItemQuery[kSecUseAuthenticationUI as String] = kSecUseAuthenticationUIFail
-
+        
         switch Keychain.containsObject(forKey: key, options: secItemQuery) {
         case errSecSuccess,
              errSecInteractionNotAllowed:

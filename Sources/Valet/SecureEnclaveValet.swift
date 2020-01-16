@@ -26,8 +26,10 @@ import Foundation
 public final class SecureEnclaveValet: NSObject {
     
     // MARK: Public Class Methods
-    
-    /// - Parameter identifier: A non-empty string that uniquely identifies a SecureEnclaveValet.
+
+    /// - Parameters:
+    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
         let key = Service.standard(identifier, .secureEnclave(accessControl)).description as NSString
@@ -40,8 +42,10 @@ public final class SecureEnclaveValet: NSObject {
             return valet
         }
     }
-    
-    /// - Parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+
+    /// - Parameters:
+    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedAccessGroupValet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
         let key = Service.sharedAccessGroup(identifier, .secureEnclave(accessControl)).description as NSString
@@ -114,7 +118,7 @@ public final class SecureEnclaveValet: NSObject {
     public func canAccessKeychain() -> Bool {
         SecureEnclave.canAccessKeychain(with: service, identifier: identifier)
     }
-    
+
     /// - Parameters:
     ///   - object: A Data value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
@@ -137,7 +141,7 @@ public final class SecureEnclaveValet: NSObject {
             try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: try keychainQuery())
         }
     }
-    
+
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
