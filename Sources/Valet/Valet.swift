@@ -614,16 +614,14 @@ internal extension Valet {
 
     #if os(macOS)
     class func permutations(withExplictlySet identifier: Identifier, shared: Bool = false) -> [Valet] {
-        return Accessibility.allValues().map { accessibility in
-            let valet: Valet = shared ? .sharedAccessGroupValet(withExplicitlySet: identifier, accessibility: accessibility) : .valet(withExplicitlySet: identifier, accessibility: accessibility)
-            return valet
+        Accessibility.allValues().map { accessibility in
+            shared ? .sharedAccessGroupValet(withExplicitlySet: identifier, accessibility: accessibility) : .valet(withExplicitlySet: identifier, accessibility: accessibility)
         }
     }
 
     class func iCloudPermutations(withExplictlySet identifier: Identifier, shared: Bool = false) -> [Valet] {
-        return CloudAccessibility.allValues().map { cloudAccessibility in
-            let valet: Valet = shared ? .iCloudSharedAccessGroupValet(withExplicitlySet: identifier, accessibility: cloudAccessibility) : .iCloudValet(withExplicitlySet: identifier, accessibility: cloudAccessibility)
-            return valet
+        CloudAccessibility.allValues().map { cloudAccessibility in
+            shared ? .iCloudSharedAccessGroupValet(withExplicitlySet: identifier, accessibility: cloudAccessibility) : .iCloudValet(withExplicitlySet: identifier, accessibility: cloudAccessibility)
         }
     }
     #endif
