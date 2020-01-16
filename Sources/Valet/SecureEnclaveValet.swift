@@ -147,8 +147,7 @@ public final class SecureEnclaveValet: NSObject {
         }
     }
 
-    /// - Parameters:
-    ///   - key: The key to look up in the keychain.
+    /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
     @objc

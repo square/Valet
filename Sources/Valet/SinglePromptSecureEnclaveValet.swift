@@ -151,8 +151,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
         }
     }
 
-    /// - Parameters:
-    ///   - key: The key to look up in the keychain.
+    /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
     @objc
@@ -202,8 +201,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
         }
     }
 
-    /// - Parameters:
-    ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
+    /// - Parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
     /// - Returns: The set of all (String) keys currently stored in this Valet instance. Will return an empty set if the keychain is not accessible.
     @objc
     public func allKeys(userPrompt: String) -> Set<String> {
