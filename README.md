@@ -103,7 +103,7 @@ let mySecureEnclaveValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "
 VALValet *const myValet = [VALValet valetWithExplicitlySetIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
-Mac apps signed with a developer ID may see their Valet’s identifier [shown to their users](https://github.com/square/Valet/issues/140). While it is possible to explicitly set a user-friendly identifier, note that doing so bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
+Mac apps signed with a developer ID may see their Valet’s identifier [shown to their users](https://github.com/square/Valet/issues/140). ⚠️⚠️ While it is possible to explicitly set a user-friendly identifier, note that doing so bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs ⚠️⚠️. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
 
 #### Choosing the Best Accessibility Value
 
