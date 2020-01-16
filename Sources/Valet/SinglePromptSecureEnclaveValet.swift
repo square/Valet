@@ -31,7 +31,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
 
     // MARK: Public Class Methods
 
-    /// - Parameter identifier: A non-empty string that uniquely identifies a SinglePromptSecureEnclaveValet.
+    /// - Parameters:
+    ///   - identifier: A non-empty string that uniquely identifies a SinglePromptSecureEnclaveValet.
+    ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
         let key = Service.standard(identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
@@ -45,7 +47,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
         }
     }
 
-    /// - Parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    /// - Parameters:
+    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedAccessGroupValet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
         let key = Service.sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
@@ -142,7 +146,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     }
 
     /// - Parameter key: The key to look up in the keychain.
-    /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
+    /// - Returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
     @objc
     public func containsObject(forKey key: String) -> Bool {
@@ -283,7 +287,9 @@ extension SinglePromptSecureEnclaveValet {
 
     // MARK: Public Class Methods
 
-    /// - Parameter identifier: A non-empty string that uniquely identifies a SinglePromptSecureEnclaveValet.
+    /// - Parameters:
+    ///   - identifier: A non-empty string that uniquely identifies a SinglePromptSecureEnclaveValet.
+    ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     @objc(valetWithIdentifier:accessControl:)
     public class func 🚫swift_valet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet? {
@@ -294,7 +300,9 @@ extension SinglePromptSecureEnclaveValet {
         return valet(with: identifier, accessControl: accessControl)
     }
 
-    /// - Parameter identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    /// - Parameters:
+    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     @objc(sharedAccessGroupValetWithIdentifier:accessControl:)
     public class func 🚫swift_sharedAccessGroupValet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet? {

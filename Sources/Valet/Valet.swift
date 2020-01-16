@@ -151,7 +151,7 @@ public final class Valet: NSObject {
             return Keychain.canAccess(attributes: keychainQuery)
         }
     }
-    
+
     /// - Parameters:
     ///   - object: A Data value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
@@ -162,7 +162,7 @@ public final class Valet: NSObject {
             try Keychain.setObject(object, forKey: key, options: try keychainQuery())
         }
     }
-    
+
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
@@ -172,7 +172,7 @@ public final class Valet: NSObject {
             try Keychain.object(forKey: key, options: try keychainQuery())
         }
     }
-    
+
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
     @objc
@@ -189,7 +189,7 @@ public final class Valet: NSObject {
             }
         }
     }
-    
+
     /// - Parameters:
     ///   - string: A String value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `string` from the keychain.
@@ -373,7 +373,7 @@ extension Valet {
         }
         return valet(with: identifier, accessibility: accessibility)
     }
-    
+
     /// - Parameters:
     ///   - identifier: A non-empty string that uniquely identifies a Valet.
     ///   - accessibility: The desired accessibility for the Valet.
