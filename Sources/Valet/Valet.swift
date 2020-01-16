@@ -135,7 +135,7 @@ public final class Valet: NSObject {
     #if os(macOS)
     private class func findOrCreate(explicitlySet identifier: Identifier, configuration: Configuration, sharedAccessGroup: Bool = false) -> Valet {
         let service: Service = sharedAccessGroup ? .sharedAccessGroupOverride(service: identifier, configuration) : .standardOverride(service: identifier, configuration)
-        let key = service.description as NSString
+        let key = service.description + configuration.description + configuration.accessibility.description + String(sharedAccessGroup) as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
 
