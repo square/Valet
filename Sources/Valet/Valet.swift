@@ -154,7 +154,7 @@ public final class Valet: NSObject {
 
     /// - Parameters:
     ///   - object: A Data value to be inserted into the keychain.
-    ///   - key: A Key that can be used to retrieve the `object` from the keychain.
+    ///   - key: A key that can be used to retrieve the `object` from the keychain.
     /// - Returns: `false` if the keychain is not accessible.
     @objc
     @discardableResult
@@ -167,8 +167,7 @@ public final class Valet: NSObject {
         }
     }
 
-    /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key. Returns `nil` if no object exists in the keychain for the specified key, or if the keychain is inaccessible.
     @objc
     public func object(forKey key: String) -> Data? {
@@ -195,7 +194,7 @@ public final class Valet: NSObject {
 
     /// - Parameters:
     ///   - string: A String value to be inserted into the keychain.
-    ///   - key: A Key that can be used to retrieve the `string` from the keychain.
+    ///   - key: A key that can be used to retrieve the `string` from the keychain.
     /// - Returns: `true` if the operation succeeded, or `false` if the keychain is not accessible.
     @objc
     @discardableResult
@@ -208,8 +207,7 @@ public final class Valet: NSObject {
         }
     }
 
-    /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
     @objc
     public func string(forKey key: String) -> String? {

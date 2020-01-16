@@ -90,7 +90,7 @@ public final class SecureEnclave {
 
     /// - Parameters:
     ///   - object: A Data value to be inserted into the keychain.
-    ///   - key: A Key that can be used to retrieve the `object` from the keychain.
+    ///   - key: A key that can be used to retrieve the `object` from the keychain.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: `false` if the keychain is not accessible.
     @discardableResult
@@ -102,7 +102,7 @@ public final class SecureEnclave {
     }
 
     /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key. Returns `.itemNotFound` if no object exists in the keychain for the specified key, or if the keychain is inaccessible. Returns `.userCancelled` if the user cancels the user-presence prompt.
@@ -135,7 +135,7 @@ public final class SecureEnclave {
 
     /// - Parameters:
     ///   - string: A String value to be inserted into the keychain.
-    ///   - key: A Key that can be used to retrieve the `string` from the keychain.
+    ///   - key: A key that can be used to retrieve the `string` from the keychain.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: `true` if the operation succeeded, or `false` if the keychain is not accessible.
     @discardableResult
@@ -147,7 +147,7 @@ public final class SecureEnclave {
     }
 
     /// - Parameters:
-    ///   - key: A Key used to retrieve the desired object from the keychain.
+    ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key. Returns `nil` if no string exists in the keychain for the specified key, or if the keychain is inaccessible.
