@@ -85,17 +85,17 @@ internal final class Keychain {
     
     // MARK: Setters
     
-    internal static func set(string: String, forKey key: String, options: [String: AnyHashable]) -> SecItem.Result {
+    internal static func setString(_ string: String, forKey key: String, options: [String: AnyHashable]) -> SecItem.Result {
         let data = Data(string.utf8)
         guard !data.isEmpty else {
             ErrorHandler.assertionFailure("Can not set an empty value.")
             return .error(errSecParam)
         }
         
-        return set(object: data, forKey: key, options: options)
+        return setObject(data, forKey: key, options: options)
     }
     
-    internal static func set(object: Data, forKey key: String, options: [String: AnyHashable]) -> SecItem.Result {
+    internal static func setObject(_ object: Data, forKey key: String, options: [String: AnyHashable]) -> SecItem.Result {
         guard !key.isEmpty else {
             ErrorHandler.assertionFailure("Can not set a value with an empty key.")
             return .error(errSecParam)
@@ -375,7 +375,7 @@ internal final class Keychain {
                 return .dataInQueryResultInvalid
             }
             
-            switch Keychain.set(object: value, forKey: key, options: destinationAttributes) {
+            switch Keychain.setObject(value, forKey: key, options: destinationAttributes) {
             case .success:
                 alreadyMigratedKeys.append(key)
                 

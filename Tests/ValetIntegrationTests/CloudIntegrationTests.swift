@@ -58,12 +58,12 @@ class CloudIntegrationTests: XCTestCase
         let iCloudValet = Valet.iCloudValet(with: identifier, accessibility: .afterFirstUnlock)
 
         // Setting
-        XCTAssertTrue(iCloudValet.set(string: "butts", forKey: "cloud"))
+        XCTAssertTrue(iCloudValet.setString("butts", forKey: "cloud"))
         XCTAssertEqual("butts", iCloudValet.string(forKey: "cloud"))
         XCTAssertNil(vanillaValet.string(forKey: "cloud"))
         
         // Removal
-        XCTAssertTrue(vanillaValet.set(string: "snake people", forKey: "millennials"))
+        XCTAssertTrue(vanillaValet.setString("snake people", forKey: "millennials"))
         XCTAssertTrue(iCloudValet.removeObject(forKey: "millennials"))
         XCTAssertEqual("snake people", vanillaValet.string(forKey: "millennials"))
     }
@@ -72,7 +72,7 @@ class CloudIntegrationTests: XCTestCase
     {
         allPermutations.forEach { valet in
             XCTAssertNil(valet.string(forKey: key), "\(valet) read item from keychain that should not exist")
-            XCTAssertTrue(valet.set(string: passcode, forKey: key), "\(valet) could not set item in keychain")
+            XCTAssertTrue(valet.setString(passcode, forKey: key), "\(valet) could not set item in keychain")
             XCTAssertEqual(passcode, valet.string(forKey: key))
         }
     }
@@ -80,7 +80,7 @@ class CloudIntegrationTests: XCTestCase
     func test_removeObjectForKey()
     {
         allPermutations.forEach { valet in
-            XCTAssertTrue(valet.set(string: passcode, forKey: key), "\(valet) could not set item in keychain")
+            XCTAssertTrue(valet.setString(passcode, forKey: key), "\(valet) could not set item in keychain")
             XCTAssertEqual(passcode, valet.string(forKey: key), "\(valet) read incorrect value from keychain.")
 
             XCTAssertTrue(valet.removeObject(forKey: key), "\(valet) did not remove item from keychain.")
