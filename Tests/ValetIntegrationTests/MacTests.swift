@@ -128,19 +128,27 @@ class ValetMacTests: XCTestCase
         let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
             XCTAssertTrue($0.canAccessKeychain())
+
+            XCTAssertTrue($0.removeAllObjects())
         }
 
         Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
             XCTAssertTrue($0.canAccessKeychain())
+
+            XCTAssertTrue($0.removeAllObjects())
         }
 
         let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
         Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true).forEach {
             XCTAssertTrue($0.canAccessKeychain())
+
+            XCTAssertTrue($0.removeAllObjects())
         }
 
         Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true).forEach {
             XCTAssertTrue($0.canAccessKeychain())
+
+            XCTAssertTrue($0.removeAllObjects())
         }
     }
 
