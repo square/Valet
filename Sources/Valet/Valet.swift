@@ -114,7 +114,6 @@ public final class Valet: NSObject {
 
     // MARK: Private Class Functions
 
-    /// - returns: a Valet with the given Identifier, Flavor (and a shared access group service if requested)
     private class func findOrCreate(_ identifier: Identifier, configuration: Configuration, sharedAccessGroup: Bool = false) -> Valet {
         let service: Service = sharedAccessGroup ? .sharedAccessGroup(identifier, configuration) : .standard(identifier, configuration)
         let key = service.description as NSString
@@ -134,7 +133,6 @@ public final class Valet: NSObject {
     }
 
     #if os(macOS)
-    /// - Returns: a Valet with the given Identifier, Flavor (and a shared access group service if requested)
     private class func findOrCreate(explicitlySet identifier: Identifier, configuration: Configuration, sharedAccessGroup: Bool = false) -> Valet {
         let service: Service = sharedAccessGroup ? .sharedAccessGroupOverride(service: identifier, configuration) : .standardOverride(service: identifier, configuration)
         let key = service.description as NSString
