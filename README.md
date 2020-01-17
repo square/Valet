@@ -91,7 +91,19 @@ This `myValet` instance can be used to store and retrieve data securely on this 
 
 #### Choosing the Best Identifier
 
-The identifier you choose for your Valet is used to create a sandbox for the data your Valet writes to the keychain. Two Valets of the same type created via the same initializer, accessibility value, and identifier will be able to read and write the same key:value pairs; Valets with different identifiers each have their own sandbox. Choose an identifier that describes the kind of data your Valet will protect. You do not need to include your application name or bundleIdentifier in your Valet’s identifier.
+The identifier you choose for your Valet is used to create a sandbox for the data your Valet writes to the keychain. Two Valets of the same type created via the same initializer, accessibility value, and identifier will be able to read and write the same key:value pairs; Valets with different identifiers each have their own sandbox. Choose an identifier that describes the kind of data your Valet will protect. You do not need to include your application name or bundle identifier in your Valet’s identifier.
+
+#### Choosing a User-friendly Identifier on macOS
+
+```swift
+let mySecureEnclaveValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
+```
+
+```objc
+VALValet *const myValet = [VALValet valetWithExplicitlySetIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
+```
+
+Mac apps signed with a developer ID may see their Valet’s identifier [shown to their users](https://github.com/square/Valet/issues/140). ⚠️⚠️ While it is possible to explicitly set a user-friendly identifier, note that doing so bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs ⚠️⚠️. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
 
 #### Choosing the Best Accessibility Value
 
