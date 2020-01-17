@@ -47,6 +47,17 @@ class ValetMacTests: XCTestCase
         var trustedAppSelf: SecTrustedApplication?
         var trustedAppSystemUIServer: SecTrustedApplication?
 
+        let kSecReturnWorkingReference: CFString
+        let kSecValueWorkingReference: CFString
+        if #available(macOS 10.15, *) {
+            // macOS Catalina requires a persistent ref to pass this test.
+            kSecReturnWorkingReference = kSecReturnPersistentRef
+            kSecValueWorkingReference = kSecValuePersistentRef
+        } else {
+            kSecReturnWorkingReference = kSecReturnRef
+            kSecValueWorkingReference = kSecValueRef
+        }
+
         XCTAssertEqual(SecTrustedApplicationCreateFromPath(nil, &trustedAppSelf), errSecSuccess)
         XCTAssertEqual(SecTrustedApplicationCreateFromPath("/System/Library/CoreServices/SystemUIServer.app", &trustedAppSystemUIServer), errSecSuccess);
         let trustedList = [trustedAppSelf!, trustedAppSystemUIServer!] as NSArray?
@@ -62,7 +73,7 @@ class ValetMacTests: XCTestCase
         XCTAssertTrue(valet.containsObject(forKey: vulnKey))
 
         // Obtain a reference to the vulnerable keychain entry.
-        query[kSecReturnRef as String] = true
+        query[kSecReturnWorkingReference as String] = true
         query[kSecReturnAttributes as String] = true
         var vulnerableEntryReference: CFTypeRef?
         XCTAssertEqual(SecItemCopyMatching(query as CFDictionary, &vulnerableEntryReference), errSecSuccess)
@@ -71,13 +82,13 @@ class ValetMacTests: XCTestCase
             XCTFail()
             return
         }
-        guard let vulnerableValueRef = vulnerableKeychainEntry[kSecValueRef as String] else {
+        guard let vulnerableValueRef = vulnerableKeychainEntry[kSecValueWorkingReference as String] else {
             XCTFail()
             return
         }
 
         let queryWithVulnerableReference = [
-            kSecValueRef as String: vulnerableValueRef
+            kSecValueWorkingReference as String: vulnerableValueRef
             ] as CFDictionary
         // Demonstrate that the item is accessible with the reference.
         XCTAssertEqual(SecItemCopyMatching(queryWithVulnerableReference, nil), errSecSuccess)
@@ -88,7 +99,7 @@ class ValetMacTests: XCTestCase
 
         // We should no longer be able to access the keychain item via the ref.
         let queryWithVulnerableReferenceAndAttributes = [
-            kSecValueRef as String: vulnerableValueRef,
+            kSecValueWorkingReference as String: vulnerableValueRef,
             kSecReturnAttributes as String: true
             ] as CFDictionary
         XCTAssertEqual(SecItemCopyMatching(queryWithVulnerableReferenceAndAttributes, nil), errSecItemNotFound)
