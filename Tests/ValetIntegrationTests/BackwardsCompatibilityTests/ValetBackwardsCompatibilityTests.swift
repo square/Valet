@@ -51,6 +51,11 @@ internal extension Valet {
                 return VALLegacyValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
             case .sharedAccessGroup:
                 return VALLegacyValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
+            #if os(macOS)
+                case .standardOverride,
+                     .sharedAccessGroupOverride:
+                fatalError("There is no legacy Valet for a service override valet")
+            #endif
             }
         case .iCloud:
             switch service {
@@ -58,6 +63,11 @@ internal extension Valet {
                 return VALSynchronizableValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
             case .sharedAccessGroup:
                 return VALSynchronizableValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
+            #if os(macOS)
+            case .standardOverride,
+                 .sharedAccessGroupOverride:
+                fatalError("There is no legacy Valet for a service override valet")
+            #endif
             }
 
         default:

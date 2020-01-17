@@ -93,13 +93,156 @@ class ValetMacTests: XCTestCase
         // This is not be the case upon setting a breakpoint and inspecting before the valet.setString(, forKey:) call above.
     }
 
+    func test_withExplicitlySet_assignsExplicitIdentifier() throws {
+        let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
+        try Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
+            XCTAssertEqual(try $0.keychainQuery()[kSecAttrService as String], explicitlySetIdentifier.description)
+        }
+
+        try Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
+            XCTAssertEqual(try $0.keychainQuery()[kSecAttrService as String], explicitlySetIdentifier.description)
+        }
+
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        try Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
+            XCTAssertEqual(try $0.keychainQuery()[kSecAttrService as String], explicitlySetIdentifier.description)
+        }
+
+        try Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
+            XCTAssertEqual(try $0.keychainQuery()[kSecAttrService as String], explicitlySetIdentifier.description)
+        }
+    }
+
+    func test_withExplicitlySet_canAccessKeychain() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
+        try Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
+            XCTAssertTrue($0.canAccessKeychain())
+
+            try $0.removeAllObjects()
+        }
+
+        try Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
+            XCTAssertTrue($0.canAccessKeychain())
+
+            try $0.removeAllObjects()
+        }
+
+        let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        try Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true).forEach {
+            XCTAssertTrue($0.canAccessKeychain())
+
+            try $0.removeAllObjects()
+        }
+
+        try Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true).forEach {
+            XCTAssertTrue($0.canAccessKeychain())
+
+            try $0.removeAllObjects()
+        }
+    }
+
+    func test_withExplicitlySet_canReadWrittenString() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
+        let key = "key"
+        let passcode = "12345"
+
+        try Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
+            try $0.setString(passcode, forKey: key)
+            XCTAssertEqual(try $0.string(forKey: key), passcode)
+
+            try $0.removeAllObjects()
+        }
+
+        try Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
+            try $0.setString(passcode, forKey: key)
+            XCTAssertEqual(try $0.string(forKey: key), passcode)
+
+            try $0.removeAllObjects()
+        }
+
+        let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        try Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true).forEach {
+            try $0.setString(passcode, forKey: key)
+            XCTAssertEqual(try $0.string(forKey: key), passcode)
+
+            try $0.removeAllObjects()
+        }
+
+        try Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true).forEach {
+            try $0.setString(passcode, forKey: key)
+            XCTAssertEqual(try $0.string(forKey: key), passcode)
+
+            try $0.removeAllObjects()
+        }
+    }
+
+    func test_withExplicitlySet_vendsSameObjectWhenSameConfigurationRequested() {
+        let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
+        var permutations1 = Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        var permutations2 = Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        for (index, permutation) in permutations1.enumerated() {
+            XCTAssertTrue(permutation === permutations2[index], "Two Valets with \(accessibilityValues[index]) were not identical")
+        }
+
+        permutations1 = Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        permutations2 = Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        for (index, permutation) in permutations1.enumerated() {
+            XCTAssertTrue(permutation === permutations2[index], "Two iCloud Valets with \(accessibilityValues[index]) were not identical")
+        }
+
+        let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        permutations1 = Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        permutations2 = Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        for (index, permutation) in permutations1.enumerated() {
+            XCTAssertTrue(permutation === permutations2[index], "Two shared Valets with \(accessibilityValues[index]) were not identical")
+        }
+
+        permutations1 = Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        permutations2 = Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        for (index, permutation) in permutations1.enumerated() {
+            XCTAssertTrue(permutation === permutations2[index], "Two shared iCloud Valets with \(accessibilityValues[index]) were not identical")
+        }
+    }
+
+    func test_withExplicitlySet_createsObjectWithCorrectAccessibility() {
+        let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
+        var permutations = Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        for (index, permutation) in permutations.enumerated() {
+            XCTAssertEqual(accessibilityValues[index], permutation.accessibility)
+        }
+
+        permutations = Valet.iCloudPermutations(withExplictlySet: explicitlySetIdentifier, shared: false)
+        for (index, permutation) in permutations.enumerated() {
+            XCTAssertEqual(accessibilityValues[index], permutation.accessibility)
+        }
+
+        let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        permutations = Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        for (index, permutation) in permutations.enumerated() {
+            XCTAssertEqual(accessibilityValues[index], permutation.accessibility)
+        }
+
+        permutations = Valet.iCloudPermutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true)
+        for (index, permutation) in permutations.enumerated() {
+            XCTAssertEqual(accessibilityValues[index], permutation.accessibility)
+        }
+    }
+
     // MARK: Migration - PreCatalina
 
     func test_migrateObjectsFromPreCatalina_migratesDataWrittenPreCatalina() throws {
         guard #available(macOS 10.15, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() else {
             return
         }
 
@@ -116,10 +259,14 @@ class ValetMacTests: XCTestCase
         SecItemDelete(preCatalinaWriteQuery as CFDictionary)
 
         XCTAssertEqual(SecItemAdd(preCatalinaWriteQuery as CFDictionary, nil), errSecSuccess)
-        XCTAssertNil(try valet.object(forKey: key))
+        XCTAssertThrowsError(try valet.object(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
         XCTAssertNoThrow(try valet.migrateObjectsFromPreCatalina())
         XCTAssertEqual(try valet.object(forKey: key), object)
     }
+
+    private let accessibilityValues = Accessibility.allValues()
 
 }
 #endif
