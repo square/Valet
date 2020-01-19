@@ -55,7 +55,7 @@ public final class SecureEnclave {
     ///   - object: A Data value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
     ///   - options: A base query used to scope the calls in the keychain.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    /// - Throws: An error of type `KeychainError`.
     internal static func setObject(_ object: Data, forKey key: String, options: [String : AnyHashable]) throws {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         try? Keychain.removeObject(forKey: key, options: options)
@@ -68,7 +68,7 @@ public final class SecureEnclave {
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    /// - Throws: An error of type `KeychainError`.
     internal static func object(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws -> Data {
         var secItemQuery = options
         if !userPrompt.isEmpty {
@@ -82,7 +82,7 @@ public final class SecureEnclave {
     ///   - key: The key to look up in the keychain.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    /// - Throws: An error of type `KeychainError`.
     internal static func containsObject(forKey key: String, options: [String : AnyHashable]) throws -> Bool {
         var secItemQuery = options
         secItemQuery[kSecUseAuthenticationUI as String] = kSecUseAuthenticationUIFail
@@ -103,7 +103,7 @@ public final class SecureEnclave {
     ///   - string: A String value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `string` from the keychain.
     ///   - options: A base query used to scope the calls in the keychain.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    /// - Throws: An error of type `KeychainError`.
     internal static func setString(_ string: String, forKey key: String, options: [String : AnyHashable]) throws {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         try? Keychain.removeObject(forKey: key, options: options)
@@ -116,7 +116,7 @@ public final class SecureEnclave {
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    /// - Throws: An error of type `KeychainError`.
     internal static func string(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws -> String {
         var secItemQuery = options
         if !userPrompt.isEmpty {

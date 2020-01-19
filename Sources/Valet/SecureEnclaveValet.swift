@@ -122,7 +122,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - Parameters:
     ///   - object: A Data value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    /// - Throws: An error of type `KeychainError`.
     @objc
     public func setObject(_ object: Data, forKey key: String) throws {
         try execute(in: lock) {
@@ -134,7 +134,7 @@ public final class SecureEnclaveValet: NSObject {
     ///   - key: A key used to retrieve the desired object from the keychain.
     ///   -  userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - Returns: The data currently stored in the keychain for the provided key.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    /// - Throws: An error of type `KeychainError`.
     @objc
     public func object(forKey key: String, withPrompt userPrompt: String) throws -> Data {
         try execute(in: lock) {
@@ -144,7 +144,7 @@ public final class SecureEnclaveValet: NSObject {
 
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
-    /// - Note: Will never prompt the user for Face ID, Touch ID, or password. Method will throw a `KeychainError` if an error occurs.
+    /// - Note: Will never prompt the user for Face ID, Touch ID, or password. Method will throw a `KeychainError`.
     public func containsObject(forKey key: String) throws -> Bool {
         try execute(in: lock) {
             try SecureEnclave.containsObject(forKey: key, options: try keychainQuery())
@@ -154,7 +154,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - Parameters:
     ///   - string: A String value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `string` from the keychain.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    /// - Throws: An error of type `KeychainError`.
     @objc
     public func setString(_ string: String, forKey key: String) throws {
         try execute(in: lock) {
@@ -166,7 +166,7 @@ public final class SecureEnclaveValet: NSObject {
     ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - Returns: The string currently stored in the keychain for the provided key.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    /// - Throws: An error of type `KeychainError`.
     @objc
     public func string(forKey key: String, withPrompt userPrompt: String) throws -> String {
         try execute(in: lock) {
@@ -176,7 +176,7 @@ public final class SecureEnclaveValet: NSObject {
     
     /// Removes a key/object pair from the keychain.
     /// - Parameter key: A key used to remove the desired object from the keychain.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    /// - Throws: An error of type `KeychainError`.
     @objc
     public func removeObject(forKey key: String) throws {
         try execute(in: lock) {
@@ -185,7 +185,7 @@ public final class SecureEnclaveValet: NSObject {
     }
     
     /// Removes all key/object pairs accessible by this Valet instance from the keychain.
-    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    /// - Throws: An error of type `KeychainError`.
     @objc
     public func removeAllObjects() throws {
         try execute(in: lock) {
@@ -197,7 +197,8 @@ public final class SecureEnclaveValet: NSObject {
     /// - Parameters:
     ///   - query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
-    /// - Note: The keychain is not modified if an error is thrown. Method will throw a `KeychainError` or `MigrationError` if an error occurs.
+    /// - Throws: An error of type `KeychainError` or `MigrationError`.
+    /// - Note: The keychain is not modified if an error is thrown.
     @objc
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) throws {
         try execute(in: lock) {
@@ -209,7 +210,8 @@ public final class SecureEnclaveValet: NSObject {
     /// - Parameters:
     ///   - keychain: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
-    /// - Note: The keychain is not modified if an error is thrown. Method will throw a `KeychainError` or `MigrationError` if an error occurs.
+    /// - Throws: An error of type `KeychainError` or `MigrationError`.
+    /// - Note: The keychain is not modified if an error is thrown.
     @objc
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) throws {
         try migrateObjects(matching: try valet.keychainQuery(), removeOnCompletion: removeOnCompletion)
