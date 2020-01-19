@@ -66,7 +66,7 @@ class ValetMacTests: XCTestCase
         XCTAssertEqual(SecItemAdd(accessListQuery as CFDictionary, nil), errSecSuccess)
 
         // The potentially vulnerable keychain item should exist in our Valet now.
-        XCTAssertTrue(valet.containsObject(forKey: vulnKey))
+        XCTAssertTrue(try valet.containsObject(forKey: vulnKey))
 
         // Obtain a reference to the vulnerable keychain entry.
         query[kSecReturnWorkingReference as String] = true
