@@ -29,14 +29,6 @@ class ValetTests: XCTestCase
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = Valet.valet(with: identifier, accessibility: .whenUnlocked)
 
-    // MARK: XCTestCase
-
-    override func setUp() {
-        super.setUp()
-
-        try? valet.removeAllObjects()
-    }
-
     // MARK: Initialization
 
     func test_init_createsCorrectBackingService() {

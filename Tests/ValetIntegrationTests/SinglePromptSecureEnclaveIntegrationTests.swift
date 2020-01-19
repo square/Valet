@@ -34,8 +34,12 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     override func setUp()
     {
         super.setUp()
-        
-        try? valet.removeObject(forKey: key)
+
+        do {
+            try valet.removeAllObjects()
+        } catch {
+            XCTFail("Error removing objects from Valet \(valet): \(error)")
+        }
     }
 
     // MARK: Equality

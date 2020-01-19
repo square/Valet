@@ -101,10 +101,13 @@ class ValetIntegrationTests: XCTestCase
     {
         super.setUp()
 
-        try? vanillaValet.removeAllObjects()
-        try? anotherFlavor.removeAllObjects()
-
-        allPermutations.forEach { testingValet in try? testingValet.removeAllObjects() }
+        ([vanillaValet, anotherFlavor] + allPermutations).forEach { testingValet in
+            do {
+                try testingValet.removeAllObjects()
+            } catch {
+                XCTFail("Error removing objects from Valet \(testingValet): \(error)")
+            }
+        }
 
         XCTAssertEqual(try? vanillaValet.allKeys(), Set())
         XCTAssertEqual(try? anotherFlavor.allKeys(), Set())
