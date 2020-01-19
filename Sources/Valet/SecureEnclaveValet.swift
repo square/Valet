@@ -249,7 +249,9 @@ extension SecureEnclaveValet {
     
     // MARK: Public Class Methods
     
-    /// - Parameter identifier: A non-empty string that uniquely identifies a SecureEnclaveValet.
+    /// - Parameters:
+    ///   - identifier: A non-empty string that uniquely identifies a SecureEnclaveValet.
+    ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     @objc(valetWithIdentifier:accessControl:)
     public class func 🚫swift_valet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet? {
