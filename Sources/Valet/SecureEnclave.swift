@@ -69,7 +69,7 @@ public final class SecureEnclave {
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    internal static func object(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws -> Data {
+    internal static func object(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws -> Data? {
         var secItemQuery = options
         if !userPrompt.isEmpty {
             secItemQuery[kSecUseOperationPrompt as String] = userPrompt
@@ -117,7 +117,7 @@ public final class SecureEnclave {
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    internal static func string(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws -> String {
+    internal static func string(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws -> String? {
         var secItemQuery = options
         if !userPrompt.isEmpty {
             secItemQuery[kSecUseOperationPrompt as String] = userPrompt

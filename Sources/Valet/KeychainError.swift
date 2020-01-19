@@ -27,8 +27,6 @@ public enum KeychainError: Int, Error, Equatable {
     case couldNotAccessKeychain
     /// User dismissed the user-presence prompt.
     case userCancelled
-    /// No data was found for the requested key.
-    case itemNotFound
     /// The application does not have the proper entitlements to perform the requested action.
     /// This may be due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.
     /// More information: https://forums.developer.apple.com/thread/4743")
@@ -39,9 +37,8 @@ public enum KeychainError: Int, Error, Equatable {
     case emptyValue
 
     init(status: OSStatus) {
+        assert(status != errSecItemNotFound, "Should not be creating a KeychainError with errSecItemNotFound")
         switch status {
-        case errSecItemNotFound:
-            self = .itemNotFound
         case errSecUserCanceled,
              errSecAuthFailed:
             self = .userCancelled

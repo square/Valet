@@ -270,9 +270,7 @@ class ValetMacTests: XCTestCase
         SecItemDelete(preCatalinaWriteQuery as CFDictionary)
 
         XCTAssertEqual(SecItemAdd(preCatalinaWriteQuery as CFDictionary, nil), errSecSuccess)
-        XCTAssertThrowsError(try valet.object(forKey: key)) { error in
-            XCTAssertEqual(error as? KeychainError, .itemNotFound)
-        }
+        XCTAssertNil(try valet.object(forKey: key))
         XCTAssertNoThrow(try valet.migrateObjectsFromPreCatalina())
         XCTAssertEqual(try valet.object(forKey: key), object)
     }

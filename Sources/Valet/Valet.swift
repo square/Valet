@@ -249,8 +249,7 @@ public final class Valet: NSObject {
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc
-    public func object(forKey key: String) throws -> Data {
+    public func object(forKey key: String) throws -> Data? {
         try execute(in: lock) {
             try Keychain.object(forKey: key, options: try keychainQuery())
         }
@@ -285,9 +284,9 @@ public final class Valet: NSObject {
     }
 
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
+    /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    @objc
-    public func string(forKey key: String) throws -> String {
+    public func string(forKey key: String) throws -> String? {
         try execute(in: lock) {
             try Keychain.string(forKey: key, options: try keychainQuery())
         }
@@ -584,6 +583,26 @@ extension Valet {
             return false
         }
         return containsObject
+    }
+
+    /// - Parameter key: A key used to retrieve the desired object from the keychain.
+    /// - Returns: The data currently stored in the keychain for the provided key. Will return `nil` if the keychain is not accessible.
+    @available(swift, obsoleted: 1.0)
+    @objc(objectForKey:)
+    public func 🚫swift_object(forKey key: String) -> Data? {
+        execute(in: lock) {
+            try? Keychain.object(forKey: key, options: try keychainQuery())
+        }
+    }
+
+    /// - Parameter key: A key used to retrieve the desired object from the keychain.
+    /// - Returns: The string currently stored in the keychain for the provided key. Will return `nil` if the keychain is not accessible.
+    @available(swift, obsoleted: 1.0)
+    @objc(stringForKey:)
+    public func 🚫swift_string(forKey key: String) -> String? {
+        execute(in: lock) {
+            try? Keychain.string(forKey: key, options: try keychainQuery())
+        }
     }
 
 }
