@@ -99,7 +99,7 @@ internal final class Keychain {
         
         #if os(macOS)
             // Never update an existing keychain item on OS X, since the existing item could have unauthorized apps in the Access Control List. Fixes zero-day Keychain vuln found here: https://drive.google.com/file/d/0BxxXk1d3yyuZOFlsdkNMSGswSGs/view
-            try? SecItem.deleteItems(matching: secItemQuery)
+            try SecItem.deleteItems(matching: secItemQuery)
             secItemQuery[kSecValueData as String] = object
             try SecItem.add(attributes: secItemQuery)
         #else

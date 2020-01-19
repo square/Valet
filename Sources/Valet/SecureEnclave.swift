@@ -58,7 +58,7 @@ public final class SecureEnclave {
     /// - Throws: An error of type `KeychainError`.
     internal static func setObject(_ object: Data, forKey key: String, options: [String : AnyHashable]) throws {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
-        try? Keychain.removeObject(forKey: key, options: options)
+        try Keychain.removeObject(forKey: key, options: options)
         
         try Keychain.setObject(object, forKey: key, options: options)
     }
@@ -106,7 +106,7 @@ public final class SecureEnclave {
     /// - Throws: An error of type `KeychainError`.
     internal static func setString(_ string: String, forKey key: String, options: [String : AnyHashable]) throws {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
-        try? Keychain.removeObject(forKey: key, options: options)
+        try Keychain.removeObject(forKey: key, options: options)
         
         try Keychain.setString(string, forKey: key, options: options)
     }
