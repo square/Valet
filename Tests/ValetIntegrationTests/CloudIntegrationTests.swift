@@ -39,8 +39,12 @@ class CloudIntegrationTests: XCTestCase
     override func setUp()
     {
         super.setUp()
-        
-        allPermutations.forEach { testValet in try? testValet.removeAllObjects() }
+
+        do {
+            try allPermutations.forEach { testValet in XCTAssertNoThrow(try testValet.removeAllObjects()) }
+        } catch {
+            XCTFail("Error removing objects from Valet: \(error)")
+        }
     }
     
     func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration() throws
