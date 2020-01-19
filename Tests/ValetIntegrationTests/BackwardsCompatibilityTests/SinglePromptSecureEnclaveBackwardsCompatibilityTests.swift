@@ -34,9 +34,9 @@ extension SinglePromptSecureEnclaveIntegrationTests {
             return
         }
 
-        let deprecatedValet = VALLegacySinglePromptSecureEnclaveValet(identifier: valet.identifier.description)!
+        let deprecatedValet = VALLegacySinglePromptSecureEnclaveValet(identifier: valet().identifier.description)!
         XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
-        XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
+        XCTAssertEqual(.success(passcode), valet().string(forKey: key, withPrompt: ""))
     }
 
 }
