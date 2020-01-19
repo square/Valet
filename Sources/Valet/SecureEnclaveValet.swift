@@ -248,7 +248,6 @@ public final class SecureEnclaveValet: NSObject {
 extension SecureEnclaveValet {
     
     // MARK: Public Class Methods
-    
     /// - Parameters:
     ///   - identifier: A non-empty string that uniquely identifies a SecureEnclaveValet.
     ///   - accessControl: The desired access control for the SecureEnclaveValet.
