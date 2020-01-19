@@ -79,7 +79,7 @@ internal final class SecItem {
     
     // MARK: Internal Class Methods
     
-    internal static func copy<DesiredType>(matching query: [String : AnyHashable]) throws -> DesiredType? {
+    internal static func copy<DesiredType>(matching query: [String : AnyHashable]) throws -> DesiredType {
         if query.isEmpty {
             assertionFailure("Must provide a query with at least one item")
         }
@@ -89,22 +89,18 @@ internal final class SecItem {
         execute(in: secItemLock) {
             status = SecItemCopyMatching(query as CFDictionary, &result)
         }
-
-        switch status {
-        case errSecSuccess:
+        
+        if status == errSecSuccess {
             if let result = result as? DesiredType {
                 return result
-
+                
             } else {
                 // The query failed to pull out a value object of the desired type, but did find metadata matching this query.
                 // This can happen because either the query didn't ask for return data via [kSecReturnData : true], or because a metadata-only item existed in the keychain.
-                return nil
+                throw KeychainError.itemNotFound
             }
-
-        case errSecItemNotFound:
-            return nil
-
-        default:
+            
+        } else {
             throw KeychainError(status: status)
         }
     }
@@ -181,16 +177,14 @@ internal final class SecItem {
         execute(in: secItemLock) {
             status = SecItemDelete(secItemQuery as CFDictionary)
         }
-
-        switch status {
-        case errSecSuccess,
-             errSecItemNotFound:
+        
+        if status == errSecSuccess {
             // We're done!
-            break
-
-        default:
+            
+        } else {
             switch KeychainError(status: status) {
-            case .couldNotAccessKeychain:
+            case .couldNotAccessKeychain
+:
                 throw KeychainError.couldNotAccessKeychain
 
             case .missingEntitlement:

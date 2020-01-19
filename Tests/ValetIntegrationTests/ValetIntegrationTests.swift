@@ -235,10 +235,12 @@ class ValetIntegrationTests: XCTestCase
 
     // MARK: string(forKey:)
 
-    func test_stringForKey_returnsNilForKeyWithNoValue() throws
+    func test_stringForKey_throwsItemNotFoundForKeyWithNoValue() throws
     {
         try allPermutations.forEach { valet in
-            XCTAssertNil(try vanillaValet.string(forKey: key), "\(valet) found item that should not exit")
+            XCTAssertThrowsError(try vanillaValet.string(forKey: key), "\(valet) found item that should not exit") { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
     }
 
@@ -259,25 +261,29 @@ class ValetIntegrationTests: XCTestCase
         XCTAssertEqual("monster", try equalValet.string(forKey: "cookie"))
     }
 
-    func test_stringForKey_withDifferingIdentifier_returnsNil() throws
+    func test_stringForKey_withDifferingIdentifier_throwsItemNotFound() throws
     {
         try vanillaValet.setString(passcode, forKey: key)
         XCTAssertEqual(passcode, try vanillaValet.string(forKey: key))
         
         let differingIdentifier = Valet.valet(with: Identifier(nonEmpty: "wat")!, accessibility: vanillaValet.accessibility)
-        XCTAssertNil(try differingIdentifier.string(forKey: key))
+        XCTAssertThrowsError(try differingIdentifier.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
 
-    func test_stringForKey_withDifferingAccessibility_returnsNil() throws
+    func test_stringForKey_withDifferingAccessibility_throwsItemNotFound() throws
     {
         try vanillaValet.setString(passcode, forKey: key)
         XCTAssertEqual(passcode, try vanillaValet.string(forKey: key))
         
         let differingAccessibility = Valet.valet(with: vanillaValet.identifier, accessibility: .afterFirstUnlockThisDeviceOnly)
-        XCTAssertNil(try differingAccessibility.string(forKey: key))
+        XCTAssertThrowsError(try differingAccessibility.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
 
-    func test_stringForKey_withEquivalentConfigurationButDifferingFlavor_returnsNil() throws
+    func test_stringForKey_withEquivalentConfigurationButDifferingFlavor_throwsItemNotFound() throws
     {
         guard testEnvironmentIsSigned() else {
             return
@@ -286,7 +292,9 @@ class ValetIntegrationTests: XCTestCase
         try vanillaValet.setString("monster", forKey: "cookie")
         XCTAssertEqual("monster", try vanillaValet.string(forKey: "cookie"))
 
-        XCTAssertNil(try anotherFlavor.string(forKey: "cookie"))
+        XCTAssertThrowsError(try anotherFlavor.string(forKey: "cookie")) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
 
     #if !os(macOS)
@@ -315,7 +323,9 @@ class ValetIntegrationTests: XCTestCase
     func test_setStringForKey_successfullyUpdatesExistingKey() throws
     {
         try allPermutations.forEach { valet in
-            XCTAssertNil(try valet.string(forKey: key))
+            XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
 
             try valet.setString("1", forKey: key)
             XCTAssertEqual("1", try valet.string(forKey: key))
@@ -342,9 +352,11 @@ class ValetIntegrationTests: XCTestCase
     
     // MARK: object(forKey:)
 
-    func test_objectForKey_returnsNil() throws {
+    func test_objectForKey_throwsItemNotFound() throws {
         try allPermutations.forEach { valet in
-            XCTAssertNil(try valet.object(forKey: key))
+            XCTAssertThrowsError(try valet.object(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
     }
     
@@ -363,25 +375,29 @@ class ValetIntegrationTests: XCTestCase
         XCTAssertEqual(passcodeData, try equalValet.object(forKey: key))
     }
     
-    func test_objectForKey_withDifferingIdentifier_returnsNil() throws {
+    func test_objectForKey_withDifferingIdentifier_throwsItemNotFound() throws {
         try allPermutations.forEach { valet in
             try valet.setObject(passcodeData, forKey: key)
             XCTAssertEqual(passcodeData, try valet.object(forKey: key))
 
             let differingIdentifier = Valet.valet(with: Identifier(nonEmpty: "wat")!, accessibility: valet.accessibility)
-            XCTAssertNil(try differingIdentifier.object(forKey: key))
+            XCTAssertThrowsError(try differingIdentifier.object(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
     }
     
-    func test_objectForKey_withDifferingAccessibility_returnsNil() throws {
+    func test_objectForKey_withDifferingAccessibility_throwsItemNotFound() throws {
         try vanillaValet.setObject(passcodeData, forKey: key)
         XCTAssertEqual(passcodeData, try vanillaValet.object(forKey: key))
         
         let differingAccessibility = Valet.valet(with: vanillaValet.identifier, accessibility: .afterFirstUnlockThisDeviceOnly)
-        XCTAssertNil(try differingAccessibility.object(forKey: key))
+        XCTAssertThrowsError(try differingAccessibility.object(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
     
-    func test_objectForKey_withEquivalentConfigurationButDifferingFlavor_returnsNil() throws {
+    func test_objectForKey_withEquivalentConfigurationButDifferingFlavor_throwsItemNotFound() throws {
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -389,7 +405,9 @@ class ValetIntegrationTests: XCTestCase
         try vanillaValet.setObject(passcodeData, forKey: key)
         XCTAssertEqual(passcodeData, try vanillaValet.object(forKey: key))
 
-        XCTAssertNil(try anotherFlavor.object(forKey: key))
+        XCTAssertThrowsError(try anotherFlavor.object(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
     
     // MARK: set(object:forKey:)
@@ -437,7 +455,9 @@ class ValetIntegrationTests: XCTestCase
             let dictionary = [ "that's no" : "moon" ]
             let nonStringData = NSKeyedArchiver.archivedData(withRootObject: dictionary)
             try valet.setObject(nonStringData, forKey: key)
-            XCTAssertNil(try valet.string(forKey: key))
+            XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
     }
     
@@ -559,7 +579,9 @@ class ValetIntegrationTests: XCTestCase
         try allPermutations.forEach { valet in
             try valet.setString(passcode, forKey: key)
             try valet.removeObject(forKey: key)
-            XCTAssertNil(try valet.string(forKey: key))
+            XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
     }
 
@@ -594,7 +616,9 @@ class ValetIntegrationTests: XCTestCase
 
         try vanillaValet.removeObject(forKey: key)
 
-        XCTAssertNil(try vanillaValet.string(forKey: key))
+        XCTAssertThrowsError(try vanillaValet.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
         XCTAssertEqual(passcode, try anotherFlavor.string(forKey: key))
     }
 
@@ -641,20 +665,20 @@ class ValetIntegrationTests: XCTestCase
         ]
 
         XCTAssertThrowsError(try vanillaValet.migrateObjects(matching: queryWithNoMatches, removeOnCompletion: false)) { error in
-            XCTAssertEqual(error as? MigrationError, .noItemsToMigrateFound)
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
         XCTAssertThrowsError(try vanillaValet.migrateObjects(matching: queryWithNoMatches, removeOnCompletion: true)) { error in
-            XCTAssertEqual(error as? MigrationError, .noItemsToMigrateFound)
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
 
         let valetKeychainQuery = try vanillaValet.keychainQuery()
 
         // Our test Valet has not yet been written to, migration should fail:
         XCTAssertThrowsError(try anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: false)) { error in
-            XCTAssertEqual(error as? MigrationError, .noItemsToMigrateFound)
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
         XCTAssertThrowsError(try anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: true)) { error in
-            XCTAssertEqual(error as? MigrationError, .noItemsToMigrateFound)
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
     }
 
@@ -768,7 +792,9 @@ class ValetIntegrationTests: XCTestCase
         XCTAssertEqual(0, try anotherFlavor.allKeys().count)
         for (key, value) in keyValuePairs {
             XCTAssertEqual(try vanillaValet.string(forKey: key), value)
-            XCTAssertNil(try anotherFlavor.string(forKey: key))
+            XCTAssertThrowsError(try anotherFlavor.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
     }
 

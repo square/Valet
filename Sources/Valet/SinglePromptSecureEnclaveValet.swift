@@ -138,7 +138,8 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    public func object(forKey key: String, withPrompt userPrompt: String) throws -> Data? {
+    @objc
+    public func object(forKey key: String, withPrompt userPrompt: String) throws -> Data {
         try execute(in: lock) {
             try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: try continuedAuthenticationKeychainQuery())
         }
@@ -168,7 +169,8 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
     /// - Note: Method will throw a `KeychainError` if an error occurs.
-    public func string(forKey key: String, withPrompt userPrompt: String) throws -> String? {
+    @objc
+    public func string(forKey key: String, withPrompt userPrompt: String) throws -> String {
         try execute(in: lock) {
             try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: try continuedAuthenticationKeychainQuery())
         }
@@ -316,30 +318,6 @@ extension SinglePromptSecureEnclaveValet {
             return false
         }
         return containsObject
-    }
-
-    /// - Parameters:
-    ///   - key: A key used to retrieve the desired object from the keychain.
-    ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
-    /// - Returns: The data currently stored in the keychain for the provided key. Will return `nil` if the keychain is not accessible.
-    @available(swift, obsoleted: 1.0)
-    @objc(objectForKey:withPrompt:)
-    public func 🚫swift_object(forKey key: String, withPrompt userPrompt: String) -> Data? {
-        execute(in: lock) {
-            try? SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: try continuedAuthenticationKeychainQuery())
-        }
-    }
-
-    /// - Parameters:
-    ///   - key: A key used to retrieve the desired object from the keychain.
-    ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
-    /// - Returns: The string currently stored in the keychain for the provided key. Will return `nil` if the keychain is not accessible.
-    @available(swift, obsoleted: 1.0)
-    @objc(stringForKey:withPrompt:)
-    public func 🚫swift_string(forKey key: String, withPrompt userPrompt: String) -> String? {
-        execute(in: lock) {
-            try? SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: try continuedAuthenticationKeychainQuery())
-        }
     }
 
 }

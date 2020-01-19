@@ -62,7 +62,9 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
         XCTAssertNotEqual(valet, equivalentValet)
         XCTAssertEqual(passcode, try valet.string(forKey: key, withPrompt: ""))
-        XCTAssertNil(try equivalentValet.string(forKey: key, withPrompt: ""))
+        XCTAssertThrowsError(try equivalentValet.string(forKey: key, withPrompt: "")) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
 
     // MARK: allKeys
@@ -176,7 +178,9 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         
         for (key, value) in keyValuePairs {
             XCTAssertEqual(value, try valet.string(forKey: key, withPrompt: ""))
-            XCTAssertNil(try plainOldValet.string(forKey: key))
+            XCTAssertThrowsError(try plainOldValet.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
         
         // Clean up items for the next test run (allKeys and removeAllObjects are unsupported in VALSecureEnclaveValet.

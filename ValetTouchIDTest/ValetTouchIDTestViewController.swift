@@ -60,9 +60,11 @@ final class ValetTouchIDTestViewController : UIViewController
     {
         let resultString: String
         do {
-            resultString = try singlePromptSecureEnclaveValet.string(forKey: username, withPrompt: "Use TouchID to retrieve password") ?? "object not found"
+            resultString = try singlePromptSecureEnclaveValet.string(forKey: username, withPrompt: "Use TouchID to retrieve password")
         } catch KeychainError.userCancelled {
             resultString = "user cancelled TouchID"
+        } catch KeychainError.itemNotFound {
+            resultString = "object not found"
         } catch {
             resultString = "caught unknown error \(error)"
         }

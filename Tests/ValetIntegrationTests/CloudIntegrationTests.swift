@@ -60,7 +60,9 @@ class CloudIntegrationTests: XCTestCase
         // Setting
         try iCloudValet.setString("butts", forKey: "cloud")
         XCTAssertEqual("butts", try iCloudValet.string(forKey: "cloud"))
-        XCTAssertNil(try vanillaValet.string(forKey: "cloud"))
+        XCTAssertThrowsError(try vanillaValet.string(forKey: "cloud")) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
         
         // Removal
         try vanillaValet.setString("snake people", forKey: "millennials")
@@ -71,7 +73,9 @@ class CloudIntegrationTests: XCTestCase
     func test_setStringForKey() throws
     {
         try allPermutations.forEach { valet in
-            XCTAssertNil(try valet.string(forKey: key))
+            XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
             try valet.setString(passcode, forKey: key)
             XCTAssertEqual(passcode, try valet.string(forKey: key))
         }
@@ -84,7 +88,9 @@ class CloudIntegrationTests: XCTestCase
             XCTAssertEqual(passcode, try valet.string(forKey: key))
 
             try valet.removeObject(forKey: key)
-            XCTAssertNil(try valet.string(forKey: key))
+            XCTAssertThrowsError(try valet.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
         }
     }
     

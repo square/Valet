@@ -25,8 +25,6 @@ import Foundation
 public enum MigrationError: Int, Error, Equatable, CustomStringConvertible {
     /// Migration failed because the keychain query was not valid.
     case invalidQuery
-    /// Migration failed because no items to migrate were found.
-    case noItemsToMigrateFound
     /// Migration failed because a key in the query result could not be read.
     case keyInQueryResultInvalid
     /// Migration failed because some data in the query result could not be read.
@@ -43,7 +41,6 @@ public enum MigrationError: Int, Error, Equatable, CustomStringConvertible {
     public var description: String {
         switch self {
         case .invalidQuery: return "invalidQuery"
-        case .noItemsToMigrateFound: return "noItemsToMigrateFound"
         case .keyInQueryResultInvalid: return "keyInQueryResultInvalid"
         case .dataInQueryResultInvalid: return "dataInQueryResultInvalid"
         case .duplicateKeyInQueryResult: return "duplicateKeyInQueryResult"

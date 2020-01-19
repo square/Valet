@@ -56,15 +56,16 @@ internal final class Keychain {
     
     // MARK: Getters
     
-    internal static func string(forKey key: String, options: [String : AnyHashable]) throws -> String? {
-        if let data = try object(forKey: key, options: options) {
-            return String(data: data, encoding: .utf8)
+    internal static func string(forKey key: String, options: [String : AnyHashable]) throws -> String {
+        let data = try object(forKey: key, options: options)
+        if let string = String(data: data, encoding: .utf8) {
+            return string
         } else {
-            return nil
+            throw KeychainError.itemNotFound
         }
     }
     
-    internal static func object(forKey key: String, options: [String : AnyHashable]) throws -> Data? {
+    internal static func object(forKey key: String, options: [String : AnyHashable]) throws -> Data {
         guard !key.isEmpty else {
             throw KeychainError.emptyKey
         }
@@ -150,10 +151,7 @@ internal final class Keychain {
         secItemQuery[kSecReturnAttributes as String] = true
 
         do {
-            guard let collection: Any = try SecItem.copy(matching: secItemQuery) else {
-                // Nothing was found. That's fine.
-                return Set()
-            }
+            let collection: Any = try SecItem.copy(matching: secItemQuery)
             if let singleMatch = collection as? [String: AnyHashable], let singleKey = singleMatch[kSecAttrAccount as String] as? String, singleKey != canaryKey {
                 return Set([singleKey])
 
@@ -167,6 +165,9 @@ internal final class Keychain {
                 return Set()
             }
 
+        } catch KeychainError.itemNotFound {
+            // Nothing was found. That's fine.
+            return Set()
         } catch {
             // This isn't a recoverable error. Throw.
             throw error
@@ -223,9 +224,7 @@ internal final class Keychain {
         secItemQuery[kSecReturnRef as String] = false
         secItemQuery[kSecReturnPersistentRef as String] = true
         
-        guard let collection: Any = try SecItem.copy(matching: secItemQuery) else {
-            throw MigrationError.noItemsToMigrateFound
-        }
+        let collection: Any = try SecItem.copy(matching: secItemQuery)
         let retrievedItemsToMigrate: [[String: AnyHashable]]
         if let singleMatch = collection as? [String : AnyHashable] {
             retrievedItemsToMigrate = [singleMatch]
@@ -251,10 +250,7 @@ internal final class Keychain {
             ]
 
             do {
-                guard let data: Data = try SecItem.copy(matching: retrieveDataQuery) else {
-                    // It is possible for metadata-only items to exist in the keychain that do not have data associated with them. Ignore this entry.
-                    continue
-                }
+                let data: Data = try SecItem.copy(matching: retrieveDataQuery)
                 guard !data.isEmpty else {
                     throw MigrationError.dataInQueryResultInvalid
                 }
@@ -262,6 +258,10 @@ internal final class Keychain {
                 var retrievedItemToMigrateWithData = retrievedItem
                 retrievedItemToMigrateWithData[kSecValueData as String] = data
                 retrievedItemsToMigrateWithData.append(retrievedItemToMigrateWithData)
+            } catch KeychainError.itemNotFound {
+                // It is possible for metadata-only items to exist in the keychain that do not have data associated with them. Ignore this entry.
+                continue
+
             } catch {
                 throw error
             }
