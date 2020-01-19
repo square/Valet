@@ -28,7 +28,7 @@ public final class SecureEnclaveValet: NSObject {
     // MARK: Public Class Methods
 
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: A non-empty string that uniquely identifies a SecureEnclaveValet.
     ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
