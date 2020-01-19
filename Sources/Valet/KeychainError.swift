@@ -31,7 +31,7 @@ public enum KeychainError: Int, Error, Equatable {
     case itemNotFound
     /// The application does not have the proper entitlements to perform the requested action.
     /// This may be due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.
-    /// More information: https://forums.developer.apple.com/thread/4743")
+    /// - SeeAlso: https://forums.developer.apple.com/thread/4743"
     case missingEntitlement
     /// The key provided is empty.
     case emptyKey

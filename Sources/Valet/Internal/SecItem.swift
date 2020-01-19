@@ -115,7 +115,6 @@ internal final class SecItem {
         execute(in: secItemLock) {
             status = SecItemCopyMatching(query as CFDictionary, nil)
         }
-        assert(status != errSecMissingEntitlement, "A 'Missing Entitlements' error occurred. This is likely due to an Apple Keychain bug. As a workaround try running on a device that is not attached to a debugger.\n\nMore information: https://forums.developer.apple.com/thread/4743")
 
         return status
     }
