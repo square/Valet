@@ -263,7 +263,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     
     /// Migrates objects matching the vended keychain query into the receiving SinglePromptSecureEnclaveValet instance.
     /// - Parameters:
-    ///   - keychain: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
+    ///   - valet: A Valet whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
     /// - Returns: Whether the migration succeeded or failed.
     /// - Note: The keychain is not modified if a failure occurs.
