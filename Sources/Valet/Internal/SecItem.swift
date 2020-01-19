@@ -183,8 +183,7 @@ internal final class SecItem {
             
         } else {
             switch KeychainError(status: status) {
-            case .couldNotAccessKeychain
-:
+            case .couldNotAccessKeychain:
                 throw KeychainError.couldNotAccessKeychain
 
             case .missingEntitlement:
