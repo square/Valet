@@ -258,17 +258,17 @@ public final class Valet: NSObject {
 
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
-    @objc
-    public func containsObject(forKey key: String) -> Bool {
-        execute(in: lock) {
-            guard let keychainQuery = try? self.keychainQuery() else {
-                return false
-            }
-            switch Keychain.containsObject(forKey: key, options: keychainQuery) {
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    public func containsObject(forKey key: String) throws -> Bool {
+        try execute(in: lock) {
+            let status = Keychain.containsObject(forKey: key, options: try self.keychainQuery())
+            switch status {
             case errSecSuccess:
                 return true
-            default:
+            case errSecItemNotFound:
                 return false
+            default:
+                throw KeychainError(status: status)
             }
         }
     }
@@ -573,7 +573,19 @@ extension Valet {
         return findOrCreate(explicitlySet: identifier, configuration: .iCloud(accessibility), sharedAccessGroup: true)
     }
     #endif
-    
+
+    /// - Parameter key: The key to look up in the keychain.
+    /// - Returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
+    /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
+    @available(swift, obsoleted: 1.0)
+    @objc(containsObjectForKey:)
+    public func 🚫swift_containsObject(forKey key: String) -> Bool {
+        guard let containsObject = try? containsObject(forKey: key) else {
+            return false
+        }
+        return containsObject
+    }
+
 }
 
 // MARK: - Testing

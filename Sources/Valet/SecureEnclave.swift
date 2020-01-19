@@ -82,16 +82,20 @@ public final class SecureEnclave {
     ///   - key: The key to look up in the keychain.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
-    internal static func containsObject(forKey key: String, options: [String : AnyHashable]) -> Bool {
+    /// - Note: Method will throw a `KeychainError` if an error occurs.
+    internal static func containsObject(forKey key: String, options: [String : AnyHashable]) throws -> Bool {
         var secItemQuery = options
         secItemQuery[kSecUseAuthenticationUI as String] = kSecUseAuthenticationUIFail
-        
-        switch Keychain.containsObject(forKey: key, options: secItemQuery) {
+
+        let status = Keychain.containsObject(forKey: key, options: secItemQuery)
+        switch status {
         case errSecSuccess,
              errSecInteractionNotAllowed:
             return true
-        default:
+        case errSecItemNotFound:
             return false
+        default:
+            throw KeychainError(status: status)
         }
     }
 

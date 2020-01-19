@@ -180,13 +180,13 @@ class ValetIntegrationTests: XCTestCase
     func test_containsObjectForKey() throws
     {
        try allPermutations.forEach { valet in
-            XCTAssertFalse(vanillaValet.containsObject(forKey: key), "\(valet) found object for key that should not exist")
+            XCTAssertFalse(try vanillaValet.containsObject(forKey: key), "\(valet) found object for key that should not exist")
 
             try vanillaValet.setString(passcode, forKey: key)
-            XCTAssertTrue(vanillaValet.containsObject(forKey: key), "\(valet) could not find item it has set in keychain")
+            XCTAssertTrue(try vanillaValet.containsObject(forKey: key), "\(valet) could not find item it has set in keychain")
 
             try vanillaValet.removeObject(forKey: key)
-            XCTAssertFalse(vanillaValet.containsObject(forKey: key), "\(valet) found removed item in keychain")
+            XCTAssertFalse(try vanillaValet.containsObject(forKey: key), "\(valet) found removed item in keychain")
         }
     }
 
