@@ -40,10 +40,12 @@ class CloudIntegrationTests: XCTestCase
     {
         super.setUp()
 
-        do {
-            try allPermutations.forEach { testValet in XCTAssertNoThrow(try testValet.removeAllObjects()) }
-        } catch {
-            XCTFail("Error removing objects from Valet: \(error)")
+        allPermutations.forEach { testValet in
+            do {
+                try testValet.removeAllObjects()
+            } catch {
+                XCTFail("Error removing objects from Valet \(testValet): \(error)")
+            }
         }
     }
     
