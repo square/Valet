@@ -20,14 +20,18 @@
 
 import Foundation
 @testable import Valet
-import LegacyValet
 import XCTest
 
+#if canImport(LocalAuthentication)
 
 class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
-    let valet = SinglePromptSecureEnclaveValet.valet(with: SinglePromptSecureEnclaveTests.identifier, accessControl: .userPresence)
+
+    @available(tvOS 10.0, *)
+    func valet() -> SinglePromptSecureEnclaveValet {
+        .valet(with: SinglePromptSecureEnclaveTests.identifier, accessControl: .userPresence)
+    }
     let key = "key"
     let passcode = "topsecret"
 
@@ -39,33 +43,41 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             // Nothing to do here.
         }
 
-        valet.removeObject(forKey: key)
+        if #available(tvOS 10.0, *) {
+            valet().removeObject(forKey: key)
+        }
     }
 
     // MARK: Equality
         
     func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_canAccessSameData()
     {
+        guard #available(tvOS 10.0, *) else {
+            return
+        }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
-        XCTAssertTrue(valet.setString(passcode, forKey: key))
-        let equivalentValet = SinglePromptSecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
-        XCTAssertEqual(valet, equivalentValet)
+        XCTAssertTrue(valet().setString(passcode, forKey: key))
+        let equivalentValet = SinglePromptSecureEnclaveValet.valet(with: valet().identifier, accessControl: valet().accessControl)
+        XCTAssertEqual(valet(), equivalentValet)
         XCTAssertEqual(.success(passcode), equivalentValet.string(forKey: key, withPrompt: ""))
     }
     
     func test_SinglePromptSecureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
     {
+        guard #available(tvOS 10.0, *) else {
+            return
+        }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
-        XCTAssertTrue(valet.setString(passcode, forKey: key))
-        let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
-        XCTAssertNotEqual(valet, equivalentValet)
-        XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
+        XCTAssertTrue(valet().setString(passcode, forKey: key))
+        let equivalentValet = SecureEnclaveValet.valet(with: valet().identifier, accessControl: .devicePasscode)
+        XCTAssertNotEqual(valet(), equivalentValet)
+        XCTAssertEqual(.success(passcode), valet().string(forKey: key, withPrompt: ""))
         XCTAssertEqual(.itemNotFound, equivalentValet.string(forKey: key, withPrompt: ""))
     }
 
@@ -73,38 +85,47 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_allKeys()
     {
+        guard #available(tvOS 10.0, *) else {
+            return
+        }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
-        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set())
+        XCTAssertEqual(valet().allKeys(userPrompt: ""), Set())
         
-        XCTAssertTrue(valet.setString(passcode, forKey: key))
-        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set(arrayLiteral: key))
+        XCTAssertTrue(valet().setString(passcode, forKey: key))
+        XCTAssertEqual(valet().allKeys(userPrompt: ""), Set(arrayLiteral: key))
         
-        XCTAssertTrue(valet.setString("monster", forKey: "cookie"))
-        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set(arrayLiteral: key, "cookie"))
+        XCTAssertTrue(valet().setString("monster", forKey: "cookie"))
+        XCTAssertEqual(valet().allKeys(userPrompt: ""), Set(arrayLiteral: key, "cookie"))
         
-        valet.removeAllObjects()
-        XCTAssertEqual(valet.allKeys(userPrompt: ""), Set())
+        valet().removeAllObjects()
+        XCTAssertEqual(valet().allKeys(userPrompt: ""), Set())
     }
     
     func test_allKeys_doesNotReflectValetImplementationDetails() {
+        guard #available(tvOS 10.0, *) else {
+            return
+        }
         // Under the hood, Valet inserts a canary when calling `canAccessKeychain()` - this should not appear in `allKeys()`.
-        _ = valet.canAccessKeychain()
-        XCTAssertEqual(valet.allKeys(userPrompt: "it me"), Set())
+        _ = valet().canAccessKeychain()
+        XCTAssertEqual(valet().allKeys(userPrompt: "it me"), Set())
     }
     
     // MARK: canAccessKeychain
     
     func test_canAccessKeychain()
     {
+        guard #available(tvOS 10.0, *) else {
+            return
+        }
         guard testEnvironmentIsSigned() else {
             return
         }
 
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
-            return .valet(with: valet.identifier, accessControl: accessControl)
+            return .valet(with: valet().identifier, accessControl: accessControl)
         }
 
         for permutation in permutations {
@@ -113,6 +134,9 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_canAccessKeychain_sharedAccessGroup() {
+        guard #available(tvOS 10.0, *) else {
+            return
+        }
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -122,6 +146,8 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
         #elseif os(macOS)
             sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        #elseif os(tvOS)
+            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-tvOS-Test-Host-App")!
         #else
             XCTFail()
         #endif
@@ -139,6 +165,9 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsMatchingQuery_failsForBadQuery()
     {
+        guard #available(tvOS 10.0, *) else {
+            return
+        }
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -147,11 +176,14 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             kSecClass as String: kSecClassGenericPassword as String,
             kSecAttrAccessControl as String: "Fake access control"
         ]
-        XCTAssertEqual(.invalidQuery, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertEqual(.invalidQuery, valet().migrateObjects(matching: invalidQuery, removeOnCompletion: false))
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave()
     {
+        guard #available(tvOS 10.0, *) else {
+            return
+        }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
@@ -159,7 +191,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         let plainOldValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
         
         // Clean up any dangling keychain items before we start this test.
-        valet.removeAllObjects()
+        valet().removeAllObjects()
         plainOldValet.removeAllObjects()
         
         let keyValuePairs = [
@@ -174,20 +206,23 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             plainOldValet.setString(value, forKey: key)
         }
         
-        XCTAssertEqual(.success, valet.migrateObjects(from: plainOldValet, removeOnCompletion: true))
+        XCTAssertEqual(.success, valet().migrateObjects(from: plainOldValet, removeOnCompletion: true))
         
         for (key, value) in keyValuePairs {
-            XCTAssertEqual(.success(value), valet.string(forKey: key, withPrompt: ""))
+            XCTAssertEqual(.success(value), valet().string(forKey: key, withPrompt: ""))
             XCTAssertNil(plainOldValet.string(forKey: key))
         }
         
         // Clean up items for the next test run (allKeys and removeAllObjects are unsupported in VALSecureEnclaveValet.
         for key in keyValuePairs.keys {
-            XCTAssertTrue(valet.removeObject(forKey: key))
+            XCTAssertTrue(valet().removeObject(forKey: key))
         }
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() {
+        guard #available(tvOS 10.0, *) else {
+            return
+        }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
@@ -195,7 +230,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         let otherValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me_To_Valet")!, accessibility: .afterFirstUnlock)
         
         // Clean up any dangling keychain items before we start this test.
-        valet.removeAllObjects()
+        valet().removeAllObjects()
         otherValet.removeAllObjects()
         
         let keyStringPairToMigrateMap = ["foo" : "bar", "testing" : "migration", "is" : "quite", "entertaining" : "if", "you" : "don't", "screw" : "up"]
@@ -203,13 +238,15 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             XCTAssertTrue(otherValet.setString(value, forKey: key))
         }
         
-        XCTAssertTrue(valet.canAccessKeychain())
+        XCTAssertTrue(valet().canAccessKeychain())
         XCTAssertTrue(otherValet.canAccessKeychain())
-        XCTAssertEqual(.success, valet.migrateObjects(from: otherValet, removeOnCompletion: false))
+        XCTAssertEqual(.success, valet().migrateObjects(from: otherValet, removeOnCompletion: false))
         
         for (key, value) in keyStringPairToMigrateMap {
-            XCTAssertEqual(valet.string(forKey: key, withPrompt: ""), .success(value))
+            XCTAssertEqual(valet().string(forKey: key, withPrompt: ""), .success(value))
             XCTAssertEqual(otherValet.string(forKey: key), value)
         }
     }
 }
+
+#endif
