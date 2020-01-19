@@ -208,7 +208,7 @@ public final class SecureEnclaveValet: NSObject {
     
     /// Migrates objects matching the vended keychain query into the receiving SecureEnclaveValet instance.
     /// - Parameters:
-    ///   - keychain: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
+    ///   - valet: A Valet whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
     /// - Throws: An error of type `KeychainError` or `MigrationError`.
     /// - Note: The keychain is not modified if an error is thrown.

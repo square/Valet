@@ -134,6 +134,15 @@
 		1693E29623B2D24600F8D97A /* KeychainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* KeychainError.swift */; };
 		1693E29723B2D24600F8D97A /* KeychainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* KeychainError.swift */; };
 		1693E29823B2D24600F8D97A /* KeychainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* KeychainError.swift */; };
+		169E9A6723D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6423D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m */; };
+		169E9A6823D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6423D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m */; };
+		169E9A6923D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6423D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m */; };
+		169E9A6A23D181DC001B69F5 /* VALValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6523D181DC001B69F5 /* VALValetTests.m */; };
+		169E9A6B23D181DC001B69F5 /* VALValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6523D181DC001B69F5 /* VALValetTests.m */; };
+		169E9A6C23D181DC001B69F5 /* VALValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6523D181DC001B69F5 /* VALValetTests.m */; };
+		169E9A6D23D181DC001B69F5 /* VALSecureEnclaveValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6623D181DC001B69F5 /* VALSecureEnclaveValetTests.m */; };
+		169E9A6E23D181DC001B69F5 /* VALSecureEnclaveValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6623D181DC001B69F5 /* VALSecureEnclaveValetTests.m */; };
+		169E9A6F23D181DC001B69F5 /* VALSecureEnclaveValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6623D181DC001B69F5 /* VALSecureEnclaveValetTests.m */; };
 		169FC990215ECFCE00C2D6BD /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; };
 		169FC991215ECFCE00C2D6BD /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		169FC992215ECFCE00C2D6BD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D77541215BFC1D004F060C /* XCTest.framework */; };
@@ -396,6 +405,9 @@
 		165CDDD1204B26D500C96C2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		165CDDD5204B26F700C96C2E /* Valet tvOS Test Host App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Valet tvOS Test Host App.entitlements"; sourceTree = "<group>"; };
 		1693E29423B2D24600F8D97A /* KeychainError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainError.swift; sourceTree = "<group>"; };
+		169E9A6423D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALSinglePromptSecureEnclaveValetTests.m; sourceTree = "<group>"; };
+		169E9A6523D181DC001B69F5 /* VALValetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALValetTests.m; sourceTree = "<group>"; };
+		169E9A6623D181DC001B69F5 /* VALSecureEnclaveValetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALSecureEnclaveValetTests.m; sourceTree = "<group>"; };
 		16B5856C1F71DBE00038EE30 /* Valet macOS Test Host App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Valet macOS Test Host App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		16B5856E1F71DBE00038EE30 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		16B585701F71DBE00038EE30 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -669,6 +681,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		169E9A5B23D17A43001B69F5 /* ValetObjectiveCBridgeTests */ = {
+			isa = PBXGroup;
+			children = (
+				169E9A6623D181DC001B69F5 /* VALSecureEnclaveValetTests.m */,
+				169E9A6423D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m */,
+				169E9A6523D181DC001B69F5 /* VALValetTests.m */,
+			);
+			path = ValetObjectiveCBridgeTests;
+			sourceTree = "<group>";
+		};
 		16B5856D1F71DBE00038EE30 /* Valet macOS Test Host App */ = {
 			isa = PBXGroup;
 			children = (
@@ -725,6 +747,7 @@
 		16E04BEB1F71B70500E8552D /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				169E9A5B23D17A43001B69F5 /* ValetObjectiveCBridgeTests */,
 				16E04BF51F71B73700E8552D /* Info.plist */,
 				1612FCFD22A9C95400FC1142 /* ValetIntegrationTests */,
 				1612FD0922A9C95500FC1142 /* ValetTests */,
@@ -1213,7 +1236,7 @@
 					16C3B096204B1E4C00B4D0B4 = {
 						CreatedOnToolsVersion = 9.2;
 						DevelopmentTeam = 9XUJ7M53NG;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 165CDDC5204B26D400C96C2E;
 					};
@@ -1263,13 +1286,13 @@
 					EA1E1F8D1A8C46090067C991 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 9XUJ7M53NG;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 371150A41E2962D8004A45D4;
 					};
 					EAEAA88B1B167A8700F7AA98 = {
 						CreatedOnToolsVersion = 6.3.2;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
 					EAF894731B053E0400EDAD6C = {
@@ -1518,12 +1541,15 @@
 			files = (
 				1612FD1322A9C95500FC1142 /* SecItemTests.swift in Sources */,
 				1612FD3122A9C95500FC1142 /* SecureEnclaveTests.swift in Sources */,
+				169E9A6C23D181DC001B69F5 /* VALValetTests.m in Sources */,
 				1612FD2B22A9C95500FC1142 /* SecureEnclaveIntegrationTests.swift in Sources */,
 				1612FD1622A9C95500FC1142 /* CloudIntegrationTests.swift in Sources */,
 				1612FD2822A9C95500FC1142 /* ValetIntegrationTests.swift in Sources */,
 				1612FD3722A9C95500FC1142 /* ValetTests.swift in Sources */,
 				1612FD3422A9C95500FC1142 /* CloudTests.swift in Sources */,
 				32E7115E2336B90800018E15 /* SinglePromptSecureEnclaveTests.swift in Sources */,
+				169E9A6923D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */,
+				169E9A6F23D181DC001B69F5 /* VALSecureEnclaveValetTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1614,6 +1640,7 @@
 			files = (
 				1612FD1122A9C95500FC1142 /* SecItemTests.swift in Sources */,
 				1612FD1422A9C95500FC1142 /* CloudIntegrationTests.swift in Sources */,
+				169E9A6A23D181DC001B69F5 /* VALValetTests.m in Sources */,
 				1612FD3522A9C95500FC1142 /* ValetTests.swift in Sources */,
 				1612FD2922A9C95500FC1142 /* SecureEnclaveIntegrationTests.swift in Sources */,
 				1612FD2322A9C95500FC1142 /* SinglePromptSecureEnclaveIntegrationTests.swift in Sources */,
@@ -1622,8 +1649,10 @@
 				1612FD2F22A9C95500FC1142 /* SecureEnclaveTests.swift in Sources */,
 				1612FD3222A9C95500FC1142 /* CloudTests.swift in Sources */,
 				1612FD2C22A9C95500FC1142 /* SinglePromptSecureEnclaveTests.swift in Sources */,
+				169E9A6723D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */,
 				1612FD2622A9C95500FC1142 /* ValetIntegrationTests.swift in Sources */,
 				1612FD2022A9C95500FC1142 /* ValetBackwardsCompatibilityTests.swift in Sources */,
+				169E9A6D23D181DC001B69F5 /* VALSecureEnclaveValetTests.m in Sources */,
 				1612FD1A22A9C95500FC1142 /* SynchronizableBackwardsCompatibilityTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1643,6 +1672,9 @@
 				1612FD3322A9C95500FC1142 /* CloudTests.swift in Sources */,
 				1612FD3822A9C96900FC1142 /* MacTests.swift in Sources */,
 				1612FD2D22A9C95500FC1142 /* SinglePromptSecureEnclaveTests.swift in Sources */,
+				169E9A6823D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */,
+				169E9A6E23D181DC001B69F5 /* VALSecureEnclaveValetTests.m in Sources */,
+				169E9A6B23D181DC001B69F5 /* VALValetTests.m in Sources */,
 				1612FD2722A9C95500FC1142 /* ValetIntegrationTests.swift in Sources */,
 				1612FD2122A9C95500FC1142 /* ValetBackwardsCompatibilityTests.swift in Sources */,
 				1612FD1B22A9C95500FC1142 /* SynchronizableBackwardsCompatibilityTests.swift in Sources */,
@@ -2105,6 +2137,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -2119,6 +2152,7 @@
 				SDKROOT = appletvos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Valet tvOS Test Host App.app/Valet tvOS Test Host App";
 			};
@@ -2131,6 +2165,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -2144,6 +2179,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Valet tvOS Test Host App.app/Valet tvOS Test Host App";
 			};
@@ -2612,6 +2648,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Valet iOS Test Host App.app/Valet iOS Test Host App";
 			};
 			name = Debug;
@@ -2629,6 +2666,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Valet iOS Test Host App.app/Valet iOS Test Host App";
 			};
 			name = Release;
@@ -2656,6 +2694,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -2678,6 +2717,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
