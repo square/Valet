@@ -94,7 +94,7 @@ class CloudIntegrationTests: XCTestCase
     
     func test_canAccessKeychain()
     {
-       allPermutations.forEach { valet in
+        allPermutations.forEach { valet in
             XCTAssertTrue(valet.canAccessKeychain(), "\(valet) could not access keychain.")
         }
     }
