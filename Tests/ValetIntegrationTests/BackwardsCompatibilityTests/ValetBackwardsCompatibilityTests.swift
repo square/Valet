@@ -97,7 +97,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
     // MARK: Tests
 
     func test_backwardsCompatibility_withLegacyValet() throws {
-        try Valet.currentAndLegacyPermutations(with: valet.identifier).forEach { permutation, legacyValet in
+        try Valet.currentAndLegacyPermutations(with: vanillaValet.identifier).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
@@ -128,19 +128,19 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
     }
 
     func test_migrateObjectsFromAlwaysAccessibleValet_forwardsCompatibility_fromLegacyValet() throws {
-        let alwaysAccessibleLegacyValet = VALLegacyValet(identifier: valet.identifier.description, accessibility: .always)!
+        let alwaysAccessibleLegacyValet = VALLegacyValet(identifier: vanillaValet.identifier.description, accessibility: .always)!
         alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
 
-        let valet = Valet.valet(with: valet.identifier, accessibility: .afterFirstUnlock)
+        let valet = Valet.valet(with: vanillaValet.identifier, accessibility: .afterFirstUnlock)
         XCTAssertNoThrow(try valet.migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion: true))
         XCTAssertEqual(try valet.string(forKey: key), passcode)
     }
 
     func test_migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet_forwardsCompatibility_fromLegacyValet() throws {
-        let alwaysAccessibleLegacyValet = VALLegacyValet(identifier: valet.identifier.description, accessibility: .alwaysThisDeviceOnly)!
+        let alwaysAccessibleLegacyValet = VALLegacyValet(identifier: vanillaValet.identifier.description, accessibility: .alwaysThisDeviceOnly)!
         alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
 
-        let valet = Valet.valet(with: valet.identifier, accessibility: .afterFirstUnlockThisDeviceOnly)
+        let valet = Valet.valet(with: vanillaValet.identifier, accessibility: .afterFirstUnlockThisDeviceOnly)
         XCTAssertNoThrow(try valet.migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion: true))
         XCTAssertEqual(try valet.string(forKey: key), passcode)
     }

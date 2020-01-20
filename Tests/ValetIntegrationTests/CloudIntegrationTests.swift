@@ -56,20 +56,20 @@ class CloudIntegrationTests: XCTestCase
         }
 
         let identifier = Identifier(nonEmpty: "DistinctTest")!
-        let valet = Valet.valet(with: identifier, accessibility: .afterFirstUnlock)
+        let vanillaValet = Valet.valet(with: identifier, accessibility: .afterFirstUnlock)
         let iCloudValet = Valet.iCloudValet(with: identifier, accessibility: .afterFirstUnlock)
 
         // Setting
         try iCloudValet.setString("butts", forKey: "cloud")
         XCTAssertEqual("butts", try iCloudValet.string(forKey: "cloud"))
-        XCTAssertThrowsError(try valet.string(forKey: "cloud")) { error in
+        XCTAssertThrowsError(try vanillaValet.string(forKey: "cloud")) { error in
             XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
         
         // Removal
-        try valet.setString("snake people", forKey: "millennials")
+        try vanillaValet.setString("snake people", forKey: "millennials")
         try iCloudValet.removeObject(forKey: "millennials")
-        XCTAssertEqual("snake people", try valet.string(forKey: "millennials"))
+        XCTAssertEqual("snake people", try vanillaValet.string(forKey: "millennials"))
     }
     
     func test_setStringForKey() throws
