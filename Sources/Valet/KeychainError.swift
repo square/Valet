@@ -22,7 +22,7 @@ import Foundation
 
 
 @objc(VALKeychainError)
-public enum KeychainError: Int, CustomStringConvertible, Error, Equatable {
+public enum KeychainError: Int, CaseIterable, CustomStringConvertible, Error, Equatable {
     /// The keychain could not be accessed.
     case couldNotAccessKeychain
     /// User dismissed the user-presence prompt.
@@ -56,12 +56,12 @@ public enum KeychainError: Int, CustomStringConvertible, Error, Equatable {
 
     public var description: String {
         switch self {
-        case .couldNotAccessKeychain: return "couldNotAccessKeychain"
-        case .emptyKey: return "emptyKey"
-        case .emptyValue: return "emptyValue"
-        case .itemNotFound: return "itemNotFound"
-        case .missingEntitlement: return "missingEntitlement"
-        case .userCancelled: return "userCancelled"
+        case .couldNotAccessKeychain: return "KeychainError.couldNotAccessKeychain"
+        case .emptyKey: return "KeychainError.emptyKey"
+        case .emptyValue: return "KeychainError.emptyValue"
+        case .itemNotFound: return "KeychainError.itemNotFound"
+        case .missingEntitlement: return "KeychainError.missingEntitlement"
+        case .userCancelled: return "KeychainError.userCancelled"
         }
     }
 
