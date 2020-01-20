@@ -107,7 +107,7 @@ internal final class SecItem {
     
     internal static func containsObject(matching query: [String : AnyHashable]) -> OSStatus {
         guard query.count > 0 else {
-            // "Must provide a query with at least one item
+            // Must provide a query with at least one item
             return errSecParam
         }
         
