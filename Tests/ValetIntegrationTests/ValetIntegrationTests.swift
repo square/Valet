@@ -189,13 +189,13 @@ class ValetIntegrationTests: XCTestCase
     func test_containsObjectForKey() throws
     {
        try allPermutations.forEach { valet in
-            XCTAssertFalse(try vanillaValet.containsObject(forKey: key), "\(valet) found object for key that should not exist")
+            XCTAssertFalse(try valet.containsObject(forKey: key), "\(valet) found object for key that should not exist")
 
-            try vanillaValet.setString(passcode, forKey: key)
-            XCTAssertTrue(try vanillaValet.containsObject(forKey: key), "\(valet) could not find item it has set in keychain")
+            try valet.setString(passcode, forKey: key)
+            XCTAssertTrue(try valet.containsObject(forKey: key), "\(valet) could not find item it has set in keychain")
 
-            try vanillaValet.removeObject(forKey: key)
-            XCTAssertFalse(try vanillaValet.containsObject(forKey: key), "\(valet) found removed item in keychain")
+            try valet.removeObject(forKey: key)
+            XCTAssertFalse(try valet.containsObject(forKey: key), "\(valet) found removed item in keychain")
         }
     }
 
@@ -204,24 +204,24 @@ class ValetIntegrationTests: XCTestCase
     func test_allKeys() throws
     {
        try allPermutations.forEach { valet in
-            XCTAssertEqual(try vanillaValet.allKeys(), Set(), "\(valet) found keys that should not exist")
+            XCTAssertEqual(try valet.allKeys(), Set(), "\(valet) found keys that should not exist")
 
-            try vanillaValet.setString(passcode, forKey: key)
-            XCTAssertEqual(try vanillaValet.allKeys(), Set(arrayLiteral: key))
+            try valet.setString(passcode, forKey: key)
+            XCTAssertEqual(try valet.allKeys(), Set(arrayLiteral: key))
 
-            try vanillaValet.setString("monster", forKey: "cookie")
-            XCTAssertEqual(try vanillaValet.allKeys(), Set(arrayLiteral: key, "cookie"))
+            try valet.setString("monster", forKey: "cookie")
+            XCTAssertEqual(try valet.allKeys(), Set(arrayLiteral: key, "cookie"))
 
-            try vanillaValet.removeAllObjects()
-            XCTAssertEqual(try vanillaValet.allKeys(), Set(), "\(valet) found keys that should not exist")
+            try valet.removeAllObjects()
+            XCTAssertEqual(try valet.allKeys(), Set(), "\(valet) found keys that should not exist")
         }
     }
     
     func test_allKeys_doesNotReflectValetImplementationDetails() throws {
         try allPermutations.forEach { valet in
             // Under the hood, Valet inserts a canary when calling `canAccessKeychain()` - this should not appear in `allKeys()`.
-            _ = vanillaValet.canAccessKeychain()
-            XCTAssertEqual(try vanillaValet.allKeys(), Set(), "\(valet) found keys that should not exist")
+            _ = valet.canAccessKeychain()
+            XCTAssertEqual(try valet.allKeys(), Set(), "\(valet) found keys that should not exist")
         }
     }
 
@@ -247,7 +247,7 @@ class ValetIntegrationTests: XCTestCase
     func test_stringForKey_throwsItemNotFoundForKeyWithNoValue() throws
     {
         try allPermutations.forEach { valet in
-            XCTAssertThrowsError(try vanillaValet.string(forKey: key), "\(valet) found item that should not exit") { error in
+            XCTAssertThrowsError(try valet.string(forKey: key), "\(valet) found item that should not exit") { error in
                 XCTAssertEqual(error as? KeychainError, .itemNotFound)
             }
         }
@@ -256,8 +256,8 @@ class ValetIntegrationTests: XCTestCase
     func test_stringForKey_retrievesStringForValidKey() throws
     {
         try allPermutations.forEach { valet in
-            try vanillaValet.setString(passcode, forKey: key)
-            XCTAssertEqual(passcode, try vanillaValet.string(forKey: key))
+            try valet.setString(passcode, forKey: key)
+            XCTAssertEqual(passcode, try valet.string(forKey: key))
         }
     }
 
