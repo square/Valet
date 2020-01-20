@@ -78,9 +78,9 @@ class ValetTests: XCTestCase
 
     func test_differentValetFlavorsWithEquivalentConfiguration_areNotEqual()
     {
-        let anotherFlavor = Valet.iCloudValet(with: ValetTests.identifier, accessibility: .whenUnlocked)
-        XCTAssertFalse(valet == anotherFlavor)
-        XCTAssertFalse(valet === anotherFlavor)
+        let iCloudValet = Valet.iCloudValet(with: ValetTests.identifier, accessibility: .whenUnlocked)
+        XCTAssertFalse(valet == iCloudValet)
+        XCTAssertFalse(valet === iCloudValet)
     }
 
     func test_valetsWithDifferingIdentifier_areNotEqual()
