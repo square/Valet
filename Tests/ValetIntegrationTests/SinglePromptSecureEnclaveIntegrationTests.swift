@@ -105,7 +105,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_allKeys_doesNotReflectValetImplementationDetails() {
-        guard #available(tvOS 10.0, *) else {
+        guard #available(tvOS 11.0, *) else {
             return
         }
         // Under the hood, Valet inserts a canary when calling `canAccessKeychain()` - this should not appear in `allKeys()`.
