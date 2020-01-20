@@ -35,6 +35,9 @@ class SecureEnclaveIntegrationTests: XCTestCase
     {
         super.setUp()
 
+        guard testEnvironmentIsSigned() else {
+            return
+        }
         do {
             try valet.removeAllObjects()
         } catch {

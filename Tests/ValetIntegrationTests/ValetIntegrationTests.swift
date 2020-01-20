@@ -101,7 +101,13 @@ class ValetIntegrationTests: XCTestCase
     {
         super.setUp()
 
-        ([vanillaValet, anotherFlavor] + allPermutations).forEach { testingValet in
+        let permutations: [Valet]
+        if testEnvironmentIsSigned() {
+            permutations = [vanillaValet, anotherFlavor] + allPermutations
+        } else {
+            permutations = [vanillaValet] + allPermutations
+        }
+        permutations.forEach { testingValet in
             do {
                 try testingValet.removeAllObjects()
             } catch {
