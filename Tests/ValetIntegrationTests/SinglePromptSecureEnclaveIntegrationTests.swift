@@ -28,7 +28,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
 
-    @available(tvOS 10.0, *)
+    @available(tvOS 11.0, *)
     func valet() -> SinglePromptSecureEnclaveValet {
         .valet(with: SinglePromptSecureEnclaveTests.identifier, accessControl: .userPresence)
     }
@@ -43,7 +43,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             // Nothing to do here.
         }
 
-        if #available(tvOS 10.0, *) {
+        if #available(tvOS 11.0, *) {
             valet().removeObject(forKey: key)
         }
     }
@@ -52,7 +52,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         
     func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_canAccessSameData()
     {
-        guard #available(tvOS 10.0, *) else {
+        guard #available(tvOS 11.0, *) else {
             return
         }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
@@ -67,7 +67,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_SinglePromptSecureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData()
     {
-        guard #available(tvOS 10.0, *) else {
+        guard #available(tvOS 11.0, *) else {
             return
         }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
@@ -117,7 +117,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_canAccessKeychain()
     {
-        guard #available(tvOS 10.0, *) else {
+        guard #available(tvOS 11.0, *) else {
             return
         }
         guard testEnvironmentIsSigned() else {
@@ -134,7 +134,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_canAccessKeychain_sharedAccessGroup() {
-        guard #available(tvOS 10.0, *) else {
+        guard #available(tvOS 11.0, *) else {
             return
         }
         guard testEnvironmentIsSigned() else {
@@ -165,7 +165,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsMatchingQuery_failsForBadQuery()
     {
-        guard #available(tvOS 10.0, *) else {
+        guard #available(tvOS 11.0, *) else {
             return
         }
         guard testEnvironmentIsSigned() else {
@@ -181,7 +181,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave()
     {
-        guard #available(tvOS 10.0, *) else {
+        guard #available(tvOS 11.0, *) else {
             return
         }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
@@ -220,7 +220,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() {
-        guard #available(tvOS 10.0, *) else {
+        guard #available(tvOS 11.0, *) else {
             return
         }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
