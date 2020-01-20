@@ -361,7 +361,7 @@ class ValetIntegrationTests: XCTestCase
     
     // MARK: object(forKey:)
 
-    func test_objectForKey_throwsItemNotFound() throws {
+    func test_objectForKey_throwsItemNotFoundWhenNoObjectExists() throws {
         try allPermutations.forEach { valet in
             XCTAssertThrowsError(try valet.object(forKey: key)) { error in
                 XCTAssertEqual(error as? KeychainError, .itemNotFound)
