@@ -85,7 +85,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_allKeys()
     {
-        guard #available(tvOS 10.0, *) else {
+        guard #available(tvOS 11.0, *) else {
             return
         }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
