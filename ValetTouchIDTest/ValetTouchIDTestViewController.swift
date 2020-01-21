@@ -45,7 +45,13 @@ final class ValetTouchIDTestViewController : UIViewController
     @IBAction func setOrUpdateItem(sender: UIResponder)
     {
         let stringToSet = "I am here! " + NSUUID().uuidString
-        let setOrUpdatedItem = singlePromptSecureEnclaveValet.setString(stringToSet, forKey: username)
+        let setOrUpdatedItem: Bool
+        do {
+            try singlePromptSecureEnclaveValet.setString(stringToSet, forKey: username)
+            setOrUpdatedItem = true
+        } catch {
+            setOrUpdatedItem = false
+        }
         updateTextView(messageComponents: #function, (setOrUpdatedItem ? "Success" : "Failure"))
     }
     
@@ -53,15 +59,14 @@ final class ValetTouchIDTestViewController : UIViewController
     @IBAction func getItem(sender: UIResponder)
     {
         let resultString: String
-        switch singlePromptSecureEnclaveValet.string(forKey: username, withPrompt: "Use TouchID to retrieve password") {
-        case let .success(password):
-            resultString = password
-            
-        case .userCancelled:
+        do {
+            resultString = try singlePromptSecureEnclaveValet.string(forKey: username, withPrompt: "Use TouchID to retrieve password")
+        } catch KeychainError.userCancelled {
             resultString = "user cancelled TouchID"
-            
-        case .itemNotFound:
+        } catch KeychainError.itemNotFound {
             resultString = "object not found"
+        } catch {
+            resultString = "caught unknown error \(error)"
         }
         
         updateTextView(messageComponents: #function, resultString)
@@ -70,7 +75,14 @@ final class ValetTouchIDTestViewController : UIViewController
     @objc(removeItem:)
     @IBAction func removeItem(sender: UIResponder)
     {
-        let removedItem = singlePromptSecureEnclaveValet.removeObject(forKey: username)
+        let removedItem: Bool
+        do {
+            try singlePromptSecureEnclaveValet.removeObject(forKey: username)
+            removedItem = true
+        } catch {
+            removedItem = false
+        }
+
         updateTextView(messageComponents: #function, (removedItem ? "Success" : "Failure"))
     }
     

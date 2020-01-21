@@ -1,5 +1,5 @@
 //
-//  MigrationResult.swift
+//  MigrationError.swift
 //  Valet
 //
 //  Created by Dan Federman and Eric Muller on 9/16/17.
@@ -9,7 +9,7 @@
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
 //
-//    http://www.apache.org/licenses/LICENSE-2.0
+//    http://www.apache.org/licenses/LICENSE-2.0
 //
 //  Unless required by applicable law or agreed to in writing software
 //  distributed under the License is distributed on an "AS IS" BASIS
@@ -20,16 +20,11 @@
 
 import Foundation
 
+
 @objc(VALMigrationResult)
-public enum MigrationResult: Int, Equatable, CustomStringConvertible {
-    /// Migration succeeded.
-    case success = 1
+public enum MigrationError: Int, CaseIterable, CustomStringConvertible, Error, Equatable {
     /// Migration failed because the keychain query was not valid.
     case invalidQuery
-    /// Migration failed because no items to migrate were found.
-    case noItemsToMigrateFound
-    /// Migration failed because the keychain could not be read.
-    case couldNotReadKeychain
     /// Migration failed because a key in the query result could not be read.
     case keyInQueryResultInvalid
     /// Migration failed because some data in the query result could not be read.
@@ -38,8 +33,6 @@ public enum MigrationResult: Int, Equatable, CustomStringConvertible {
     case duplicateKeyInQueryResult
     /// Migration failed because a key in the keychain duplicates a key already managed by Valet.
     case keyInQueryResultAlreadyExistsInValet
-    /// Migration failed because writing to the keychain failed.
-    case couldNotWriteToKeychain
     /// Migration failed because removing the migrated data from the keychain failed.
     case removalFailed
 
@@ -47,16 +40,12 @@ public enum MigrationResult: Int, Equatable, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .success: return "success"
-        case .invalidQuery: return "invalidQuery"
-        case .noItemsToMigrateFound: return "noItemsToMigrateFound"
-        case .couldNotReadKeychain: return "couldNotReadKeychain"
-        case .keyInQueryResultInvalid: return "keyInQueryResultInvalid"
-        case .dataInQueryResultInvalid: return "dataInQueryResultInvalid"
-        case .duplicateKeyInQueryResult: return "duplicateKeyInQueryResult"
-        case .keyInQueryResultAlreadyExistsInValet: return "keyInQueryResultAlreadyExistsInValet"
-        case .couldNotWriteToKeychain: return "couldNotWriteToKeychain"
-        case .removalFailed: return "removalFailed"
+        case .invalidQuery: return "MigrationError.invalidQuery"
+        case .keyInQueryResultInvalid: return "MigrationError.keyInQueryResultInvalid"
+        case .dataInQueryResultInvalid: return "MigrationError.dataInQueryResultInvalid"
+        case .duplicateKeyInQueryResult: return "MigrationError.duplicateKeyInQueryResult"
+        case .keyInQueryResultAlreadyExistsInValet: return "MigrationError.keyInQueryResultAlreadyExistsInValet"
+        case .removalFailed: return "MigrationError.removalFailed"
         }
     }
 }
