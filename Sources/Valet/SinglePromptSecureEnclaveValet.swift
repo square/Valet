@@ -148,7 +148,8 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
 
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
-    /// - Note: Will never prompt the user for Face ID, Touch ID, or password. Method will throw a `KeychainError`.
+    /// - Throws: An error of type `KeychainError`.
+    /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
     public func containsObject(forKey key: String) throws -> Bool {
         try execute(in: lock) {
             try SecureEnclave.containsObject(forKey: key, options: try self.baseKeychainQuery())
