@@ -20,7 +20,7 @@ import XCTest
 @testable import Valet
 
 
-class ConfigurationTests: XCTestCase {
+final class ConfigurationTests: XCTestCase {
 
     func test_description_valet_mirrorsLegacyName() {
         Accessibility.allValues().forEach {
