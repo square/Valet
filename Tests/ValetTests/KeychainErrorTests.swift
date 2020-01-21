@@ -20,7 +20,7 @@ import XCTest
 @testable import Valet
 
 
-class KeychainErrorTests: XCTestCase {
+final class KeychainErrorTests: XCTestCase {
 
     func test_initStatus_createsNotFoundErrorFrom_errSecItemNotFound() {
         XCTAssertEqual(KeychainError(status: errSecItemNotFound), KeychainError.itemNotFound)
