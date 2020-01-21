@@ -30,15 +30,6 @@ class CloudTests: XCTestCase
     static let accessibility = CloudAccessibility.whenUnlocked
     let valet = Valet.iCloudValet(with: identifier, accessibility: accessibility)
 
-    override func setUp()
-    {
-        super.setUp()
-        
-        ErrorHandler.customAssertBody = { _, _, _, _ in
-            // Nothing to do here.
-        }
-    }
-
     // MARK: Equality
 
     func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
