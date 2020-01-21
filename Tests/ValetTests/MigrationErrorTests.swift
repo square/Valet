@@ -20,7 +20,7 @@ import XCTest
 @testable import Valet
 
 
-class MigrationErrorTests: XCTestCase {
+final class MigrationErrorTests: XCTestCase {
 
     func test_description_createsHumanReadableDescription() {
         MigrationError.allCases.forEach {
