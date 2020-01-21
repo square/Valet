@@ -31,7 +31,7 @@ func testEnvironmentIsSigned() -> Bool {
     // Our test host apps for iOS and Mac are both signed, so testing for a custom bundle identifier is analogous to testing signing.
     guard Bundle.main.bundleIdentifier != nil && Bundle.main.bundleIdentifier != "com.apple.dt.xctest.tool" else {
         #if os(iOS) || os(tvOS)
-            XCTFail("test bundle should be signed")
+        XCTFail("test bundle should be signed")
         #endif
         
         return false
@@ -63,15 +63,15 @@ internal extension Valet {
     static var sharedAccessGroupIdentifier: Identifier = {
         let sharedAccessGroupIdentifier: Identifier
         #if os(iOS)
-            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
+        sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
         #elseif os(macOS)
-            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
         #elseif os(tvOS)
-            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-tvOS-Test-Host-App")!
+        sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-tvOS-Test-Host-App")!
         #elseif os(watchOS)
-            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension")!
+        sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension")!
         #else
-            XCTFail()
+        XCTFail()
         #endif
         return sharedAccessGroupIdentifier
     }()
@@ -188,7 +188,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_containsObjectForKey() throws
     {
-       try allPermutations.forEach { valet in
+        try allPermutations.forEach { valet in
             XCTAssertFalse(try valet.containsObject(forKey: key), "\(valet) found object for key that should not exist")
 
             try valet.setString(passcode, forKey: key)
@@ -203,7 +203,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_allKeys() throws
     {
-       try allPermutations.forEach { valet in
+        try allPermutations.forEach { valet in
             XCTAssertEqual(try valet.allKeys(), Set(), "\(valet) found keys that should not exist")
 
             try valet.setString(passcode, forKey: key)
@@ -349,16 +349,16 @@ class ValetIntegrationTests: XCTestCase
                 XCTAssertEqual(error as? KeychainError, KeychainError.emptyValue)
             }
         }
+    }
 
-        func test_setStringForKey_throwsEmptyKeyOnInvalidKey() throws {
-            try allPermutations.forEach { valet in
-                XCTAssertThrowsError(try valet.setString(passcode, forKey: "")) { error in
-                    XCTAssertEqual(error as? KeychainError, KeychainError.emptyKey)
-                }
+    func test_setStringForKey_throwsEmptyKeyOnInvalidKey() throws {
+        try allPermutations.forEach { valet in
+            XCTAssertThrowsError(try valet.setString(passcode, forKey: "")) { error in
+                XCTAssertEqual(error as? KeychainError, KeychainError.emptyKey)
             }
         }
     }
-    
+
     // MARK: object(forKey:)
 
     func test_objectForKey_throwsItemNotFoundWhenNoObjectExists() throws {
