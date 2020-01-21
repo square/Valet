@@ -31,15 +31,6 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = SinglePromptSecureEnclaveValet.valet(with: SinglePromptSecureEnclaveTests.identifier, accessControl: .userPresence)
 
-    override func setUp()
-    {
-        super.setUp()
-        
-        ErrorHandler.customAssertBody = { _, _, _, _ in
-            // Nothing to do here.
-        }
-    }
-
     // MARK: Initialization
 
     func test_init_createsCorrectBackingService() {
