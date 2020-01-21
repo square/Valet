@@ -176,7 +176,7 @@ internal final class Keychain {
     // MARK: Migration
     
     internal static func migrateObjects(matching query: [String : AnyHashable], into destinationAttributes: [String : AnyHashable], removeOnCompletion: Bool) throws {
-        guard query.count > 0 else {
+        guard !query.isEmpty else {
             // Migration requires secItemQuery to contain values.
             throw MigrationError.invalidQuery
         }
