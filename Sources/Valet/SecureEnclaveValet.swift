@@ -258,7 +258,7 @@ extension SecureEnclaveValet {
         }
         return valet(with: identifier, accessControl: accessControl)
     }
-    
+
     /// - Parameters:
     ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
     ///   - accessControl: The desired access control for the SecureEnclaveValet.
