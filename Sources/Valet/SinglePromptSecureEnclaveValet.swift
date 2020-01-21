@@ -203,7 +203,6 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
 
     /// - Parameter userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI. If the `SinglePromptSecureEnclaveValet` has already been unlocked, no prompt will be shown.
     /// - Returns: The set of all (String) keys currently stored in this Valet instance. Will return an empty set if the keychain is not accessible.
-    @available(tvOS 11.0, *)
     @objc
     public func allKeys(userPrompt: String) -> Set<String> {
         execute(in: lock) {
