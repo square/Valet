@@ -20,7 +20,7 @@ import XCTest
 @testable import Valet
 
 
-class CloudAccessibilityTests: XCTestCase {
+final class CloudAccessibilityTests: XCTestCase {
 
     func test_description_mirrorsAccessibilityCounterpartDescription() {
         CloudAccessibility.allValues().forEach {
