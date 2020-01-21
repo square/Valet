@@ -87,7 +87,7 @@ public final class SecureEnclave {
         var secItemQuery = options
         secItemQuery[kSecUseAuthenticationUI as String] = kSecUseAuthenticationUIFail
 
-        let status = Keychain.containsObject(forKey: key, options: secItemQuery)
+        let status = Keychain.performCopy(forKey: key, options: secItemQuery)
         switch status {
         case errSecSuccess,
              errSecInteractionNotAllowed:

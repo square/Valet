@@ -103,7 +103,7 @@ internal final class Keychain {
         secItemQuery[kSecValueData as String] = object
         try SecItem.add(attributes: secItemQuery)
         #else
-        if containsObject(forKey: key, options: options) == errSecSuccess {
+        if performCopy(forKey: key, options: options) == errSecSuccess {
             try SecItem.update(attributes: [kSecValueData as String: object], forItemsMatching: secItemQuery)
         } else {
             secItemQuery[kSecValueData as String] = object
@@ -131,7 +131,7 @@ internal final class Keychain {
     
     // MARK: Contains
     
-    internal static func containsObject(forKey key: String, options: [String : AnyHashable]) -> OSStatus {
+    internal static func performCopy(forKey key: String, options: [String : AnyHashable]) -> OSStatus {
         guard !key.isEmpty else {
             return errSecParam
         }
@@ -139,7 +139,7 @@ internal final class Keychain {
         var secItemQuery = options
         secItemQuery[kSecAttrAccount as String] = key
         
-        return SecItem.containsObject(matching: secItemQuery)
+        return SecItem.performCopy(matching: secItemQuery)
     }
     
     // MARK: AllObjects
@@ -286,7 +286,7 @@ internal final class Keychain {
                 throw MigrationError.dataInQueryResultInvalid
             }
 
-            if Keychain.containsObject(forKey: key, options: destinationAttributes) == errSecItemNotFound {
+            if Keychain.performCopy(forKey: key, options: destinationAttributes) == errSecItemNotFound {
                 keysToMigrate.insert(key)
             } else {
                 throw MigrationError.keyInQueryResultAlreadyExistsInValet

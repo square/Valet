@@ -105,7 +105,7 @@ internal final class SecItem {
         }
     }
     
-    internal static func containsObject(matching query: [String : AnyHashable]) -> OSStatus {
+    internal static func performCopy(matching query: [String : AnyHashable]) -> OSStatus {
         guard !query.isEmpty else {
             // Must provide a query with at least one item
             return errSecParam

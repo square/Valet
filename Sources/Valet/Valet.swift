@@ -261,7 +261,7 @@ public final class Valet: NSObject {
     /// - Throws: An error of type `KeychainError`.
     public func containsObject(forKey key: String) throws -> Bool {
         try execute(in: lock) {
-            let status = Keychain.containsObject(forKey: key, options: try self.keychainQuery())
+            let status = Keychain.performCopy(forKey: key, options: try self.keychainQuery())
             switch status {
             case errSecSuccess:
                 return true
