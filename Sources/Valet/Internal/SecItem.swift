@@ -188,7 +188,10 @@ internal final class SecItem {
             case .missingEntitlement:
                 throw KeychainError.missingEntitlement
 
-            default:
+            case .emptyKey,
+                 .emptyValue,
+                 .itemNotFound,
+                 .userCancelled:
                 // We succeeded as long as we can confirm that the item is not in the keychain.
                 break
             }
