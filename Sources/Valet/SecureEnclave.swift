@@ -91,6 +91,7 @@ public final class SecureEnclave {
         switch status {
         case errSecSuccess,
              errSecInteractionNotAllowed:
+            // An item exists in the keychain if we could successfully copy the item, or if we got an error telling us we weren't allowed to copy the item since we couldn't prompt the user.
             return true
         case errSecItemNotFound:
             return false
