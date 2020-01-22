@@ -114,6 +114,10 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         guard #available(tvOS 11.0, *) else {
             return
         }
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+            return
+        }
+
         // Under the hood, Valet inserts a canary when calling `canAccessKeychain()` - this should not appear in `allKeys()`.
         _ = valet().canAccessKeychain()
         XCTAssertEqual(try valet().allKeys(userPrompt: "it me"), Set())
