@@ -24,7 +24,7 @@ import LegacyValet
 import XCTest
 
 
-@available(tvOS 10.0, *)
+@available(tvOS 11.0, *)
 extension SinglePromptSecureEnclaveIntegrationTests {
 
     @available (*, deprecated)
@@ -34,9 +34,9 @@ extension SinglePromptSecureEnclaveIntegrationTests {
             return
         }
 
-        let deprecatedValet = VALLegacySinglePromptSecureEnclaveValet(identifier: valet.identifier.description)!
+        let deprecatedValet = VALLegacySinglePromptSecureEnclaveValet(identifier: valet().identifier.description)!
         XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
-        XCTAssertEqual(passcode, try valet.string(forKey: key, withPrompt: ""))
+        XCTAssertEqual(passcode, try valet().string(forKey: key, withPrompt: ""))
     }
 
 }

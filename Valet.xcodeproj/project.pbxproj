@@ -131,6 +131,7 @@
 		167E251023D6328E00889121 /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167E250F23D6328E00889121 /* ConfigurationTests.swift */; };
 		167E251123D6328E00889121 /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167E250F23D6328E00889121 /* ConfigurationTests.swift */; };
 		167E251223D6328E00889121 /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167E250F23D6328E00889121 /* ConfigurationTests.swift */; };
+		167E24F123D4B89800889121 /* SinglePromptSecureEnclaveIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD0622A9C95400FC1142 /* SinglePromptSecureEnclaveIntegrationTests.swift */; };
 		167E250723D62CAA00889121 /* CloudAccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167E250623D62CAA00889121 /* CloudAccessibilityTests.swift */; };
 		167E250823D62CAA00889121 /* CloudAccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167E250623D62CAA00889121 /* CloudAccessibilityTests.swift */; };
 		167E250923D62CAA00889121 /* CloudAccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167E250623D62CAA00889121 /* CloudAccessibilityTests.swift */; };
@@ -1562,6 +1563,7 @@
 				1612FD1322A9C95500FC1142 /* SecItemTests.swift in Sources */,
 				1612FD3122A9C95500FC1142 /* SecureEnclaveTests.swift in Sources */,
 				167E251223D6328E00889121 /* ConfigurationTests.swift in Sources */,
+				167E24F123D4B89800889121 /* SinglePromptSecureEnclaveIntegrationTests.swift in Sources */,
 				169E9A6C23D181DC001B69F5 /* VALValetTests.m in Sources */,
 				1612FD2B22A9C95500FC1142 /* SecureEnclaveIntegrationTests.swift in Sources */,
 				167E250023D6235000889121 /* KeychainErrorTests.swift in Sources */,
