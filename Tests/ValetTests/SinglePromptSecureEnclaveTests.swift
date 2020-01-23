@@ -25,7 +25,7 @@ import Foundation
 import XCTest
 
 
-@available(tvOS 10.0, *)
+@available(tvOS 11.0, *)
 class SinglePromptSecureEnclaveTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
