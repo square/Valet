@@ -601,26 +601,26 @@ internal extension Valet {
     // MARK: Permutations
 
     class func permutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
-        Accessibility.allValues().map { accessibility in
+        Accessibility.allCases.map { accessibility in
             shared ? .sharedAccessGroupValet(with: identifier, accessibility: accessibility) : .valet(with: identifier, accessibility: accessibility)
         }
     }
 
     class func iCloudPermutations(with identifier: Identifier, shared: Bool = false) -> [Valet] {
-        CloudAccessibility.allValues().map { cloudAccessibility in
+        CloudAccessibility.allCases.map { cloudAccessibility in
             shared ? .iCloudSharedAccessGroupValet(with: identifier, accessibility: cloudAccessibility) : .iCloudValet(with: identifier, accessibility: cloudAccessibility)
         }
     }
 
     #if os(macOS)
     class func permutations(withExplictlySet identifier: Identifier, shared: Bool = false) -> [Valet] {
-        Accessibility.allValues().map { accessibility in
+        Accessibility.allCases.map { accessibility in
             shared ? .sharedAccessGroupValet(withExplicitlySet: identifier, accessibility: accessibility) : .valet(withExplicitlySet: identifier, accessibility: accessibility)
         }
     }
 
     class func iCloudPermutations(withExplictlySet identifier: Identifier, shared: Bool = false) -> [Valet] {
-        CloudAccessibility.allValues().map { cloudAccessibility in
+        CloudAccessibility.allCases.map { cloudAccessibility in
             shared ? .iCloudSharedAccessGroupValet(withExplicitlySet: identifier, accessibility: cloudAccessibility) : .iCloudValet(withExplicitlySet: identifier, accessibility: cloudAccessibility)
         }
     }
