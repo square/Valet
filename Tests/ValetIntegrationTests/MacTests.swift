@@ -106,7 +106,7 @@ class ValetMacTests: XCTestCase
     // MARK: Migration - PreCatalina
 
     func test_migrateObjectsFromPreCatalina_migratesDataWrittenPreCatalina() {
-        guard #available(macOS 10.15, *) else {
+        guard testEnvironmentIsSigned() else {
             return
         }
 

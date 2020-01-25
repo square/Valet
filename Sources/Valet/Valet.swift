@@ -245,8 +245,7 @@ public final class Valet: NSObject, KeychainQueryConvertible {
     #if os(macOS)
     /// Migrates objects that were written to this Valet prior to macOS 10.15 to a format that can be read on macOS 10.15 and later. The new format is backwards compatible, allowing these values to be read on older operating systems.
     /// - returns: Whether the migration succeeded or failed.
-    /// - note: The keychain is not modified if a failure occurs. This method can only be called from macOS 10.15 or later.
-    @available(macOS 10.15, *)
+    /// - note: The keychain is not modified if a failure occurs.
     @objc(migrateObjectsFromPreCatalina)
     public func migrateObjectsFromPreCatalina() -> MigrationResult {
         var baseQuery = keychainQuery
