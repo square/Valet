@@ -24,96 +24,96 @@ import LegacyValet
 import XCTest
 
 
-// MARK: – Backwards Compatibility Extensions
-
-
-internal extension Valet {
-
-    var legacyIdentifier: String {
-        return identifier.description
-    }
-
-    var legacyAccessibility: VALLegacyAccessibility {
-        switch accessibility {
-        case .afterFirstUnlock: return .afterFirstUnlock
-        case .afterFirstUnlockThisDeviceOnly: return .afterFirstUnlockThisDeviceOnly
-        case .always: return .always
-        case .alwaysThisDeviceOnly: return .alwaysThisDeviceOnly
-        case .whenPasscodeSetThisDeviceOnly: return .whenPasscodeSetThisDeviceOnly
-        case .whenUnlocked: return .whenUnlocked
-        case .whenUnlockedThisDeviceOnly: return .whenUnlockedThisDeviceOnly
-        }
-    }
-
-    var legacyValet: VALLegacyValet {
-        switch configuration {
-        case .valet:
-            switch service {
-            case .standard:
-                return VALLegacyValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
-            case .sharedAccessGroup:
-                return VALLegacyValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
-            }
-        case .iCloud:
-            switch service {
-            case .standard:
-                return VALSynchronizableValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
-            case .sharedAccessGroup:
-                return VALSynchronizableValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
-            }
-
-        default:
-            fatalError()
-        }
-    }
-
-    // MARK: Permutations
-
-    class func currentAndLegacyPermutations(with identifier: Identifier, shared: Bool = false) -> [(Valet, VALLegacyValet)] {
-        return permutations(with: identifier, shared: shared).map {
-            return ($0, $0.legacyValet)
-        }
-    }
-
-    class func iCloudCurrentAndLegacyPermutations(with identifier: Identifier, shared: Bool = false) -> [(Valet, VALSynchronizableValet)] {
-        return iCloudPermutations(with: identifier, shared: shared).map {
-            return ($0, $0.legacyValet as! VALSynchronizableValet)
-        }
-    }
-}
-
-// MARK: - Tests
-
-class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
-
-    // MARK: Tests
-
-    func test_backwardsCompatibility_withLegacyValet() {
-        Valet.currentAndLegacyPermutations(with: vanillaValet.identifier).forEach { permutation, legacyValet in
-            legacyValet.setString(passcode, forKey: key)
-
-            XCTAssertNotNil(legacyValet.string(forKey: key))
-            if #available(OSX 10.15, *) {
-                #if os(macOS)
-                _ = permutation.migrateObjectsFromPreCatalina()
-                #endif
-            }
-            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
-        }
-    }
-
-    func test_backwardsCompatibility_withLegacySharedAccessGroupValet() {
-        Valet.currentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
-            legacyValet.setString(passcode, forKey: key)
-
-            XCTAssertNotNil(legacyValet.string(forKey: key))
-            if #available(OSX 10.15, *) {
-                #if os(macOS)
-                _ = permutation.migrateObjectsFromPreCatalina()
-                #endif
-            }
-            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
-        }
-    }
-
-}
+//// MARK: – Backwards Compatibility Extensions
+//
+//
+//internal extension Valet {
+//
+//    var legacyIdentifier: String {
+//        return identifier.description
+//    }
+//
+//    var legacyAccessibility: VALLegacyAccessibility {
+//        switch accessibility {
+//        case .afterFirstUnlock: return .afterFirstUnlock
+//        case .afterFirstUnlockThisDeviceOnly: return .afterFirstUnlockThisDeviceOnly
+//        case .always: return .always
+//        case .alwaysThisDeviceOnly: return .alwaysThisDeviceOnly
+//        case .whenPasscodeSetThisDeviceOnly: return .whenPasscodeSetThisDeviceOnly
+//        case .whenUnlocked: return .whenUnlocked
+//        case .whenUnlockedThisDeviceOnly: return .whenUnlockedThisDeviceOnly
+//        }
+//    }
+//
+//    var legacyValet: VALLegacyValet {
+//        switch configuration {
+//        case .valet:
+//            switch service {
+//            case .standard:
+//                return VALLegacyValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
+//            case .sharedAccessGroup:
+//                return VALLegacyValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
+//            }
+//        case .iCloud:
+//            switch service {
+//            case .standard:
+//                return VALSynchronizableValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
+//            case .sharedAccessGroup:
+//                return VALSynchronizableValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
+//            }
+//
+//        default:
+//            fatalError()
+//        }
+//    }
+//
+//    // MARK: Permutations
+//
+//    class func currentAndLegacyPermutations(with identifier: Identifier, shared: Bool = false) -> [(Valet, VALLegacyValet)] {
+//        return permutations(with: identifier, shared: shared).map {
+//            return ($0, $0.legacyValet)
+//        }
+//    }
+//
+//    class func iCloudCurrentAndLegacyPermutations(with identifier: Identifier, shared: Bool = false) -> [(Valet, VALSynchronizableValet)] {
+//        return iCloudPermutations(with: identifier, shared: shared).map {
+//            return ($0, $0.legacyValet as! VALSynchronizableValet)
+//        }
+//    }
+//}
+//
+//// MARK: - Tests
+//
+//class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
+//
+//    // MARK: Tests
+//
+//    func test_backwardsCompatibility_withLegacyValet() {
+//        Valet.currentAndLegacyPermutations(with: vanillaValet.identifier).forEach { permutation, legacyValet in
+//            legacyValet.setString(passcode, forKey: key)
+//
+//            XCTAssertNotNil(legacyValet.string(forKey: key))
+//            if #available(OSX 10.15, *) {
+//                #if os(macOS)
+//                _ = permutation.migrateObjectsFromPreCatalina()
+//                #endif
+//            }
+//            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
+//        }
+//    }
+//
+//    func test_backwardsCompatibility_withLegacySharedAccessGroupValet() {
+//        Valet.currentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
+//            legacyValet.setString(passcode, forKey: key)
+//
+//            XCTAssertNotNil(legacyValet.string(forKey: key))
+//            if #available(OSX 10.15, *) {
+//                #if os(macOS)
+//                _ = permutation.migrateObjectsFromPreCatalina()
+//                #endif
+//            }
+//            XCTAssertEqual(legacyValet.string(forKey: key), permutation.string(forKey: key), "\(permutation) was not able to read from legacy counterpart: \(legacyValet)")
+//        }
+//    }
+//
+//}

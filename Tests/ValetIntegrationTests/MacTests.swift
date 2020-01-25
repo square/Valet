@@ -22,115 +22,115 @@ import Foundation
 import XCTest
 import Valet
 
-#if os(macOS)
-class ValetMacTests: XCTestCase
-{
-    // This test verifies that we are neutralizing the zero-day Mac OS X Access Control List vulnerability.
-    // Whitepaper: https://drive.google.com/file/d/0BxxXk1d3yyuZOFlsdkNMSGswSGs/view
-    // Square Corner blog post: https://corner.squareup.com/2015/06/valet-beats-the-ox-x-keychain-access-control-list-zero-day-vulnerability.html
-    func test_setStringForKey_neutralizesMacOSAccessControlListVuln()
-    {
-        let valet = Valet.valet(with: Identifier(nonEmpty: "MacOSVulnTest")!, accessibility: .whenUnlocked)
-        let vulnKey = "KeepIt"
-        let vulnValue = "Secret"
-        valet.removeObject(forKey: vulnKey)
-
-        var query = valet.keychainQuery
-        query[kSecAttrAccount as String] = vulnKey
-
-        var accessList: SecAccess?
-        var trustedAppSelf: SecTrustedApplication?
-        var trustedAppSystemUIServer: SecTrustedApplication?
-
-        let kSecReturnWorkingReference: CFString
-        let kSecValueWorkingReference: CFString
-        if #available(macOS 10.15, *) {
-            // macOS Catalina requires a persistent ref to pass this test.
-            kSecReturnWorkingReference = kSecReturnPersistentRef
-            kSecValueWorkingReference = kSecValuePersistentRef
-        } else {
-            kSecReturnWorkingReference = kSecReturnRef
-            kSecValueWorkingReference = kSecValueRef
-        }
-
-        XCTAssertEqual(SecTrustedApplicationCreateFromPath(nil, &trustedAppSelf), errSecSuccess)
-        XCTAssertEqual(SecTrustedApplicationCreateFromPath("/System/Library/CoreServices/SystemUIServer.app", &trustedAppSystemUIServer), errSecSuccess);
-        let trustedList = [trustedAppSelf!, trustedAppSystemUIServer!] as NSArray?
-
-        // Add an entry to the keychain with an access control list.
-        XCTAssertEqual(SecAccessCreate("Access Control List" as CFString, trustedList, &accessList), errSecSuccess)
-        var accessListQuery = query
-        accessListQuery[kSecAttrAccess as String] = accessList
-        accessListQuery[kSecValueData as String] = Data(vulnValue.utf8)
-        XCTAssertEqual(SecItemAdd(accessListQuery as CFDictionary, nil), errSecSuccess)
-
-        // The potentially vulnerable keychain item should exist in our Valet now.
-        XCTAssertTrue(valet.containsObject(forKey: vulnKey))
-
-        // Obtain a reference to the vulnerable keychain entry.
-        query[kSecReturnWorkingReference as String] = true
-        query[kSecReturnAttributes as String] = true
-        var vulnerableEntryReference: CFTypeRef?
-        XCTAssertEqual(SecItemCopyMatching(query as CFDictionary, &vulnerableEntryReference), errSecSuccess)
-
-        guard let vulnerableKeychainEntry = vulnerableEntryReference as! NSDictionary? else {
-            XCTFail()
-            return
-        }
-        guard let vulnerableValueRef = vulnerableKeychainEntry[kSecValueWorkingReference as String] else {
-            XCTFail()
-            return
-        }
-
-        let queryWithVulnerableReference = [
-            kSecValueWorkingReference as String: vulnerableValueRef
-            ] as CFDictionary
-        // Demonstrate that the item is accessible with the reference.
-        XCTAssertEqual(SecItemCopyMatching(queryWithVulnerableReference, nil), errSecSuccess)
-
-        // Update the vulnerable value with Valet - we should have deleted the existing item, making the entry no longer vulnerable.
-        let updatedValue = "Safe"
-        XCTAssertTrue(valet.set(string: updatedValue, forKey: vulnKey))
-
-        // We should no longer be able to access the keychain item via the ref.
-        let queryWithVulnerableReferenceAndAttributes = [
-            kSecValueWorkingReference as String: vulnerableValueRef,
-            kSecReturnAttributes as String: true
-            ] as CFDictionary
-        XCTAssertEqual(SecItemCopyMatching(queryWithVulnerableReferenceAndAttributes, nil), errSecItemNotFound)
-
-        // If you add a breakpoint here then manually inspect the keychain via Keychain.app (search for "MacOSVulnTest"), "xctest" should be the only member of the Access Control list.
-        // This is not be the case upon setting a breakpoint and inspecting before the valet.setString(, forKey:) call above.
-    }
-
-    // MARK: Migration - PreCatalina
-
-    func test_migrateObjectsFromPreCatalina_migratesDataWrittenPreCatalina() {
-        guard #available(macOS 10.15, *) else {
-            return
-        }
-
-        let valet = Valet.valet(with: Identifier(nonEmpty: "PreCatalinaTest")!, accessibility: .afterFirstUnlock)
-        var preCatalinaWriteQuery = valet.keychainQuery
-        #if swift(>=5.1)
-        preCatalinaWriteQuery[kSecUseDataProtectionKeychain as String] = nil
-        #else
-        preCatalinaWriteQuery["nleg"] = nil // kSecUseDataProtectionKeychain for Xcode 9 and Xcode 10 compatibility.
-        #endif
-
-        let key = "PreCatalinaKey"
-        let object = Data("PreCatalinaValue".utf8)
-        preCatalinaWriteQuery[kSecAttrAccount as String] = key
-        preCatalinaWriteQuery[kSecValueData as String] = object
-
-        // Make sure the item is not in the keychain before we start this test
-        SecItemDelete(preCatalinaWriteQuery as CFDictionary)
-
-        XCTAssertEqual(SecItemAdd(preCatalinaWriteQuery as CFDictionary, nil), errSecSuccess)
-        XCTAssertNil(valet.object(forKey: key))
-        XCTAssertEqual(valet.migrateObjectsFromPreCatalina(), .success)
-        XCTAssertEqual(valet.object(forKey: key), object)
-    }
-
-}
-#endif
+//#if os(macOS)
+//class ValetMacTests: XCTestCase
+//{
+//    // This test verifies that we are neutralizing the zero-day Mac OS X Access Control List vulnerability.
+//    // Whitepaper: https://drive.google.com/file/d/0BxxXk1d3yyuZOFlsdkNMSGswSGs/view
+//    // Square Corner blog post: https://corner.squareup.com/2015/06/valet-beats-the-ox-x-keychain-access-control-list-zero-day-vulnerability.html
+//    func test_setStringForKey_neutralizesMacOSAccessControlListVuln()
+//    {
+//        let valet = Valet.valet(with: Identifier(nonEmpty: "MacOSVulnTest")!, accessibility: .whenUnlocked)
+//        let vulnKey = "KeepIt"
+//        let vulnValue = "Secret"
+//        valet.removeObject(forKey: vulnKey)
+//
+//        var query = valet.keychainQuery
+//        query[kSecAttrAccount as String] = vulnKey
+//
+//        var accessList: SecAccess?
+//        var trustedAppSelf: SecTrustedApplication?
+//        var trustedAppSystemUIServer: SecTrustedApplication?
+//
+//        let kSecReturnWorkingReference: CFString
+//        let kSecValueWorkingReference: CFString
+//        if #available(macOS 10.15, *) {
+//            // macOS Catalina requires a persistent ref to pass this test.
+//            kSecReturnWorkingReference = kSecReturnPersistentRef
+//            kSecValueWorkingReference = kSecValuePersistentRef
+//        } else {
+//            kSecReturnWorkingReference = kSecReturnRef
+//            kSecValueWorkingReference = kSecValueRef
+//        }
+//
+//        XCTAssertEqual(SecTrustedApplicationCreateFromPath(nil, &trustedAppSelf), errSecSuccess)
+//        XCTAssertEqual(SecTrustedApplicationCreateFromPath("/System/Library/CoreServices/SystemUIServer.app", &trustedAppSystemUIServer), errSecSuccess);
+//        let trustedList = [trustedAppSelf!, trustedAppSystemUIServer!] as NSArray?
+//
+//        // Add an entry to the keychain with an access control list.
+//        XCTAssertEqual(SecAccessCreate("Access Control List" as CFString, trustedList, &accessList), errSecSuccess)
+//        var accessListQuery = query
+//        accessListQuery[kSecAttrAccess as String] = accessList
+//        accessListQuery[kSecValueData as String] = Data(vulnValue.utf8)
+//        XCTAssertEqual(SecItemAdd(accessListQuery as CFDictionary, nil), errSecSuccess)
+//
+//        // The potentially vulnerable keychain item should exist in our Valet now.
+//        XCTAssertTrue(valet.containsObject(forKey: vulnKey))
+//
+//        // Obtain a reference to the vulnerable keychain entry.
+//        query[kSecReturnWorkingReference as String] = true
+//        query[kSecReturnAttributes as String] = true
+//        var vulnerableEntryReference: CFTypeRef?
+//        XCTAssertEqual(SecItemCopyMatching(query as CFDictionary, &vulnerableEntryReference), errSecSuccess)
+//
+//        guard let vulnerableKeychainEntry = vulnerableEntryReference as! NSDictionary? else {
+//            XCTFail()
+//            return
+//        }
+//        guard let vulnerableValueRef = vulnerableKeychainEntry[kSecValueWorkingReference as String] else {
+//            XCTFail()
+//            return
+//        }
+//
+//        let queryWithVulnerableReference = [
+//            kSecValueWorkingReference as String: vulnerableValueRef
+//            ] as CFDictionary
+//        // Demonstrate that the item is accessible with the reference.
+//        XCTAssertEqual(SecItemCopyMatching(queryWithVulnerableReference, nil), errSecSuccess)
+//
+//        // Update the vulnerable value with Valet - we should have deleted the existing item, making the entry no longer vulnerable.
+//        let updatedValue = "Safe"
+//        XCTAssertTrue(valet.set(string: updatedValue, forKey: vulnKey))
+//
+//        // We should no longer be able to access the keychain item via the ref.
+//        let queryWithVulnerableReferenceAndAttributes = [
+//            kSecValueWorkingReference as String: vulnerableValueRef,
+//            kSecReturnAttributes as String: true
+//            ] as CFDictionary
+//        XCTAssertEqual(SecItemCopyMatching(queryWithVulnerableReferenceAndAttributes, nil), errSecItemNotFound)
+//
+//        // If you add a breakpoint here then manually inspect the keychain via Keychain.app (search for "MacOSVulnTest"), "xctest" should be the only member of the Access Control list.
+//        // This is not be the case upon setting a breakpoint and inspecting before the valet.setString(, forKey:) call above.
+//    }
+//
+//    // MARK: Migration - PreCatalina
+//
+//    func test_migrateObjectsFromPreCatalina_migratesDataWrittenPreCatalina() {
+//        guard #available(macOS 10.15, *) else {
+//            return
+//        }
+//
+//        let valet = Valet.valet(with: Identifier(nonEmpty: "PreCatalinaTest")!, accessibility: .afterFirstUnlock)
+//        var preCatalinaWriteQuery = valet.keychainQuery
+//        #if swift(>=5.1)
+//        preCatalinaWriteQuery[kSecUseDataProtectionKeychain as String] = nil
+//        #else
+//        preCatalinaWriteQuery["nleg"] = nil // kSecUseDataProtectionKeychain for Xcode 9 and Xcode 10 compatibility.
+//        #endif
+//
+//        let key = "PreCatalinaKey"
+//        let object = Data("PreCatalinaValue".utf8)
+//        preCatalinaWriteQuery[kSecAttrAccount as String] = key
+//        preCatalinaWriteQuery[kSecValueData as String] = object
+//
+//        // Make sure the item is not in the keychain before we start this test
+//        SecItemDelete(preCatalinaWriteQuery as CFDictionary)
+//
+//        XCTAssertEqual(SecItemAdd(preCatalinaWriteQuery as CFDictionary, nil), errSecSuccess)
+//        XCTAssertNil(valet.object(forKey: key))
+//        XCTAssertEqual(valet.migrateObjectsFromPreCatalina(), .success)
+//        XCTAssertEqual(valet.object(forKey: key), object)
+//    }
+//
+//}
+//#endif

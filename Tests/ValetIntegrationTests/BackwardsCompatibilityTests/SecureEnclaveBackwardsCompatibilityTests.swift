@@ -24,18 +24,18 @@ import LegacyValet
 import XCTest
 
 
-extension SecureEnclaveIntegrationTests {
-
-    @available (*, deprecated)
-    func test_backwardsCompatibility_withLegacyValet()
-    {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-
-        let deprecatedValet = VALLegacySecureEnclaveValet(identifier: valet.identifier.description)!
-        XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
-        XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
-    }
-
-}
+//extension SecureEnclaveIntegrationTests {
+//
+//    @available (*, deprecated)
+//    func test_backwardsCompatibility_withLegacyValet()
+//    {
+//        guard testEnvironmentIsSigned() else {
+//            return
+//        }
+//
+//        let deprecatedValet = VALLegacySecureEnclaveValet(identifier: valet.identifier.description)!
+//        XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
+//        XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
+//    }
+//
+//}

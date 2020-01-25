@@ -24,19 +24,19 @@ import LegacyValet
 import XCTest
 
 
-@available(tvOS 10.0, *)
-extension SinglePromptSecureEnclaveIntegrationTests {
-
-    @available (*, deprecated)
-    func test_backwardsCompatibility_withLegacyValet()
-    {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-
-        let deprecatedValet = VALLegacySinglePromptSecureEnclaveValet(identifier: valet.identifier.description)!
-        XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
-        XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
-    }
-
-}
+//@available(tvOS 10.0, *)
+//extension SinglePromptSecureEnclaveIntegrationTests {
+//
+//    @available (*, deprecated)
+//    func test_backwardsCompatibility_withLegacyValet()
+//    {
+//        guard testEnvironmentIsSigned() else {
+//            return
+//        }
+//
+//        let deprecatedValet = VALLegacySinglePromptSecureEnclaveValet(identifier: valet.identifier.description)!
+//        XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
+//        XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
+//    }
+//
+//}

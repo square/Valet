@@ -24,37 +24,37 @@ import XCTest
 @testable import Valet
 
 
-class CloudTests: XCTestCase
-{
-    static let identifier = Identifier(nonEmpty: "valet_testing")!
-    static let accessibility = CloudAccessibility.whenUnlocked
-    let valet = Valet.iCloudValet(with: identifier, accessibility: accessibility)
-
-    override func setUp()
-    {
-        super.setUp()
-        
-        ErrorHandler.customAssertBody = { _, _, _, _ in
-            // Nothing to do here.
-        }
-    }
-
-    // MARK: Equality
-
-    func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
-    {
-        let localValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
-        XCTAssertFalse(valet == localValet)
-        XCTAssertFalse(valet === localValet)
-    }
-
-    func test_synchronizableValets_withEquivalentConfigurationsAreEqual() {
-        guard case let .iCloud(accessibility) = valet.configuration else {
-            XCTFail()
-            return
-        }
-        let otherValet = Valet.iCloudValet(with: valet.identifier, accessibility: accessibility)
-        XCTAssertEqual(valet, otherValet, "Valet should be equal to otherValet")
-        XCTAssertTrue(valet === otherValet, "Valet and otherValet should be the same object")
-    }
-}
+//class CloudTests: XCTestCase
+//{
+//    static let identifier = Identifier(nonEmpty: "valet_testing")!
+//    static let accessibility = CloudAccessibility.whenUnlocked
+//    let valet = Valet.iCloudValet(with: identifier, accessibility: accessibility)
+//
+//    override func setUp()
+//    {
+//        super.setUp()
+//        
+//        ErrorHandler.customAssertBody = { _, _, _, _ in
+//            // Nothing to do here.
+//        }
+//    }
+//
+//    // MARK: Equality
+//
+//    func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
+//    {
+//        let localValet = Valet.valet(with: valet.identifier, accessibility: valet.accessibility)
+//        XCTAssertFalse(valet == localValet)
+//        XCTAssertFalse(valet === localValet)
+//    }
+//
+//    func test_synchronizableValets_withEquivalentConfigurationsAreEqual() {
+//        guard case let .iCloud(accessibility) = valet.configuration else {
+//            XCTFail()
+//            return
+//        }
+//        let otherValet = Valet.iCloudValet(with: valet.identifier, accessibility: accessibility)
+//        XCTAssertEqual(valet, otherValet, "Valet should be equal to otherValet")
+//        XCTAssertTrue(valet === otherValet, "Valet and otherValet should be the same object")
+//    }
+//}

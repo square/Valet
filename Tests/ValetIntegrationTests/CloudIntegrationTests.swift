@@ -24,76 +24,76 @@ import XCTest
 @testable import Valet
 
 
-class CloudIntegrationTests: XCTestCase
-{
-    static let identifier = Valet.sharedAccessGroupIdentifier
-    static let accessibility = CloudAccessibility.whenUnlocked
-    var allPermutations: [Valet] {
-        return (testEnvironmentIsSigned()
-            ? Valet.iCloudPermutations(with: CloudIntegrationTests.identifier) + Valet.iCloudPermutations(with: ValetIntegrationTests.identifier, shared: true)
-            : [])
-    }
-    let key = "key"
-    let passcode = "topsecret"
-    
-    override func setUp()
-    {
-        super.setUp()
-        
-        ErrorHandler.customAssertBody = { _, _, _, _ in
-            // Nothing to do here.
-        }
-
-        allPermutations.forEach { testValet in testValet.removeAllObjects() }
-    }
-    
-    func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
-    {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
-
-        let identifier = Identifier(nonEmpty: "DistinctTest")!
-        let vanillaValet = Valet.valet(with: identifier, accessibility: .afterFirstUnlock)
-        let iCloudValet = Valet.iCloudValet(with: identifier, accessibility: .afterFirstUnlock)
-
-        // Setting
-        XCTAssertTrue(iCloudValet.set(string: "butts", forKey: "cloud"))
-        XCTAssertEqual("butts", iCloudValet.string(forKey: "cloud"))
-        XCTAssertNil(vanillaValet.string(forKey: "cloud"))
-        
-        // Removal
-        XCTAssertTrue(vanillaValet.set(string: "snake people", forKey: "millennials"))
-        XCTAssertTrue(iCloudValet.removeObject(forKey: "millennials"))
-        XCTAssertEqual("snake people", vanillaValet.string(forKey: "millennials"))
-    }
-    
-    func test_setStringForKey()
-    {
-        allPermutations.forEach { valet in
-            XCTAssertNil(valet.string(forKey: key), "\(valet) read item from keychain that should not exist")
-            XCTAssertTrue(valet.set(string: passcode, forKey: key), "\(valet) could not set item in keychain")
-            XCTAssertEqual(passcode, valet.string(forKey: key))
-        }
-    }
-    
-    func test_removeObjectForKey()
-    {
-        allPermutations.forEach { valet in
-            XCTAssertTrue(valet.set(string: passcode, forKey: key), "\(valet) could not set item in keychain")
-            XCTAssertEqual(passcode, valet.string(forKey: key), "\(valet) read incorrect value from keychain.")
-
-            XCTAssertTrue(valet.removeObject(forKey: key), "\(valet) did not remove item from keychain.")
-            XCTAssertNil(valet.string(forKey: key), "\(valet) found removed item in keychain.")
-        }
-    }
-    
-    // MARK: canAccessKeychain
-    
-    func test_canAccessKeychain()
-    {
-        allPermutations.forEach { valet in
-            XCTAssertTrue(valet.canAccessKeychain(), "\(valet) could not access keychain.")
-        }
-    }
-}
+//class CloudIntegrationTests: XCTestCase
+//{
+//    static let identifier = Valet.sharedAccessGroupIdentifier
+//    static let accessibility = CloudAccessibility.whenUnlocked
+//    var allPermutations: [Valet] {
+//        return (testEnvironmentIsSigned()
+//            ? Valet.iCloudPermutations(with: CloudIntegrationTests.identifier) + Valet.iCloudPermutations(with: ValetIntegrationTests.identifier, shared: true)
+//            : [])
+//    }
+//    let key = "key"
+//    let passcode = "topsecret"
+//    
+//    override func setUp()
+//    {
+//        super.setUp()
+//        
+//        ErrorHandler.customAssertBody = { _, _, _, _ in
+//            // Nothing to do here.
+//        }
+//
+//        allPermutations.forEach { testValet in testValet.removeAllObjects() }
+//    }
+//    
+//    func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration()
+//    {
+//        guard testEnvironmentIsSigned() else {
+//            return
+//        }
+//
+//        let identifier = Identifier(nonEmpty: "DistinctTest")!
+//        let vanillaValet = Valet.valet(with: identifier, accessibility: .afterFirstUnlock)
+//        let iCloudValet = Valet.iCloudValet(with: identifier, accessibility: .afterFirstUnlock)
+//
+//        // Setting
+//        XCTAssertTrue(iCloudValet.set(string: "butts", forKey: "cloud"))
+//        XCTAssertEqual("butts", iCloudValet.string(forKey: "cloud"))
+//        XCTAssertNil(vanillaValet.string(forKey: "cloud"))
+//        
+//        // Removal
+//        XCTAssertTrue(vanillaValet.set(string: "snake people", forKey: "millennials"))
+//        XCTAssertTrue(iCloudValet.removeObject(forKey: "millennials"))
+//        XCTAssertEqual("snake people", vanillaValet.string(forKey: "millennials"))
+//    }
+//    
+//    func test_setStringForKey()
+//    {
+//        allPermutations.forEach { valet in
+//            XCTAssertNil(valet.string(forKey: key), "\(valet) read item from keychain that should not exist")
+//            XCTAssertTrue(valet.set(string: passcode, forKey: key), "\(valet) could not set item in keychain")
+//            XCTAssertEqual(passcode, valet.string(forKey: key))
+//        }
+//    }
+//    
+//    func test_removeObjectForKey()
+//    {
+//        allPermutations.forEach { valet in
+//            XCTAssertTrue(valet.set(string: passcode, forKey: key), "\(valet) could not set item in keychain")
+//            XCTAssertEqual(passcode, valet.string(forKey: key), "\(valet) read incorrect value from keychain.")
+//
+//            XCTAssertTrue(valet.removeObject(forKey: key), "\(valet) did not remove item from keychain.")
+//            XCTAssertNil(valet.string(forKey: key), "\(valet) found removed item in keychain.")
+//        }
+//    }
+//    
+//    // MARK: canAccessKeychain
+//    
+//    func test_canAccessKeychain()
+//    {
+//        allPermutations.forEach { valet in
+//            XCTAssertTrue(valet.canAccessKeychain(), "\(valet) could not access keychain.")
+//        }
+//    }
+//}
