@@ -171,7 +171,9 @@ However, because the Keychain is effectively disk storage, there is no guarantee
 
 Already using the Keychain and no longer want to maintain your own Keychain code? We feel you. That’s why we wrote `migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool)`. This method allows you to migrate all your existing Keychain entries to a Valet instance in one line. Just pass in a Dictionary with the `kSecClass`, `kSecAttrService`, and any other `kSecAttr*` attributes you use – we’ll migrate the data for you.
 
-### Supporting macOS Catalina (10.15) and later
+### Integrating Valet into a macOS application
+
+Your macOS application must have the Keychain Sharing entitlement in order to use Valet, even if your application does not intend to share keychain data between applications. For instructions on how to add a Keychain Sharing entitlement to your application, read [Apple's documentation on the subject](https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps). The subsection on "Add Apps to One or More Keychain Access Groups" is particularly helpful, as it includes a screenshot showing Xcode's Signing & Capabilities screen.
 
 If your macOS application supports macOS 10.14 or prior, you must run `myValet.migrateObjectsFromPreCatalina()` before reading values from a Valet. macOS Catalina introduced a breaking change to the macOS keychain, requiring that macOS keychain items that utilize `kSecAttrAccessible` or `kSecAttrAccessGroup` set `kSecUseDataProtectionKeychain` to `true` [when writing or accessing](https://developer.apple.com/documentation/security/ksecusedataprotectionkeychain) these items. Valet’s `migrateObjectsFromPreCatalina()` upgrades items entered into the keychain on older macOS devices or other operating systems to include the key:value pair `kSecUseDataProtectionKeychain:true`. Note that Valets that share keychain items between devices with iCloud are exempt from this requirement. Similarly, `SecureEnclaveValet` and `SinglePromptSecureEnclaveValet` are exempt from this requirement.
 
