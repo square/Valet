@@ -23,13 +23,13 @@ import XCTest
 final class ConfigurationTests: XCTestCase {
 
     func test_description_valet_mirrorsLegacyName() {
-        Accessibility.allValues().forEach {
+        Accessibility.allCases.forEach {
             XCTAssertEqual(Configuration.valet($0).description, "VALValet")
         }
     }
 
     func test_description_iCloud_mirrorsLegacyName() {
-        CloudAccessibility.allValues().forEach {
+        CloudAccessibility.allCases.forEach {
             XCTAssertEqual(Configuration.iCloud($0).description, "VALSynchronizableValet")
         }
     }
@@ -47,13 +47,13 @@ final class ConfigurationTests: XCTestCase {
     }
 
     func test_accessibility_valet_returnsPassedInAccessibility() {
-        Accessibility.allValues().forEach {
+        Accessibility.allCases.forEach {
             XCTAssertEqual(Configuration.valet($0).accessibility, $0)
         }
     }
 
     func test_accessibility_iCloud_returnsPassedInAccessibility() {
-        CloudAccessibility.allValues().forEach {
+        CloudAccessibility.allCases.forEach {
             XCTAssertEqual(Configuration.iCloud($0).accessibility, $0.accessibility)
         }
     }
@@ -71,13 +71,13 @@ final class ConfigurationTests: XCTestCase {
     }
 
     func test_prettyDescription_valet_isHumanReadable() {
-        Accessibility.allValues().forEach {
+        Accessibility.allCases.forEach {
             XCTAssertEqual(Configuration.valet($0).prettyDescription, "\($0) (Valet)")
         }
     }
 
     func test_prettyDescription_iCloud_isHumanReadable() {
-        CloudAccessibility.allValues().forEach {
+        CloudAccessibility.allCases.forEach {
             XCTAssertEqual(Configuration.iCloud($0).prettyDescription, "\($0) (iCloud)")
         }
     }

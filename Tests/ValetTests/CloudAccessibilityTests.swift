@@ -23,13 +23,13 @@ import XCTest
 final class CloudAccessibilityTests: XCTestCase {
 
     func test_description_mirrorsAccessibilityCounterpartDescription() {
-        CloudAccessibility.allValues().forEach {
+        CloudAccessibility.allCases.forEach {
             XCTAssertEqual($0.description, $0.accessibility.description)
         }
     }
 
     func test_secAccessibilityAttribute_mirrorsAccessibilityCounterpartSecAccessibilityAttribute() {
-        CloudAccessibility.allValues().forEach {
+        CloudAccessibility.allCases.forEach {
             XCTAssertEqual($0.secAccessibilityAttribute, $0.accessibility.secAccessibilityAttribute)
         }
     }

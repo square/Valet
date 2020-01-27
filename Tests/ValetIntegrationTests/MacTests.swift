@@ -277,7 +277,7 @@ class ValetMacTests: XCTestCase
         XCTAssertEqual(try valet.object(forKey: key), object)
     }
 
-    private let accessibilityValues = Accessibility.allValues()
+    private let accessibilityValues = Accessibility.allCases
 
 }
 #endif
