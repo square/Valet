@@ -89,7 +89,12 @@ final class ValetTouchIDTestViewController : UIViewController
     @objc(containsItem:)
     @IBAction func containsItem(sender: UIResponder)
     {
-        let containsItem = singlePromptSecureEnclaveValet.containsObject(forKey: username)
+        let containsItem: Bool
+        do {
+            containsItem = try singlePromptSecureEnclaveValet.containsObject(forKey: username)
+        } catch {
+            containsItem = false
+        }
         updateTextView(messageComponents: #function, (containsItem ? "YES" : "NO"))
     }
     
