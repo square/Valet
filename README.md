@@ -128,11 +128,11 @@ In addition to allowing the storage of strings, Valet allows the storage of `Dat
 ### Sharing Secrets Among Multiple Applications
 
 ```swift
-let mySharedValet = Valet.sharedAccessGroupValet(with: Identifier(nonEmpty: "AppID12345.Druidia")!, accessibility: .whenUnlocked)
+let mySharedValet = Valet.sharedAccessGroupValet(with: SharedAccessGroupIdentifier(appIDPrefix: "AppID12345", nonEmptyGroup: "Druidia")!, accessibility: .whenUnlocked)
 ```
 
 ```objc
-VALValet *const mySharedValet = [VALValet valetWithSharedAccessGroupIdentifier:@"AppID12345.Druidia" accessibility:VALAccessibilityWhenUnlocked];
+VALValet *const mySharedValet = [VALValet sharedAccessGroupValetWithAppIDPrefix:@"AppID12345" sharedAccessGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
 This instance can be used to store and retrieve data securely across any app written by the same developer that has `AppID12345.Druidia` (or `$(AppIdentifierPrefix)Druidia`) set as a value for the `keychain-access-groups` key in the app’s `Entitlements`, where `AppID12345` is the application’s [App ID prefix](https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps#2974920). This Valet is accessible when the device is unlocked. Note that `myValet` and `mySharedValet` can not read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedAccessGroupValet` initializer.
