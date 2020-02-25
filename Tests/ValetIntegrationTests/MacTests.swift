@@ -145,7 +145,7 @@ class ValetMacTests: XCTestCase
             try $0.removeAllObjects()
         }
 
-        let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "9XUJ7M53NG.com.squareup.Valet-macOS-Test-Host-App")!
         try Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true).forEach {
             XCTAssertTrue($0.canAccessKeychain())
 
@@ -182,7 +182,7 @@ class ValetMacTests: XCTestCase
             try $0.removeAllObjects()
         }
 
-        let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        let explicitlySetSharedAccessGroupIdentifier = Identifier(nonEmpty: "9XUJ7M53NG.com.squareup.Valet-macOS-Test-Host-App")!
         try Valet.permutations(withExplictlySet: explicitlySetSharedAccessGroupIdentifier, shared: true).forEach {
             try $0.setString(passcode, forKey: key)
             XCTAssertEqual(try $0.string(forKey: key), passcode)
