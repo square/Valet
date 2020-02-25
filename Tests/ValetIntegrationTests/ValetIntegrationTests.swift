@@ -63,13 +63,13 @@ internal extension Valet {
     static var sharedAccessGroupIdentifier: Identifier = {
         let sharedAccessGroupIdentifier: Identifier
         #if os(iOS)
-        sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
+        sharedAccessGroupIdentifier = Identifier(nonEmpty: "9XUJ7M53NG.com.squareup.Valet-iOS-Test-Host-App")!
         #elseif os(macOS)
-        sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
+        sharedAccessGroupIdentifier = Identifier(nonEmpty: "9XUJ7M53NG.com.squareup.Valet-macOS-Test-Host-App")!
         #elseif os(tvOS)
-        sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-tvOS-Test-Host-App")!
+        sharedAccessGroupIdentifier = Identifier(nonEmpty: "9XUJ7M53NG.com.squareup.Valet-tvOS-Test-Host-App")!
         #elseif os(watchOS)
-        sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension")!
+        sharedAccessGroupIdentifier = Identifier(nonEmpty: "9XUJ7M53NG.com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension")!
         #else
         XCTFail()
         #endif
