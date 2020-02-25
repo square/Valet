@@ -37,7 +37,7 @@ internal extension Valet {
             return identifier.description
         #if os(macOS)
         case let .sharedAccessGroupOverride(identifier, _):
-            return identifier.description
+            return identifier.groupIdentifier
         case let .standardOverride(identifier, _):
             return identifier.description
         #endif

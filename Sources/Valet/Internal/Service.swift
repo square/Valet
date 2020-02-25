@@ -27,7 +27,7 @@ internal enum Service: CustomStringConvertible, Equatable {
 
     #if os(macOS)
     case standardOverride(service: Identifier, Configuration)
-    case sharedAccessGroupOverride(service: Identifier, Configuration)
+    case sharedAccessGroupOverride(service: SharedAccessGroupIdentifier, Configuration)
     #endif
 
     // MARK: Equatable
@@ -114,9 +114,10 @@ internal enum Service: CustomStringConvertible, Equatable {
         case let .sharedAccessGroup(identifier, configuration):
             service = Service.sharedAccessGroup(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
         #if os(macOS)
-        case let .standardOverride(identifier, _),
-             let .sharedAccessGroupOverride(identifier, _):
+        case let .standardOverride(identifier, _):
             service = identifier.description
+        case let .sharedAccessGroupOverride(identifier, _):
+            service = identifier.groupIdentifier
         #endif
         }
 
