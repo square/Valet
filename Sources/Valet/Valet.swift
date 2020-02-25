@@ -182,7 +182,7 @@ public final class Valet: NSObject {
         self.configuration = configuration
         self.service = service
         accessibility = configuration.accessibility
-        _keychainQuery = try? service.generateBaseQuery()
+        baseKeychainQuery = service.generateBaseQuery()
     }
 
     #if os(macOS)
@@ -191,7 +191,7 @@ public final class Valet: NSObject {
         self.configuration = configuration
         service = .standardOverride(service: identifier, configuration)
         accessibility = configuration.accessibility
-        _keychainQuery = try? service.generateBaseQuery()
+        baseKeychainQuery = service.generateBaseQuery()
     }
 
     private init(overrideSharedAccess identifier: Identifier, configuration: Configuration) {
@@ -199,7 +199,7 @@ public final class Valet: NSObject {
         self.configuration = configuration
         service = .sharedAccessGroupOverride(service: identifier, configuration)
         accessibility = configuration.accessibility
-        _keychainQuery = try? service.generateBaseQuery()
+        baseKeychainQuery = service.generateBaseQuery()
     }
     #endif
 
@@ -228,10 +228,7 @@ public final class Valet: NSObject {
     @objc
     public func canAccessKeychain() -> Bool {
         execute(in: lock) {
-            guard let keychainQuery = try? keychainQuery() else {
-                return false
-            }
-            return Keychain.canAccess(attributes: keychainQuery)
+            return Keychain.canAccess(attributes: baseKeychainQuery)
         }
     }
 
@@ -242,7 +239,7 @@ public final class Valet: NSObject {
     @objc
     public func setObject(_ object: Data, forKey key: String) throws {
         try execute(in: lock) {
-            try Keychain.setObject(object, forKey: key, options: try keychainQuery())
+            try Keychain.setObject(object, forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -252,7 +249,7 @@ public final class Valet: NSObject {
     @objc
     public func object(forKey key: String) throws -> Data {
         try execute(in: lock) {
-            try Keychain.object(forKey: key, options: try keychainQuery())
+            try Keychain.object(forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -261,7 +258,7 @@ public final class Valet: NSObject {
     /// - Throws: An error of type `KeychainError`.
     public func containsObject(forKey key: String) throws -> Bool {
         try execute(in: lock) {
-            let status = Keychain.performCopy(forKey: key, options: try self.keychainQuery())
+            let status = Keychain.performCopy(forKey: key, options: baseKeychainQuery)
             switch status {
             case errSecSuccess:
                 return true
@@ -280,7 +277,7 @@ public final class Valet: NSObject {
     @objc
     public func setString(_ string: String, forKey key: String) throws {
         try execute(in: lock) {
-            try Keychain.setString(string, forKey: key, options: try keychainQuery())
+            try Keychain.setString(string, forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -290,7 +287,7 @@ public final class Valet: NSObject {
     @objc
     public func string(forKey key: String) throws -> String {
         try execute(in: lock) {
-            try Keychain.string(forKey: key, options: try keychainQuery())
+            try Keychain.string(forKey: key, options: baseKeychainQuery)
         }
     }
     
@@ -299,7 +296,7 @@ public final class Valet: NSObject {
     @objc
     public func allKeys() throws -> Set<String> {
         try execute(in: lock) {
-            try Keychain.allKeys(options: try keychainQuery())
+            try Keychain.allKeys(options: baseKeychainQuery)
         }
     }
     
@@ -309,7 +306,7 @@ public final class Valet: NSObject {
     @objc
     public func removeObject(forKey key: String) throws {
         try execute(in: lock) {
-            try Keychain.removeObject(forKey: key, options: try keychainQuery())
+            try Keychain.removeObject(forKey: key, options: baseKeychainQuery)
         }
     }
     
@@ -318,7 +315,7 @@ public final class Valet: NSObject {
     @objc
     public func removeAllObjects() throws {
         try execute(in: lock) {
-            try Keychain.removeAllObjects(matching: try keychainQuery())
+            try Keychain.removeAllObjects(matching: baseKeychainQuery)
         }
     }
 
@@ -331,7 +328,7 @@ public final class Valet: NSObject {
     @objc
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) throws {
         try execute(in: lock) {
-            try Keychain.migrateObjects(matching: query, into: try keychainQuery(), removeOnCompletion: removeOnCompletion)
+            try Keychain.migrateObjects(matching: query, into: baseKeychainQuery, removeOnCompletion: removeOnCompletion)
         }
     }
     
@@ -343,7 +340,7 @@ public final class Valet: NSObject {
     /// - Note: The keychain is not modified if an error is thrown.
     @objc
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) throws {
-        try migrateObjects(matching: try valet.keychainQuery(), removeOnCompletion: removeOnCompletion)
+        try migrateObjects(matching: valet.baseKeychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
     /// Call this method if your Valet used to have its accessibility set to `always`.
@@ -353,7 +350,7 @@ public final class Valet: NSObject {
     /// - Note: The keychain is not modified if an error is thrown.
     @objc
     public func migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion: Bool) throws {
-        var keychainQuery = try execute(in: lock) { try self.keychainQuery() }
+        var keychainQuery = baseKeychainQuery
 
         #if os(macOS)
         if #available(OSX 10.15, *) {
@@ -388,7 +385,7 @@ public final class Valet: NSObject {
     /// - Note: The keychain is not modified if an error is thrown.
     @objc
     public func migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion: Bool) throws {
-        var keychainQuery = try execute(in: lock) { try self.keychainQuery() }
+        var keychainQuery = baseKeychainQuery
 
         #if os(macOS)
         if #available(OSX 10.15, *) {
@@ -423,7 +420,7 @@ public final class Valet: NSObject {
     @available(macOS 10.15, *)
     @objc
     public func migrateObjectsFromPreCatalina() throws {
-        var keychainQuery = try execute(in: lock) { try self.keychainQuery() }
+        var keychainQuery = baseKeychainQuery
         keychainQuery[kSecUseDataProtectionKeychain as String] = false
 
         // We do not need to remove these items on completion, since we are updating the kSecUseDataProtectionKeychain attribute in-place.
@@ -435,23 +432,11 @@ public final class Valet: NSObject {
 
     internal let configuration: Configuration
     internal let service: Service
-
-    // MARK: Internal Methods
-
-    internal func keychainQuery() throws -> [String : AnyHashable] {
-        if let keychainQuery = _keychainQuery {
-            return keychainQuery
-        } else {
-            let keychainQuery = try service.generateBaseQuery()
-            _keychainQuery = keychainQuery
-            return keychainQuery
-        }
-    }
+    internal let baseKeychainQuery: [String : AnyHashable]
 
     // MARK: Private Properties
 
     private let lock = NSLock()
-    private var _keychainQuery: [String : AnyHashable]?
 }
 
 

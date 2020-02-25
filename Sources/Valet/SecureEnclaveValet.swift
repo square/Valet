@@ -95,7 +95,7 @@ public final class SecureEnclaveValet: NSObject {
         self.identifier = identifier
         self.service = service
         self.accessControl = accessControl
-        _keychainQuery = try? service.generateBaseQuery()
+        baseKeychainQuery = service.generateBaseQuery()
     }
     
     // MARK: Hashable
@@ -126,7 +126,7 @@ public final class SecureEnclaveValet: NSObject {
     @objc
     public func setObject(_ object: Data, forKey key: String) throws {
         try execute(in: lock) {
-            try SecureEnclave.setObject(object, forKey: key, options: try keychainQuery())
+            try SecureEnclave.setObject(object, forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -138,7 +138,7 @@ public final class SecureEnclaveValet: NSObject {
     @objc
     public func object(forKey key: String, withPrompt userPrompt: String) throws -> Data {
         try execute(in: lock) {
-            try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: try keychainQuery())
+            try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: baseKeychainQuery)
         }
     }
 
@@ -148,7 +148,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
     public func containsObject(forKey key: String) throws -> Bool {
         try execute(in: lock) {
-            try SecureEnclave.containsObject(forKey: key, options: try keychainQuery())
+            try SecureEnclave.containsObject(forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -159,7 +159,7 @@ public final class SecureEnclaveValet: NSObject {
     @objc
     public func setString(_ string: String, forKey key: String) throws {
         try execute(in: lock) {
-            try SecureEnclave.setString(string, forKey: key, options: try keychainQuery())
+            try SecureEnclave.setString(string, forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -171,7 +171,7 @@ public final class SecureEnclaveValet: NSObject {
     @objc
     public func string(forKey key: String, withPrompt userPrompt: String) throws -> String {
         try execute(in: lock) {
-            try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: try keychainQuery())
+            try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: baseKeychainQuery)
         }
     }
     
@@ -181,7 +181,7 @@ public final class SecureEnclaveValet: NSObject {
     @objc
     public func removeObject(forKey key: String) throws {
         try execute(in: lock) {
-            try Keychain.removeObject(forKey: key, options: try keychainQuery())
+            try Keychain.removeObject(forKey: key, options: baseKeychainQuery)
         }
     }
     
@@ -190,7 +190,7 @@ public final class SecureEnclaveValet: NSObject {
     @objc
     public func removeAllObjects() throws {
         try execute(in: lock) {
-            try Keychain.removeAllObjects(matching: try keychainQuery())
+            try Keychain.removeAllObjects(matching: baseKeychainQuery)
         }
     }
     
@@ -203,7 +203,7 @@ public final class SecureEnclaveValet: NSObject {
     @objc
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) throws {
         try execute(in: lock) {
-            try Keychain.migrateObjects(matching: query, into: try keychainQuery(), removeOnCompletion: removeOnCompletion)
+            try Keychain.migrateObjects(matching: query, into: baseKeychainQuery, removeOnCompletion: removeOnCompletion)
         }
     }
     
@@ -215,7 +215,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - Note: The keychain is not modified if an error is thrown.
     @objc
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) throws {
-        try migrateObjects(matching: try valet.keychainQuery(), removeOnCompletion: removeOnCompletion)
+        try migrateObjects(matching: valet.baseKeychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
     // MARK: Internal Properties
@@ -225,19 +225,8 @@ public final class SecureEnclaveValet: NSObject {
     // MARK: Private Properties
 
     private let lock = NSLock()
-    private var _keychainQuery: [String : AnyHashable]?
+    private let baseKeychainQuery: [String : AnyHashable]
 
-    // MARK: Private Methods
-
-    private func keychainQuery() throws -> [String : AnyHashable] {
-        if let keychainQuery = _keychainQuery {
-            return keychainQuery
-        } else {
-            let keychainQuery = try service.generateBaseQuery()
-            _keychainQuery = keychainQuery
-            return keychainQuery
-        }
-    }
 }
 
 

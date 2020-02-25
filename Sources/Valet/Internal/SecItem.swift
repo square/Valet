@@ -31,52 +31,7 @@ internal func execute<ReturnType>(in lock: NSLock, block: () throws -> ReturnTyp
 
 
 internal final class SecItem {
-    
-    // MARK: Internal Class Properties
-
-    /// Programatically grab the required prefix for the shared access group (i.e. Bundle Seed ID). The value for the kSecAttrAccessGroup key in queries for data that is shared between apps must be of the format bundleSeedID.sharedAccessGroup. For more information on the Bundle Seed ID, see https://developer.apple.com/library/ios/qa/qa1713/_index.html
-    internal static var sharedAccessGroupPrefix: String? {
-        var query: [CFString : Any] = [
-            kSecClass : kSecClassGenericPassword,
-            kSecAttrAccount : "SharedAccessGroupPrefixPlaceholder",
-            kSecReturnAttributes : true,
-            kSecAttrAccessible : Accessibility.afterFirstUnlockThisDeviceOnly.secAccessibilityAttribute
-        ]
-
-        if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
-            // Add kSecUseDataProtectionKeychain to the query to ensure we can retrieve the shared access group prefix.
-            query[kSecUseDataProtectionKeychain] = true
-        }
-
-        secItemLock.lock()
-        defer {
-            secItemLock.unlock()
-        }
         
-        var result: AnyObject? = nil
-        var status = SecItemCopyMatching(query as CFDictionary, &result)
-        
-        if status == errSecItemNotFound {
-            status = SecItemAdd(query as CFDictionary, &result)
-        }
-        
-        guard status == errSecSuccess, let queryResult = result as? [CFString : AnyHashable], let accessGroup = queryResult[kSecAttrAccessGroup] as? String else {
-            // We may not be able to access the shared access group prefix because the accessibility of the above keychain data is set to `afterFirstUnlock`.
-            // Consumers should always check `canAccessKeychain()` after creating a Valet and before using it. Doing so will catch this error.
-            return nil
-        }
-        
-        let components = accessGroup.components(separatedBy: ".")
-        if let bundleSeedIdentifier = components.first, !bundleSeedIdentifier.isEmpty {
-            return bundleSeedIdentifier
-            
-        } else {
-            // We may not be able to access the shared access group prefix because the accessibility of the above keychain data is set to `afterFirstUnlock`.
-            // Consumers should always check `canAccessKeychain()` after creating a Valet and before using it. Doing so will catch this error.
-            return nil
-        }
-    }
-    
     // MARK: Internal Class Methods
     
     internal static func copy<DesiredType>(matching query: [String : AnyHashable]) throws -> DesiredType {

@@ -309,7 +309,7 @@ class ValetIntegrationTests: XCTestCase
     #if !os(macOS)
     func test_objectForKey_canReadItemsWithout_kSecUseDataProtectionKeychain_when_kSecUseDataProtectionKeychain_isSetToTrueInKeychainQuery() throws {
         let valet = Valet.valet(with: Identifier(nonEmpty: "DataProtectionTest")!, accessibility: .afterFirstUnlock)
-        var dataProtectionWriteQuery = try valet.keychainQuery()
+        var dataProtectionWriteQuery = valet.baseKeychainQuery
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             dataProtectionWriteQuery[kSecUseDataProtectionKeychain as String] = nil
         }
@@ -641,7 +641,7 @@ class ValetIntegrationTests: XCTestCase
 
         try vanillaValet.setString(passcode, forKey: key)
 
-        let valetKeychainQuery = try vanillaValet.keychainQuery()
+        let valetKeychainQuery = vanillaValet.baseKeychainQuery
 
         // Test for base query success.
         try anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: false)
@@ -680,7 +680,7 @@ class ValetIntegrationTests: XCTestCase
             XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
 
-        let valetKeychainQuery = try vanillaValet.keychainQuery()
+        let valetKeychainQuery = vanillaValet.baseKeychainQuery
 
         // Our test Valet has not yet been written to, migration should fail:
         XCTAssertThrowsError(try anotherFlavor.migrateObjects(matching: valetKeychainQuery, removeOnCompletion: false)) { error in

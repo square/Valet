@@ -99,7 +99,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
         self.identifier = identifier
         self.service = service
         self.accessControl = accessControl
-        _baseKeychainQuery = try? service.generateBaseQuery()
+        baseKeychainQuery = service.generateBaseQuery()
     }
     
     // MARK: Hashable
@@ -130,7 +130,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc
     public func setObject(_ object: Data, forKey key: String) throws {
         try execute(in: lock) {
-            try SecureEnclave.setObject(object, forKey: key, options: try baseKeychainQuery())
+            try SecureEnclave.setObject(object, forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -152,7 +152,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
     public func containsObject(forKey key: String) throws -> Bool {
         try execute(in: lock) {
-            try SecureEnclave.containsObject(forKey: key, options: try self.baseKeychainQuery())
+            try SecureEnclave.containsObject(forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -163,7 +163,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc
     public func setString(_ string: String, forKey key: String) throws {
         try execute(in: lock) {
-            try SecureEnclave.setString(string, forKey: key, options: try baseKeychainQuery())
+            try SecureEnclave.setString(string, forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -209,7 +209,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc
     public func removeObject(forKey key: String) throws {
         try execute(in: lock) {
-            try Keychain.removeObject(forKey: key, options: try baseKeychainQuery())
+            try Keychain.removeObject(forKey: key, options: baseKeychainQuery)
         }
     }
     
@@ -218,7 +218,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc
     public func removeAllObjects() throws {
         try execute(in: lock) {
-            try Keychain.removeAllObjects(matching: try baseKeychainQuery())
+            try Keychain.removeAllObjects(matching: baseKeychainQuery)
         }
     }
     
@@ -231,7 +231,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) throws {
         try execute(in: lock) {
-            try Keychain.migrateObjects(matching: query, into: try baseKeychainQuery(), removeOnCompletion: removeOnCompletion)
+            try Keychain.migrateObjects(matching: query, into: baseKeychainQuery, removeOnCompletion: removeOnCompletion)
         }
     }
     
@@ -243,7 +243,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - Note: The keychain is not modified if an error is thrown.
     @objc
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) throws {
-        try migrateObjects(matching: try valet.keychainQuery(), removeOnCompletion: removeOnCompletion)
+        try migrateObjects(matching: valet.baseKeychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
     // MARK: Internal Properties
@@ -254,26 +254,14 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
 
     private let lock = NSLock()
     private var localAuthenticationContext = LAContext()
-    private var _baseKeychainQuery: [String : AnyHashable]?
-    
-    // MARK: Private Methods
-    
-    private func baseKeychainQuery() throws -> [String : AnyHashable] {
-        if let baseKeychainQuery = _baseKeychainQuery {
-            return baseKeychainQuery
-        } else {
-            let baseKeychainQuery = try service.generateBaseQuery()
-            _baseKeychainQuery = baseKeychainQuery
-            return baseKeychainQuery
-        }
-    }
-    
+    private let baseKeychainQuery: [String : AnyHashable]
+
     /// A keychain query dictionary that allows for continued read access to the Secure Enclave after the a single unlock event.
     /// This query should be used when retrieving keychain data, but should not be used for keychain writes or `containsObject` checks.
     /// Using this query in a `containsObject` check can cause a false positive in the case where an element has been removed from
     /// the keychain by the operating system due to a face, fingerprint, or password change.
     private func continuedAuthenticationKeychainQuery() throws -> [String : AnyHashable] {
-        var keychainQuery = try baseKeychainQuery()
+        var keychainQuery = baseKeychainQuery
         keychainQuery[kSecUseAuthenticationContext as String] = localAuthenticationContext
         return keychainQuery
     }

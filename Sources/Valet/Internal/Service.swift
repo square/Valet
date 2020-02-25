@@ -54,7 +54,7 @@ internal enum Service: CustomStringConvertible, Equatable {
 
     // MARK: Internal Methods
     
-    internal func generateBaseQuery() throws -> [String : AnyHashable] {
+    internal func generateBaseQuery() -> [String : AnyHashable] {
         var baseQuery: [String : AnyHashable] = [
             kSecClass as String : kSecClassGenericPassword as String,
             kSecAttrService as String : secService,
@@ -70,15 +70,7 @@ internal enum Service: CustomStringConvertible, Equatable {
             configuration = desiredConfiguration
             
         case let .sharedAccessGroup(identifier, desiredConfiguration):
-            guard let sharedAccessGroupPrefix = SecItem.sharedAccessGroupPrefix else {
-                throw KeychainError.couldNotAccessKeychain
-            }
-            if identifier.description.hasPrefix("\(sharedAccessGroupPrefix).") {
-                // The Bundle Seed ID was passed in as a prefix to the identifier.
-                baseQuery[kSecAttrAccessGroup as String] = identifier.description
-            } else {
-                baseQuery[kSecAttrAccessGroup as String] = "\(sharedAccessGroupPrefix).\(identifier.description)"
-            }
+            baseQuery[kSecAttrAccessGroup as String] = identifier.description
             configuration = desiredConfiguration
 
         #if os(macOS)
@@ -86,15 +78,7 @@ internal enum Service: CustomStringConvertible, Equatable {
             configuration = desiredConfiguration
 
         case let .sharedAccessGroupOverride(identifier, desiredConfiguration):
-            guard let sharedAccessGroupPrefix = SecItem.sharedAccessGroupPrefix else {
-                throw KeychainError.couldNotAccessKeychain
-            }
-            if identifier.description.hasPrefix("\(sharedAccessGroupPrefix).") {
-                // The Bundle Seed ID was passed in as a prefix to the identifier.
-                baseQuery[kSecAttrAccessGroup as String] = identifier.description
-            } else {
-                baseQuery[kSecAttrAccessGroup as String] = "\(sharedAccessGroupPrefix).\(identifier.description)"
-            }
+            baseQuery[kSecAttrAccessGroup as String] = identifier.description
             configuration = desiredConfiguration
         #endif
         }
