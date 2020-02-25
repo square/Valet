@@ -25,26 +25,24 @@ public final class SecureEnclave {
         
     // MARK: Internal Methods
 
-    /// - Parameters:
-    ///   - service: The service of the keychain slice we want to check if we can access.
-    ///   - identifier: A non-empty identifier that scopes the slice of keychain we want to access.
+    /// - Parameter service: The service of the keychain slice we want to check if we can access.
     /// - Returns: `true` if the keychain is accessible for reading and writing, `false` otherwise.
     /// - Note: Determined by writing a value to the keychain and then reading it back out.
-    internal static func canAccessKeychain(with service: Service, identifier: Identifier) -> Bool {
+    internal static func canAccessKeychain(with service: Service) -> Bool {
         // To avoid prompting the user for Touch ID or passcode, create a Valet with our identifier and accessibility and ask it if it can access the keychain.
         let noPromptValet: Valet
         switch service {
         #if os(macOS)
-        case .standardOverride:
-            fallthrough
+        case let .standardOverride(identifier, _):
+            noPromptValet = .valet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         #endif
-        case .standard:
+        case let .standard(identifier, _):
             noPromptValet = .valet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         #if os(macOS)
-        case .sharedAccessGroupOverride:
-            fallthrough
+        case let .sharedAccessGroupOverride(identifier, _):
+            noPromptValet = .sharedAccessGroupValet(withExplicitlySet: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         #endif
-        case .sharedAccessGroup:
+        case let .sharedAccessGroup(identifier, _):
             noPromptValet = .sharedAccessGroupValet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         }
         

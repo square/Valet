@@ -48,10 +48,10 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     }
 
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: A non-empty identifier that must correspond with the value for keychain-access-groups in your Entitlements file.
     ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    public class func sharedAccessGroupValet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
+    public class func sharedAccessGroupValet(with identifier: SharedAccessGroupIdentifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
         let key = Service.sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
@@ -88,10 +88,10 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
             accessControl: accessControl)
     }
     
-    private convenience init(sharedAccess identifier: Identifier, accessControl: SecureEnclaveAccessControl) {
+    private convenience init(sharedAccess groupIdentifier: SharedAccessGroupIdentifier, accessControl: SecureEnclaveAccessControl) {
         self.init(
-            identifier: identifier,
-            service: .sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)),
+            identifier: groupIdentifier.asIdentifier,
+            service: .sharedAccessGroup(groupIdentifier, .singlePromptSecureEnclave(accessControl)),
             accessControl: accessControl)
     }
 
@@ -120,7 +120,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - Note: Determined by writing a value to the keychain and then reading it back out. Will never prompt the user for Face ID, Touch ID, or password.
     @objc
     public func canAccessKeychain() -> Bool {
-        SecureEnclave.canAccessKeychain(with: service, identifier: identifier)
+        SecureEnclave.canAccessKeychain(with: service)
     }
 
     /// - Parameters:
@@ -290,12 +290,14 @@ extension SinglePromptSecureEnclaveValet {
     }
 
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - appIDPrefix: The application's App ID prefix. This string can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
+    ///   - identifier: An identifier that cooresponds to a value in keychain-access-groups in the application's Entitlements file. This string must not be empty.
     ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    @objc(sharedAccessGroupValetWithIdentifier:accessControl:)
-    public class func 🚫swift_sharedAccessGroupValet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet? {
-        guard let identifier = Identifier(nonEmpty: identifier) else {
+    /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
+    @objc(sharedAccessGroupValetWithAppIDPrefix:sharedAccessGroupIdentifier:accessControl:)
+    public class func 🚫swift_sharedAccessGroupValet(appIDPrefix: String, nonEmptyIdentifier identifier: String, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet? {
+        guard let identifier = SharedAccessGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: identifier) else {
             return nil
         }
         return sharedAccessGroupValet(with: identifier, accessControl: accessControl)

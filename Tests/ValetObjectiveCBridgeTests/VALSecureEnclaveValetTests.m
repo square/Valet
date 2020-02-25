@@ -26,6 +26,25 @@
     return @"identifier";
 }
 
+- (NSString *)appIDPrefix;
+{
+    return @"9XUJ7M53NG";
+}
+
+- (NSString *)sharedAccessGroupIdentifier;
+{
+#if TARGET_OS_IPHONE
+    return @"com.squareup.Valet-iOS-Test-Host-App";
+#elif TARGET_OS_WATCH
+    return @"com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension";
+#elif TARGET_OS_MAC
+    return @"com.squareup.Valet-macOS-Test-Host-App";
+#else
+    // This will fail
+    return @"";
+#endif
+}
+
 - (void)test_valetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlDevicePasscode;
 {
     VALSecureEnclaveValet *const valet = [VALSecureEnclaveValet valetWithIdentifier:self.identifier accessControl:VALSecureEnclaveAccessControlDevicePasscode];
@@ -62,35 +81,35 @@
 
 - (void)test_sharedAccessGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlDevicePasscode;
 {
-    VALSecureEnclaveValet *const valet = [VALSecureEnclaveValet sharedAccessGroupValetWithIdentifier:self.identifier accessControl:VALSecureEnclaveAccessControlDevicePasscode];
+    VALSecureEnclaveValet *const valet = [VALSecureEnclaveValet sharedAccessGroupValetWithAppIDPrefix:self.appIDPrefix sharedAccessGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlDevicePasscode];
     XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlDevicePasscode);
     XCTAssertEqual([valet class], [VALSecureEnclaveValet class]);
 }
 
 - (void)test_sharedAccessGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlUserPresence;
 {
-    VALSecureEnclaveValet *const valet = [VALSecureEnclaveValet sharedAccessGroupValetWithIdentifier:self.identifier accessControl:VALSecureEnclaveAccessControlUserPresence];
+    VALSecureEnclaveValet *const valet = [VALSecureEnclaveValet sharedAccessGroupValetWithAppIDPrefix:self.appIDPrefix sharedAccessGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlUserPresence];
     XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlUserPresence);
     XCTAssertEqual([valet class], [VALSecureEnclaveValet class]);
 }
 
 - (void)test_sharedAccessGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlBiometricAny;
 {
-    VALSecureEnclaveValet *const valet = [VALSecureEnclaveValet sharedAccessGroupValetWithIdentifier:self.identifier accessControl:VALSecureEnclaveAccessControlBiometricAny];
+    VALSecureEnclaveValet *const valet = [VALSecureEnclaveValet sharedAccessGroupValetWithAppIDPrefix:self.appIDPrefix sharedAccessGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlBiometricAny];
     XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlBiometricAny);
     XCTAssertEqual([valet class], [VALSecureEnclaveValet class]);
 }
 
 - (void)test_sharedAccessGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlBiometricCurrentSet;
 {
-    VALSecureEnclaveValet *const valet = [VALSecureEnclaveValet sharedAccessGroupValetWithIdentifier:self.identifier accessControl:VALSecureEnclaveAccessControlBiometricCurrentSet];
+    VALSecureEnclaveValet *const valet = [VALSecureEnclaveValet sharedAccessGroupValetWithAppIDPrefix:self.appIDPrefix sharedAccessGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlBiometricCurrentSet];
     XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlBiometricCurrentSet);
     XCTAssertEqual([valet class], [VALSecureEnclaveValet class]);
 }
 
 - (void)test_sharedAccessGroupValetWithIdentifier_accessibility_returnsNilWhenIdentifierIsEmpty;
 {
-    VALSecureEnclaveValet *const valet = [VALSecureEnclaveValet sharedAccessGroupValetWithIdentifier:@"" accessControl:VALSecureEnclaveAccessControlBiometricCurrentSet];
+    VALSecureEnclaveValet *const valet = [VALSecureEnclaveValet sharedAccessGroupValetWithAppIDPrefix:self.appIDPrefix sharedAccessGroupIdentifier:@"" accessControl:VALSecureEnclaveAccessControlBiometricCurrentSet];
     XCTAssertNil(valet);
 }
 

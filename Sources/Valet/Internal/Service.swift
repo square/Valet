@@ -23,7 +23,7 @@ import Foundation
 
 internal enum Service: CustomStringConvertible, Equatable {
     case standard(Identifier, Configuration)
-    case sharedAccessGroup(Identifier, Configuration)
+    case sharedAccessGroup(SharedAccessGroupIdentifier, Configuration)
 
     #if os(macOS)
     case standardOverride(service: Identifier, Configuration)
@@ -48,7 +48,11 @@ internal enum Service: CustomStringConvertible, Equatable {
         "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
     }
 
-    internal static func sharedAccessGroup(with configuration: Configuration, identifier: Identifier, accessibilityDescription: String) -> String {
+    internal static func sharedAccessGroup(with configuration: Configuration, identifier: SharedAccessGroupIdentifier, accessibilityDescription: String) -> String {
+        "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier.groupIdentifier)_\(accessibilityDescription)"
+    }
+
+    internal static func sharedAccessGroup(with configuration: Configuration, explicitlySetIdentifier identifier: Identifier, accessibilityDescription: String) -> String {
         "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
     }
 

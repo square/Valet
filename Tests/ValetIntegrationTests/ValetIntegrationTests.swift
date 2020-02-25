@@ -60,20 +60,18 @@ internal extension Valet {
 
     // MARK: Shared Access Group
 
-    static var sharedAccessGroupIdentifier: Identifier = {
-        let sharedAccessGroupIdentifier: Identifier
+    static var sharedAccessGroupIdentifier: SharedAccessGroupIdentifier = {
         #if os(iOS)
-        sharedAccessGroupIdentifier = Identifier(nonEmpty: "9XUJ7M53NG.com.squareup.Valet-iOS-Test-Host-App")!
+        return SharedAccessGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-iOS-Test-Host-App")!
         #elseif os(macOS)
-        sharedAccessGroupIdentifier = Identifier(nonEmpty: "9XUJ7M53NG.com.squareup.Valet-macOS-Test-Host-App")!
+        return SharedAccessGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-macOS-Test-Host-App")!
         #elseif os(tvOS)
-        sharedAccessGroupIdentifier = Identifier(nonEmpty: "9XUJ7M53NG.com.squareup.Valet-tvOS-Test-Host-App")!
+        return SharedAccessGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-tvOS-Test-Host-App")!
         #elseif os(watchOS)
-        sharedAccessGroupIdentifier = Identifier(nonEmpty: "9XUJ7M53NG.com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension")!
+        return SharedAccessGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension")!
         #else
         XCTFail()
         #endif
-        return sharedAccessGroupIdentifier
     }()
 
 }
@@ -81,15 +79,15 @@ internal extension Valet {
 
 class ValetIntegrationTests: XCTestCase
 {
-    static let identifier = Valet.sharedAccessGroupIdentifier
+    static let sharedAccessGroupIdentifier = Valet.sharedAccessGroupIdentifier
     var allPermutations: [Valet] {
-        return Valet.permutations(with: ValetIntegrationTests.identifier)
-            + (testEnvironmentIsSigned() ? Valet.permutations(with: ValetIntegrationTests.identifier, shared: true) : [])
+        return Valet.permutations(with: ValetIntegrationTests.sharedAccessGroupIdentifier.asIdentifier)
+            + (testEnvironmentIsSigned() ? Valet.permutations(with: ValetIntegrationTests.sharedAccessGroupIdentifier) : [])
     }
 
-    let vanillaValet = Valet.valet(with: identifier, accessibility: .whenUnlocked)
+    let vanillaValet = Valet.valet(with: sharedAccessGroupIdentifier.asIdentifier, accessibility: .whenUnlocked)
     // FIXME: Need a different flavor (Synchronizable must be tested in a signed environment)
-    let anotherFlavor = Valet.iCloudValet(with: identifier, accessibility: .whenUnlocked)
+    let anotherFlavor = Valet.iCloudValet(with: sharedAccessGroupIdentifier.asIdentifier, accessibility: .whenUnlocked)
 
     let key = "key"
     let passcode = "topsecret"
@@ -131,7 +129,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_init_createsCorrectBackingService_sharedAccess() {
-        let identifier = ValetTests.identifier
+        let identifier = Valet.sharedAccessGroupIdentifier
 
         Accessibility.allCases.forEach { accessibility in
             let backingService = Valet.sharedAccessGroupValet(with: identifier, accessibility: accessibility).service
@@ -149,7 +147,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_init_createsCorrectBackingService_cloudSharedAccess() {
-        let identifier = ValetTests.identifier
+        let identifier = Valet.sharedAccessGroupIdentifier
 
         CloudAccessibility.allCases.forEach { accessibility in
             let backingService = Valet.iCloudSharedAccessGroupValet(with: identifier, accessibility: accessibility).service
@@ -172,7 +170,7 @@ class ValetIntegrationTests: XCTestCase
             return
         }
 
-        Valet.permutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation in
+        Valet.permutations(with: Valet.sharedAccessGroupIdentifier).forEach { permutation in
             XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
         }
     }
