@@ -31,6 +31,8 @@ public final class SecureEnclave {
         case success(Type)
         /// User dismissed the user-presence prompt.
         case userCancelled
+		/// User authentication failed.
+		case authFailed
         /// No data was found for the requested key.
         case itemNotFound
 
@@ -42,12 +44,13 @@ public final class SecureEnclave {
                 self = .success(value)
 
             case let .error(status):
-                let userCancelled = (status == errSecUserCanceled || status == errSecAuthFailed)
-                if userCancelled {
+				if status == errSecUserCanceled {
                     self = .userCancelled
-                } else {
-                    self = .itemNotFound
-                }
+				} else if status == errSecAuthFailed {
+					self  = .authFailed
+				} else {
+					self = .itemNotFound
+				}
             }
         }
 
@@ -61,9 +64,12 @@ public final class SecureEnclave {
                 return true
             case (.itemNotFound, .itemNotFound):
                 return true
+			case (.authFailed, .authFailed):
+				return true
             case (.success, _),
                  (.userCancelled, _),
-                 (.itemNotFound, _):
+                 (.itemNotFound, _),
+				 (.authFailed, _):
               return false
           }
         }

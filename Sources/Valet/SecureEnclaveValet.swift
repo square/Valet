@@ -256,6 +256,8 @@ extension SecureEnclaveValet {
             return nil
         case .itemNotFound:
             return nil
+		case .authFailed:
+			return nil
         }
     }
     
@@ -273,6 +275,8 @@ extension SecureEnclaveValet {
             return nil
         case .itemNotFound:
             return nil
+		case .authFailed:
+			return nil
         }
     }
 }

@@ -294,7 +294,9 @@ extension SinglePromptSecureEnclaveValet {
             return nil
         case .itemNotFound:
             return nil
-        }
+		case .authFailed:
+			return nil
+		}
     }
     
     /// - parameter key: A Key used to retrieve the desired object from the keychain.
@@ -311,6 +313,8 @@ extension SinglePromptSecureEnclaveValet {
             return nil
         case .itemNotFound:
             return nil
+		case .authFailed:
+			return nil
         }
     }
 }
