@@ -85,7 +85,7 @@ VALValet *const myValet = [VALValet valetWithIdentifier:@"Druidia" accessibility
 To begin storing data securely using Valet, you need to create a Valet instance with:
 
 * An identifier – a non-empty string that is used to identify this Valet. The Swift API uses an `Identifier` wrapper class to enforce the non-empty constraint.
-* An accessibility value – an enum ([Accessibility](Sources/Accessibility.swift#L25)) that defines when you will be able to persist and retrieve data.
+* An accessibility value – an enum ([Accessibility](Sources/Valet/Accessibility.swift#L25)) that defines when you will be able to persist and retrieve data.
 
 This `myValet` instance can be used to store and retrieve data securely on this device, but only when the device is unlocked.
 
