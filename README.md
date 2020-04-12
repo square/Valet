@@ -206,18 +206,28 @@ Valet guarantees it will never fail to write to or read from the keychain unless
 * watchOS 2 or later.
 * macOS 10.11 or later.
 
-### Migrating from Valet 2.*
+## Migrating from prior Valet versions
 
-First the good news: you will _not_ have to migrate your keychain data when upgrading from Valet 2.* to Valet 3.*. All Valet objects are backwards compatible with their Valet 2 counterparts. We have exhaustive unit tests to prove it (search for `test_backwardsCompatibility`).
+The good news: most Valet configurations do _not_ have to migrate keychain data when upgrading from and older version of Valet. All Valet objects are backwards compatible with their counterparts from prior versions. We have exhaustive unit tests to prove it (search for `test_backwardsCompatibility`). Valets that have had their configurations deprecated by Apple will need to migrate stored data.
 
-Now the bad news: the Swift Valet API has slight differences from the Objective-C Valet API. You may have noticed a few of the differences in the sample code above, but here’s a rundown of the changes that may affect you.
+The bad news: there are multiple source-breaking API changes from prior versions.
+
+Both guides below explain the changes required to upgrade to Valet 4. 
+
+### Migrating from Valet 2
 
 1. Initializers have changed in both Swift and Objective-C - both languages use class methods now, which felt more semantically honest (a lot of the time you’re not instantiating a new Valet, you’re re-accessing one you’ve already created). [See example usage above](#basic-initialization).
-1. `VALSynchronizableValet` (which allowed keychains to be synced to iCloud) has been replaced by a `Valet.iCloudValet(with:accessibility:)`  (or `+[VALValet iCloudValetWithIdentifier:accessibility:]` in Objective-C). [See examples above](#sharing-secrets-across-devices-with-icloud).
-1. `SecureEnclaveValet` and `SinglePromptSecureEnclaveValet` data retrieval methods now return a single enum [SecureEnclave.Result](Sources/SecureEnclave.swift#L28) rather than using an `inout` boolean to signal whether a user cancelled. The Objective-C API remains the same.
-1. `migrateObjects(matching:)` and `migrateObjects(from:)` now both return a nonnull [MigrationResult](Sources/MigrationResult.swift#L24).
+1. `VALSynchronizableValet` (which allowed keychains to be synced to iCloud) has been replaced by a `Valet.iCloudValet(with:accessibility:)` (or `+[VALValet iCloudValetWithIdentifier:accessibility:]` in Objective-C). [See examples above](#sharing-secrets-across-devices-with-icloud).
 1. `VALAccessControl` has been renamed to `SecureEnclaveAccessControl` (`VALSecureEnclaveAccessControl` in Objective-C). This enum no longer references `TouchID`; instead it refers to unlocking with `biometric` due to the introduction of Face ID.
 1. `Valet`, `SecureEnclaveValet`, and `SinglePromptSecureEnclaveValet` are no longer in the same inheritance tree. All three now inherit directly from `NSObject` and use composition to share code. If you were relying on the subclass hierarchy before, 1) that might be a code smell 2) consider declaring a protocol for the shared behavior you were expecting to make your migration to Valet 3 easier.
+
+You'll also need to continue reading through the [migration from Valet 3](#migration-from-valet-3) section below.
+
+### Migrating from Valet 3
+
+1. The accessibility values `always` and `alwaysThisDeviceOnly` have been removed from Valet, because Apple has deprecated their counterparts (see the documentation for [kSecAttrAccessibleAlways](https://developer.apple.com/documentation/security/ksecattraccessiblealways) [kSecAttrAccessibleAlways](https://developer.apple.com/documentation/security/ksecattraccessiblealways)). To migrate values stored with `alwaysThisDeviceOnly ` accessibility, use the method `migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion:)` on a Valet with your new preferred accessibility. To migrate values stored with `always` accessibility, use the method `migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion:)` on a Valet with your new preferred accessibility.
+1. Most APIs that returned optionals or `Bool` values have been migrated to returning a nonoptional and throwing if an error is encountered. Ignoring the error that can be thrown by each API will keep your code flow behaving the same as it did before. Walking through one example: in Swift, `let secret: String? = myValet.string(forKey: myKey)` becomes `let secret: String? = try? myValet.string(forKey: myKey)`. In Objective-C, `NSString *const secret = [myValet stringForKey:myKey]; ` becomes `NSString *const secret = [myValet stringForKey:myKey error:nil];`. If you're intersted in the reason data wasn't returned, use a [do-catch](https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html#ID541) statement in Swift, or pass in an `NSError` to each API call and inspect the output in Objective-C. Each method clearly documents the `Error` type it can `throw`. [See examples above](#reading-and-writing).
+1. The class method used to create a Valet that can share secretes between applications using keychain shared access groups has changed. In order to prevent the incorrect detection of the App ID prefix [in rare circumstances](https://github.com/square/Valet/pull/218), the App ID prefix must now be explicitly passed into these methods. [See examples above](#sharing-secrets-across-devices-with-icloud).
 
 ## Contributing
 
