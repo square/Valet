@@ -41,7 +41,7 @@ class ValetTests: XCTestCase
     }
 
     func test_init_createsCorrectBackingService_sharedAccess() {
-        let identifier = ValetTests.identifier
+        let identifier = Valet.sharedAccessGroupIdentifier
 
         Accessibility.allCases.forEach { accessibility in
             let backingService = Valet.sharedAccessGroupValet(with: identifier, accessibility: accessibility).service
@@ -59,7 +59,7 @@ class ValetTests: XCTestCase
     }
 
     func test_init_createsCorrectBackingService_cloudSharedAccess() {
-        let identifier = ValetTests.identifier
+        let identifier = Valet.sharedAccessGroupIdentifier
 
         CloudAccessibility.allCases.forEach { accessibility in
             let backingService = Valet.iCloudSharedAccessGroupValet(with: identifier, accessibility: accessibility).service

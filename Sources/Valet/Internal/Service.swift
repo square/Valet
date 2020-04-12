@@ -23,11 +23,11 @@ import Foundation
 
 internal enum Service: CustomStringConvertible, Equatable {
     case standard(Identifier, Configuration)
-    case sharedAccessGroup(Identifier, Configuration)
+    case sharedAccessGroup(SharedAccessGroupIdentifier, Configuration)
 
     #if os(macOS)
     case standardOverride(service: Identifier, Configuration)
-    case sharedAccessGroupOverride(service: Identifier, Configuration)
+    case sharedAccessGroupOverride(service: SharedAccessGroupIdentifier, Configuration)
     #endif
 
     // MARK: Equatable
@@ -48,13 +48,17 @@ internal enum Service: CustomStringConvertible, Equatable {
         "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
     }
 
-    internal static func sharedAccessGroup(with configuration: Configuration, identifier: Identifier, accessibilityDescription: String) -> String {
+    internal static func sharedAccessGroup(with configuration: Configuration, identifier: SharedAccessGroupIdentifier, accessibilityDescription: String) -> String {
+        "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier.groupIdentifier)_\(accessibilityDescription)"
+    }
+
+    internal static func sharedAccessGroup(with configuration: Configuration, explicitlySetIdentifier identifier: Identifier, accessibilityDescription: String) -> String {
         "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
     }
 
     // MARK: Internal Methods
     
-    internal func generateBaseQuery() throws -> [String : AnyHashable] {
+    internal func generateBaseQuery() -> [String : AnyHashable] {
         var baseQuery: [String : AnyHashable] = [
             kSecClass as String : kSecClassGenericPassword as String,
             kSecAttrService as String : secService,
@@ -70,15 +74,7 @@ internal enum Service: CustomStringConvertible, Equatable {
             configuration = desiredConfiguration
             
         case let .sharedAccessGroup(identifier, desiredConfiguration):
-            guard let sharedAccessGroupPrefix = SecItem.sharedAccessGroupPrefix else {
-                throw KeychainError.couldNotAccessKeychain
-            }
-            if identifier.description.hasPrefix("\(sharedAccessGroupPrefix).") {
-                // The Bundle Seed ID was passed in as a prefix to the identifier.
-                baseQuery[kSecAttrAccessGroup as String] = identifier.description
-            } else {
-                baseQuery[kSecAttrAccessGroup as String] = "\(sharedAccessGroupPrefix).\(identifier.description)"
-            }
+            baseQuery[kSecAttrAccessGroup as String] = identifier.description
             configuration = desiredConfiguration
 
         #if os(macOS)
@@ -86,15 +82,7 @@ internal enum Service: CustomStringConvertible, Equatable {
             configuration = desiredConfiguration
 
         case let .sharedAccessGroupOverride(identifier, desiredConfiguration):
-            guard let sharedAccessGroupPrefix = SecItem.sharedAccessGroupPrefix else {
-                throw KeychainError.couldNotAccessKeychain
-            }
-            if identifier.description.hasPrefix("\(sharedAccessGroupPrefix).") {
-                // The Bundle Seed ID was passed in as a prefix to the identifier.
-                baseQuery[kSecAttrAccessGroup as String] = identifier.description
-            } else {
-                baseQuery[kSecAttrAccessGroup as String] = "\(sharedAccessGroupPrefix).\(identifier.description)"
-            }
+            baseQuery[kSecAttrAccessGroup as String] = identifier.description
             configuration = desiredConfiguration
         #endif
         }
@@ -126,9 +114,10 @@ internal enum Service: CustomStringConvertible, Equatable {
         case let .sharedAccessGroup(identifier, configuration):
             service = Service.sharedAccessGroup(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
         #if os(macOS)
-        case let .standardOverride(identifier, _),
-             let .sharedAccessGroupOverride(identifier, _):
+        case let .standardOverride(identifier, _):
             service = identifier.description
+        case let .sharedAccessGroupOverride(identifier, _):
+            service = identifier.groupIdentifier
         #endif
         }
 

@@ -48,10 +48,10 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     }
 
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: A non-empty identifier that must correspond with the value for keychain-access-groups in your Entitlements file.
     ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    public class func sharedAccessGroupValet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
+    public class func sharedAccessGroupValet(with identifier: SharedAccessGroupIdentifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
         let key = Service.sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
@@ -88,10 +88,10 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
             accessControl: accessControl)
     }
     
-    private convenience init(sharedAccess identifier: Identifier, accessControl: SecureEnclaveAccessControl) {
+    private convenience init(sharedAccess groupIdentifier: SharedAccessGroupIdentifier, accessControl: SecureEnclaveAccessControl) {
         self.init(
-            identifier: identifier,
-            service: .sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)),
+            identifier: groupIdentifier.asIdentifier,
+            service: .sharedAccessGroup(groupIdentifier, .singlePromptSecureEnclave(accessControl)),
             accessControl: accessControl)
     }
 
@@ -99,7 +99,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
         self.identifier = identifier
         self.service = service
         self.accessControl = accessControl
-        _baseKeychainQuery = try? service.generateBaseQuery()
+        baseKeychainQuery = service.generateBaseQuery()
     }
     
     // MARK: Hashable
@@ -120,7 +120,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - Note: Determined by writing a value to the keychain and then reading it back out. Will never prompt the user for Face ID, Touch ID, or password.
     @objc
     public func canAccessKeychain() -> Bool {
-        SecureEnclave.canAccessKeychain(with: service, identifier: identifier)
+        SecureEnclave.canAccessKeychain(with: service)
     }
 
     /// - Parameters:
@@ -130,7 +130,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc
     public func setObject(_ object: Data, forKey key: String) throws {
         try execute(in: lock) {
-            try SecureEnclave.setObject(object, forKey: key, options: try baseKeychainQuery())
+            try SecureEnclave.setObject(object, forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -152,7 +152,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
     public func containsObject(forKey key: String) throws -> Bool {
         try execute(in: lock) {
-            try SecureEnclave.containsObject(forKey: key, options: try self.baseKeychainQuery())
+            try SecureEnclave.containsObject(forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -163,7 +163,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc
     public func setString(_ string: String, forKey key: String) throws {
         try execute(in: lock) {
-            try SecureEnclave.setString(string, forKey: key, options: try baseKeychainQuery())
+            try SecureEnclave.setString(string, forKey: key, options: baseKeychainQuery)
         }
     }
 
@@ -209,7 +209,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc
     public func removeObject(forKey key: String) throws {
         try execute(in: lock) {
-            try Keychain.removeObject(forKey: key, options: try baseKeychainQuery())
+            try Keychain.removeObject(forKey: key, options: baseKeychainQuery)
         }
     }
     
@@ -218,7 +218,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc
     public func removeAllObjects() throws {
         try execute(in: lock) {
-            try Keychain.removeAllObjects(matching: try baseKeychainQuery())
+            try Keychain.removeAllObjects(matching: baseKeychainQuery)
         }
     }
     
@@ -231,7 +231,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     @objc
     public func migrateObjects(matching query: [String : AnyHashable], removeOnCompletion: Bool) throws {
         try execute(in: lock) {
-            try Keychain.migrateObjects(matching: query, into: try baseKeychainQuery(), removeOnCompletion: removeOnCompletion)
+            try Keychain.migrateObjects(matching: query, into: baseKeychainQuery, removeOnCompletion: removeOnCompletion)
         }
     }
     
@@ -243,7 +243,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     /// - Note: The keychain is not modified if an error is thrown.
     @objc
     public func migrateObjects(from valet: Valet, removeOnCompletion: Bool) throws {
-        try migrateObjects(matching: try valet.keychainQuery(), removeOnCompletion: removeOnCompletion)
+        try migrateObjects(matching: valet.baseKeychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
     // MARK: Internal Properties
@@ -254,26 +254,14 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
 
     private let lock = NSLock()
     private var localAuthenticationContext = LAContext()
-    private var _baseKeychainQuery: [String : AnyHashable]?
-    
-    // MARK: Private Methods
-    
-    private func baseKeychainQuery() throws -> [String : AnyHashable] {
-        if let baseKeychainQuery = _baseKeychainQuery {
-            return baseKeychainQuery
-        } else {
-            let baseKeychainQuery = try service.generateBaseQuery()
-            _baseKeychainQuery = baseKeychainQuery
-            return baseKeychainQuery
-        }
-    }
-    
+    private let baseKeychainQuery: [String : AnyHashable]
+
     /// A keychain query dictionary that allows for continued read access to the Secure Enclave after the a single unlock event.
     /// This query should be used when retrieving keychain data, but should not be used for keychain writes or `containsObject` checks.
     /// Using this query in a `containsObject` check can cause a false positive in the case where an element has been removed from
     /// the keychain by the operating system due to a face, fingerprint, or password change.
     private func continuedAuthenticationKeychainQuery() throws -> [String : AnyHashable] {
-        var keychainQuery = try baseKeychainQuery()
+        var keychainQuery = baseKeychainQuery
         keychainQuery[kSecUseAuthenticationContext as String] = localAuthenticationContext
         return keychainQuery
     }
@@ -302,12 +290,14 @@ extension SinglePromptSecureEnclaveValet {
     }
 
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - appIDPrefix: The application's App ID prefix. This string can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
+    ///   - identifier: An identifier that cooresponds to a value in keychain-access-groups in the application's Entitlements file. This string must not be empty.
     ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    @objc(sharedAccessGroupValetWithIdentifier:accessControl:)
-    public class func 🚫swift_sharedAccessGroupValet(with identifier: String, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet? {
-        guard let identifier = Identifier(nonEmpty: identifier) else {
+    /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
+    @objc(sharedAccessGroupValetWithAppIDPrefix:sharedAccessGroupIdentifier:accessControl:)
+    public class func 🚫swift_sharedAccessGroupValet(appIDPrefix: String, nonEmptyIdentifier identifier: String, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet? {
+        guard let identifier = SharedAccessGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: identifier) else {
             return nil
         }
         return sharedAccessGroupValet(with: identifier, accessControl: accessControl)

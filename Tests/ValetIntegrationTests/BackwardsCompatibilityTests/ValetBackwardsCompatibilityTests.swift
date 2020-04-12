@@ -30,7 +30,18 @@ import XCTest
 internal extension Valet {
 
     var legacyIdentifier: String {
-        return identifier.description
+        switch service {
+        case let .sharedAccessGroup(sharedAccessGroupIdentifier, _):
+            return sharedAccessGroupIdentifier.groupIdentifier
+        case let .standard(identifier, _):
+            return identifier.description
+        #if os(macOS)
+        case let .sharedAccessGroupOverride(identifier, _):
+            return identifier.groupIdentifier
+        case let .standardOverride(identifier, _):
+            return identifier.description
+        #endif
+        }
     }
 
     var legacyAccessibility: VALLegacyAccessibility {
@@ -77,14 +88,26 @@ internal extension Valet {
 
     // MARK: Permutations
 
-    class func currentAndLegacyPermutations(with identifier: Identifier, shared: Bool = false) -> [(Valet, VALLegacyValet)] {
-        permutations(with: identifier, shared: shared).map {
+    class func currentAndLegacyPermutations(with identifier: Identifier) -> [(Valet, VALLegacyValet)] {
+        permutations(with: identifier).map {
             ($0, $0.legacyValet)
         }
     }
 
-    class func iCloudCurrentAndLegacyPermutations(with identifier: Identifier, shared: Bool = false) -> [(Valet, VALSynchronizableValet)] {
-        iCloudPermutations(with: identifier, shared: shared).map {
+    class func currentAndLegacyPermutations(with identifier: SharedAccessGroupIdentifier) -> [(Valet, VALLegacyValet)] {
+        permutations(with: identifier).map {
+            ($0, $0.legacyValet)
+        }
+    }
+
+    class func iCloudCurrentAndLegacyPermutations(with identifier: Identifier) -> [(Valet, VALSynchronizableValet)] {
+        iCloudPermutations(with: identifier).map {
+            ($0, $0.legacyValet as! VALSynchronizableValet)
+        }
+    }
+
+    class func iCloudCurrentAndLegacyPermutations(with identifier: SharedAccessGroupIdentifier) -> [(Valet, VALSynchronizableValet)] {
+        iCloudPermutations(with: identifier).map {
             ($0, $0.legacyValet as! VALSynchronizableValet)
         }
     }
@@ -114,7 +137,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
         guard testEnvironmentIsSigned() else {
             return
         }
-        try Valet.currentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
+        try Valet.currentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
@@ -149,7 +172,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
         guard testEnvironmentIsSigned() else {
             return
         }
-        let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.description, accessibility: .always)!
+        let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.groupIdentifier, accessibility: .always)!
         alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
 
         let valet = Valet.sharedAccessGroupValet(with: Valet.sharedAccessGroupIdentifier, accessibility: .afterFirstUnlock)
@@ -161,7 +184,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
         guard testEnvironmentIsSigned() else {
             return
         }
-        let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.description, accessibility: .alwaysThisDeviceOnly)!
+        let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.groupIdentifier, accessibility: .alwaysThisDeviceOnly)!
         alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
 
         let valet = Valet.sharedAccessGroupValet(with: Valet.sharedAccessGroupIdentifier, accessibility: .afterFirstUnlockThisDeviceOnly)

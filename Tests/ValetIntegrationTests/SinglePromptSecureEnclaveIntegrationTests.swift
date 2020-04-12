@@ -151,19 +151,8 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             return
         }
         
-        let sharedAccessGroupIdentifier: Identifier
-        #if os(iOS)
-            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-iOS-Test-Host-App")!
-        #elseif os(macOS)
-            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-macOS-Test-Host-App")!
-        #elseif os(tvOS)
-            sharedAccessGroupIdentifier = Identifier(nonEmpty: "com.squareup.Valet-tvOS-Test-Host-App")!
-        #else
-            XCTFail()
-        #endif
-
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
-            return .sharedAccessGroupValet(with: sharedAccessGroupIdentifier, accessControl: accessControl)
+            return .sharedAccessGroupValet(with: Valet.sharedAccessGroupIdentifier, accessControl: accessControl)
         }
 
         for permutation in permutations {

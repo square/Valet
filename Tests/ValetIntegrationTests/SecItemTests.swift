@@ -25,23 +25,5 @@ import XCTest
 
 
 class SecItemTests: XCTestCase {
-
-    func test_sharedAccessGroupPrefix_findsPrefix() {
-        #if os(watchOS) || os(tvOS) || os(iOS)
-            // CocoaPods app host DSL does not provide ability to edit the app host settings such
-            // the `DEVELOPER TEAM` so for now skip this assertion.
-            #if !COCOAPODS
-                XCTAssertEqual(SecItem.sharedAccessGroupPrefix, "9XUJ7M53NG")
-            #endif
-        #elseif os(macOS)
-            guard testEnvironmentIsSigned() else {
-                return
-            }
-            XCTAssertEqual(SecItem.sharedAccessGroupPrefix, "9XUJ7M53NG")
-        #else
-            // Currently unsupported build configuration. This next line will compile-time error.
-            doNotCommentOutThisLine()
-        #endif
-    }
     
 }

@@ -43,7 +43,7 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     }
 
     func test_init_createsCorrectBackingService_sharedAccess() {
-        let identifier = ValetTests.identifier
+        let identifier = Valet.sharedAccessGroupIdentifier
 
         SecureEnclaveAccessControl.allValues().forEach { accessControl in
             let backingService = SinglePromptSecureEnclaveValet.sharedAccessGroupValet(with: identifier, accessControl: accessControl).service

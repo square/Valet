@@ -47,7 +47,7 @@ extension CloudIntegrationTests {
             return
         }
 
-        try Valet.iCloudCurrentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier, shared: true).forEach { permutation, legacyValet in
+        try Valet.iCloudCurrentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
             XCTAssertNotNil(legacyValet.string(forKey: key))
