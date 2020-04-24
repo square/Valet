@@ -321,6 +321,7 @@ public final class Valet: NSObject {
     /// Removes a key/object pair from the keychain.
     /// - Parameter key: A key used to remove the desired object from the keychain.
     /// - Throws: An error of type `KeychainError`.
+    /// - Note: No error is thrown if the `key` is not found in the keychain.
     @objc
     public func removeObject(forKey key: String) throws {
         try execute(in: lock) {
