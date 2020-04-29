@@ -44,7 +44,7 @@ public final class Valet: NSObject {
     }
 
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedAccessGroupValet(with identifier: SharedAccessGroupIdentifier, accessibility: Accessibility) -> Valet {
@@ -52,7 +52,7 @@ public final class Valet: NSObject {
     }
 
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func iCloudSharedAccessGroupValet(with identifier: SharedAccessGroupIdentifier, accessibility: CloudAccessibility) -> Valet {
@@ -84,7 +84,7 @@ public final class Valet: NSObject {
 
     /// Creates a shared-access-group Valet with an explicitly set kSecAttrService.
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    ///   - identifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
@@ -95,7 +95,7 @@ public final class Valet: NSObject {
 
     /// Creates an iCloud-shared-access-group Valet with an explicitly set kSecAttrService.
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    ///   - identifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
@@ -321,6 +321,7 @@ public final class Valet: NSObject {
     /// Removes a key/object pair from the keychain.
     /// - Parameter key: A key used to remove the desired object from the keychain.
     /// - Throws: An error of type `KeychainError`.
+    /// - Note: No error is thrown if the `key` is not found in the keychain.
     @objc
     public func removeObject(forKey key: String) throws {
         try execute(in: lock) {
@@ -352,8 +353,8 @@ public final class Valet: NSObject {
     
     /// Migrates objects in the input Valet into the receiving Valet instance.
     /// - Parameters:
-    ///   - valet: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
-    ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
+    ///   - valet: The Valet used to retrieve the existing keychain data that should be migrated.
+    ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - Throws: An error of type `KeychainError` or `MigrationError`.
     /// - Note: The keychain is not modified if an error is thrown.
     @objc
@@ -493,7 +494,7 @@ extension Valet {
 
     /// - Parameters:
     ///   - appIDPrefix: The application's App ID prefix. This string can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
-    ///   - identifier: An identifier that cooresponds to a value in keychain-access-groups in the application's Entitlements file. This string must not be empty.
+    ///   - identifier: An identifier that corresponds to a value in keychain-access-groups in the application's Entitlements file. This string must not be empty.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
@@ -507,7 +508,8 @@ extension Valet {
     }
 
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - appIDPrefix: The application's App ID prefix. This string can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
+    ///   - identifier: An identifier that corresponds to a value in keychain-access-groups in the application's Entitlements file. This string must not be empty.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes iCloud-shared keychain elements that can be shared across applications written by the same development team.
     @available(swift, obsoleted: 1.0)
