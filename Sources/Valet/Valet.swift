@@ -353,8 +353,8 @@ public final class Valet: NSObject {
     
     /// Migrates objects in the input Valet into the receiving Valet instance.
     /// - Parameters:
-    ///   - valet: An objects whose vended keychain query is used to retrieve existing keychain data via a call to SecItemCopyMatching.
-    ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychfain if the migration succeeds.
+    ///   - valet: The Valet used to retrieve the existing keychain data that should be migrated.
+    ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - Throws: An error of type `KeychainError` or `MigrationError`.
     /// - Note: The keychain is not modified if an error is thrown.
     @objc
