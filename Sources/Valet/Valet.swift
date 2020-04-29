@@ -494,7 +494,7 @@ extension Valet {
 
     /// - Parameters:
     ///   - appIDPrefix: The application's App ID prefix. This string can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
-    ///   - identifier: An identifier that cooresponds to a value in keychain-access-groups in the application's Entitlements file. This string must not be empty.
+    ///   - identifier: An identifier that corresponds to a value in keychain-access-groups in the application's Entitlements file. This string must not be empty.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
@@ -508,7 +508,8 @@ extension Valet {
     }
 
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - appIDPrefix: The application's App ID prefix. This string can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
+    ///   - identifier: An identifier that corresponds to a value in keychain-access-groups in the application's Entitlements file. This string must not be empty.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes iCloud-shared keychain elements that can be shared across applications written by the same development team.
     @available(swift, obsoleted: 1.0)
