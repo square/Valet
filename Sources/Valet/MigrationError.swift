@@ -25,9 +25,9 @@ import Foundation
 public enum MigrationError: Int, CaseIterable, CustomStringConvertible, Error, Equatable {
     /// Migration failed because the keychain query was not valid.
     case invalidQuery
-    /// Migration failed because a key staged for migration was empty.
+    /// Migration failed because a key staged for migration was invalid.
     case keyToMigrateInvalid
-    /// Migration failed because some data staged for migration was empty.
+    /// Migration failed because some data staged for migration was invalid.
     case dataToMigrateInvalid
     /// Migration failed because two equivalent keys were staged for migration.
     case duplicateKeyToMigrate
