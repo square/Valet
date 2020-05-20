@@ -341,6 +341,18 @@ public final class Valet: NSObject {
     /// Migrates objects matching the input query into the receiving Valet instance.
     /// - Parameters:
     ///   - query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
+    ///   - compactMap: A closure that transforms a key:value pair from the raw pair currently in the keychain into a key:value pair we'll insert into the destination Valet. Returning `nil` from this closure will cause that key:value pair not to be migrated. `throw`ing from this closure will prevent migration.
+    /// - Throws: An error of type `KeychainError` or `MigrationError`. Will rethrow any error thrown by `compactMap`.
+    /// - Note: The keychain is not modified if an error is thrown.
+    public func migrateObjects(matching query: [String : AnyHashable], compactMap: (MigratableKeyValuePair<AnyHashable>) throws -> MigratableKeyValuePair<String>?) throws {
+        try execute(in: lock) {
+            try Keychain.migrateObjects(matching: query, into: baseKeychainQuery, compactMap: compactMap)
+        }
+    }
+
+    /// Migrates objects matching the input query into the receiving Valet instance.
+    /// - Parameters:
+    ///   - query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
     /// - Throws: An error of type `KeychainError` or `MigrationError`.
     /// - Note: The keychain is not modified if an error is thrown.
@@ -350,7 +362,19 @@ public final class Valet: NSObject {
             try Keychain.migrateObjects(matching: query, into: baseKeychainQuery, removeOnCompletion: removeOnCompletion)
         }
     }
-    
+
+    /// Migrates objects matching the input query into the receiving Valet instance.
+    /// - Parameters:
+    ///   - valet: The Valet used to retrieve the existing keychain data that should be migrated.
+    ///   - compactMap: A closure that transforms a key:value pair from the raw pair currently in the keychain into a key:value pair we'll insert into the destination Valet. Returning `nil` from this closure will cause that key:value pair not to be migrated. `throw`ing from this closure will prevent migration.
+    /// - Throws: An error of type `KeychainError` or `MigrationError`. Will rethrow any error thrown by `compactMap`.
+    /// - Note: The keychain is not modified if an error is thrown.
+    public func migrateObjects(from valet: Valet, compactMap: (MigratableKeyValuePair<AnyHashable>) throws -> MigratableKeyValuePair<String>?) throws {
+        try execute(in: lock) {
+            try Keychain.migrateObjects(matching: valet.baseKeychainQuery, into: baseKeychainQuery, compactMap: compactMap)
+        }
+    }
+
     /// Migrates objects in the input Valet into the receiving Valet instance.
     /// - Parameters:
     ///   - valet: The Valet used to retrieve the existing keychain data that should be migrated.
@@ -620,6 +644,8 @@ extension Valet {
     }
     #endif
 
+    // MARK: Public Methods
+
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
@@ -631,6 +657,54 @@ extension Valet {
         }
         return containsObject
     }
+
+    /// Migrates objects matching the input query into the receiving Valet instance.
+    /// - Parameters:
+    ///   - query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
+    ///   - compactMap: A closure that transforms a key:value pair from the raw pair currently in the keychain into a key:value pair we'll insert into the destination Valet. Returning `nil` from this closure will cause that key:value pair not to be migrated.
+    /// - Throws: An error of type `KeychainError` or `MigrationError`.
+    /// - Note: The keychain is not modified if an error is thrown.
+    @available(swift, obsoleted: 1.0)
+    @objc(migrateObjectsMatching:compactMap:error:)
+    public func 🚫swift_migrateObjects(matching query: [String : AnyHashable], compactMap: (ObjectiveCCompatibilityMigratableKeyValuePairInput) -> ObjectiveCCompatibilityMigratableKeyValuePairOutput?) throws {
+        try 🚫！swift_migrateObjects(matching: query, compactMap: compactMap)
+    }
+
+    /// Migrates objects matching the input query into the receiving Valet instance.
+    /// - Parameters:
+    ///   - valet: The Valet used to retrieve the existing keychain data that should be migrated.
+    ///   - compactMap: A closure that transforms a key:value pair from the raw pair currently in the keychain into a key:value pair we'll insert into the destination Valet. Returning `nil` from this closure will cause that key:value pair not to be migrated.
+    /// - Throws: An error of type `KeychainError` or `MigrationError`. Will rethrow any error thrown by `compactMap`.
+    /// - Note: The keychain is not modified if an error is thrown.
+    @available(swift, obsoleted: 1.0)
+    @objc(migrateObjectsFrom:compactMap:error:)
+    public func 🚫swift_migrateObjects(from valet: Valet, compactMap: (ObjectiveCCompatibilityMigratableKeyValuePairInput) -> ObjectiveCCompatibilityMigratableKeyValuePairOutput?) throws {
+        try 🚫！swift_migrateObjects(matching: valet.baseKeychainQuery, compactMap: compactMap)
+    }
+
+    // MARK: Private Methods
+
+    private func 🚫！swift_migrateObjects(matching query: [String : AnyHashable], compactMap: (ObjectiveCCompatibilityMigratableKeyValuePairInput) -> ObjectiveCCompatibilityMigratableKeyValuePairOutput?) throws {
+        try execute(in: lock) {
+            struct PreventedMigrationSentinel: Error {}
+            do {
+                try Keychain.migrateObjects(matching: query, into: baseKeychainQuery) { input in
+                    guard let output = compactMap(ObjectiveCCompatibilityMigratableKeyValuePairInput(key: input.key, value: input.value)) else {
+                        return nil
+                    }
+                    guard !output.preventMigration else {
+                        throw PreventedMigrationSentinel()
+                    }
+                    return MigratableKeyValuePair<String>(key: output.key, value: output.value)
+                }
+            } catch is PreventedMigrationSentinel {
+                // Do nothing. This error shouldn't be surfaced to Objective-C.
+            } catch {
+                throw error
+            }
+        }
+    }
+
 
 }
 

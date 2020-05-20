@@ -63,6 +63,11 @@
 {
     return @"valet.test";
 }
+  
+- (BOOL)testEnvironmentIsSigned;
+{
+    return NSBundle.mainBundle.bundleIdentifier != nil && ![NSBundle.mainBundle.bundleIdentifier isEqualToString:@"com.apple.dt.xctest.tool"];
+}
 
 - (void)test_valetWithIdentifier_accessibility_returnsCorrectValet_VALAccessibilityWhenUnlocked;
 {
@@ -245,6 +250,271 @@
 {
     VALValet *const valet = [VALValet iCloudValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:@"" accessibility:VALCloudAccessibilityAfterFirstUnlock];
     XCTAssertNil(valet);
+}
+
+- (void)test_containsObjectForKey_returnsTrueWhenObjectExistsInKeychain;
+{
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+    [valet setString:@"password" forKey:NSStringFromSelector(_cmd) error:nil];
+    XCTAssertTrue([valet containsObjectForKey:NSStringFromSelector(_cmd)]);
+
+    // Clean up.
+    [valet removeObjectForKey:NSStringFromSelector(_cmd) error:nil];
+}
+
+- (void)test_containsObjectForKey_returnsFalseWhenObjectDoesNotExistInKeychain;
+{
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+    XCTAssertFalse([valet containsObjectForKey:NSStringFromSelector(_cmd)]);
+
+    // Clean up.
+    [valet removeObjectForKey:NSStringFromSelector(_cmd) error:nil];
+}
+
+- (void)test_migrateObjectsMatching_compactMap_error_successfullyMigratesSingleValue;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    [valet setString:@"password" forKey:NSStringFromSelector(_cmd) error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    [otherValet migrateObjectsMatching:@{
+        (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
+        (__bridge id)kSecAttrService : @"VAL_VALValet_initWithIdentifier:accessibility:_identifier_AccessibleWhenUnlocked",
+    } compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        return [[VALMigratableKeyValuePairOutput alloc] initWithKey:input.key value:input.value];
+    } error:nil];
+    XCTAssertEqualObjects([otherValet stringForKey:NSStringFromSelector(_cmd) error:nil], @"password");
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
+    [otherValet removeAllObjectsAndReturnError:nil];
+}
+
+- (void)test_migrateObjectsFrom_compactMap_error_successfullyMigratesSingleValue;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    [valet setString:@"password" forKey:NSStringFromSelector(_cmd) error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    [otherValet migrateObjectsFrom:valet compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        return [[VALMigratableKeyValuePairOutput alloc] initWithKey:input.key value:input.value];
+    } error:nil];
+    XCTAssertEqualObjects([otherValet stringForKey:NSStringFromSelector(_cmd) error:nil], @"password");
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
+    [otherValet removeAllObjectsAndReturnError:nil];
+}
+
+- (void)test_migrateObjectsMatching_compactMap_error_successfullyMigratesTransformedValue;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    [valet setString:@"password" forKey:NSStringFromSelector(_cmd) error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    [otherValet migrateObjectsMatching:@{
+        (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
+        (__bridge id)kSecAttrService : @"VAL_VALValet_initWithIdentifier:accessibility:_identifier_AccessibleWhenUnlocked",
+    } compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        return [[VALMigratableKeyValuePairOutput alloc] initWithKey:input.key value:[@"12345" dataUsingEncoding:NSUTF8StringEncoding]];
+    } error:nil];
+    XCTAssertEqualObjects([otherValet stringForKey:NSStringFromSelector(_cmd) error:nil], @"12345");
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
+    [otherValet removeAllObjectsAndReturnError:nil];
+}
+
+- (void)test_migrateObjectsFrom_compactMap_error_successfullyMigratesTransformedValue;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    [valet setString:@"password" forKey:NSStringFromSelector(_cmd) error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    [otherValet migrateObjectsFrom:valet compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        return [[VALMigratableKeyValuePairOutput alloc] initWithKey:input.key value:[@"12345" dataUsingEncoding:NSUTF8StringEncoding]];
+    } error:nil];
+    XCTAssertEqualObjects([otherValet stringForKey:NSStringFromSelector(_cmd) error:nil], @"12345");
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
+    [otherValet removeAllObjectsAndReturnError:nil];
+}
+
+- (void)test_migrateObjectsMatching_compactMap_error_returningNilDoesNotMigratePair;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    NSString *const key1 = [NSString stringWithFormat:@"%@-1", NSStringFromSelector(_cmd)];
+    NSString *const key2 = [NSString stringWithFormat:@"%@-2", NSStringFromSelector(_cmd)];
+    [valet setString:@"password1" forKey:key1 error:nil];
+    [valet setString:@"password2" forKey:key2 error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    [otherValet migrateObjectsMatching:@{
+        (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
+        (__bridge id)kSecAttrService : @"VAL_VALValet_initWithIdentifier:accessibility:_identifier_AccessibleWhenUnlocked",
+    } compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        if ([input.key isEqualToString:key1]) {
+            return nil;
+        } else {
+            return [[VALMigratableKeyValuePairOutput alloc] initWithKey:input.key value:input.value];
+        }
+    } error:nil];
+    XCTAssertNil([otherValet stringForKey:key1 error:nil]);
+    XCTAssertEqualObjects([otherValet stringForKey:key2 error:nil], @"password2");
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
+    [otherValet removeAllObjectsAndReturnError:nil];
+}
+
+- (void)test_migrateObjectsFrom_compactMap_error_returningNilDoesNotMigratePair;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    NSString *const key1 = [NSString stringWithFormat:@"%@-1", NSStringFromSelector(_cmd)];
+    NSString *const key2 = [NSString stringWithFormat:@"%@-2", NSStringFromSelector(_cmd)];
+    [valet setString:@"password1" forKey:key1 error:nil];
+    [valet setString:@"password2" forKey:key2 error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    [otherValet migrateObjectsFrom:valet compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        if ([input.key isEqualToString:key1]) {
+            return nil;
+        } else {
+            return [[VALMigratableKeyValuePairOutput alloc] initWithKey:input.key value:input.value];
+        }
+    } error:nil];
+    XCTAssertNil([otherValet stringForKey:key1 error:nil]);
+    XCTAssertEqualObjects([otherValet stringForKey:key2 error:nil], @"password2");
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
+    [otherValet removeAllObjectsAndReturnError:nil];
+}
+
+- (void)test_migrateObjectsMatching_compactMap_error_preventingMigrationPreventsAllMigration;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    NSString *const key1 = [NSString stringWithFormat:@"%@-1", NSStringFromSelector(_cmd)];
+    NSString *const key2 = [NSString stringWithFormat:@"%@-2", NSStringFromSelector(_cmd)];
+    [valet setString:@"password1" forKey:key1 error:nil];
+    [valet setString:@"password2" forKey:key2 error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    [otherValet migrateObjectsMatching:@{
+        (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
+        (__bridge id)kSecAttrService : @"VAL_VALValet_initWithIdentifier:accessibility:_identifier_AccessibleWhenUnlocked",
+    } compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        if ([input.key isEqualToString:key1]) {
+            return [[VALMigratableKeyValuePairOutput alloc] initWithKey:input.key value:input.value];;
+        } else {
+            return VALMigratableKeyValuePairOutput.preventMigration;
+        }
+    } error:nil];
+    XCTAssertNil([otherValet stringForKey:key1 error:nil]);
+    XCTAssertNil([otherValet stringForKey:key2 error:nil]);
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
+    [otherValet removeAllObjectsAndReturnError:nil];
+}
+
+- (void)test_migrateObjectsFrom_compactMap_error_preventingMigrationPreventsAllMigration;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    NSString *const key1 = [NSString stringWithFormat:@"%@-1", NSStringFromSelector(_cmd)];
+    NSString *const key2 = [NSString stringWithFormat:@"%@-2", NSStringFromSelector(_cmd)];
+    [valet setString:@"password1" forKey:key1 error:nil];
+    [valet setString:@"password2" forKey:key2 error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    [otherValet migrateObjectsFrom:valet compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        if ([input.key isEqualToString:key1]) {
+            return [[VALMigratableKeyValuePairOutput alloc] initWithKey:input.key value:input.value];;
+        } else {
+            return VALMigratableKeyValuePairOutput.preventMigration;
+        }
+    } error:nil];
+    XCTAssertNil([otherValet stringForKey:key1 error:nil]);
+    XCTAssertNil([otherValet stringForKey:key2 error:nil]);
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
+}
+
+- (void)test_migrateObjectsMatching_compactMap_error_preventingMigrationReturnsNoError;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    [valet setString:@"password" forKey:NSStringFromSelector(_cmd) error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    NSError *error = nil;
+    [otherValet migrateObjectsMatching:@{
+        (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
+        (__bridge id)kSecAttrService : @"VAL_VALValet_initWithIdentifier:accessibility:_identifier_AccessibleWhenUnlocked",
+    } compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        return VALMigratableKeyValuePairOutput.preventMigration;
+    } error:&error];
+    XCTAssertNil(error);
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
+}
+
+- (void)test_migrateObjectsFrom_compactMap_error_preventingMigrationReturnsNoError;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    [valet setString:@"password" forKey:NSStringFromSelector(_cmd) error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    NSError *error = nil;
+    [otherValet migrateObjectsFrom:valet compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        return VALMigratableKeyValuePairOutput.preventMigration;
+    } error:&error];
+    XCTAssertNil(error);
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
 }
 
 // MARK: Mac Tests

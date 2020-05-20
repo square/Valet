@@ -746,7 +746,7 @@ class ValetIntegrationTests: XCTestCase
         }
     }
 
-    func test_migrateObjectsMatching_withAccountNameAsData_doesNotRaiseException() throws
+    func test_migrateObjectsMatching_withAccountNameAsData_raisesException() throws
     {
         let identifier = "Keychain_With_Account_Name_As_NSData"
         
@@ -770,7 +770,130 @@ class ValetIntegrationTests: XCTestCase
             XCTAssertEqual(error as? MigrationError, .keyToMigrateInvalid)
         }
     }
-    
+
+    func test_migrateObjectsMatchingCompactMap_successfullyMigratesTransformedValue() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
+        try migrationValet.removeAllObjects()
+
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
+        try anotherValet.removeAllObjects()
+
+        try migrationValet.setString("password", forKey: #function)
+
+        try anotherValet.migrateObjects(matching: [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: migrationValet.service.description,
+        ]) { _ in
+            MigratableKeyValuePair<String>(key: #function, value: "12345")
+        }
+
+        XCTAssertEqual(try? anotherValet.string(forKey: #function), "12345")
+    }
+
+    func test_migrateObjectsMatchingCompactMap_returningNilDoesNotMigratePair() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
+        try migrationValet.removeAllObjects()
+
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
+        try anotherValet.removeAllObjects()
+
+        let key1 = #function + "1"
+        let key2 = #function + "2"
+        try migrationValet.setString("password1", forKey: key1)
+        try migrationValet.setString("password2", forKey: key2)
+
+        try anotherValet.migrateObjects(matching: [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: migrationValet.service.description,
+        ]) { input in
+            guard let key = input.key as? String else {
+                return nil
+            }
+            if key == key1 {
+                return nil
+            } else {
+                return MigratableKeyValuePair<String>(key: key, value: input.value)
+            }
+        }
+
+        XCTAssertNil(try? anotherValet.string(forKey: key1))
+        XCTAssertEqual(try? anotherValet.string(forKey: key2), "password2")
+    }
+
+    func test_migrateObjectsMatchingCompactMap_throwingErrorPreventsAllMigration() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
+        try migrationValet.removeAllObjects()
+
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
+        try anotherValet.removeAllObjects()
+
+        let key1 = #function + "1"
+        let key2 = #function + "2"
+        try migrationValet.setString("password1", forKey: key1)
+        try migrationValet.setString("password2", forKey: key2)
+
+        try? anotherValet.migrateObjects(matching: [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: migrationValet.service.description,
+        ]) { input in
+            guard let key = input.key as? String else {
+                return nil
+            }
+            if key == key1 {
+                return MigratableKeyValuePair<String>(key: key, value: input.value)
+            } else {
+                struct FakeError: Error {}
+                throw FakeError()
+            }
+        }
+
+        XCTAssertNil(try? anotherValet.string(forKey: key1))
+        XCTAssertNil(try? anotherValet.string(forKey: key2))
+    }
+
+    func test_migrateObjectsMatchingCompactMap_thrownErrorFromCompactMapIsRethrown() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
+        try migrationValet.removeAllObjects()
+
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
+        try anotherValet.removeAllObjects()
+
+        try migrationValet.setString("password", forKey: #function)
+
+        struct FakeError: Error {}
+        var caughtExpectedError = false
+        do {
+            try anotherValet.migrateObjects(matching: [
+                kSecClass as String: kSecClassGenericPassword,
+                kSecAttrService as String: migrationValet.service.description,
+            ]) { _ in
+                throw FakeError()
+            }
+        } catch is FakeError {
+            caughtExpectedError = true
+        } catch {
+            // Nothing to do
+        }
+
+        XCTAssertTrue(caughtExpectedError)
+    }
+
     // MARK: Migration - Valet
     
     func test_migrateObjectsFromValet_migratesSingleKeyValuePairSuccessfully() throws
@@ -899,6 +1022,117 @@ class ValetIntegrationTests: XCTestCase
             XCTAssertEqual(try vanillaValet.string(forKey: key), value)
             XCTAssertEqual(try otherValet.string(forKey: key), value)
         }
+    }
+
+    func test_migrateObjectsFromValetCompactMap_successfullyMigratesTransformedValue() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
+        try migrationValet.removeAllObjects()
+
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
+        try anotherValet.removeAllObjects()
+
+        try migrationValet.setString("password", forKey: #function)
+
+        try anotherValet.migrateObjects(from: migrationValet) { _ in
+            MigratableKeyValuePair<String>(key: #function, value: "12345")
+        }
+
+        XCTAssertEqual(try? anotherValet.string(forKey: #function), "12345")
+    }
+
+    func test_migrateObjectsFromValetCompactMap_returningNilDoesNotMigratePair() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
+        try migrationValet.removeAllObjects()
+
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
+        try anotherValet.removeAllObjects()
+
+        let key1 = #function + "1"
+        let key2 = #function + "2"
+        try migrationValet.setString("password1", forKey: key1)
+        try migrationValet.setString("password2", forKey: key2)
+
+        try anotherValet.migrateObjects(from: migrationValet) { input in
+            guard let key = input.key as? String else {
+                return nil
+            }
+            if key == key1 {
+                return nil
+            } else {
+                return MigratableKeyValuePair<String>(key: key, value: input.value)
+            }
+        }
+
+        XCTAssertNil(try? anotherValet.string(forKey: key1))
+        XCTAssertEqual(try? anotherValet.string(forKey: key2), "password2")
+    }
+
+    func test_migrateObjectsFromValetCompactMap_throwingErrorPreventsAllMigration() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
+        try migrationValet.removeAllObjects()
+
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
+        try anotherValet.removeAllObjects()
+
+        let key1 = #function + "1"
+        let key2 = #function + "2"
+        try migrationValet.setString("password1", forKey: key1)
+        try migrationValet.setString("password2", forKey: key2)
+
+        try? anotherValet.migrateObjects(from: migrationValet) { input in
+            guard let key = input.key as? String else {
+                return nil
+            }
+            if key == key1 {
+                return MigratableKeyValuePair<String>(key: key, value: input.value)
+            } else {
+                struct FakeError: Error {}
+                throw FakeError()
+            }
+        }
+
+        XCTAssertNil(try? anotherValet.string(forKey: key1))
+        XCTAssertNil(try? anotherValet.string(forKey: key2))
+    }
+
+    func test_migrateObjectsFromValetCompactMap_thrownErrorFromCompactMapIsRethrown() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
+        try migrationValet.removeAllObjects()
+
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
+        try anotherValet.removeAllObjects()
+
+        try migrationValet.setString("password", forKey: #function)
+
+        struct FakeError: Error {}
+        var caughtExpectedError = false
+        do {
+            try anotherValet.migrateObjects(from: migrationValet) { _ in
+                throw FakeError()
+            }
+        } catch is FakeError {
+            caughtExpectedError = true
+        } catch {
+            // Nothing to do
+        }
+
+        XCTAssertTrue(caughtExpectedError)
     }
 
 }
