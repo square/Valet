@@ -269,7 +269,11 @@ internal final class Keychain {
         // Sanity check that we are capable of migrating the data.
         var keyValuePairsToMigrate = [String: Data]()
         for keychainEntry in retrievedItemsToMigrateWithData {
-            guard let key = keychainEntry[kSecAttrAccount as String], key as? String != Keychain.canaryKey else {
+            guard let key = keychainEntry[kSecAttrAccount as String] else {
+                throw MigrationError.keyToMigrateInvalid
+            }
+
+            guard key as? String != Keychain.canaryKey else {
                 // We don't care about this key. Move along.
                 continue
             }
