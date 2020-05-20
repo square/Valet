@@ -27,14 +27,14 @@ final class MigrationErrorTests: XCTestCase {
             switch $0 {
             case .invalidQuery:
                 XCTAssertEqual($0.description, "MigrationError.invalidQuery")
-            case .keyInQueryResultInvalid:
-                XCTAssertEqual($0.description, "MigrationError.keyInQueryResultInvalid")
-            case .dataInQueryResultInvalid:
-                XCTAssertEqual($0.description, "MigrationError.dataInQueryResultInvalid")
-            case .duplicateKeyInQueryResult:
-                XCTAssertEqual($0.description, "MigrationError.duplicateKeyInQueryResult")
-            case .keyInQueryResultAlreadyExistsInValet:
-                XCTAssertEqual($0.description, "MigrationError.keyInQueryResultAlreadyExistsInValet")
+            case .keyToMigrateInvalid:
+                XCTAssertEqual($0.description, "MigrationError.keyToMigrateInvalid")
+            case .dataToMigrateInvalid:
+                XCTAssertEqual($0.description, "MigrationError.dataToMigrateInvalid")
+            case .duplicateKeyToMigrate:
+                XCTAssertEqual($0.description, "MigrationError.duplicateKeyToMigrate")
+            case .keyToMigrateAlreadyExistsInValet:
+                XCTAssertEqual($0.description, "MigrationError.keyToMigrateAlreadyExistsInValet")
             case .removalFailed:
                 XCTAssertEqual($0.description, "MigrationError.removalFailed")
             }

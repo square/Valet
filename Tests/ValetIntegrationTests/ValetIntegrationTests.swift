@@ -689,7 +689,7 @@ class ValetIntegrationTests: XCTestCase
         }
     }
 
-    func test_migrateObjectsMatching_bailsOutIfConflictExistsInQueryResult() throws
+    func test_migrateObjectsMatching_bailsOutIfConflictExistsToMigrate() throws
     {
         let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
         try migrationValet.removeAllObjects()
@@ -704,7 +704,7 @@ class ValetIntegrationTests: XCTestCase
         ]
 
         XCTAssertThrowsError(try migrationValet.migrateObjects(matching: conflictingQuery, removeOnCompletion: false)) { error in
-            XCTAssertEqual(error as? MigrationError, .duplicateKeyInQueryResult)
+            XCTAssertEqual(error as? MigrationError, .duplicateKeyToMigrate)
         }
     }
 
@@ -729,7 +729,7 @@ class ValetIntegrationTests: XCTestCase
             kSecAttrService as String: identifier
         ]
         XCTAssertThrowsError(try vanillaValet.migrateObjects(matching: query, removeOnCompletion: false)) { error in
-            XCTAssertEqual(error as? MigrationError, .keyInQueryResultInvalid)
+            XCTAssertEqual(error as? MigrationError, .keyToMigrateInvalid)
         }
     }
     
@@ -829,7 +829,7 @@ class ValetIntegrationTests: XCTestCase
         XCTAssertEqual(keyValuePairs.count, try anotherFlavor.allKeys().count)
 
         XCTAssertThrowsError(try vanillaValet.migrateObjects(from: anotherFlavor, removeOnCompletion: true)) { error in
-            XCTAssertEqual(error as? MigrationError, .keyInQueryResultAlreadyExistsInValet)
+            XCTAssertEqual(error as? MigrationError, .keyToMigrateAlreadyExistsInValet)
         }
 
         // Neither Valet should have seen any changes.

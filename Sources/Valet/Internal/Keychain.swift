@@ -232,7 +232,7 @@ internal final class Keychain {
             retrievedItemsToMigrate = multipleMatches
 
         } else {
-            throw MigrationError.dataInQueryResultInvalid
+            throw MigrationError.dataToMigrateInvalid
         }
         
         // Now that we have the persistent refs with attributes, get the data associated with each keychain entry.
@@ -251,7 +251,7 @@ internal final class Keychain {
             do {
                 let data: Data = try SecItem.copy(matching: retrieveDataQuery)
                 guard !data.isEmpty else {
-                    throw MigrationError.dataInQueryResultInvalid
+                    throw MigrationError.dataToMigrateInvalid
                 }
                 
                 var retrievedItemToMigrateWithData = retrievedItem
@@ -275,21 +275,21 @@ internal final class Keychain {
             }
             
             guard !key.isEmpty else {
-                throw MigrationError.keyInQueryResultInvalid
+                throw MigrationError.keyToMigrateInvalid
             }
             
             guard !keysToMigrate.contains(key) else {
-                throw MigrationError.duplicateKeyInQueryResult
+                throw MigrationError.duplicateKeyToMigrate
             }
             
             guard let data = keychainEntry[kSecValueData as String] as? Data, !data.isEmpty else {
-                throw MigrationError.dataInQueryResultInvalid
+                throw MigrationError.dataToMigrateInvalid
             }
 
             if Keychain.performCopy(forKey: key, options: destinationAttributes) == errSecItemNotFound {
                 keysToMigrate.insert(key)
             } else {
-                throw MigrationError.keyInQueryResultAlreadyExistsInValet
+                throw MigrationError.keyToMigrateAlreadyExistsInValet
             }
         }
         
@@ -305,12 +305,12 @@ internal final class Keychain {
         for keychainEntry in retrievedItemsToMigrateWithData {
             guard let key = keychainEntry[kSecAttrAccount as String] as? String else {
                 revertMigration()
-                throw MigrationError.keyInQueryResultInvalid
+                throw MigrationError.keyToMigrateInvalid
             }
 
             guard let value = keychainEntry[kSecValueData as String] as? Data else {
                 revertMigration()
-                throw MigrationError.dataInQueryResultInvalid
+                throw MigrationError.dataToMigrateInvalid
             }
 
             do {
