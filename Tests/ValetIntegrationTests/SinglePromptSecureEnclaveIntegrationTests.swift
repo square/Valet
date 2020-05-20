@@ -159,7 +159,24 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             XCTAssertTrue(permutation.canAccessKeychain())
         }
     }
-    
+
+    func test_canAccessKeychain_sharedAppGroup() {
+        guard #available(tvOS 11.0, *) else {
+            return
+        }
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
+            return .sharedGroupValet(with: Valet.sharedAppGroupIdentifier, accessControl: accessControl)
+        }
+
+        for permutation in permutations {
+            XCTAssertTrue(permutation.canAccessKeychain())
+        }
+    }
+
     // MARK: Migration
     
     func test_migrateObjectsMatchingQuery_failsForBadQuery()
