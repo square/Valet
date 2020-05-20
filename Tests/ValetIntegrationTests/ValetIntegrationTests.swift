@@ -74,15 +74,35 @@ internal extension Valet {
         #endif
     }()
 
+    // MARK: Shared App Group
+
+    static var sharedAppGroupIdentifier: SharedGroupIdentifier = {
+        #if os(iOS)
+        return SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: "valet.test")!
+        #elseif os(macOS)
+        return SharedGroupIdentifier(groupPrefix: "9XUJ7M53NG", nonEmptyGroup: "valet.test")!
+        #elseif os(tvOS)
+        return SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: "valet.test")!
+        #elseif os(watchOS)
+        return SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: "valet.test")!
+        #else
+        XCTFail()
+        #endif
+    }()
+
 }
 
 
 class ValetIntegrationTests: XCTestCase
 {
     static let sharedAccessGroupIdentifier = Valet.sharedAccessGroupIdentifier
+    static let sharedAppGroupIdentifier = Valet.sharedAppGroupIdentifier
     var allPermutations: [Valet] {
         return Valet.permutations(with: ValetIntegrationTests.sharedAccessGroupIdentifier.asIdentifier)
-            + (testEnvironmentIsSigned() ? Valet.permutations(with: ValetIntegrationTests.sharedAccessGroupIdentifier) : [])
+            + (testEnvironmentIsSigned()
+                ? Valet.permutations(with: ValetIntegrationTests.sharedAccessGroupIdentifier)
+                    + Valet.permutations(with: ValetIntegrationTests.sharedAppGroupIdentifier)
+                : [])
     }
 
     let vanillaValet = Valet.valet(with: sharedAccessGroupIdentifier.asIdentifier, accessibility: .whenUnlocked)
@@ -171,6 +191,17 @@ class ValetIntegrationTests: XCTestCase
         }
 
         Valet.permutations(with: Valet.sharedAccessGroupIdentifier).forEach { permutation in
+            XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
+        }
+    }
+
+    func test_canAccessKeychain_sharedAppGroup()
+    {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        Valet.permutations(with: Valet.sharedAppGroupIdentifier).forEach { permutation in
             XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
         }
     }
