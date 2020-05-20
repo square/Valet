@@ -42,7 +42,7 @@ public struct SharedAccessGroupIdentifier: CustomStringConvertible {
     // MARK: CustomStringConvertible
 
     public var description: String {
-        return appIDPrefix + "." + groupIdentifier
+        appIDPrefix + "." + groupIdentifier
     }
 
     // MARK: Internal Properties
