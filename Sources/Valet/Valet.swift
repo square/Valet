@@ -667,7 +667,7 @@ extension Valet {
     @available(swift, obsoleted: 1.0)
     @objc(migrateObjectsMatching:compactMap:error:)
     public func 🚫swift_migrateObjects(matching query: [String : AnyHashable], compactMap: (ObjectiveCCompatibilityMigratableKeyValuePairInput) -> ObjectiveCCompatibilityMigratableKeyValuePairOutput?) throws {
-        try 🚫！swift_migrateObjects(matching: query, compactMap: compactMap)
+        try objc_compatibility_migrateObjects(matching: query, compactMap: compactMap)
     }
 
     /// Migrates objects matching the input query into the receiving Valet instance.
@@ -679,12 +679,12 @@ extension Valet {
     @available(swift, obsoleted: 1.0)
     @objc(migrateObjectsFrom:compactMap:error:)
     public func 🚫swift_migrateObjects(from valet: Valet, compactMap: (ObjectiveCCompatibilityMigratableKeyValuePairInput) -> ObjectiveCCompatibilityMigratableKeyValuePairOutput?) throws {
-        try 🚫！swift_migrateObjects(matching: valet.baseKeychainQuery, compactMap: compactMap)
+        try objc_compatibility_migrateObjects(matching: valet.baseKeychainQuery, compactMap: compactMap)
     }
 
     // MARK: Private Methods
 
-    private func 🚫！swift_migrateObjects(matching query: [String : AnyHashable], compactMap: (ObjectiveCCompatibilityMigratableKeyValuePairInput) -> ObjectiveCCompatibilityMigratableKeyValuePairOutput?) throws {
+    private func objc_compatibility_migrateObjects(matching query: [String : AnyHashable], compactMap: (ObjectiveCCompatibilityMigratableKeyValuePairInput) -> ObjectiveCCompatibilityMigratableKeyValuePairOutput?) throws {
         try execute(in: lock) {
             struct PreventedMigrationSentinel: Error {}
             do {
