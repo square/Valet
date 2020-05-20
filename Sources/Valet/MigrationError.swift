@@ -25,13 +25,13 @@ import Foundation
 public enum MigrationError: Int, CaseIterable, CustomStringConvertible, Error, Equatable {
     /// Migration failed because the keychain query was not valid.
     case invalidQuery
-    /// Migration failed because a key in the query result could not be read.
+    /// Migration failed because a key staged for migration was empty.
     case keyToMigrateInvalid
-    /// Migration failed because some data in the query result could not be read.
+    /// Migration failed because some data staged for migration was empty.
     case dataToMigrateInvalid
-    /// Migration failed because two keys with the same value were found in the keychain.
+    /// Migration failed because two equivalent keys were staged for migration.
     case duplicateKeyToMigrate
-    /// Migration failed because a key in the keychain duplicates a key already managed by Valet.
+    /// Migration failed because a key staged for migration duplicates a key already managed by Valet.
     case keyToMigrateAlreadyExistsInValet
     /// Migration failed because removing the migrated data from the keychain failed.
     case removalFailed
