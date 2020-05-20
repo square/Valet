@@ -307,29 +307,25 @@ internal final class Keychain {
             }
         }
 
-        // All looks good. Time to actually migrate.
-        var alreadyMigratedKeys = [String]()
-        func revertMigration() {
-            // Something has gone wrong. Remove all migrated items.
-            for alreadyMigratedKey in alreadyMigratedKeys {
-                try? Keychain.removeObject(forKey: alreadyMigratedKey, options: destinationAttributes)
-            }
-        }
+        // Capture the keys in the destination prior to migration beginning.
+        let keysInKeychainPreMigration = Set(try Keychain.allKeys(options: destinationAttributes))
 
+        // All looks good. Time to actually migrate.
         for keyValuePair in keyValuePairsToMigrate {
             do {
                 try Keychain.setObject(keyValuePair.value, forKey: keyValuePair.key, options: destinationAttributes)
-                alreadyMigratedKeys.append(keyValuePair.key)
             } catch {
-                revertMigration()
+                revertMigration(into: destinationAttributes, keysInKeychainPreMigration: keysInKeychainPreMigration)
                 throw error
             }
         }
     }
 
     internal static func migrateObjects(matching query: [String : AnyHashable], into destinationAttributes: [String : AnyHashable], removeOnCompletion: Bool) throws {
+        // Capture the keys in the destination prior to migration beginning.
         let keysInKeychainPreMigration = Set(try Keychain.allKeys(options: destinationAttributes))
 
+        // Attempt migration.
         try migrateObjects(matching: query, into: destinationAttributes) { keychainKeyValuePair in
             guard let key = keychainKeyValuePair.key as? String else {
                 throw MigrationError.keyToMigrateInvalid
@@ -342,17 +338,21 @@ internal final class Keychain {
             do {
                 try Keychain.removeAllObjects(matching: query)
             } catch {
-                if let allKeysPostPotentiallyPartialMigration = try? Keychain.allKeys(options: destinationAttributes) {
-                    let migratedKeys = allKeysPostPotentiallyPartialMigration.filter { !keysInKeychainPreMigration.contains($0) }
-                    migratedKeys.forEach { migratedKey in
-                        try? Keychain.removeObject(forKey: migratedKey, options: destinationAttributes)
-                    }
-                }
+                revertMigration(into: destinationAttributes, keysInKeychainPreMigration: keysInKeychainPreMigration)
 
                 throw MigrationError.removalFailed
             }
 
             // We're done!
+        }
+    }
+
+    internal static func revertMigration(into destinationAttributes: [String : AnyHashable], keysInKeychainPreMigration: Set<String>) {
+        if let allKeysPostPotentiallyPartialMigration = try? Keychain.allKeys(options: destinationAttributes) {
+            let migratedKeys = allKeysPostPotentiallyPartialMigration.filter { !keysInKeychainPreMigration.contains($0) }
+            migratedKeys.forEach { migratedKey in
+                try? Keychain.removeObject(forKey: migratedKey, options: destinationAttributes)
+            }
         }
     }
 }
