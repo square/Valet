@@ -31,12 +31,12 @@ internal extension Valet {
 
     var legacyIdentifier: String {
         switch service {
-        case let .sharedAccessGroup(sharedAccessGroupIdentifier, _):
+        case let .sharedGroup(sharedAccessGroupIdentifier, _):
             return sharedAccessGroupIdentifier.groupIdentifier
         case let .standard(identifier, _):
             return identifier.description
         #if os(macOS)
-        case let .sharedAccessGroupOverride(identifier, _):
+        case let .sharedGroupOverride(identifier, _):
             return identifier.groupIdentifier
         case let .standardOverride(identifier, _):
             return identifier.description
@@ -60,11 +60,11 @@ internal extension Valet {
             switch service {
             case .standard:
                 return VALLegacyValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
-            case .sharedAccessGroup:
+            case .sharedGroup:
                 return VALLegacyValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
             #if os(macOS)
                 case .standardOverride,
-                     .sharedAccessGroupOverride:
+                     .sharedGroupOverride:
                 fatalError("There is no legacy Valet for a service override valet")
             #endif
             }
@@ -72,11 +72,11 @@ internal extension Valet {
             switch service {
             case .standard:
                 return VALSynchronizableValet(identifier: legacyIdentifier, accessibility: legacyAccessibility)!
-            case .sharedAccessGroup:
+            case .sharedGroup:
                 return VALSynchronizableValet(sharedAccessGroupIdentifier: legacyIdentifier, accessibility: legacyAccessibility)!
             #if os(macOS)
             case .standardOverride,
-                 .sharedAccessGroupOverride:
+                 .sharedGroupOverride:
                 fatalError("There is no legacy Valet for a service override valet")
             #endif
             }
@@ -94,7 +94,7 @@ internal extension Valet {
         }
     }
 
-    class func currentAndLegacyPermutations(with identifier: SharedAccessGroupIdentifier) -> [(Valet, VALLegacyValet)] {
+    class func currentAndLegacyPermutations(with identifier: SharedGroupIdentifier) -> [(Valet, VALLegacyValet)] {
         permutations(with: identifier).map {
             ($0, $0.legacyValet)
         }
@@ -106,7 +106,7 @@ internal extension Valet {
         }
     }
 
-    class func iCloudCurrentAndLegacyPermutations(with identifier: SharedAccessGroupIdentifier) -> [(Valet, VALSynchronizableValet)] {
+    class func iCloudCurrentAndLegacyPermutations(with identifier: SharedGroupIdentifier) -> [(Valet, VALSynchronizableValet)] {
         iCloudPermutations(with: identifier).map {
             ($0, $0.legacyValet as! VALSynchronizableValet)
         }
@@ -175,7 +175,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
         let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.groupIdentifier, accessibility: .always)!
         alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
 
-        let valet = Valet.sharedAccessGroupValet(with: Valet.sharedAccessGroupIdentifier, accessibility: .afterFirstUnlock)
+        let valet = Valet.sharedGroupValet(with: Valet.sharedAccessGroupIdentifier, accessibility: .afterFirstUnlock)
         XCTAssertNoThrow(try valet.migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion: true))
         XCTAssertEqual(try valet.string(forKey: key), passcode)
     }
@@ -187,7 +187,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
         let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.groupIdentifier, accessibility: .alwaysThisDeviceOnly)!
         alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
 
-        let valet = Valet.sharedAccessGroupValet(with: Valet.sharedAccessGroupIdentifier, accessibility: .afterFirstUnlockThisDeviceOnly)
+        let valet = Valet.sharedGroupValet(with: Valet.sharedAccessGroupIdentifier, accessibility: .afterFirstUnlockThisDeviceOnly)
         XCTAssertNoThrow(try valet.migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion: true))
         XCTAssertEqual(try valet.string(forKey: key), passcode)
     }

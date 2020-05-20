@@ -60,15 +60,15 @@ internal extension Valet {
 
     // MARK: Shared Access Group
 
-    static var sharedAccessGroupIdentifier: SharedAccessGroupIdentifier = {
+    static var sharedAccessGroupIdentifier: SharedGroupIdentifier = {
         #if os(iOS)
-        return SharedAccessGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-iOS-Test-Host-App")!
+        return SharedGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-iOS-Test-Host-App")!
         #elseif os(macOS)
-        return SharedAccessGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-macOS-Test-Host-App")!
+        return SharedGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-macOS-Test-Host-App")!
         #elseif os(tvOS)
-        return SharedAccessGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-tvOS-Test-Host-App")!
+        return SharedGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-tvOS-Test-Host-App")!
         #elseif os(watchOS)
-        return SharedAccessGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension")!
+        return SharedGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension")!
         #else
         XCTFail()
         #endif
@@ -132,8 +132,8 @@ class ValetIntegrationTests: XCTestCase
         let identifier = Valet.sharedAccessGroupIdentifier
 
         Accessibility.allCases.forEach { accessibility in
-            let backingService = Valet.sharedAccessGroupValet(with: identifier, accessibility: accessibility).service
-            XCTAssertEqual(backingService, Service.sharedAccessGroup(identifier, .valet(accessibility)))
+            let backingService = Valet.sharedGroupValet(with: identifier, accessibility: accessibility).service
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .valet(accessibility)))
         }
     }
 
@@ -150,8 +150,8 @@ class ValetIntegrationTests: XCTestCase
         let identifier = Valet.sharedAccessGroupIdentifier
 
         CloudAccessibility.allCases.forEach { accessibility in
-            let backingService = Valet.iCloudSharedAccessGroupValet(with: identifier, accessibility: accessibility).service
-            XCTAssertEqual(backingService, Service.sharedAccessGroup(identifier, .iCloud(accessibility)))
+            let backingService = Valet.iCloudSharedGroupValet(with: identifier, accessibility: accessibility).service
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .iCloud(accessibility)))
         }
     }
 

@@ -92,7 +92,7 @@
 - (void)test_sharedAccessGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlDevicePasscode;
 {
     if (@available(tvOS 11.0, *)) {
-        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedAccessGroupValetWithAppIDPrefix:self.appIDPrefix sharedAccessGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlDevicePasscode];
+        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedGroupValetWithAppIDPrefix:self.appIDPrefix sharedGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlDevicePasscode];
         XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlDevicePasscode);
         XCTAssertEqual([valet class], [VALSinglePromptSecureEnclaveValet class]);
     }
@@ -101,7 +101,7 @@
 - (void)test_sharedAccessGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlUserPresence;
 {
     if (@available(tvOS 11.0, *)) {
-        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedAccessGroupValetWithAppIDPrefix:self.appIDPrefix sharedAccessGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlUserPresence];
+        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedGroupValetWithAppIDPrefix:self.appIDPrefix sharedGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlUserPresence];
         XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlUserPresence);
         XCTAssertEqual([valet class], [VALSinglePromptSecureEnclaveValet class]);
     }
@@ -110,7 +110,7 @@
 - (void)test_sharedAccessGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlBiometricAny;
 {
     if (@available(tvOS 11.0, *)) {
-        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedAccessGroupValetWithAppIDPrefix:self.appIDPrefix sharedAccessGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlBiometricAny];
+        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedGroupValetWithAppIDPrefix:self.appIDPrefix sharedGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlBiometricAny];
         XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlBiometricAny);
         XCTAssertEqual([valet class], [VALSinglePromptSecureEnclaveValet class]);
     }
@@ -119,7 +119,7 @@
 - (void)test_sharedAccessGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlBiometricCurrentSet;
 {
     if (@available(tvOS 11.0, *)) {
-        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedAccessGroupValetWithAppIDPrefix:self.appIDPrefix sharedAccessGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlBiometricCurrentSet];
+        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedGroupValetWithAppIDPrefix:self.appIDPrefix sharedGroupIdentifier:self.sharedAccessGroupIdentifier accessControl:VALSecureEnclaveAccessControlBiometricCurrentSet];
         XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlBiometricCurrentSet);
         XCTAssertEqual([valet class], [VALSinglePromptSecureEnclaveValet class]);
     }
@@ -128,7 +128,7 @@
 - (void)test_sharedAccessGroupValetWithIdentifier_accessibility_returnsNilWhenIdentifierIsEmpty;
 {
     if (@available(tvOS 11.0, *)) {
-        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedAccessGroupValetWithAppIDPrefix:self.appIDPrefix sharedAccessGroupIdentifier:@"" accessControl:VALSecureEnclaveAccessControlBiometricCurrentSet];
+        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedGroupValetWithAppIDPrefix:self.appIDPrefix sharedGroupIdentifier:@"" accessControl:VALSecureEnclaveAccessControlBiometricCurrentSet];
         XCTAssertNil(valet);
     }
 }

@@ -51,8 +51,8 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - identifier: A non-empty identifier that must correspond with the value for keychain-access-groups in your Entitlements file.
     ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    public class func sharedAccessGroupValet(with identifier: SharedAccessGroupIdentifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
-        let key = Service.sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
+    public class func sharedGroupValet(with identifier: SharedGroupIdentifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
+        let key = Service.sharedGroup(identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
@@ -88,10 +88,10 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
             accessControl: accessControl)
     }
     
-    private convenience init(sharedAccess groupIdentifier: SharedAccessGroupIdentifier, accessControl: SecureEnclaveAccessControl) {
+    private convenience init(sharedAccess groupIdentifier: SharedGroupIdentifier, accessControl: SecureEnclaveAccessControl) {
         self.init(
             identifier: groupIdentifier.asIdentifier,
-            service: .sharedAccessGroup(groupIdentifier, .singlePromptSecureEnclave(accessControl)),
+            service: .sharedGroup(groupIdentifier, .singlePromptSecureEnclave(accessControl)),
             accessControl: accessControl)
     }
 
@@ -295,12 +295,12 @@ extension SinglePromptSecureEnclaveValet {
     ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
-    @objc(sharedAccessGroupValetWithAppIDPrefix:sharedAccessGroupIdentifier:accessControl:)
-    public class func 🚫swift_sharedAccessGroupValet(appIDPrefix: String, nonEmptyIdentifier identifier: String, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet? {
-        guard let identifier = SharedAccessGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: identifier) else {
+    @objc(sharedGroupValetWithAppIDPrefix:sharedGroupIdentifier:accessControl:)
+    public class func 🚫swift_sharedGroupValet(appIDPrefix: String, nonEmptyIdentifier identifier: String, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet? {
+        guard let identifier = SharedGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: identifier) else {
             return nil
         }
-        return sharedAccessGroupValet(with: identifier, accessControl: accessControl)
+        return sharedGroupValet(with: identifier, accessControl: accessControl)
     }
 
     /// - Parameter key: The key to look up in the keychain.

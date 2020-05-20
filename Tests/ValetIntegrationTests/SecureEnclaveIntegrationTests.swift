@@ -97,7 +97,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
         }
 
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
-            return .sharedAccessGroupValet(with: Valet.sharedAccessGroupIdentifier, accessControl: accessControl)
+            return .sharedGroupValet(with: Valet.sharedAccessGroupIdentifier, accessControl: accessControl)
         }
         
         for permutation in permutations {

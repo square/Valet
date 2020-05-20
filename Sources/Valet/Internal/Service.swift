@@ -23,11 +23,11 @@ import Foundation
 
 internal enum Service: CustomStringConvertible, Equatable {
     case standard(Identifier, Configuration)
-    case sharedAccessGroup(SharedAccessGroupIdentifier, Configuration)
+    case sharedGroup(SharedGroupIdentifier, Configuration)
 
     #if os(macOS)
     case standardOverride(service: Identifier, Configuration)
-    case sharedAccessGroupOverride(service: SharedAccessGroupIdentifier, Configuration)
+    case sharedGroupOverride(service: SharedGroupIdentifier, Configuration)
     #endif
 
     // MARK: Equatable
@@ -48,11 +48,11 @@ internal enum Service: CustomStringConvertible, Equatable {
         "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
     }
 
-    internal static func sharedAccessGroup(with configuration: Configuration, identifier: SharedAccessGroupIdentifier, accessibilityDescription: String) -> String {
+    internal static func sharedGroup(with configuration: Configuration, identifier: SharedGroupIdentifier, accessibilityDescription: String) -> String {
         "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier.groupIdentifier)_\(accessibilityDescription)"
     }
 
-    internal static func sharedAccessGroup(with configuration: Configuration, explicitlySetIdentifier identifier: Identifier, accessibilityDescription: String) -> String {
+    internal static func sharedGroup(with configuration: Configuration, explicitlySetIdentifier identifier: Identifier, accessibilityDescription: String) -> String {
         "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
     }
 
@@ -73,7 +73,7 @@ internal enum Service: CustomStringConvertible, Equatable {
         case let .standard(_, desiredConfiguration):
             configuration = desiredConfiguration
             
-        case let .sharedAccessGroup(identifier, desiredConfiguration):
+        case let .sharedGroup(identifier, desiredConfiguration):
             baseQuery[kSecAttrAccessGroup as String] = identifier.description
             configuration = desiredConfiguration
 
@@ -81,7 +81,7 @@ internal enum Service: CustomStringConvertible, Equatable {
         case let .standardOverride(_, desiredConfiguration):
             configuration = desiredConfiguration
 
-        case let .sharedAccessGroupOverride(identifier, desiredConfiguration):
+        case let .sharedGroupOverride(identifier, desiredConfiguration):
             baseQuery[kSecAttrAccessGroup as String] = identifier.description
             configuration = desiredConfiguration
         #endif
@@ -111,19 +111,19 @@ internal enum Service: CustomStringConvertible, Equatable {
         switch self {
         case let .standard(identifier, configuration):
             service = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
-        case let .sharedAccessGroup(identifier, configuration):
-            service = Service.sharedAccessGroup(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
+        case let .sharedGroup(identifier, configuration):
+            service = Service.sharedGroup(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
         #if os(macOS)
         case let .standardOverride(identifier, _):
             service = identifier.description
-        case let .sharedAccessGroupOverride(identifier, _):
+        case let .sharedGroupOverride(identifier, _):
             service = identifier.groupIdentifier
         #endif
         }
 
         switch self {
         case let .standard(_, configuration),
-             let .sharedAccessGroup(_, configuration):
+             let .sharedGroup(_, configuration):
             switch configuration {
             case .valet, .iCloud:
                 // Nothing to do here.
@@ -138,7 +138,7 @@ internal enum Service: CustomStringConvertible, Equatable {
 
         #if os(macOS)
         case .standardOverride,
-             .sharedAccessGroupOverride:
+             .sharedGroupOverride:
             return service
         #endif
         }
