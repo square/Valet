@@ -25,14 +25,14 @@ import Foundation
 public enum MigrationError: Int, CaseIterable, CustomStringConvertible, Error, Equatable {
     /// Migration failed because the keychain query was not valid.
     case invalidQuery
-    /// Migration failed because a key in the query result could not be read.
-    case keyInQueryResultInvalid
-    /// Migration failed because some data in the query result could not be read.
-    case dataInQueryResultInvalid
-    /// Migration failed because two keys with the same value were found in the keychain.
-    case duplicateKeyInQueryResult
-    /// Migration failed because a key in the keychain duplicates a key already managed by Valet.
-    case keyInQueryResultAlreadyExistsInValet
+    /// Migration failed because a key staged for migration was invalid.
+    case keyToMigrateInvalid
+    /// Migration failed because some data staged for migration was invalid.
+    case dataToMigrateInvalid
+    /// Migration failed because two equivalent keys were staged for migration.
+    case duplicateKeyToMigrate
+    /// Migration failed because a key staged for migration duplicates a key already managed by Valet.
+    case keyToMigrateAlreadyExistsInValet
     /// Migration failed because removing the migrated data from the keychain failed.
     case removalFailed
 
@@ -41,10 +41,10 @@ public enum MigrationError: Int, CaseIterable, CustomStringConvertible, Error, E
     public var description: String {
         switch self {
         case .invalidQuery: return "MigrationError.invalidQuery"
-        case .keyInQueryResultInvalid: return "MigrationError.keyInQueryResultInvalid"
-        case .dataInQueryResultInvalid: return "MigrationError.dataInQueryResultInvalid"
-        case .duplicateKeyInQueryResult: return "MigrationError.duplicateKeyInQueryResult"
-        case .keyInQueryResultAlreadyExistsInValet: return "MigrationError.keyInQueryResultAlreadyExistsInValet"
+        case .keyToMigrateInvalid: return "MigrationError.keyToMigrateInvalid"
+        case .dataToMigrateInvalid: return "MigrationError.dataToMigrateInvalid"
+        case .duplicateKeyToMigrate: return "MigrationError.duplicateKeyToMigrate"
+        case .keyToMigrateAlreadyExistsInValet: return "MigrationError.keyToMigrateAlreadyExistsInValet"
         case .removalFailed: return "MigrationError.removalFailed"
         }
     }
