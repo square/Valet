@@ -303,6 +303,20 @@ extension SinglePromptSecureEnclaveValet {
         return sharedGroupValet(with: identifier, accessControl: accessControl)
     }
 
+    /// - Parameters:
+    ///   - groupPrefix: On iOS, iPadOS, watchOS, and tvOS, this prefix must equal "group". On macOS, this prefix is the application's App ID prefix, which  can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
+    ///   - identifier: An identifier that cooresponds to a value in com.apple.security.application-groups in the application's Entitlements file. This string must not be empty.
+    ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
+    /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
+    /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
+    @objc(sharedGroupValetWithGroupPrefix:sharedGroupIdentifier:accessControl:)
+    public class func 🚫swift_sharedGroupValet(groupPrefix: String, nonEmptyIdentifier identifier: String, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet? {
+        guard let identifier = SharedGroupIdentifier(groupPrefix: groupPrefix, nonEmptyGroup: identifier) else {
+            return nil
+        }
+        return sharedGroupValet(with: identifier, accessControl: accessControl)
+    }
+
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.

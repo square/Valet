@@ -45,6 +45,25 @@
 #endif
 }
 
+- (NSString *)groupPrefix;
+{
+#if TARGET_OS_IPHONE
+    return @"group";
+#elif TARGET_OS_WATCH
+    return @"group";
+#elif TARGET_OS_MAC
+    return self.appIDPrefix;
+#else
+    // This will fail
+    return @"";
+#endif
+}
+
+- (NSString *)sharedAppGroupIdentifier;
+{
+    return @"valet.test";
+}
+
 - (void)test_valetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlDevicePasscode;
 {
     if (@available(tvOS 11.0, *)) {
@@ -129,6 +148,50 @@
 {
     if (@available(tvOS 11.0, *)) {
         VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedGroupValetWithAppIDPrefix:self.appIDPrefix sharedGroupIdentifier:@"" accessControl:VALSecureEnclaveAccessControlBiometricCurrentSet];
+        XCTAssertNil(valet);
+    }
+}
+
+- (void)test_sharedAppGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlDevicePasscode;
+{
+    if (@available(tvOS 11.0, *)) {
+        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedGroupValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:self.sharedAppGroupIdentifier accessControl:VALSecureEnclaveAccessControlDevicePasscode];
+        XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlDevicePasscode);
+        XCTAssertEqual([valet class], [VALSinglePromptSecureEnclaveValet class]);
+    }
+}
+
+- (void)test_sharedAppGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlUserPresence;
+{
+    if (@available(tvOS 11.0, *)) {
+        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedGroupValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:self.sharedAppGroupIdentifier accessControl:VALSecureEnclaveAccessControlUserPresence];
+        XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlUserPresence);
+        XCTAssertEqual([valet class], [VALSinglePromptSecureEnclaveValet class]);
+    }
+}
+
+- (void)test_sharedAppGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlBiometricAny;
+{
+    if (@available(tvOS 11.0, *)) {
+        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedGroupValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:self.sharedAppGroupIdentifier accessControl:VALSecureEnclaveAccessControlBiometricAny];
+        XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlBiometricAny);
+        XCTAssertEqual([valet class], [VALSinglePromptSecureEnclaveValet class]);
+    }
+}
+
+- (void)test_sharedAppGroupValetWithIdentifier_accessControl_returnsCorrectValet_VALSecureEnclaveAccessControlBiometricCurrentSet;
+{
+    if (@available(tvOS 11.0, *)) {
+        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedGroupValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:self.sharedAppGroupIdentifier accessControl:VALSecureEnclaveAccessControlBiometricCurrentSet];
+        XCTAssertEqual(valet.accessControl, VALSecureEnclaveAccessControlBiometricCurrentSet);
+        XCTAssertEqual([valet class], [VALSinglePromptSecureEnclaveValet class]);
+    }
+}
+
+- (void)test_sharedAppGroupValetWithIdentifier_accessibility_returnsNilWhenIdentifierIsEmpty;
+{
+    if (@available(tvOS 11.0, *)) {
+        VALSinglePromptSecureEnclaveValet *const valet = [VALSinglePromptSecureEnclaveValet sharedGroupValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:@"" accessControl:VALSecureEnclaveAccessControlBiometricCurrentSet];
         XCTAssertNil(valet);
     }
 }

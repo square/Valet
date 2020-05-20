@@ -45,6 +45,25 @@
 #endif
 }
 
+- (NSString *)groupPrefix;
+{
+#if TARGET_OS_IPHONE
+    return @"group";
+#elif TARGET_OS_WATCH
+    return @"group";
+#elif TARGET_OS_MAC
+    return self.appIDPrefix;
+#else
+    // This will fail
+    return @"";
+#endif
+}
+
+- (NSString *)sharedAppGroupIdentifier;
+{
+    return @"valet.test";
+}
+
 - (void)test_valetWithIdentifier_accessibility_returnsCorrectValet_VALAccessibilityWhenUnlocked;
 {
     VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
@@ -147,6 +166,47 @@
     XCTAssertNil(valet);
 }
 
+- (void)test_valetWithSharedAppGroupIdentifier_accessibility_returnsCorrectValet_VALAccessibilityWhenUnlocked;
+{
+    VALValet *const valet = [VALValet sharedGroupValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:self.sharedAppGroupIdentifier accessibility:VALAccessibilityWhenUnlocked];
+    XCTAssertEqual(valet.accessibility, VALAccessibilityWhenUnlocked);
+    XCTAssertEqual([valet class], [VALValet class]);
+}
+
+- (void)test_valetWithSharedAppGroupIdentifier_accessibility_returnsCorrectValet_VALAccessibilityAfterFirstUnlock;
+{
+    VALValet *const valet = [VALValet sharedGroupValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:self.sharedAppGroupIdentifier accessibility:VALAccessibilityAfterFirstUnlock];
+    XCTAssertEqual(valet.accessibility, VALAccessibilityAfterFirstUnlock);
+    XCTAssertEqual([valet class], [VALValet class]);
+}
+
+- (void)test_valetWithSharedAppGroupIdentifier_accessibility_returnsCorrectValet_VALAccessibilityWhenPasscodeSetThisDeviceOnly;
+{
+    VALValet *const valet = [VALValet sharedGroupValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:self.sharedAppGroupIdentifier accessibility:VALAccessibilityWhenPasscodeSetThisDeviceOnly];
+    XCTAssertEqual(valet.accessibility, VALAccessibilityWhenPasscodeSetThisDeviceOnly);
+    XCTAssertEqual([valet class], [VALValet class]);
+}
+
+- (void)test_valetWithSharedAppGroupIdentifier_accessibility_returnsCorrectValet_VALAccessibilityWhenUnlockedThisDeviceOnly;
+{
+    VALValet *const valet = [VALValet sharedGroupValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:self.sharedAppGroupIdentifier accessibility:VALAccessibilityWhenUnlockedThisDeviceOnly];
+    XCTAssertEqual(valet.accessibility, VALAccessibilityWhenUnlockedThisDeviceOnly);
+    XCTAssertEqual([valet class], [VALValet class]);
+}
+
+- (void)test_valetWithSharedAppGroupIdentifier_accessibility_returnsCorrectValet_VALAccessibilityAfterFirstUnlockThisDeviceOnly;
+{
+    VALValet *const valet = [VALValet sharedGroupValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:self.sharedAppGroupIdentifier accessibility:VALAccessibilityAfterFirstUnlockThisDeviceOnly];
+    XCTAssertEqual(valet.accessibility, VALAccessibilityAfterFirstUnlockThisDeviceOnly);
+    XCTAssertEqual([valet class], [VALValet class]);
+}
+
+- (void)test_valetWithSharedAppGroupIdentifier_accessibility_returnsNilWhenIdentifierIsEmpty;
+{
+    VALValet *const valet = [VALValet sharedGroupValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:@"" accessibility:VALAccessibilityAfterFirstUnlockThisDeviceOnly];
+    XCTAssertNil(valet);
+}
+
 - (void)test_iCloudValetWithSharedAccessGroupIdentifier_accessibility_returnsCorrectValet_VALCloudAccessibilityWhenUnlocked;
 {
     VALValet *const valet = [VALValet iCloudValetWithAppIDPrefix:self.appIDPrefix sharedGroupIdentifier:self.sharedAccessGroupIdentifier accessibility:VALCloudAccessibilityWhenUnlocked];
@@ -164,6 +224,26 @@
 - (void)test_iCloudValetWithSharedAccessGroupIdentifier_accessibility_returnsNilWhenIdentifierIsEmpty;
 {
     VALValet *const valet = [VALValet iCloudValetWithAppIDPrefix:self.appIDPrefix sharedGroupIdentifier:@"" accessibility:VALCloudAccessibilityAfterFirstUnlock];
+    XCTAssertNil(valet);
+}
+
+- (void)test_iCloudValetWithSharedAppGroupIdentifier_accessibility_returnsCorrectValet_VALCloudAccessibilityWhenUnlocked;
+{
+    VALValet *const valet = [VALValet iCloudValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:self.sharedAppGroupIdentifier accessibility:VALCloudAccessibilityWhenUnlocked];
+    XCTAssertEqual(valet.accessibility, VALAccessibilityWhenUnlocked);
+    XCTAssertEqual([valet class], [VALValet class]);
+}
+
+- (void)test_iCloudValetWithSharedAppGroupIdentifier_accessibility_returnsCorrectValet_VALCloudAccessibilityAfterFirstUnlock;
+{
+    VALValet *const valet = [VALValet iCloudValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:self.sharedAppGroupIdentifier accessibility:VALCloudAccessibilityAfterFirstUnlock];
+    XCTAssertEqual(valet.accessibility, VALAccessibilityAfterFirstUnlock);
+    XCTAssertEqual([valet class], [VALValet class]);
+}
+
+- (void)test_iCloudValetWithSharedAppGroupIdentifier_accessibility_returnsNilWhenIdentifierIsEmpty;
+{
+    VALValet *const valet = [VALValet iCloudValetWithGroupPrefix:self.groupPrefix sharedGroupIdentifier:@"" accessibility:VALCloudAccessibilityAfterFirstUnlock];
     XCTAssertNil(valet);
 }
 
