@@ -98,10 +98,14 @@ class ValetIntegrationTests: XCTestCase
     static let sharedAccessGroupIdentifier = Valet.sharedAccessGroupIdentifier
     static let sharedAppGroupIdentifier = Valet.sharedAppGroupIdentifier
     var allPermutations: [Valet] {
+        var signedPermutations = Valet.permutations(with: ValetIntegrationTests.sharedAccessGroupIdentifier)
+        #if !os(macOS)
+        // We can't test app groups on macOS without a paid developer account, which we don't have.
+        signedPermutations += Valet.permutations(with: ValetIntegrationTests.sharedAppGroupIdentifier)
+        #endif
         return Valet.permutations(with: ValetIntegrationTests.sharedAccessGroupIdentifier.asIdentifier)
             + (testEnvironmentIsSigned()
-                ? Valet.permutations(with: ValetIntegrationTests.sharedAccessGroupIdentifier)
-                    + Valet.permutations(with: ValetIntegrationTests.sharedAppGroupIdentifier)
+                ? signedPermutations
                 : [])
     }
 
@@ -195,6 +199,8 @@ class ValetIntegrationTests: XCTestCase
         }
     }
 
+    #if !os(macOS)
+    // We can't test app groups on macOS without a paid developer account, which we don't have.
     func test_canAccessKeychain_sharedAppGroup()
     {
         guard testEnvironmentIsSigned() else {
@@ -205,6 +211,7 @@ class ValetIntegrationTests: XCTestCase
             XCTAssertTrue(permutation.canAccessKeychain(), "\(permutation) could not access keychain.")
         }
     }
+    #endif
 
     func test_canAccessKeychain_Performance()
     {

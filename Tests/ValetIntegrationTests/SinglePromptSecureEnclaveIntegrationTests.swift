@@ -160,6 +160,8 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         }
     }
 
+    #if !os(macOS)
+    // We can't test app groups on macOS without a paid developer account, which we don't have.
     func test_canAccessKeychain_sharedAppGroup() {
         guard #available(tvOS 11.0, *) else {
             return
@@ -176,6 +178,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
             XCTAssertTrue(permutation.canAccessKeychain())
         }
     }
+    #endif
 
     // MARK: Migration
     

@@ -105,6 +105,8 @@ class SecureEnclaveIntegrationTests: XCTestCase
         }
     }
 
+    #if !os(macOS)
+    // We can't test app groups on macOS without a paid developer account, which we don't have.
     func test_canAccessKeychain_sharedAppGroup() {
         guard testEnvironmentIsSigned() else {
             return
@@ -118,6 +120,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
             XCTAssertTrue(permutation.canAccessKeychain())
         }
     }
+    #endif
 
     // MARK: Migration
     
