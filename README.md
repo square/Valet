@@ -96,7 +96,7 @@ The identifier you choose for your Valet is used to create a sandbox for the dat
 #### Choosing a User-friendly Identifier on macOS
 
 ```swift
-let mySecureEnclaveValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
+let myValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
 ```
 
 ```objc
