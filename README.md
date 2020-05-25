@@ -123,7 +123,7 @@ VALValet *const myNewValet = [VALValet valetWithExplicitlySetIdentifier:@"Druidi
 [myNewValet migrateObjectsFrom:myOldValet removeOnCompletion:true error:nil];
 ```
 
-The Valet type, identifier, accessibility value, and initializer chosen to create a Valet are combined to create a sandbox within the keychain. This behavior ensures that different Valets can not read or write one another's key:value pairs. If you change a Valet's accessibility after persisting key:value pairs, you must migrate the key:values pairs from the Valet with the no-longer-desired accessibility to the Valet with the desired accessibility to avoid data loss.
+The Valet type, identifier, accessibility value, and initializer chosen to create a Valet are combined to create a sandbox within the keychain. This behavior ensures that different Valets can not read or write one another's key:value pairs. If you change a Valet's accessibility after persisting key:value pairs, you must migrate the key:value pairs from the Valet with the no-longer-desired accessibility to the Valet with the desired accessibility to avoid data loss.
 
 ### Reading and Writing
 
