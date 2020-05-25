@@ -109,6 +109,22 @@ Mac apps signed with a developer ID may see their Valet’s identifier [shown to
 
 The Accessibility enum is used to determine when your secrets can be accessed. It’s a good idea to use the strictest accessibility possible that will allow your app to function. For example, if your app does not run in the background you will want to ensure the secrets can only be read when the phone is unlocked by using `.whenUnlocked` or `.whenUnlockedThisDeviceOnly`.
 
+#### Changing an Accessibility Value After Persisting Data
+
+```swift
+let myOldValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
+let myNewValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "Druidia")!, accessibility: .afterFirstUnlock)
+try? myNewValet.migrateObjects(from: myOldValet, removeOnCompletion: true)
+```
+
+```objc
+VALValet *const myOldValet = [VALValet valetWithExplicitlySetIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
+VALValet *const myNewValet = [VALValet valetWithExplicitlySetIdentifier:@"Druidia" accessibility:VALAccessibilityAfterFirstUnlock];
+[myNewValet migrateObjectsFrom:myOldValet removeOnCompletion:true error:nil];
+```
+
+The Valet type, identifier, accessibility value, and initializer chosen to create a Valet are combined to create a sandbox within the keychain. This behavior ensures that different Valets can not read or write one another's key:value pairs. If you change a Valet's accessibility after persisting key:value pairs, you must migrate the key:values pairs from the Valet with the no-longer-desired accessibility to the Valet with the desired accessibility to avoid data loss.
+
 ### Reading and Writing
 
 ```swift
