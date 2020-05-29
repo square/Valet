@@ -42,7 +42,7 @@ public struct SharedGroupIdentifier: CustomStringConvertible {
     /// A representation of a shared app group identifier.
     /// - Parameters:
     ///   - groupPrefix: On iOS, iPadOS, watchOS, and tvOS, this prefix must equal "group". On macOS, this prefix is the application's App ID prefix, which  can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
-    ///   - groupIdentifier: An identifier that cooresponds to a value in com.apple.security.application-groups in the application's Entitlements file. This string must not be empty.
+    ///   - groupIdentifier: An identifier that corresponds to a value in com.apple.security.application-groups in the application's Entitlements file. This string must not be empty.
     /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
     public init?(groupPrefix: String, nonEmptyGroup groupIdentifier: String?) {
         #if os(macOS)
