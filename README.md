@@ -149,9 +149,6 @@ VALValet *const mySharedValet = [VALValet sharedGroupValetWithGroupPrefix:@"grou
 
 This instance can be used to store and retrieve data securely across any app written by the same developer that has `group.Druidia` set as a value for the `com.apple.security.application-groups` key in the app’s `Entitlements`. This Valet is accessible when the device is unlocked. Note that `myValet` and `mySharedValet` cannot read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedGroupValet` initializer. Note that on macOS, the `groupPrefix` [must be the App ID prefix](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_application-groups#discussion).
 
-#### macOS Support in Beta
-macOS support of sharing secrets with an App Groups entitlement is in Beta! If you'd like to help us validate that sharing secrets with App Groups works on macOS, please comment on #222.
-
 ### Sharing Secrets Across Devices with iCloud
 
 ```swift
