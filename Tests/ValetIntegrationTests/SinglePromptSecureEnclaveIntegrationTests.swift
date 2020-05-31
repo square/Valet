@@ -152,14 +152,34 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         }
         
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
-            return .sharedAccessGroupValet(with: Valet.sharedAccessGroupIdentifier, accessControl: accessControl)
+            return .sharedGroupValet(with: Valet.sharedAccessGroupIdentifier, accessControl: accessControl)
         }
 
         for permutation in permutations {
             XCTAssertTrue(permutation.canAccessKeychain())
         }
     }
-    
+
+    #if !os(macOS)
+    // We can't test app groups on macOS without a paid developer account, which we don't have.
+    func test_canAccessKeychain_sharedAppGroup() {
+        guard #available(tvOS 11.0, *) else {
+            return
+        }
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
+            return .sharedGroupValet(with: Valet.sharedAppGroupIdentifier, accessControl: accessControl)
+        }
+
+        for permutation in permutations {
+            XCTAssertTrue(permutation.canAccessKeychain())
+        }
+    }
+    #endif
+
     // MARK: Migration
     
     func test_migrateObjectsMatchingQuery_failsForBadQuery()

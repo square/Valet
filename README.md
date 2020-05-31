@@ -141,17 +141,29 @@ NSString *const myLuggageCombination = [myValet stringForKey:username error:nil]
 
 In addition to allowing the storage of strings, Valet allows the storage of `Data` objects via `setObject(_ object: Data, forKey key: Key)` and `object(forKey key: String)`. Valets created with a different class type, via a different initializer, or with a different accessibility attribute will not be able to read or modify values in `myValet`.
 
-### Sharing Secrets Among Multiple Applications
+### Sharing Secrets Among Multiple Applications Using a Keychain Sharing Entitlement
 
 ```swift
-let mySharedValet = Valet.sharedAccessGroupValet(with: SharedAccessGroupIdentifier(appIDPrefix: "AppID12345", nonEmptyGroup: "Druidia")!, accessibility: .whenUnlocked)
+let mySharedValet = Valet.sharedGroupValet(with: SharedGroupIdentifier(appIDPrefix: "AppID12345", nonEmptyGroup: "Druidia")!, accessibility: .whenUnlocked)
 ```
 
 ```objc
-VALValet *const mySharedValet = [VALValet sharedAccessGroupValetWithAppIDPrefix:@"AppID12345" sharedAccessGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
+VALValet *const mySharedValet = [VALValet sharedGroupValetWithAppIDPrefix:@"AppID12345" sharedGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
-This instance can be used to store and retrieve data securely across any app written by the same developer that has `AppID12345.Druidia` (or `$(AppIdentifierPrefix)Druidia`) set as a value for the `keychain-access-groups` key in the app’s `Entitlements`, where `AppID12345` is the application’s [App ID prefix](https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps#2974920). This Valet is accessible when the device is unlocked. Note that `myValet` and `mySharedValet` can not read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedAccessGroupValet` initializer.
+This instance can be used to store and retrieve data securely across any app written by the same developer that has `AppID12345.Druidia` (or `$(AppIdentifierPrefix)Druidia`) set as a value for the `keychain-access-groups` key in the app’s `Entitlements`, where `AppID12345` is the application’s [App ID prefix](https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps#2974920). This Valet is accessible when the device is unlocked. Note that `myValet` and `mySharedValet` can not read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedGroupValet` initializer.
+
+### Sharing Secrets Among Multiple Applications Using an App Groups Entitlement
+
+```swift
+let mySharedValet = Valet.sharedGroupValet(with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: "Druidia")!, accessibility: .whenUnlocked)
+```
+
+```objc
+VALValet *const mySharedValet = [VALValet sharedGroupValetWithGroupPrefix:@"group" sharedGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
+```
+
+This instance can be used to store and retrieve data securely across any app written by the same developer that has `group.Druidia` set as a value for the `com.apple.security.application-groups` key in the app’s `Entitlements`. This Valet is accessible when the device is unlocked. Note that `myValet` and `mySharedValet` cannot read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedGroupValet` initializer. Note that on macOS, the `groupPrefix` [must be the App ID prefix](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_application-groups#discussion).
 
 ### Sharing Secrets Across Devices with iCloud
 

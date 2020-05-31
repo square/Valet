@@ -147,10 +147,10 @@
 		1693E29623B2D24600F8D97A /* KeychainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* KeychainError.swift */; };
 		1693E29723B2D24600F8D97A /* KeychainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* KeychainError.swift */; };
 		1693E29823B2D24600F8D97A /* KeychainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693E29423B2D24600F8D97A /* KeychainError.swift */; };
-		16967AE82405CAF800DC2B2D /* SharedAccessGroupIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16967AE72405CAF800DC2B2D /* SharedAccessGroupIdentifier.swift */; };
-		16967AE92405CC7400DC2B2D /* SharedAccessGroupIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16967AE72405CAF800DC2B2D /* SharedAccessGroupIdentifier.swift */; };
-		16967AEA2405CC7500DC2B2D /* SharedAccessGroupIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16967AE72405CAF800DC2B2D /* SharedAccessGroupIdentifier.swift */; };
-		16967AEB2405CC7600DC2B2D /* SharedAccessGroupIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16967AE72405CAF800DC2B2D /* SharedAccessGroupIdentifier.swift */; };
+		16967AE82405CAF800DC2B2D /* SharedGroupIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16967AE72405CAF800DC2B2D /* SharedGroupIdentifier.swift */; };
+		16967AE92405CC7400DC2B2D /* SharedGroupIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16967AE72405CAF800DC2B2D /* SharedGroupIdentifier.swift */; };
+		16967AEA2405CC7500DC2B2D /* SharedGroupIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16967AE72405CAF800DC2B2D /* SharedGroupIdentifier.swift */; };
+		16967AEB2405CC7600DC2B2D /* SharedGroupIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16967AE72405CAF800DC2B2D /* SharedGroupIdentifier.swift */; };
 		169E9A6723D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6423D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m */; };
 		169E9A6823D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6423D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m */; };
 		169E9A6923D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 169E9A6423D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m */; };
@@ -428,6 +428,7 @@
 		16212CD923072C6F00C84B17 /* ValetDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ValetDefines.h; path = LegacyValet/ValetDefines.h; sourceTree = "<group>"; };
 		16212CDA23072C6F00C84B17 /* VALLegacySecureEnclaveValet_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VALLegacySecureEnclaveValet_Protected.h; path = LegacyValet/VALLegacySecureEnclaveValet_Protected.h; sourceTree = "<group>"; };
 		16212CFB23072CB700C84B17 /* LegacyValet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegacyValet.h; path = LegacyValet/Public/LegacyValet.h; sourceTree = "<group>"; };
+		163F018D23D77E9800BBD3E3 /* Valet watchOS Test Host App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Valet watchOS Test Host App.entitlements"; sourceTree = "<group>"; };
 		165CDDC6204B26D400C96C2E /* Valet tvOS Test Host App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Valet tvOS Test Host App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		165CDDC8204B26D400C96C2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		165CDDCA204B26D400C96C2E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -439,7 +440,7 @@
 		167E250623D62CAA00889121 /* CloudAccessibilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudAccessibilityTests.swift; sourceTree = "<group>"; };
 		167E250F23D6328E00889121 /* ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationTests.swift; sourceTree = "<group>"; };
 		1693E29423B2D24600F8D97A /* KeychainError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainError.swift; sourceTree = "<group>"; };
-		16967AE72405CAF800DC2B2D /* SharedAccessGroupIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedAccessGroupIdentifier.swift; sourceTree = "<group>"; };
+		16967AE72405CAF800DC2B2D /* SharedGroupIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedGroupIdentifier.swift; sourceTree = "<group>"; };
 		169E9A6423D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALSinglePromptSecureEnclaveValetTests.m; sourceTree = "<group>"; };
 		169E9A6523D181DC001B69F5 /* VALValetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALValetTests.m; sourceTree = "<group>"; };
 		169E9A6623D181DC001B69F5 /* VALSecureEnclaveValetTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VALSecureEnclaveValetTests.m; sourceTree = "<group>"; };
@@ -653,7 +654,7 @@
 				1612FD7822A9CAAB00FC1142 /* SecureEnclaveAccessControl.swift */,
 				1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */,
 				1612FD7B22A9CAAB00FC1142 /* SecureEnclaveValet.swift */,
-				16967AE72405CAF800DC2B2D /* SharedAccessGroupIdentifier.swift */,
+				16967AE72405CAF800DC2B2D /* SharedGroupIdentifier.swift */,
 				1612FD7C22A9CAAB00FC1142 /* Identifier.swift */,
 				1612FD7022A9CAAB00FC1142 /* Internal */,
 			);
@@ -755,6 +756,7 @@
 		16DF6AF4204B496800F8E0A4 /* Valet watchOS Test Host App */ = {
 			isa = PBXGroup;
 			children = (
+				163F018D23D77E9800BBD3E3 /* Valet watchOS Test Host App.entitlements */,
 				16DF6AF5204B496800F8E0A4 /* Interface.storyboard */,
 				16DF6AF8204B496800F8E0A4 /* Assets.xcassets */,
 				16DF6AFA204B496800F8E0A4 /* Info.plist */,
@@ -1571,7 +1573,7 @@
 				1612FD9F22A9CAAB00FC1142 /* Configuration.swift in Sources */,
 				1612FDA322A9CAAB00FC1142 /* Accessibility.swift in Sources */,
 				1612FD7F22A9CAAB00FC1142 /* MigrationError.swift in Sources */,
-				16967AEA2405CC7500DC2B2D /* SharedAccessGroupIdentifier.swift in Sources */,
+				16967AEA2405CC7500DC2B2D /* SharedGroupIdentifier.swift in Sources */,
 				1612FD9722A9CAAB00FC1142 /* Service.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1616,7 +1618,7 @@
 				1612FDA022A9CAAB00FC1142 /* Configuration.swift in Sources */,
 				1612FDA422A9CAAB00FC1142 /* Accessibility.swift in Sources */,
 				1612FD8022A9CAAB00FC1142 /* MigrationError.swift in Sources */,
-				16967AEB2405CC7600DC2B2D /* SharedAccessGroupIdentifier.swift in Sources */,
+				16967AEB2405CC7600DC2B2D /* SharedGroupIdentifier.swift in Sources */,
 				1612FD9822A9CAAB00FC1142 /* Service.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1647,7 +1649,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16967AE82405CAF800DC2B2D /* SharedAccessGroupIdentifier.swift in Sources */,
+				16967AE82405CAF800DC2B2D /* SharedGroupIdentifier.swift in Sources */,
 				1693E29523B2D24600F8D97A /* KeychainError.swift in Sources */,
 				1612FDB922A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */,
 				1612FD8D22A9CAAB00FC1142 /* Valet.swift in Sources */,
@@ -1682,7 +1684,7 @@
 				1612FD9E22A9CAAB00FC1142 /* Configuration.swift in Sources */,
 				1612FDA222A9CAAB00FC1142 /* Accessibility.swift in Sources */,
 				1612FD7E22A9CAAB00FC1142 /* MigrationError.swift in Sources */,
-				16967AE92405CC7400DC2B2D /* SharedAccessGroupIdentifier.swift in Sources */,
+				16967AE92405CC7400DC2B2D /* SharedGroupIdentifier.swift in Sources */,
 				1612FD9622A9CAAB00FC1142 /* Service.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2380,6 +2382,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "Valet watchOS Test Host App/Valet watchOS Test Host App.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -2409,6 +2412,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "Valet watchOS Test Host App/Valet watchOS Test Host App.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;

@@ -46,8 +46,8 @@ class SinglePromptSecureEnclaveTests: XCTestCase
         let identifier = Valet.sharedAccessGroupIdentifier
 
         SecureEnclaveAccessControl.allValues().forEach { accessControl in
-            let backingService = SinglePromptSecureEnclaveValet.sharedAccessGroupValet(with: identifier, accessControl: accessControl).service
-            XCTAssertEqual(backingService, Service.sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)))
+            let backingService = SinglePromptSecureEnclaveValet.sharedGroupValet(with: identifier, accessControl: accessControl).service
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .singlePromptSecureEnclave(accessControl)))
         }
     }
 

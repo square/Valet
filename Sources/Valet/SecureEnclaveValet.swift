@@ -47,8 +47,8 @@ public final class SecureEnclaveValet: NSObject {
     ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
     ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    public class func sharedAccessGroupValet(with identifier: SharedAccessGroupIdentifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
-        let key = Service.sharedAccessGroup(identifier, .secureEnclave(accessControl)).description as NSString
+    public class func sharedGroupValet(with identifier: SharedGroupIdentifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
+        let key = Service.sharedGroup(identifier, .secureEnclave(accessControl)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
@@ -84,10 +84,10 @@ public final class SecureEnclaveValet: NSObject {
             accessControl: accessControl)
     }
     
-    private convenience init(sharedAccess groupIdentifier: SharedAccessGroupIdentifier, accessControl: SecureEnclaveAccessControl) {
+    private convenience init(sharedAccess groupIdentifier: SharedGroupIdentifier, accessControl: SecureEnclaveAccessControl) {
         self.init(
             identifier: groupIdentifier.asIdentifier,
-            service: .sharedAccessGroup(groupIdentifier, .secureEnclave(accessControl)),
+            service: .sharedGroup(groupIdentifier, .secureEnclave(accessControl)),
             accessControl: accessControl)
     }
 
@@ -254,12 +254,26 @@ extension SecureEnclaveValet {
     ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
-    @objc(sharedAccessGroupValetWithAppIDPrefix:sharedAccessGroupIdentifier:accessControl:)
-    public class func 🚫swift_sharedAccessGroupValet(appIDPrefix: String, nonEmptyIdentifier identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet? {
-        guard let identifier = SharedAccessGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: identifier) else {
+    @objc(sharedGroupValetWithAppIDPrefix:sharedGroupIdentifier:accessControl:)
+    public class func 🚫swift_sharedGroupValet(appIDPrefix: String, nonEmptyIdentifier identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet? {
+        guard let identifier = SharedGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: identifier) else {
             return nil
         }
-        return sharedAccessGroupValet(with: identifier, accessControl: accessControl)
+        return sharedGroupValet(with: identifier, accessControl: accessControl)
+    }
+
+    /// - Parameters:
+    ///   - groupPrefix: On iOS, iPadOS, watchOS, and tvOS, this prefix must equal "group". On macOS, this prefix is the application's App ID prefix, which can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
+    ///   - identifier: An identifier that corresponds to a value in com.apple.security.application-groups in the application's Entitlements file. This string must not be empty.
+    ///   - accessControl: The desired access control for the SecureEnclaveValet.
+    /// - Returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
+    /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
+    @objc(sharedGroupValetWithGroupPrefix:sharedGroupIdentifier:accessControl:)
+    public class func 🚫swift_sharedGroupValet(groupPrefix: String, nonEmptyIdentifier identifier: String, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet? {
+        guard let identifier = SharedGroupIdentifier(groupPrefix: groupPrefix, nonEmptyGroup: identifier) else {
+            return nil
+        }
+        return sharedGroupValet(with: identifier, accessControl: accessControl)
     }
 
     /// - Parameter key: The key to look up in the keychain.
