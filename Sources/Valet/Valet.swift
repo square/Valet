@@ -663,7 +663,6 @@ extension Valet {
     ///   - query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - compactMap: A closure that transforms a key:value pair from the raw pair currently in the keychain into a key:value pair we'll insert into the destination Valet. Returning `nil` from this closure will cause that key:value pair not to be migrated. Returning `VALMigratableKeyValuePairOutput.preventMigration` will prevent migrating any key:value pairs.
     ///   - error: An error of type `KeychainError` or `MigrationError`.
-    /// - Note: The keychain is not modified if an error is thrown.
     @available(swift, obsoleted: 1.0)
     @objc(migrateObjectsMatching:compactMap:error:)
     public func 🚫swift_migrateObjects(matching query: [String : AnyHashable], compactMap: (ObjectiveCCompatibilityMigratableKeyValuePairInput) -> ObjectiveCCompatibilityMigratableKeyValuePairOutput?) throws {
@@ -673,9 +672,8 @@ extension Valet {
     /// Migrates objects matching the input query into the receiving Valet instance.
     /// - Parameters:
     ///   - valet: The Valet used to retrieve the existing keychain data that should be migrated.
-    ///   - compactMap: A closure that transforms a key:value pair from the raw pair currently in the keychain into a key:value pair we'll insert into the destination Valet. Returning `nil` from this closure will cause that key:value pair not to be migrated.
+    ///   - compactMap: A closure that transforms a key:value pair from the raw pair currently in the keychain into a key:value pair we'll insert into the destination Valet. Returning `nil` from this closure will cause that key:value pair not to be migrated. Returning `VALMigratableKeyValuePairOutput.preventMigration` will prevent migrating any key:value pairs.
     ///   - error: An error of type `KeychainError` or `MigrationError`.
-    /// - Note: The keychain is not modified if an error is thrown.
     @available(swift, obsoleted: 1.0)
     @objc(migrateObjectsFrom:compactMap:error:)
     public func 🚫swift_migrateObjects(from valet: Valet, compactMap: (ObjectiveCCompatibilityMigratableKeyValuePairInput) -> ObjectiveCCompatibilityMigratableKeyValuePairOutput?) throws {
