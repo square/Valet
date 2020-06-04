@@ -3,7 +3,7 @@
 //  Valet iOS
 //
 //  Created by Dan Federman on 5/20/20.
-//  Copyright © 2010 Square, Inc.
+//  Copyright © 2020 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import XCTest
 @testable import Valet
 
 
-class KeychainIntegrationTests: XCTestCase {
+final class KeychainIntegrationTests: XCTestCase {
 
     func test_revertMigration_removesAllMigratedKeys() throws {
         guard testEnvironmentIsSigned() else {

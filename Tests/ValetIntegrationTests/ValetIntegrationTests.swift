@@ -824,7 +824,7 @@ class ValetIntegrationTests: XCTestCase
             }
         }
 
-        XCTAssertNil(try? anotherValet.string(forKey: key1))
+        XCTAssertFalse(try anotherValet.containsObject(forKey: key1))
         XCTAssertEqual(try? anotherValet.string(forKey: key2), "password2")
     }
 
@@ -859,8 +859,8 @@ class ValetIntegrationTests: XCTestCase
             }
         }
 
-        XCTAssertNil(try? anotherValet.string(forKey: key1))
-        XCTAssertNil(try? anotherValet.string(forKey: key2))
+        XCTAssertFalse(try anotherValet.containsObject(forKey: key1))
+        XCTAssertFalse(try anotherValet.containsObject(forKey: key2))
     }
 
     func test_migrateObjectsMatchingCompactMap_thrownErrorFromCompactMapIsRethrown() throws {
@@ -1071,7 +1071,7 @@ class ValetIntegrationTests: XCTestCase
             }
         }
 
-        XCTAssertNil(try? anotherValet.string(forKey: key1))
+        XCTAssertFalse(try anotherValet.containsObject(forKey: key1))
         XCTAssertEqual(try? anotherValet.string(forKey: key2), "password2")
     }
 
@@ -1103,8 +1103,8 @@ class ValetIntegrationTests: XCTestCase
             }
         }
 
-        XCTAssertNil(try? anotherValet.string(forKey: key1))
-        XCTAssertNil(try? anotherValet.string(forKey: key2))
+        XCTAssertFalse(try anotherValet.containsObject(forKey: key1))
+        XCTAssertFalse(try anotherValet.containsObject(forKey: key2))
     }
 
     func test_migrateObjectsFromValetCompactMap_thrownErrorFromCompactMapIsRethrown() throws {

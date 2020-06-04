@@ -662,7 +662,7 @@ extension Valet {
     /// - Parameters:
     ///   - query: The query with which to retrieve existing keychain data via a call to SecItemCopyMatching.
     ///   - compactMap: A closure that transforms a key:value pair from the raw pair currently in the keychain into a key:value pair we'll insert into the destination Valet. Returning `nil` from this closure will cause that key:value pair not to be migrated.
-    /// - Throws: An error of type `KeychainError` or `MigrationError`.
+    ///   - error: An error of type `KeychainError` or `MigrationError`.
     /// - Note: The keychain is not modified if an error is thrown.
     @available(swift, obsoleted: 1.0)
     @objc(migrateObjectsMatching:compactMap:error:)
@@ -674,7 +674,7 @@ extension Valet {
     /// - Parameters:
     ///   - valet: The Valet used to retrieve the existing keychain data that should be migrated.
     ///   - compactMap: A closure that transforms a key:value pair from the raw pair currently in the keychain into a key:value pair we'll insert into the destination Valet. Returning `nil` from this closure will cause that key:value pair not to be migrated.
-    /// - Throws: An error of type `KeychainError` or `MigrationError`. Will rethrow any error thrown by `compactMap`.
+    ///   - error: An error of type `KeychainError` or `MigrationError`.
     /// - Note: The keychain is not modified if an error is thrown.
     @available(swift, obsoleted: 1.0)
     @objc(migrateObjectsFrom:compactMap:error:)

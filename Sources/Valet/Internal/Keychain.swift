@@ -349,7 +349,7 @@ internal final class Keychain {
 
     internal static func revertMigration(into destinationAttributes: [String : AnyHashable], keysInKeychainPreMigration: Set<String>) {
         if let allKeysPostPotentiallyPartialMigration = try? Keychain.allKeys(options: destinationAttributes) {
-            let migratedKeys = allKeysPostPotentiallyPartialMigration.filter { !keysInKeychainPreMigration.contains($0) }
+            let migratedKeys = allKeysPostPotentiallyPartialMigration.subtracting(keysInKeychainPreMigration)
             migratedKeys.forEach { migratedKey in
                 try? Keychain.removeObject(forKey: migratedKey, options: destinationAttributes)
             }
