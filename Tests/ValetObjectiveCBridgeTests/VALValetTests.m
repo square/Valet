@@ -314,6 +314,29 @@
     [otherValet removeAllObjectsAndReturnError:nil];
 }
 
+- (void)test_migrateObjectsMatching_compactMap_error_successfullyMigratesTransformedKey;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    [valet setString:@"password" forKey:NSStringFromSelector(_cmd) error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    [otherValet migrateObjectsMatching:@{
+        (__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
+        (__bridge id)kSecAttrService : @"VAL_VALValet_initWithIdentifier:accessibility:_identifier_AccessibleWhenUnlocked",
+    } compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        return [[VALMigratableKeyValuePairOutput alloc] initWithKey:@"transformed_key" value:input.value];
+    } error:nil];
+    XCTAssertEqualObjects([otherValet stringForKey:@"transformed_key" error:nil], @"password");
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
+    [otherValet removeAllObjectsAndReturnError:nil];
+}
+
 - (void)test_migrateObjectsMatching_compactMap_error_successfullyMigratesTransformedValue;
 {
     if (![self testEnvironmentIsSigned]) {
@@ -331,6 +354,26 @@
         return [[VALMigratableKeyValuePairOutput alloc] initWithKey:input.key value:[@"12345" dataUsingEncoding:NSUTF8StringEncoding]];
     } error:nil];
     XCTAssertEqualObjects([otherValet stringForKey:NSStringFromSelector(_cmd) error:nil], @"12345");
+
+    // Clean up.
+    [valet removeAllObjectsAndReturnError:nil];
+    [otherValet removeAllObjectsAndReturnError:nil];
+}
+
+- (void)test_migrateObjectsFrom_compactMap_error_successfullyMigratesTransformedKey;
+{
+    if (![self testEnvironmentIsSigned]) {
+        return;
+    }
+    VALValet *const valet = [VALValet valetWithIdentifier:self.identifier accessibility:VALAccessibilityWhenUnlocked];
+
+    [valet setString:@"password" forKey:NSStringFromSelector(_cmd) error:nil];
+
+    VALValet *const otherValet = [VALValet valetWithIdentifier:NSStringFromSelector(_cmd) accessibility:VALAccessibilityWhenUnlocked];
+    [otherValet migrateObjectsFrom:valet compactMap:^VALMigratableKeyValuePairOutput * _Nullable(VALMigratableKeyValuePairInput * _Nonnull input) {
+        return [[VALMigratableKeyValuePairOutput alloc] initWithKey:@"transformed_key" value:input.value];
+    } error:nil];
+    XCTAssertEqualObjects([otherValet stringForKey:@"transformed_key" error:nil], @"password");
 
     // Clean up.
     [valet removeAllObjectsAndReturnError:nil];

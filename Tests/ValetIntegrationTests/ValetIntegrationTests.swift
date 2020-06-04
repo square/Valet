@@ -771,6 +771,29 @@ class ValetIntegrationTests: XCTestCase
         }
     }
 
+    func test_migrateObjectsMatchingCompactMap_successfullyMigratesTransformedKey() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
+        try migrationValet.removeAllObjects()
+
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
+        try anotherValet.removeAllObjects()
+
+        try migrationValet.setString("password", forKey: #function)
+
+        try anotherValet.migrateObjects(matching: [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: migrationValet.service.description,
+        ]) { pair in
+            MigratableKeyValuePair<String>(key: "transformed_key", value: pair.value)
+        }
+
+        XCTAssertEqual(try? anotherValet.string(forKey: "transformed_key"), "password")
+    }
+
     func test_migrateObjectsMatchingCompactMap_successfullyMigratesTransformedValue() throws {
         guard testEnvironmentIsSigned() else {
             return
@@ -1022,6 +1045,26 @@ class ValetIntegrationTests: XCTestCase
             XCTAssertEqual(try vanillaValet.string(forKey: key), value)
             XCTAssertEqual(try otherValet.string(forKey: key), value)
         }
+    }
+
+    func test_migrateObjectsFromValetCompactMap_successfullyMigratesTransformedKey() throws {
+        guard testEnvironmentIsSigned() else {
+            return
+        }
+
+        let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
+        try migrationValet.removeAllObjects()
+
+        let anotherValet = Valet.valet(with: Identifier(nonEmpty: #function)!, accessibility: .whenUnlocked)
+        try anotherValet.removeAllObjects()
+
+        try migrationValet.setString("password", forKey: #function)
+
+        try anotherValet.migrateObjects(from: migrationValet) { pair in
+            MigratableKeyValuePair<String>(key: "transformed_key", value: pair.value)
+        }
+
+        XCTAssertEqual(try? anotherValet.string(forKey: "transformed_key"), "password")
     }
 
     func test_migrateObjectsFromValetCompactMap_successfullyMigratesTransformedValue() throws {
