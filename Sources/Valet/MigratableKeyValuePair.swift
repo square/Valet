@@ -21,7 +21,7 @@
 import Foundation
 
 /// A struct that represented a key:value pair that can be migrated.
-public struct MigratableKeyValuePair<KeyType: Hashable>: Hashable {
+public struct MigratableKeyValuePair<Key: Hashable>: Hashable {
 
     // MARK: Initialization
 
@@ -29,7 +29,7 @@ public struct MigratableKeyValuePair<KeyType: Hashable>: Hashable {
     /// - Parameters:
     ///   - key: The key in the key:value pair.
     ///   - value: The value in the key:value pair.
-    public init(key: KeyType, value: Data) {
+    public init(key: Key, value: Data) {
         self.key = key
         self.value = value
     }
@@ -38,7 +38,7 @@ public struct MigratableKeyValuePair<KeyType: Hashable>: Hashable {
     /// - Parameters:
     ///   - key: The key in the key:value pair.
     ///   - value: The desired value in the key:value pair, represented as a String.
-    public init(key: KeyType, value: String) {
+    public init(key: Key, value: String) {
         self.key = key
         self.value = Data(value.utf8)
     }
@@ -46,7 +46,7 @@ public struct MigratableKeyValuePair<KeyType: Hashable>: Hashable {
     // MARK: Public
 
     /// The key in the key:value pair.
-    public let key: KeyType
+    public let key: Key
     /// The value in the key:value pair.
     public let value: Data
 }
@@ -103,6 +103,7 @@ public class ObjectiveCCompatibilityMigratableKeyValuePairOutput: NSObject {
     // MARK: Public Static Methods
 
     /// A sentinal `ObjectiveCCompatibilityMigratableKeyValuePairOutput` that conveys that the migration should be prevented.
+    @available(swift, obsoleted: 1.0)
     @objc
     public static func preventMigration() -> ObjectiveCCompatibilityMigratableKeyValuePairOutput {
         ObjectiveCCompatibilityPreventMigrationOutput()
