@@ -1,9 +1,5 @@
-//
-//  SecItemTests.swift
-//  Valet
-//
-//  Created by Dan Federman and Eric Muller on 9/16/17.
-//  Copyright © 2017 Square, Inc.
+//  Created by Dan Federman on 1/20/20.
+//  Copyright © 2020 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -24,6 +20,18 @@ import XCTest
 @testable import Valet
 
 
-class SecItemTests: XCTestCase {
-    
+final class CloudAccessibilityTests: XCTestCase {
+
+    func test_description_mirrorsAccessibilityCounterpartDescription() {
+        CloudAccessibility.allCases.forEach {
+            XCTAssertEqual($0.description, $0.accessibility.description)
+        }
+    }
+
+    func test_secAccessibilityAttribute_mirrorsAccessibilityCounterpartSecAccessibilityAttribute() {
+        CloudAccessibility.allCases.forEach {
+            XCTAssertEqual($0.secAccessibilityAttribute, $0.accessibility.secAccessibilityAttribute)
+        }
+    }
+
 }

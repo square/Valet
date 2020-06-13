@@ -18,26 +18,18 @@
 //  limitations under the License.
 //
 
-#if os(iOS) || os(macOS)
+#if canImport(LocalAuthentication)
 
 import Foundation
 @testable import Valet
 import XCTest
 
 
+@available(tvOS 11.0, *)
 class SinglePromptSecureEnclaveTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = SinglePromptSecureEnclaveValet.valet(with: SinglePromptSecureEnclaveTests.identifier, accessControl: .userPresence)
-
-    override func setUp()
-    {
-        super.setUp()
-        
-        ErrorHandler.customAssertBody = { _, _, _, _ in
-            // Nothing to do here.
-        }
-    }
 
     // MARK: Initialization
 
@@ -51,11 +43,11 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     }
 
     func test_init_createsCorrectBackingService_sharedAccess() {
-        let identifier = ValetTests.identifier
+        let identifier = Valet.sharedAccessGroupIdentifier
 
         SecureEnclaveAccessControl.allValues().forEach { accessControl in
-            let backingService = SinglePromptSecureEnclaveValet.sharedAccessGroupValet(with: identifier, accessControl: accessControl).service
-            XCTAssertEqual(backingService, Service.sharedAccessGroup(identifier, .singlePromptSecureEnclave(accessControl)))
+            let backingService = SinglePromptSecureEnclaveValet.sharedGroupValet(with: identifier, accessControl: accessControl).service
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .singlePromptSecureEnclave(accessControl)))
         }
     }
 

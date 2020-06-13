@@ -62,7 +62,7 @@ Install with [Swift Package Manager](https://github.com/apple/swift-package-mana
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Square/Valet", from: "3.0.0"),
+    .package(url: "https://github.com/Square/Valet", from: "4.0.0"),
 ],
 ```
 
@@ -91,39 +91,79 @@ This `myValet` instance can be used to store and retrieve data securely on this 
 
 #### Choosing the Best Identifier
 
-The identifier you choose for your Valet is used to create a sandbox for the data your Valet writes to the keychain. Two Valets of the same type created via the same initializer, accessibility value, and identifier will be able to read and write the same key:value pairs; Valets with different identifiers each have their own sandbox. Choose an identifier that describes the kind of data your Valet will protect. You do not need to include your application name or bundleIdentifier in your Valet’s identifier.
+The identifier you choose for your Valet is used to create a sandbox for the data your Valet writes to the keychain. Two Valets of the same type created via the same initializer, accessibility value, and identifier will be able to read and write the same key:value pairs; Valets with different identifiers each have their own sandbox. Choose an identifier that describes the kind of data your Valet will protect. You do not need to include your application name or bundle identifier in your Valet’s identifier.
+
+#### Choosing a User-friendly Identifier on macOS
+
+```swift
+let myValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
+```
+
+```objc
+VALValet *const myValet = [VALValet valetWithExplicitlySetIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
+```
+
+Mac apps signed with a developer ID may see their Valet’s identifier [shown to their users](https://github.com/square/Valet/issues/140). ⚠️⚠️ While it is possible to explicitly set a user-friendly identifier, note that doing so bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs ⚠️⚠️. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
 
 #### Choosing the Best Accessibility Value
 
 The Accessibility enum is used to determine when your secrets can be accessed. It’s a good idea to use the strictest accessibility possible that will allow your app to function. For example, if your app does not run in the background you will want to ensure the secrets can only be read when the phone is unlocked by using `.whenUnlocked` or `.whenUnlockedThisDeviceOnly`.
 
+#### Changing an Accessibility Value After Persisting Data
+
+```swift
+let myOldValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
+let myNewValet = Valet.valet(withExplicitlySet: Identifier(nonEmpty: "Druidia")!, accessibility: .afterFirstUnlock)
+try? myNewValet.migrateObjects(from: myOldValet, removeOnCompletion: true)
+```
+
+```objc
+VALValet *const myOldValet = [VALValet valetWithExplicitlySetIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
+VALValet *const myNewValet = [VALValet valetWithExplicitlySetIdentifier:@"Druidia" accessibility:VALAccessibilityAfterFirstUnlock];
+[myNewValet migrateObjectsFrom:myOldValet removeOnCompletion:true error:nil];
+```
+
+The Valet type, identifier, accessibility value, and initializer chosen to create a Valet are combined to create a sandbox within the keychain. This behavior ensures that different Valets can not read or write one another's key:value pairs. If you change a Valet's accessibility after persisting key:value pairs, you must migrate the key:value pairs from the Valet with the no-longer-desired accessibility to the Valet with the desired accessibility to avoid data loss.
+
 ### Reading and Writing
 
 ```swift
 let username = "Skroob"
-myValet.set(string: "12345", forKey: username)
+try? myValet.setString("12345", forKey: username)
 let myLuggageCombination = myValet.string(forKey: username)
 ```
 
 ```objc
 NSString *const username = @"Skroob";
-[myValet setString:@"12345" forKey:username];
-NSString *const myLuggageCombination = [myValet stringForKey:username];
+[myValet setString:@"12345" forKey:username error:nil];
+NSString *const myLuggageCombination = [myValet stringForKey:username error:nil];
 ```
 
-In addition to allowing the storage of strings, Valet allows the storage of `Data` objects via `set(object: Data, forKey key: Key)` and `-objectForKey:`. Valets created with a different class type, via a different initializer, or with a different accessibility attribute will not be able to read or modify values in `myValet`.
+In addition to allowing the storage of strings, Valet allows the storage of `Data` objects via `setObject(_ object: Data, forKey key: Key)` and `object(forKey key: String)`. Valets created with a different class type, via a different initializer, or with a different accessibility attribute will not be able to read or modify values in `myValet`.
 
-### Sharing Secrets Among Multiple Applications
+### Sharing Secrets Among Multiple Applications Using a Keychain Sharing Entitlement
 
 ```swift
-let mySharedValet = Valet.sharedAccessGroupValet(with: Identifier(nonEmpty: "Druidia")!, accessibility: .whenUnlocked)
+let mySharedValet = Valet.sharedGroupValet(with: SharedGroupIdentifier(appIDPrefix: "AppID12345", nonEmptyGroup: "Druidia")!, accessibility: .whenUnlocked)
 ```
 
 ```objc
-VALValet *const mySharedValet = [VALValet valetWithSharedAccessGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
+VALValet *const mySharedValet = [VALValet sharedGroupValetWithAppIDPrefix:@"AppID12345" sharedGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
 ```
 
-This instance can be used to store and retrieve data securely across any app written by the same developer with the value `Druidia` under the `keychain-access-groups` key in the app’s `Entitlements` file, when the device is unlocked. Note that `myValet` and `mySharedValet` can not read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedAccessGroupValet` initializer.
+This instance can be used to store and retrieve data securely across any app written by the same developer that has `AppID12345.Druidia` (or `$(AppIdentifierPrefix)Druidia`) set as a value for the `keychain-access-groups` key in the app’s `Entitlements`, where `AppID12345` is the application’s [App ID prefix](https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps#2974920). This Valet is accessible when the device is unlocked. Note that `myValet` and `mySharedValet` can not read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedGroupValet` initializer.
+
+### Sharing Secrets Among Multiple Applications Using an App Groups Entitlement
+
+```swift
+let mySharedValet = Valet.sharedGroupValet(with: SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: "Druidia")!, accessibility: .whenUnlocked)
+```
+
+```objc
+VALValet *const mySharedValet = [VALValet sharedGroupValetWithGroupPrefix:@"group" sharedGroupIdentifier:@"Druidia" accessibility:VALAccessibilityWhenUnlocked];
+```
+
+This instance can be used to store and retrieve data securely across any app written by the same developer that has `group.Druidia` set as a value for the `com.apple.security.application-groups` key in the app’s `Entitlements`. This Valet is accessible when the device is unlocked. Note that `myValet` and `mySharedValet` cannot read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedGroupValet` initializer. Note that on macOS, the `groupPrefix` [must be the App ID prefix](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_application-groups#discussion).
 
 ### Sharing Secrets Across Devices with iCloud
 
@@ -190,26 +230,34 @@ Valet guarantees it will never fail to write to or read from the keychain unless
 
 ## Requirements
 
-* Xcode 9.0 or later. Earlier versions of Xcode require [Valet version 2.4.2](https://github.com/square/Valet/releases/tag/2.4.2).
+* Xcode 11.0 or later. Xcode 10 and Xcode 9 require [Valet version 3.2.8](https://github.com/square/Valet/releases/tag/3.2.8). Earlier versions of Xcode require [Valet version 2.4.2](https://github.com/square/Valet/releases/tag/2.4.2).
 * iOS 9 or later.
 * tvOS 9 or later.
 * watchOS 2 or later.
 * macOS 10.11 or later.
 
-### Migrating from Valet 2.*
+## Migrating from prior Valet versions
 
-First the good news: you will _not_ have to migrate your keychain data when upgrading from Valet 2.* to Valet 3.*. All Valet objects are backwards compatible with their Valet 2 counterparts. We have exhaustive unit tests to prove it (search for `test_backwardsCompatibility`).
+The good news: most Valet configurations do _not_ have to migrate keychain data when upgrading from an older version of Valet. All Valet objects are backwards compatible with their counterparts from prior versions. We have exhaustive unit tests to prove it (search for `test_backwardsCompatibility`). Valets that have had their configurations deprecated by Apple will need to migrate stored data.
 
-Now the bad news: the Swift Valet API has slight differences from the Objective-C Valet API. You may have noticed a few of the differences in the sample code above, but here’s a rundown of the changes that may affect you.
+The bad news: there are multiple source-breaking API changes from prior versions.
+
+Both guides below explain the changes required to upgrade to Valet 4. 
+
+### Migrating from Valet 2
 
 1. Initializers have changed in both Swift and Objective-C - both languages use class methods now, which felt more semantically honest (a lot of the time you’re not instantiating a new Valet, you’re re-accessing one you’ve already created). [See example usage above](#basic-initialization).
-2. `VALSynchronizableValet` (which allowed keychains to be synced to iCloud) has been replaced by a `Valet.iCloudValet(with:accessibility:)`  (or `+[VALValet iCloudValetWithIdentifier:accessibility:]` in Objective-C). [See examples above](#sharing-secrets-across-devices-with-icloud).
-3. `setObject(_:forKey:)` has become `set(object:forKey:)` in Swift. The Objective-C API `-setObject:forKey:` remains the same.
-4. `setString(_:forKey:)` has become `set(string:forKey:)` in Swift. The Objective-C API `-setString:forKey:` remains the same.
-5. `SecureEnclaveValet` and `SinglePromptSecureEnclaveValet` data retrieval methods now return a single enum [SecureEnclave.Result](Sources/SecureEnclave.swift#L28) rather than using an `inout` boolean to signal whether a user cancelled. The Objective-C API remains the same.
-6. `migrateObjects(matching:)` and `migrateObjects(from:)` now both return a nonnull [MigrationResult](Sources/MigrationResult.swift#L24).
-7. `VALAccessControl` has been renamed to `SecureEnclaveAccessControl` (`VALSecureEnclaveAccessControl` in Objective-C). This enum no longer references `TouchID`; instead it refers to unlocking with `biometric` due to the introduction of Face ID.
-8. `Valet`, `SecureEnclaveValet`, and `SinglePromptSecureEnclaveValet` are no longer in the same inheritance tree. All three now inherit directly from `NSObject` and use composition to share code. If you were relying on the subclass hierarchy before, 1) that might be a code smell 2) consider declaring a protocol for the shared behavior you were expecting to make your migration to Valet 3 easier.
+1. `VALSynchronizableValet` (which allowed keychains to be synced to iCloud) has been replaced by a `Valet.iCloudValet(with:accessibility:)` (or `+[VALValet iCloudValetWithIdentifier:accessibility:]` in Objective-C). [See examples above](#sharing-secrets-across-devices-with-icloud).
+1. `VALAccessControl` has been renamed to `SecureEnclaveAccessControl` (`VALSecureEnclaveAccessControl` in Objective-C). This enum no longer references `TouchID`; instead it refers to unlocking with `biometric` due to the introduction of Face ID.
+1. `Valet`, `SecureEnclaveValet`, and `SinglePromptSecureEnclaveValet` are no longer in the same inheritance tree. All three now inherit directly from `NSObject` and use composition to share code. If you were relying on the subclass hierarchy before, 1) that might be a code smell 2) consider declaring a protocol for the shared behavior you were expecting to make your migration to Valet 3 easier.
+
+You'll also need to continue reading through the [migration from Valet 3](#migration-from-valet-3) section below.
+
+### Migrating from Valet 3
+
+1. The accessibility values `always` and `alwaysThisDeviceOnly` have been removed from Valet, because Apple has deprecated their counterparts (see the documentation for [kSecAttrAccessibleAlways](https://developer.apple.com/documentation/security/ksecattraccessiblealways) and [kSecAttrAccessibleAlwaysThisDeviceOnly](https://developer.apple.com/documentation/security/ksecattraccessiblealwaysthisdeviceonly)). To migrate values stored with `always` accessibility, use the method `migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion:)` on a Valet with your new preferred accessibility. To migrate values stored with `alwaysThisDeviceOnly` accessibility, use the method `migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion:)` on a Valet with your new preferred accessibility.
+1. Most APIs that returned optionals or `Bool` values have been migrated to returning a nonoptional and throwing if an error is encountered. Ignoring the error that can be thrown by each API will keep your code flow behaving the same as it did before. Walking through one example: in Swift, `let secret: String? = myValet.string(forKey: myKey)` becomes `let secret: String? = try? myValet.string(forKey: myKey)`. In Objective-C, `NSString *const secret = [myValet stringForKey:myKey];` becomes `NSString *const secret = [myValet stringForKey:myKey error:nil];`. If you're interested in the reason data wasn't returned, use a [do-catch](https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html#ID541) statement in Swift, or pass in an `NSError` to each API call and inspect the output in Objective-C. Each method clearly documents the `Error` type it can `throw`. [See examples above](#reading-and-writing).
+1. The class method used to create a Valet that can share secrets between applications using keychain shared access groups has changed. In order to prevent the incorrect detection of the App ID prefix [in rare circumstances](https://github.com/square/Valet/pull/218), the App ID prefix must now be explicitly passed into these methods. [See examples above](#sharing-secrets-across-devices-with-icloud).
 
 ## Contributing
 

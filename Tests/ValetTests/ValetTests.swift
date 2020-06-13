@@ -29,54 +29,41 @@ class ValetTests: XCTestCase
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = Valet.valet(with: identifier, accessibility: .whenUnlocked)
 
-    // MARK: XCTestCase
-
-    override func setUp()
-    {
-        super.setUp()
-        
-        ErrorHandler.customAssertBody = { _, _, _, _ in
-            // Nothing to do here.
-        }
-        
-        valet.removeAllObjects()
-    }
-
     // MARK: Initialization
 
     func test_init_createsCorrectBackingService() {
         let identifier = ValetTests.identifier
 
-        Accessibility.allValues().forEach { accessibility in
+        Accessibility.allCases.forEach { accessibility in
             let backingService = Valet.valet(with: identifier, accessibility: accessibility).service
             XCTAssertEqual(backingService, Service.standard(identifier, .valet(accessibility)))
         }
     }
 
     func test_init_createsCorrectBackingService_sharedAccess() {
-        let identifier = ValetTests.identifier
+        let identifier = Valet.sharedAccessGroupIdentifier
 
-        Accessibility.allValues().forEach { accessibility in
-            let backingService = Valet.sharedAccessGroupValet(with: identifier, accessibility: accessibility).service
-            XCTAssertEqual(backingService, Service.sharedAccessGroup(identifier, .valet(accessibility)))
+        Accessibility.allCases.forEach { accessibility in
+            let backingService = Valet.sharedGroupValet(with: identifier, accessibility: accessibility).service
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .valet(accessibility)))
         }
     }
 
     func test_init_createsCorrectBackingService_cloud() {
         let identifier = ValetTests.identifier
 
-        CloudAccessibility.allValues().forEach { accessibility in
+        CloudAccessibility.allCases.forEach { accessibility in
             let backingService = Valet.iCloudValet(with: identifier, accessibility: accessibility).service
             XCTAssertEqual(backingService, Service.standard(identifier, .iCloud(accessibility)))
         }
     }
 
     func test_init_createsCorrectBackingService_cloudSharedAccess() {
-        let identifier = ValetTests.identifier
+        let identifier = Valet.sharedAccessGroupIdentifier
 
-        CloudAccessibility.allValues().forEach { accessibility in
-            let backingService = Valet.iCloudSharedAccessGroupValet(with: identifier, accessibility: accessibility).service
-            XCTAssertEqual(backingService, Service.sharedAccessGroup(identifier, .iCloud(accessibility)))
+        CloudAccessibility.allCases.forEach { accessibility in
+            let backingService = Valet.iCloudSharedGroupValet(with: identifier, accessibility: accessibility).service
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .iCloud(accessibility)))
         }
     }
 
@@ -104,7 +91,7 @@ class ValetTests: XCTestCase
 
     func test_valetsWithDifferingAccessibility_areNotEqual()
     {
-        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .always)
+        let differingAccessibility = Valet.valet(with: valet.identifier, accessibility: .whenUnlockedThisDeviceOnly)
         XCTAssertNotEqual(valet, differingAccessibility)
     }
 
@@ -112,38 +99,48 @@ class ValetTests: XCTestCase
 
     func test_migrateObjectsMatching_failsForBadQueries()
     {
-        let invalidQueryError = MigrationResult.invalidQuery
-
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: [:], removeOnCompletion: false))
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: [:], removeOnCompletion: true))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: [:], removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
+        XCTAssertThrowsError(try valet.migrateObjects(matching: [:], removeOnCompletion: true)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
 
         var invalidQuery: [String: AnyHashable] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecMatchLimit as String: kSecMatchLimitOne
         ]
         // Migration queries should have kSecMatchLimit set to .All
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
 
         invalidQuery = [
             kSecClass as String: kSecClassGenericPassword,
             kSecReturnData as String: kCFBooleanTrue
         ]
         // Migration queries do not support kSecReturnData
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
 
         invalidQuery = [
             kSecClass as String: kSecClassGenericPassword,
             kSecReturnRef as String: kCFBooleanTrue
         ]
         // Migration queries do not support kSecReturnRef
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
 
         invalidQuery = [
             kSecClass as String: kSecClassGenericPassword,
             kSecReturnPersistentRef as String: kCFBooleanFalse
         ]
         // Migration queries must have kSecReturnPersistentRef set to true
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
 
 
         invalidQuery = [
@@ -151,14 +148,18 @@ class ValetTests: XCTestCase
             kSecReturnAttributes as String: kCFBooleanFalse
         ]
         // Migration queries must have kSecReturnAttributes set to true
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
         
         invalidQuery = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccessControl as String: NSNull()
         ]
         // Migration queries must not have kSecAttrAccessControl set
-        XCTAssertEqual(invalidQueryError, valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false))
+        XCTAssertThrowsError(try valet.migrateObjects(matching: invalidQuery, removeOnCompletion: false)) { error in
+            XCTAssertEqual(error as? MigrationError, .invalidQuery)
+        }
     }
 
 }

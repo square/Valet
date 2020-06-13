@@ -27,15 +27,15 @@ import XCTest
 extension SecureEnclaveIntegrationTests {
 
     @available (*, deprecated)
-    func test_backwardsCompatibility_withLegacyValet()
+    func test_backwardsCompatibility_withLegacyValet() throws
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
 
         let deprecatedValet = VALLegacySecureEnclaveValet(identifier: valet.identifier.description)!
         XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))
-        XCTAssertEqual(.success(passcode), valet.string(forKey: key, withPrompt: ""))
+        XCTAssertEqual(passcode, try valet.string(forKey: key, withPrompt: ""))
     }
 
 }

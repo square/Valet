@@ -23,20 +23,39 @@ import Foundation
 
 internal enum Service: CustomStringConvertible, Equatable {
     case standard(Identifier, Configuration)
-    case sharedAccessGroup(Identifier, Configuration)
-    
+    case sharedGroup(SharedGroupIdentifier, Configuration)
+
+    #if os(macOS)
+    case standardOverride(service: Identifier, Configuration)
+    case sharedGroupOverride(service: SharedGroupIdentifier, Configuration)
+    #endif
+
     // MARK: Equatable
     
     internal static func ==(lhs: Service, rhs: Service) -> Bool {
-        return lhs.description == rhs.description
+        lhs.description == rhs.description
     }
 
     // MARK: CustomStringConvertible
     
     internal var description: String {
-        return secService
+        secService
     }
-    
+
+    // MARK: Internal Static Methods
+
+    internal static func standard(with configuration: Configuration, identifier: Identifier, accessibilityDescription: String) -> String {
+        "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
+    }
+
+    internal static func sharedGroup(with configuration: Configuration, identifier: SharedGroupIdentifier, accessibilityDescription: String) -> String {
+        "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier.groupIdentifier)_\(accessibilityDescription)"
+    }
+
+    internal static func sharedGroup(with configuration: Configuration, explicitlySetIdentifier identifier: Identifier, accessibilityDescription: String) -> String {
+        "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
+    }
+
     // MARK: Internal Methods
     
     internal func generateBaseQuery() -> [String : AnyHashable] {
@@ -46,11 +65,7 @@ internal enum Service: CustomStringConvertible, Equatable {
         ]
 
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
-            #if swift(>=5.1)
             baseQuery[kSecUseDataProtectionKeychain as String] = true
-            #else
-            baseQuery["nleg"] = true // kSecUseDataProtectionKeychain for Xcode 9 and Xcode 10 compatibility.
-            #endif
         }
 
         let configuration: Configuration
@@ -58,10 +73,18 @@ internal enum Service: CustomStringConvertible, Equatable {
         case let .standard(_, desiredConfiguration):
             configuration = desiredConfiguration
             
-        case let .sharedAccessGroup(identifier, desiredConfiguration):
-            ErrorHandler.assert(!identifier.description.hasPrefix("\(SecItem.sharedAccessGroupPrefix)."), "Do not add the Bundle Seed ID as a prefix to your identifier. Valet prepends this value for you. Your Valet will not be able to access the keychain with the provided configuration")
-            baseQuery[kSecAttrAccessGroup as String] = "\(SecItem.sharedAccessGroupPrefix).\(identifier.description)"
+        case let .sharedGroup(identifier, desiredConfiguration):
+            baseQuery[kSecAttrAccessGroup as String] = identifier.description
             configuration = desiredConfiguration
+
+        #if os(macOS)
+        case let .standardOverride(_, desiredConfiguration):
+            configuration = desiredConfiguration
+
+        case let .sharedGroupOverride(identifier, desiredConfiguration):
+            baseQuery[kSecAttrAccessGroup as String] = identifier.description
+            configuration = desiredConfiguration
+        #endif
         }
         
         switch configuration {
@@ -87,28 +110,37 @@ internal enum Service: CustomStringConvertible, Equatable {
         var service: String
         switch self {
         case let .standard(identifier, configuration):
-            service = "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(configuration.accessibility.description)"
-        case let .sharedAccessGroup(identifier, configuration):
-            service = "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(configuration.accessibility.description)"
+            service = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
+        case let .sharedGroup(identifier, configuration):
+            service = Service.sharedGroup(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
+        #if os(macOS)
+        case let .standardOverride(identifier, _):
+            service = identifier.description
+        case let .sharedGroupOverride(identifier, _):
+            service = identifier.groupIdentifier
+        #endif
         }
-        
-        let configuration: Configuration
-        switch self {
-        case let .standard(_, desiredConfiguration),
-             let .sharedAccessGroup(_, desiredConfiguration):
-            configuration = desiredConfiguration
-        }
-        
-        switch configuration {
-        case .valet, .iCloud:
-            // Nothing to do here.
-            break
 
-        case let .secureEnclave(accessControl),
-             let .singlePromptSecureEnclave(accessControl):
-            service += accessControl.description
+        switch self {
+        case let .standard(_, configuration),
+             let .sharedGroup(_, configuration):
+            switch configuration {
+            case .valet, .iCloud:
+                // Nothing to do here.
+                break
+
+            case let .secureEnclave(accessControl),
+                 let .singlePromptSecureEnclave(accessControl):
+                service += accessControl.description
+            }
+
+            return service
+
+        #if os(macOS)
+        case .standardOverride,
+             .sharedGroupOverride:
+            return service
+        #endif
         }
-        
-        return service
     }
 }

@@ -24,19 +24,17 @@ import Foundation
 @objc(VALSecureEnclaveAccessControl)
 public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable {
     /// Access to keychain elements requires user presence verification via Touch ID, Face ID, or device Passcode. Keychain elements are still accessible by Touch ID even if fingers are added or removed. Touch ID does not have to be available or enrolled.
-    /// - version: Available on iOS 8 or later, tvOS 8 or later, watchOS 2.0 or later, and macOS 10.11 or later.
     case userPresence = 1
     
     /// Access to keychain elements requires user presence verification via Face ID, or any finger enrolled in Touch ID. Keychain elements remain accessible via Face ID or Touch ID  after faces or fingers are added or removed. Face ID must be enabled with at least one face enrolled, or Touch ID must be available and at least one finger must be enrolled.
-    /// - version: Available on iOS 9 or later, tvOS 9 or later, watchOS 2.0 or later, and macOS 10.12.1 or later.
+    @available(macOS 10.12.1, *)
     case biometricAny
     
     /// Access to keychain elements requires user presence verification via the face currently enrolled in Face ID, or fingers currently enrolled in Touch ID. Previously written keychain elements become inaccessible when faces or fingers are added or removed. Face ID must be enabled with at least one face enrolled, or Touch ID must be available and at least one finger must be enrolled.
-    /// - version: Available on iOS 9 or later, tvOS 9 or later, watchOS 2.0 or later, and macOS 10.12.1 or later.
+    @available(macOS 10.12.1, *)
     case biometricCurrentSet
     
     /// Access to keychain elements requires user presence verification via device Passcode.
-    /// - version: Available on iOS 9 or later, tvOS 9 or later, watchOS 2.0 or later, and macOS 10.11 or later.
     case devicePasscode
     
     // MARK: CustomStringConvertible
@@ -53,14 +51,14 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable 
             if #available(macOS 10.12.1, *) {
                 return "_AccessControlTouchIDAnyFingerprint"
             } else {
-                ErrorHandler.assertionFailure(".biometricAny requires macOS 10.12.1.")
+                assertionFailure(".biometricAny requires macOS 10.12.1.")
                 return ""
             }
         case .biometricCurrentSet:
             if #available(macOS 10.12.1, *) {
                 return "_AccessControlTouchIDCurrentFingerprintSet"
             } else {
-                ErrorHandler.assertionFailure(".biometricCurrentSet requires macOS 10.12.1.")
+                assertionFailure(".biometricCurrentSet requires macOS 10.12.1.")
                 return ""
             }
         case .devicePasscode:
@@ -75,29 +73,33 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable 
         case .userPresence:
             return .userPresence
         case .biometricAny:
-            if #available(macOS 10.12.1, *) {
-                return .init(rawValue: 2) // .biometryAny with Xcode 9 compatibility.
+            if #available(iOS 11.3, tvOS 11.3, watchOS 4.3, macOS 10.13.4, *) {
+                return .biometryAny
+            } else if #available(macOS 10.12.1, *) {
+                return .touchIDAny
             } else {
-                ErrorHandler.assertionFailure(".biometricAny requires macOS 10.12.1.")
+                assertionFailure(".biometricAny requires macOS 10.12.1.")
                 return .userPresence
             }
         case .biometricCurrentSet:
-            if #available(macOS 10.12.1, *) {
-                return .init(rawValue: 8) // .biometryCurrentSet with Xcode 9 compatibility.
+            if #available(iOS 11.3, tvOS 11.3, watchOS 4.3, macOS 10.13.4, *) {
+                return .biometryCurrentSet
+            } else if #available(macOS 10.12.1, *) {
+                return .touchIDCurrentSet
             } else {
-                ErrorHandler.assertionFailure(".biometricCurrentSet requires macOS 10.12.1.")
+                assertionFailure(".biometricCurrentSet requires macOS 10.12.1.")
                 return .userPresence
             }
         case .devicePasscode:
             if #available(macOS 10.11, *) {
                 return .devicePasscode
             } else {
-                ErrorHandler.assertionFailure(".devicePasscode requires macOS 10.11.")
+                assertionFailure(".devicePasscode requires macOS 10.11.")
                 return .userPresence
             }
         }
     }
-    
+
     internal static func allValues() -> [SecureEnclaveAccessControl] {
         if #available(macOS 10.12.1, *) {
             return [

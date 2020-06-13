@@ -29,15 +29,6 @@ class SecureEnclaveTests: XCTestCase
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = SecureEnclaveValet.valet(with: identifier, accessControl: .userPresence)
 
-    override func setUp()
-    {
-        super.setUp()
-        
-        ErrorHandler.customAssertBody = { _, _, _, _ in
-            // Nothing to do here.
-        }
-    }
-
     // MARK: Initialization
 
     func test_init_createsCorrectBackingService() {
@@ -50,11 +41,11 @@ class SecureEnclaveTests: XCTestCase
     }
 
     func test_init_createsCorrectBackingService_sharedAccess() {
-        let identifier = ValetTests.identifier
+        let identifier = Valet.sharedAccessGroupIdentifier
 
         SecureEnclaveAccessControl.allValues().forEach { accessControl in
-            let backingService = SecureEnclaveValet.sharedAccessGroupValet(with: identifier, accessControl: accessControl).service
-            XCTAssertEqual(backingService, Service.sharedAccessGroup(identifier, .secureEnclave(accessControl)))
+            let backingService = SecureEnclaveValet.sharedGroupValet(with: identifier, accessControl: accessControl).service
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .secureEnclave(accessControl)))
         }
     }
 
