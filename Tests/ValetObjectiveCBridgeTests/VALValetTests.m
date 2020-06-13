@@ -63,7 +63,7 @@
 {
     return @"valet.test";
 }
-  
+
 - (BOOL)testEnvironmentIsSigned;
 {
     return NSBundle.mainBundle.bundleIdentifier != nil && ![NSBundle.mainBundle.bundleIdentifier isEqualToString:@"com.apple.dt.xctest.tool"];
