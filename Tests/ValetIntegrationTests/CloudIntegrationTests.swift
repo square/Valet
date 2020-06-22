@@ -51,9 +51,7 @@ class CloudIntegrationTests: XCTestCase
     
     func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration() throws
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         let identifier = Identifier(nonEmpty: "DistinctTest")!
         let vanillaValet = Valet.valet(with: identifier, accessibility: .afterFirstUnlock)

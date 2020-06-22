@@ -39,14 +39,12 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     {
         super.setUp()
 
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() else {
-            return
-        }
         do {
+            try XCTSkipUnless(isTVOS11Available())
+            try XCTSkipUnless(testEnvironmentIsSigned())
             try valet().removeAllObjects()
+        } catch is XCTSkip {
+            // Nothing to do here.
         } catch {
             XCTFail("Error removing objects from Valet \(valet()): \(error)")
         }
@@ -56,12 +54,8 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         
     func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_canAccessSameData() throws
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
-            return
-        }
+        try XCTSkipUnless(isTVOS11Available())
+        try XCTSkipUnless(testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet())
         
         try valet().setString(passcode, forKey: key)
         let equivalentValet = SinglePromptSecureEnclaveValet.valet(with: valet().identifier, accessControl: valet().accessControl)
@@ -71,13 +65,9 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_SinglePromptSecureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData() throws
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
-            return
-        }
-        
+        try XCTSkipUnless(isTVOS11Available())
+        try XCTSkipUnless(testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet())
+
         try valet().setString(passcode, forKey: key)
         let equivalentValet = SecureEnclaveValet.valet(with: valet().identifier, accessControl: .devicePasscode)
         XCTAssertNotEqual(valet(), equivalentValet)
@@ -91,12 +81,8 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_allKeys() throws
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
-            return
-        }
+        try XCTSkipUnless(isTVOS11Available())
+        try XCTSkipUnless(testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet())
         
         XCTAssertEqual(try valet().allKeys(userPrompt: ""), Set())
         
@@ -111,12 +97,8 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_allKeys_doesNotReflectValetImplementationDetails() throws {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
-            return
-        }
+        try XCTSkipUnless(isTVOS11Available())
+        try XCTSkipUnless(testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet())
 
         // Under the hood, Valet inserts a canary when calling `canAccessKeychain()` - this should not appear in `allKeys()`.
         _ = valet().canAccessKeychain()
@@ -125,14 +107,10 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     // MARK: canAccessKeychain
     
-    func test_canAccessKeychain()
+    func test_canAccessKeychain() throws
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(isTVOS11Available())
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
             return .valet(with: valet().identifier, accessControl: accessControl)
@@ -143,13 +121,9 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         }
     }
     
-    func test_canAccessKeychain_sharedAccessGroup() {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+    func test_canAccessKeychain_sharedAccessGroup() throws {
+        try XCTSkipUnless(isTVOS11Available())
+        try XCTSkipUnless(testEnvironmentIsSigned())
         
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
             return .sharedGroupValet(with: Valet.sharedAccessGroupIdentifier, accessControl: accessControl)
@@ -162,13 +136,9 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
 
     #if !os(macOS)
     // We can't test app groups on macOS without a paid developer account, which we don't have.
-    func test_canAccessKeychain_sharedAppGroup() {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+    func test_canAccessKeychain_sharedAppGroup() throws {
+        try XCTSkipUnless(isTVOS11Available())
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
             return .sharedGroupValet(with: Valet.sharedAppGroupIdentifier, accessControl: accessControl)
@@ -182,14 +152,10 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
 
     // MARK: Migration
     
-    func test_migrateObjectsMatchingQuery_failsForBadQuery()
+    func test_migrateObjectsMatchingQuery_failsForBadQuery() throws
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(isTVOS11Available())
+        try XCTSkipUnless(testEnvironmentIsSigned())
         
         let invalidQuery = [
             kSecClass as String: kSecClassGenericPassword as String,
@@ -202,12 +168,8 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave() throws
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
-            return
-        }
+        try XCTSkipUnless(isTVOS11Available())
+        try XCTSkipUnless(testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet())
         
         let plainOldValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
         
@@ -243,12 +205,8 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() throws {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
-            return
-        }
+        try XCTSkipUnless(isTVOS11Available())
+        try XCTSkipUnless(testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet())
         
         let otherValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me_To_Valet")!, accessibility: .afterFirstUnlock)
         
@@ -268,6 +226,16 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         for (key, value) in keyStringPairToMigrateMap {
             XCTAssertEqual(try valet().string(forKey: key, withPrompt: ""), value)
             XCTAssertEqual(try otherValet.string(forKey: key), value)
+        }
+    }
+
+    // MARK: Private
+
+    private func isTVOS11Available() -> Bool {
+        if #available(tvOS 11.0, *) {
+            return true
+        } else {
+            return false
         }
     }
 }

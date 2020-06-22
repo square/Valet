@@ -29,9 +29,7 @@ extension CloudIntegrationTests {
     // MARK: Backwards Compatibility
 
     func test_backwardsCompatibility_withLegacyValet() throws {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         let identifier = Identifier(nonEmpty: "BackwardsCompatibilityTest")!
         try Valet.iCloudCurrentAndLegacyPermutations(with: identifier).forEach { permutation, legacyValet in
@@ -43,9 +41,7 @@ extension CloudIntegrationTests {
     }
 
     func test_backwardsCompatibility_withSharedAccessGroupLegacyValet() throws {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         try Valet.iCloudCurrentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)

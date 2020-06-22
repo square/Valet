@@ -114,9 +114,7 @@ class ValetMacTests: XCTestCase
             XCTAssertEqual($0.baseKeychainQuery[kSecAttrService as String], explicitlySetIdentifier.description)
         }
 
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: true).forEach {
             XCTAssertEqual($0.baseKeychainQuery[kSecAttrService as String], explicitlySetIdentifier.description)
@@ -128,9 +126,7 @@ class ValetMacTests: XCTestCase
     }
 
     func test_withExplicitlySet_canAccessKeychain() throws {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
         try Valet.permutations(withExplictlySet: explicitlySetIdentifier, shared: false).forEach {
@@ -160,9 +156,7 @@ class ValetMacTests: XCTestCase
     }
 
     func test_withExplicitlySet_canReadWrittenString() throws {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         let explicitlySetIdentifier = Identifier(nonEmpty: #function)!
         let key = "key"
@@ -253,9 +247,7 @@ class ValetMacTests: XCTestCase
     // MARK: Migration - PreCatalina
 
     func test_migrateObjectsFromPreCatalina_migratesDataWrittenPreCatalina() throws {
-        guard #available(macOS 10.15, *) else {
-            return
-        }
+        try XCTSkipUnless(isMacOS10dot15Available())
 
         let valet = Valet.valet(with: Identifier(nonEmpty: "PreCatalinaTest")!, accessibility: .afterFirstUnlock)
         var preCatalinaWriteQuery = valet.baseKeychainQuery
@@ -277,7 +269,17 @@ class ValetMacTests: XCTestCase
         XCTAssertEqual(try valet.object(forKey: key), object)
     }
 
+    // MARK: Private
+
     private let accessibilityValues = Accessibility.allCases
+
+    private func isMacOS10dot15Available() -> Bool {
+        if #available(macOS 10.15, *) {
+            return true
+        } else {
+            return false
+        }
+    }
 
 }
 #endif

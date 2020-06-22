@@ -27,9 +27,7 @@ import XCTest
 final class KeychainIntegrationTests: XCTestCase {
 
     func test_revertMigration_removesAllMigratedKeys() throws {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         let migrationValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
         try migrationValet.removeAllObjects()

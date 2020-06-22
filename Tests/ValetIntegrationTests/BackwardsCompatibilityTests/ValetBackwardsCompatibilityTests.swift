@@ -134,9 +134,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
     }
 
     func test_backwardsCompatibility_withLegacySharedAccessGroupValet() throws {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
         try Valet.currentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier).forEach { permutation, legacyValet in
             legacyValet.setString(passcode, forKey: key)
 
@@ -169,9 +167,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
     }
 
     func test_migrateObjectsFromAlwaysAccessibleValet_forwardsCompatibility_withLegacySharedAccessGroupValet() throws {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
         let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.groupIdentifier, accessibility: .always)!
         alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
 
@@ -181,9 +177,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
     }
 
     func test_migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet_forwardsCompatibility_withLegacySharedAccessGroupValet() throws {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
         let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.groupIdentifier, accessibility: .alwaysThisDeviceOnly)!
         alwaysAccessibleLegacyValet.setString(passcode, forKey: key)
 

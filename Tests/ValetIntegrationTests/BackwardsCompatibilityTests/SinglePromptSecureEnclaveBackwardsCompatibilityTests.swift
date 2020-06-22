@@ -30,9 +30,7 @@ extension SinglePromptSecureEnclaveIntegrationTests {
     @available (*, deprecated)
     func test_backwardsCompatibility_withLegacyValet() throws
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet())
 
         let deprecatedValet = VALLegacySinglePromptSecureEnclaveValet(identifier: valet().identifier.description)!
         XCTAssertTrue(deprecatedValet.setString(passcode, forKey: key))

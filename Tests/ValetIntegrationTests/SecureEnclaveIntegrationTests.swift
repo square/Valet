@@ -35,11 +35,11 @@ class SecureEnclaveIntegrationTests: XCTestCase
     {
         super.setUp()
 
-        guard testEnvironmentIsSigned() else {
-            return
-        }
         do {
+            try XCTSkipUnless(testEnvironmentIsSigned())
             try valet.removeAllObjects()
+        } catch is XCTSkip {
+            // Nothing to do here.
         } catch {
             XCTFail("Error removing objects from Valet \(valet): \(error)")
         }
@@ -49,9 +49,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     
     func test_secureEnclaveValetsWithEqualConfiguration_canAccessSameData() throws
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet())
         
         try valet.setString(passcode, forKey: key)
         let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
@@ -61,9 +59,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     
     func test_secureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData() throws
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet())
         
         try valet.setString(passcode, forKey: key)
         let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
@@ -76,11 +72,9 @@ class SecureEnclaveIntegrationTests: XCTestCase
         
     // MARK: canAccessKeychain
     
-    func test_canAccessKeychain()
+    func test_canAccessKeychain() throws
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
             return .valet(with: valet.identifier, accessControl: accessControl)
@@ -91,10 +85,8 @@ class SecureEnclaveIntegrationTests: XCTestCase
         }
     }
     
-    func test_canAccessKeychain_sharedAccessGroup() {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+    func test_canAccessKeychain_sharedAccessGroup() throws {
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
             return .sharedGroupValet(with: Valet.sharedAccessGroupIdentifier, accessControl: accessControl)
@@ -107,10 +99,8 @@ class SecureEnclaveIntegrationTests: XCTestCase
 
     #if !os(macOS)
     // We can't test app groups on macOS without a paid developer account, which we don't have.
-    func test_canAccessKeychain_sharedAppGroup() {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+    func test_canAccessKeychain_sharedAppGroup() throws {
+        try XCTSkipUnless(testEnvironmentIsSigned())
 
         let permutations: [SecureEnclaveValet] = SecureEnclaveAccessControl.allValues().compactMap { accessControl in
             return .sharedGroupValet(with: Valet.sharedAppGroupIdentifier, accessControl: accessControl)
@@ -124,11 +114,9 @@ class SecureEnclaveIntegrationTests: XCTestCase
 
     // MARK: Migration
     
-    func test_migrateObjectsMatchingQuery_failsForBadQuery()
+    func test_migrateObjectsMatchingQuery_failsForBadQuery() throws
     {
-        guard testEnvironmentIsSigned() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned())
         
         let invalidQuery = [
             kSecClass as String: kSecClassGenericPassword as String,
@@ -141,9 +129,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave() throws
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet())
         
         let plainOldValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me")!, accessibility: .afterFirstUnlock)
         
@@ -179,9 +165,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() throws {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
-            return
-        }
+        try XCTSkipUnless(testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet())
         
         let otherValet = Valet.valet(with: Identifier(nonEmpty: "Migrate_Me_To_Valet")!, accessibility: .afterFirstUnlock)
         
