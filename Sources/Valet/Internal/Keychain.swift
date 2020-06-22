@@ -174,55 +174,55 @@ internal final class Keychain {
     }
     
     // MARK: Migration
-    
-    internal static func migrateObjects(matching query: [String : AnyHashable], into destinationAttributes: [String : AnyHashable], removeOnCompletion: Bool) throws {
+
+    internal static func migrateObjects(matching query: [String : AnyHashable], into destinationAttributes: [String : AnyHashable], compactMap: (MigratableKeyValuePair<AnyHashable>) throws -> MigratableKeyValuePair<String>?) throws {
         guard !query.isEmpty else {
             // Migration requires secItemQuery to contain values.
             throw MigrationError.invalidQuery
         }
-        
+
         guard query[kSecMatchLimit as String] as? String as CFString? != kSecMatchLimitOne else {
             // Migration requires kSecMatchLimit to be set to kSecMatchLimitAll.
             throw MigrationError.invalidQuery
         }
-        
+
         guard query[kSecReturnData as String] as? Bool != true else {
             // kSecReturnData is not supported in a migration query.
             throw MigrationError.invalidQuery
         }
-        
+
         guard query[kSecReturnAttributes as String] as? Bool != false else {
             // Migration requires kSecReturnAttributes to be set to kCFBooleanTrue.
             throw MigrationError.invalidQuery
         }
-        
+
         guard query[kSecReturnRef as String] as? Bool != true else {
             // kSecReturnRef is not supported in a migration query.
             throw MigrationError.invalidQuery
         }
-        
+
         guard query[kSecReturnPersistentRef as String] as? Bool != false else {
             // Migration requires kSecReturnPersistentRef to be set to kCFBooleanTrue.
             throw MigrationError.invalidQuery
         }
-        
+
         guard query[kSecClass as String] as? String as CFString? == kSecClassGenericPassword else {
             // Migration requires kSecClass to be set to kSecClassGenericPassword to avoid data loss.
             throw MigrationError.invalidQuery
         }
-        
+
         guard query[kSecAttrAccessControl as String] == nil else {
             // kSecAttrAccessControl is not supported in a migration query. Keychain items can not be migrated en masse from the Secure Enclave.
             throw MigrationError.invalidQuery
         }
-        
+
         var secItemQuery = query
         secItemQuery[kSecMatchLimit as String] = kSecMatchLimitAll
         secItemQuery[kSecReturnAttributes as String] = true
         secItemQuery[kSecReturnData as String] = false
         secItemQuery[kSecReturnRef as String] = false
         secItemQuery[kSecReturnPersistentRef as String] = true
-        
+
         let collection: Any = try SecItem.copy(matching: secItemQuery)
         let retrievedItemsToMigrate: [[String: AnyHashable]]
         if let singleMatch = collection as? [String : AnyHashable] {
@@ -234,7 +234,7 @@ internal final class Keychain {
         } else {
             throw MigrationError.dataToMigrateInvalid
         }
-        
+
         // Now that we have the persistent refs with attributes, get the data associated with each keychain entry.
         var retrievedItemsToMigrateWithData = [[String : AnyHashable]]()
         for retrievedItem in retrievedItemsToMigrate {
@@ -242,7 +242,7 @@ internal final class Keychain {
                 throw KeychainError.couldNotAccessKeychain
 
             }
-            
+
             let retrieveDataQuery: [String : AnyHashable] = [
                 kSecValuePersistentRef as String : retrievedPersistentRef,
                 kSecReturnData as String : true
@@ -253,7 +253,7 @@ internal final class Keychain {
                 guard !data.isEmpty else {
                     throw MigrationError.dataToMigrateInvalid
                 }
-                
+
                 var retrievedItemToMigrateWithData = retrievedItem
                 retrievedItemToMigrateWithData[kSecValueData as String] = data
                 retrievedItemsToMigrateWithData.append(retrievedItemToMigrateWithData)
@@ -265,73 +265,94 @@ internal final class Keychain {
                 throw error
             }
         }
-        
+
         // Sanity check that we are capable of migrating the data.
-        var keysToMigrate = Set<String>()
+        var keyValuePairsToMigrate = [String: Data]()
         for keychainEntry in retrievedItemsToMigrateWithData {
-            guard let key = keychainEntry[kSecAttrAccount as String] as? String, key != Keychain.canaryKey else {
+            guard let key = keychainEntry[kSecAttrAccount as String] else {
+                throw MigrationError.keyToMigrateInvalid
+            }
+
+            guard key as? String != Keychain.canaryKey else {
                 // We don't care about this key. Move along.
                 continue
             }
-            
-            guard !key.isEmpty else {
-                throw MigrationError.keyToMigrateInvalid
-            }
-            
-            guard !keysToMigrate.contains(key) else {
-                throw MigrationError.duplicateKeyToMigrate
-            }
-            
-            guard let data = keychainEntry[kSecValueData as String] as? Data, !data.isEmpty else {
+
+            guard let data = keychainEntry[kSecValueData as String] as? Data else {
+                // This state should be impossible, per Apple's documentation for `kSecValueData`.
                 throw MigrationError.dataToMigrateInvalid
             }
 
-            if Keychain.performCopy(forKey: key, options: destinationAttributes) == errSecItemNotFound {
-                keysToMigrate.insert(key)
+            guard let migratablePair = try compactMap(MigratableKeyValuePair<AnyHashable>(key: key, value: data)) else {
+                // We don't care about this key. Move along.
+                continue
+            }
+
+            guard !migratablePair.key.isEmpty else {
+                throw MigrationError.keyToMigrateInvalid
+            }
+
+            guard keyValuePairsToMigrate[migratablePair.key] == nil else {
+                throw MigrationError.duplicateKeyToMigrate
+            }
+
+            guard !migratablePair.value.isEmpty else {
+                throw MigrationError.dataToMigrateInvalid
+            }
+
+            if Keychain.performCopy(forKey: migratablePair.key, options: destinationAttributes) == errSecItemNotFound {
+                keyValuePairsToMigrate[migratablePair.key] = migratablePair.value
             } else {
                 throw MigrationError.keyToMigrateAlreadyExistsInValet
             }
         }
-        
+
+        // Capture the keys in the destination prior to migration beginning.
+        let keysInKeychainPreMigration = Set(try Keychain.allKeys(options: destinationAttributes))
+
         // All looks good. Time to actually migrate.
-        var alreadyMigratedKeys = [String]()
-        func revertMigration() {
-            // Something has gone wrong. Remove all migrated items.
-            for alreadyMigratedKey in alreadyMigratedKeys {
-                try? Keychain.removeObject(forKey: alreadyMigratedKey, options: destinationAttributes)
-            }
-        }
-        
-        for keychainEntry in retrievedItemsToMigrateWithData {
-            guard let key = keychainEntry[kSecAttrAccount as String] as? String else {
-                revertMigration()
-                throw MigrationError.keyToMigrateInvalid
-            }
-
-            guard let value = keychainEntry[kSecValueData as String] as? Data else {
-                revertMigration()
-                throw MigrationError.dataToMigrateInvalid
-            }
-
+        for keyValuePair in keyValuePairsToMigrate {
             do {
-                try Keychain.setObject(value, forKey: key, options: destinationAttributes)
-                alreadyMigratedKeys.append(key)
+                try Keychain.setObject(keyValuePair.value, forKey: keyValuePair.key, options: destinationAttributes)
             } catch {
-                revertMigration()
+                revertMigration(into: destinationAttributes, keysInKeychainPreMigration: keysInKeychainPreMigration)
                 throw error
             }
         }
-        
+    }
+
+    internal static func migrateObjects(matching query: [String : AnyHashable], into destinationAttributes: [String : AnyHashable], removeOnCompletion: Bool) throws {
+        // Capture the keys in the destination prior to migration beginning.
+        let keysInKeychainPreMigration = Set(try Keychain.allKeys(options: destinationAttributes))
+
+        // Attempt migration.
+        try migrateObjects(matching: query, into: destinationAttributes) { keychainKeyValuePair in
+            guard let key = keychainKeyValuePair.key as? String else {
+                throw MigrationError.keyToMigrateInvalid
+            }
+            return MigratableKeyValuePair(key: key, value: keychainKeyValuePair.value)
+        }
+
         // Remove data if requested.
         if removeOnCompletion {
             do {
                 try Keychain.removeAllObjects(matching: query)
             } catch {
-                revertMigration()
+                revertMigration(into: destinationAttributes, keysInKeychainPreMigration: keysInKeychainPreMigration)
+
                 throw MigrationError.removalFailed
             }
 
             // We're done!
+        }
+    }
+
+    internal static func revertMigration(into destinationAttributes: [String : AnyHashable], keysInKeychainPreMigration: Set<String>) {
+        if let allKeysPostPotentiallyPartialMigration = try? Keychain.allKeys(options: destinationAttributes) {
+            let migratedKeys = allKeysPostPotentiallyPartialMigration.subtracting(keysInKeychainPreMigration)
+            migratedKeys.forEach { migratedKey in
+                try? Keychain.removeObject(forKey: migratedKey, options: destinationAttributes)
+            }
         }
     }
 }

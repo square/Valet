@@ -190,6 +190,13 @@
 		32644C32248313210037F517 /* ValetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD0D22A9C95500FC1142 /* ValetTests.swift */; };
 		32644C33248313210037F517 /* MigrationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167E250123D624EF00889121 /* MigrationErrorTests.swift */; };
 		32644C34248313210037F517 /* KeychainErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167E24FD23D6235000889121 /* KeychainErrorTests.swift */; };
+		32DC88852475111D005A9BFA /* MigratableKeyValuePair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DC88842475111D005A9BFA /* MigratableKeyValuePair.swift */; };
+		32DC88862475111D005A9BFA /* MigratableKeyValuePair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DC88842475111D005A9BFA /* MigratableKeyValuePair.swift */; };
+		32DC88872475111D005A9BFA /* MigratableKeyValuePair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DC88842475111D005A9BFA /* MigratableKeyValuePair.swift */; };
+		32DC88882475111D005A9BFA /* MigratableKeyValuePair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DC88842475111D005A9BFA /* MigratableKeyValuePair.swift */; };
+		32DC88932475BB9F005A9BFA /* KeychainIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DC88912475BA5F005A9BFA /* KeychainIntegrationTests.swift */; };
+		32DC88942475BBA1005A9BFA /* KeychainIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DC88912475BA5F005A9BFA /* KeychainIntegrationTests.swift */; };
+		32DC88952475BBA1005A9BFA /* KeychainIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DC88912475BA5F005A9BFA /* KeychainIntegrationTests.swift */; };
 		32E7115B2336B03800018E15 /* SinglePromptSecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */; };
 		32E7115C2336B03800018E15 /* SinglePromptSecureEnclaveValet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD7922A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift */; };
 		32E7115E2336B90800018E15 /* SinglePromptSecureEnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1612FD0A22A9C95500FC1142 /* SinglePromptSecureEnclaveTests.swift */; };
@@ -473,6 +480,8 @@
 		32C1ED1B224C85660063E91D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		32C1ED1C224C85820063E91D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		32C1ED1D224C85890063E91D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ValetSecureElementTestMain.storyboard; sourceTree = "<group>"; };
+		32DC88842475111D005A9BFA /* MigratableKeyValuePair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigratableKeyValuePair.swift; sourceTree = "<group>"; };
+		32DC88912475BA5F005A9BFA /* KeychainIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainIntegrationTests.swift; sourceTree = "<group>"; };
 		371150A51E2962D8004A45D4 /* Valet iOS Test Host App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Valet iOS Test Host App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		371150A71E2962D8004A45D4 /* ValetIOSTestHostAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValetIOSTestHostAppDelegate.swift; sourceTree = "<group>"; };
 		371150A91E2962D8004A45D4 /* ValetIOSTestHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValetIOSTestHostViewController.swift; sourceTree = "<group>"; };
@@ -607,6 +616,7 @@
 				1612FCFE22A9C95400FC1142 /* MacTests.swift */,
 				1612FCFF22A9C95400FC1142 /* SecItemTests.swift */,
 				1612FD0022A9C95400FC1142 /* CloudIntegrationTests.swift */,
+				32DC88912475BA5F005A9BFA /* KeychainIntegrationTests.swift */,
 				1612FD0122A9C95400FC1142 /* BackwardsCompatibilityTests */,
 				1612FD0622A9C95400FC1142 /* SinglePromptSecureEnclaveIntegrationTests.swift */,
 				1612FD0722A9C95400FC1142 /* ValetIntegrationTests.swift */,
@@ -644,6 +654,7 @@
 		1612FD6A22A9CAAB00FC1142 /* Valet */ = {
 			isa = PBXGroup;
 			children = (
+				32DC88842475111D005A9BFA /* MigratableKeyValuePair.swift */,
 				1612FD6B22A9CAAB00FC1142 /* MigrationError.swift */,
 				1612FD6D22A9CAAB00FC1142 /* SecureEnclave.swift */,
 				1612FD6E22A9CAAB00FC1142 /* CloudAccessibility.swift */,
@@ -1565,6 +1576,7 @@
 				1612FD8F22A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9322A9CAAB00FC1142 /* SecItem.swift in Sources */,
 				32E7115B2336B03800018E15 /* SinglePromptSecureEnclaveValet.swift in Sources */,
+				32DC88872475111D005A9BFA /* MigratableKeyValuePair.swift in Sources */,
 				1612FDBF22A9CAAB00FC1142 /* Identifier.swift in Sources */,
 				1612FD8B22A9CAAB00FC1142 /* CloudAccessibility.swift in Sources */,
 				1612FD9B22A9CAAB00FC1142 /* Keychain.swift in Sources */,
@@ -1584,6 +1596,7 @@
 			files = (
 				1612FD1322A9C95500FC1142 /* SecItemTests.swift in Sources */,
 				1612FD3122A9C95500FC1142 /* SecureEnclaveTests.swift in Sources */,
+				32DC88952475BBA1005A9BFA /* KeychainIntegrationTests.swift in Sources */,
 				167E251223D6328E00889121 /* ConfigurationTests.swift in Sources */,
 				167E24F123D4B89800889121 /* SinglePromptSecureEnclaveIntegrationTests.swift in Sources */,
 				169E9A6C23D181DC001B69F5 /* VALValetTests.m in Sources */,
@@ -1610,6 +1623,7 @@
 				1612FD9022A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9422A9CAAB00FC1142 /* SecItem.swift in Sources */,
 				32E7115C2336B03800018E15 /* SinglePromptSecureEnclaveValet.swift in Sources */,
+				32DC88882475111D005A9BFA /* MigratableKeyValuePair.swift in Sources */,
 				1612FDC022A9CAAB00FC1142 /* Identifier.swift in Sources */,
 				1612FD8C22A9CAAB00FC1142 /* CloudAccessibility.swift in Sources */,
 				1612FD9C22A9CAAB00FC1142 /* Keychain.swift in Sources */,
@@ -1654,6 +1668,7 @@
 				1612FDB922A9CAAB00FC1142 /* SecureEnclaveValet.swift in Sources */,
 				1612FD8D22A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9122A9CAAB00FC1142 /* SecItem.swift in Sources */,
+				32DC88852475111D005A9BFA /* MigratableKeyValuePair.swift in Sources */,
 				1612FDBD22A9CAAB00FC1142 /* Identifier.swift in Sources */,
 				1612FDB122A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift in Sources */,
 				1612FD8922A9CAAB00FC1142 /* CloudAccessibility.swift in Sources */,
@@ -1676,6 +1691,7 @@
 				1612FD8E22A9CAAB00FC1142 /* Valet.swift in Sources */,
 				1612FD9222A9CAAB00FC1142 /* SecItem.swift in Sources */,
 				1612FDBE22A9CAAB00FC1142 /* Identifier.swift in Sources */,
+				32DC88862475111D005A9BFA /* MigratableKeyValuePair.swift in Sources */,
 				1612FDB222A9CAAB00FC1142 /* SinglePromptSecureEnclaveValet.swift in Sources */,
 				1612FD8A22A9CAAB00FC1142 /* CloudAccessibility.swift in Sources */,
 				1612FD9A22A9CAAB00FC1142 /* Keychain.swift in Sources */,
@@ -1716,6 +1732,7 @@
 				1612FD2C22A9C95500FC1142 /* SinglePromptSecureEnclaveTests.swift in Sources */,
 				169E9A6723D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */,
 				1612FD2622A9C95500FC1142 /* ValetIntegrationTests.swift in Sources */,
+				32DC88932475BB9F005A9BFA /* KeychainIntegrationTests.swift in Sources */,
 				1612FD2022A9C95500FC1142 /* ValetBackwardsCompatibilityTests.swift in Sources */,
 				169E9A6D23D181DC001B69F5 /* VALSecureEnclaveValetTests.m in Sources */,
 				167E251023D6328E00889121 /* ConfigurationTests.swift in Sources */,
@@ -1745,6 +1762,7 @@
 				167E250323D624EF00889121 /* MigrationErrorTests.swift in Sources */,
 				1612FD2D22A9C95500FC1142 /* SinglePromptSecureEnclaveTests.swift in Sources */,
 				169E9A6823D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */,
+				32DC88942475BBA1005A9BFA /* KeychainIntegrationTests.swift in Sources */,
 				169E9A6E23D181DC001B69F5 /* VALSecureEnclaveValetTests.m in Sources */,
 				169E9A6B23D181DC001B69F5 /* VALValetTests.m in Sources */,
 				1612FD2722A9C95500FC1142 /* ValetIntegrationTests.swift in Sources */,
