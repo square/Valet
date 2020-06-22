@@ -1,7 +1,3 @@
-//
-//  ValetTests.swift
-//  Valet
-//
 //  Created by Eric Muller on 4/25/16.
 //  Copyright © 2016 Square, Inc.
 //

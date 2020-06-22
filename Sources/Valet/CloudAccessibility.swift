@@ -1,7 +1,3 @@
-//
-//  CloudAccessibility.swift
-//  Valet
-//
 //  Created by Dan Federman on 9/17/17.
 //  Copyright © 2017 Square, Inc.
 //

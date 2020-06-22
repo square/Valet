@@ -1,7 +1,3 @@
-//
-//  MacTests.swift
-//  Valet
-//
 //  Created by Dan Federman and Eric Muller on 9/16/17.
 //  Copyright © 2017 Square, Inc.
 //

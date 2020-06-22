@@ -1,7 +1,3 @@
-//
-//  ValetDefines.h
-//  Valet
-//
 //  Created by Dan Federman on 2/11/15.
 //  Copyright 2015 Square, Inc.
 //

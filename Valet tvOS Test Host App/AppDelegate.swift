@@ -1,7 +1,3 @@
-//
-//  AppDelegate.swift
-//  Valet tvOS Test Host App
-//
 //  Created by Dan Federman on 3/3/18.
 //  Copyright © 2018 Square, Inc.
 //

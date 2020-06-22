@@ -1,7 +1,3 @@
-//
-//  ExtensionDelegate.swift
-//  Valet watchOS Test Host App Extension
-//
 //  Created by Dan Federman on 3/3/18.
 //  Copyright © 2018 Square, Inc.
 //
