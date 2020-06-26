@@ -246,7 +246,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
         try migrateObjects(matching: valet.baseKeychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
-    // MARK: Deprecation stubs
+    // MARK: Renamed Methods
     
     @available(*, unavailable, renamed: "setObject(_:forKey:)")
     public func set(object: Data, forKey key: String) -> Bool { fatalError() }
