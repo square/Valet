@@ -1,7 +1,3 @@
-//
-//  ValetIOSTestHostViewController.swift
-//  Valet iOS Test Host App
-//
 //  Created by Dan Federman on 1/13/17.
 //  Copyright 2017 Square, Inc.
 //

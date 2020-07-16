@@ -1,7 +1,3 @@
-//
-//  ValetTouchIDTestAppDelegate.swift
-//  Valet
-//
 //  Created by Eric Muller on 4/20/16.
 //  Copyright © 2016 Square, Inc.
 //

@@ -1,7 +1,3 @@
-//
-//  Valet.swift
-//  Valet
-//
 //  Created by Dan Federman and Eric Muller on 9/17/17.
 //  Copyright © 2017 Square, Inc.
 //

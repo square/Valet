@@ -1,7 +1,3 @@
-//
-//  SharedGroupIdentifier.swift
-//  Valet
-//
 //  Created by Dan Federman on 2/25/20.
 //  Copyright © 2020 Square, Inc.
 //

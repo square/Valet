@@ -1,7 +1,3 @@
-//
-//  KeychainIntegrationTests.swift
-//  Valet iOS
-//
 //  Created by Dan Federman on 5/20/20.
 //  Copyright © 2020 Square, Inc.
 //

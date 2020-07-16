@@ -1,7 +1,3 @@
-//
-//  VALLegacySinglePromptSecureEnclaveValet.m
-//  Valet
-//
 //  Created by Dan Federman on 1/23/17.
 //  Copyright © 2017 Square, Inc.
 //

@@ -1,7 +1,3 @@
-//
-//  SinglePromptSecureEnclaveTests.swift
-//  Valet
-//
 //  Created by Eric Muller on 10/1/17.
 //  Copyright © 2017 Square, Inc.
 //

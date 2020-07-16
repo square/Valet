@@ -1,7 +1,3 @@
-//
-//  AppDelegate.swift
-//  Valet macOS Test Host App
-//
 //  Created by Dan Federman on 9/19/17.
 //  Copyright © 2017 Square, Inc.
 //

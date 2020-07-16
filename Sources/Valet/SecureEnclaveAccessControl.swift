@@ -1,7 +1,3 @@
-//
-//  SecureEnclaveAccessControl.swift
-//  Valet
-//
 //  Created by Dan Federman on 9/18/17.
 //  Copyright © 2017 Square, Inc.
 //
