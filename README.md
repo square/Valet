@@ -219,7 +219,7 @@ If your macOS application supports macOS 10.14 or prior, you must run `myValet.m
 
 ### Debugging
 
-Valet guarantees it will never fail to write to or read from the keychain unless `canAccessKeychain()` returns `false`. There are only a few cases that can lead to the keychain being inaccessible:
+Valet guarantees that reading and writing operations will succeed as long as written data is valid and `canAccessKeychain()` returns `true`. There are only a few cases that can lead to the keychain being inaccessible:
 
 1. Using the wrong `Accessibility` for your use case. Examples of improper use include using `.whenPasscodeSetThisDeviceOnly` when there is no passcode set on the device, or using `.whenUnlocked` when running in the background.
 1. Initializing a Valet with shared access group Valet when the shared access group identifier is not in your entitlements file.
