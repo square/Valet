@@ -250,6 +250,7 @@ public final class Valet: NSObject {
     ///   - object: A Data value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
     /// - Throws: An error of type `KeychainError`.
+    /// - Important: Inserting data larger than 1mb in size may sporadically fail.
     @objc
     public func setObject(_ object: Data, forKey key: String) throws {
         try execute(in: lock) {
@@ -288,6 +289,7 @@ public final class Valet: NSObject {
     ///   - string: A String value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `string` from the keychain.
     /// - Throws: An error of type `KeychainError`.
+    /// - Important: Inserting data larger than 1mb in size may sporadically fail.
     @objc
     public func setString(_ string: String, forKey key: String) throws {
         try execute(in: lock) {
