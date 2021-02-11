@@ -112,6 +112,7 @@ class ValetIntegrationTests: XCTestCase
     let key = "key"
     let passcode = "topsecret"
     lazy var passcodeData: Data = { return Data(self.passcode.utf8) }()
+    var stringArray = ["Albus", "Percival", "Wulfric", "Brian", "Dumbledore"]
     
     // MARK: XCTestCase
 
@@ -451,7 +452,7 @@ class ValetIntegrationTests: XCTestCase
         }
     }
     
-    // MARK: set(object:forKey:)
+    // MARK: setObject(:forKey:)
 
     func test_setObjectForKey_successfullyUpdatesExistingKey() throws {
         try allPermutations.forEach { valet in
@@ -478,6 +479,40 @@ class ValetIntegrationTests: XCTestCase
             XCTAssertTrue(emptyData.isEmpty)
             XCTAssertThrowsError(try valet.setObject(emptyData, forKey: key)) { error in
                 XCTAssertEqual(error as? KeychainError, .emptyValue)
+            }
+        }
+    }
+
+    // MARK: codable(forKey:)
+
+    func test_codableForKey_succeedsForValidKey() throws {
+        try allPermutations.forEach { valet in
+            try valet.setCodable(stringArray, forKey: key)
+            XCTAssertEqual(stringArray, try valet.codable(forKey: key))
+        }
+    }
+
+    func test_codableForKey_throwsDecoderErrorOnInvalidType() throws {
+        try allPermutations.forEach { valet in
+            try valet.setCodable(stringArray, forKey: key)
+            XCTAssertThrowsError(try valet.codable(forKey: self.key) as [Int]) { error in
+                switch error {
+                case DecodingError.typeMismatch:
+                    break // expected
+
+                default:
+                    XCTFail("Unexpected error: \(error)")
+                }
+            }
+        }
+    }
+
+    // MARK: setCodable(:forKey:)
+
+    func test_setCodableForKey_throwsEmptyKeyOnInvalidKey() throws {
+        try allPermutations.forEach { valet in
+            XCTAssertThrowsError(try valet.setCodable(stringArray, forKey: "")) { error in
+                XCTAssertEqual(error as? KeychainError, .emptyKey)
             }
         }
     }
