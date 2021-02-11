@@ -285,6 +285,37 @@ public final class Valet: NSObject {
         }
     }
 
+    /// Convenience setter for `Codable` objects. Stores them using `JSONEncoder` and the `setObject(:forKey:)` method.
+    ///
+    /// - Parameters:
+    ///   - object: A `Codable` object to be inserted into the keychain.
+    ///   - key: A key that can be used to retrieve the `object` from the keychain.
+    /// - Throws: An error of type `KeychainError` or an error produced while trying to encode via `JSONEncoder`.
+    /// - Important: Inserted objects JSON data representation should be no larger than 4kb.
+    public func setCodable<T: Codable>(_ object: T, forKey key: String) throws {
+        let jsonData = try JSONEncoder().encode(object)
+        try setObject(jsonData, forKey: key)
+    }
+
+    /// Convenience getter for `Codable` objects. Reads them using `JSONDecoder` and the `object(forKey:)` method.
+    ///
+    /// - Parameter key: A key used to retrieve the desired object from the keychain.
+    /// - Returns: The decoded object currently stored in the keychain for the provided key.
+    /// - Throws: An error of type `KeychainError` or an error produced while trying to decode via `JSONDecoder`.
+    public func codable<T: Codable>(forKey key: String) throws -> T {
+        let jsonData = try object(forKey: key)
+        return try JSONDecoder().decode(T.self, from: jsonData)
+    }
+
+    /// Convenience method name for `containsObject(forKey:)` for API completeness.
+    ///
+    /// - Parameter key: The key to look up in the keychain.
+    /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
+    /// - Throws: An error of type `KeychainError`.
+    public func containsCodable(forKey key: String) throws -> Bool {
+        try containsObject(forKey: key)
+    }
+
     /// - Parameters:
     ///   - string: A String value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `string` from the keychain.
