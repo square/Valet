@@ -495,7 +495,7 @@ class ValetIntegrationTests: XCTestCase
     func test_codableForKey_throwsDecoderErrorOnInvalidType() throws {
         try allPermutations.forEach { valet in
             try valet.setCodable(stringArray, forKey: key)
-            XCTAssertThrowsError(try valet.codable(forKey: self.key) as [Int]) { error in
+            XCTAssertThrowsError(try valet.codable(forKey: key) as [Int]) { error in
                 switch error {
                 case DecodingError.typeMismatch:
                     break // expected
@@ -514,6 +514,23 @@ class ValetIntegrationTests: XCTestCase
             XCTAssertThrowsError(try valet.setCodable(stringArray, forKey: "")) { error in
                 XCTAssertEqual(error as? KeychainError, .emptyKey)
             }
+        }
+    }
+
+    func test_setCodableForKey_customCoders() throws {
+        try allPermutations.forEach { valet in
+            let date = Date(timeIntervalSince1970: 1_000_000_000)
+
+            let customEncoder = JSONEncoder()
+            customEncoder.dateEncodingStrategy = .secondsSince1970
+            try valet.setCodable(date, forKey: key, jsonEncoder: customEncoder)
+
+            // default decoding strategy is `.millisecondsSince1970`, thus decoding will succeed but be different
+            XCTAssertNotEqual(date, try valet.codable(forKey: key))
+
+            let customDecoder = JSONDecoder()
+            customDecoder.dateDecodingStrategy = .secondsSince1970
+            XCTAssertEqual(date, try valet.codable(forKey: key, jsonDecoder: customDecoder))
         }
     }
     
