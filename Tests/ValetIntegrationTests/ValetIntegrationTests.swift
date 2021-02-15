@@ -522,20 +522,20 @@ class ValetIntegrationTests: XCTestCase
         }
     }
 
-    func test_setCodableForKey_customCoders() throws {
+    func test_setCodableForKey_utilizesPassedInCoder() throws {
         try allPermutations.forEach { valet in
             let date = Date(timeIntervalSince1970: 1_000_000_000)
 
             let customEncoder = JSONEncoder()
             customEncoder.dateEncodingStrategy = .secondsSince1970
-            try valet.setCodable(date, forKey: key, jsonEncoder: customEncoder)
+            try valet.setCodable(date, forKey: key, encoder: customEncoder)
 
             // default decoding strategy is `.millisecondsSince1970`, thus decoding will succeed but be different
             XCTAssertNotEqual(date, try valet.codable(forKey: key))
 
             let customDecoder = JSONDecoder()
             customDecoder.dateDecodingStrategy = .secondsSince1970
-            XCTAssertEqual(date, try valet.codable(forKey: key, jsonDecoder: customDecoder))
+            XCTAssertEqual(date, try valet.codable(forKey: key, decoder: customDecoder))
         }
     }
     

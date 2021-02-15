@@ -285,29 +285,29 @@ public final class Valet: NSObject {
         }
     }
 
-    /// Convenience setter for `Codable` objects. Stores them using `JSONEncoder` and the `setObject(:forKey:)` method.
+    /// Convenience setter for `Codable` objects. Utilizes the passed-in encoder to encode before storing the value in the Keychain with the `setObject(:forKey:)` method.
     ///
     /// - Parameters:
     ///   - object: A `Codable` object to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
-    ///   - jsonEncoder: The `JSONEncoder` to use for encoding the type to store. Defaults to the default initializer.
+    ///   - encoder: The `JSONEncoder` to use for encoding the type to store. Defaults to the default initializer.
     /// - Throws: An error of type `KeychainError` or an error produced while trying to encode via `JSONEncoder`.
     /// - Important: Inserted objects JSON data representation should be no larger than 4kb.
-    public func setCodable<T: Codable>(_ object: T, forKey key: String, jsonEncoder: JSONEncoder = .init()) throws {
-        let jsonData = try jsonEncoder.encode(object)
-        try setObject(jsonData, forKey: key)
+    public func setCodable<T: Codable>(_ object: T, forKey key: String, encoder: JSONEncoder = .init()) throws {
+        let encodedData = try encoder.encode(object)
+        try setObject(encodedData, forKey: key)
     }
 
-    /// Convenience getter for `Codable` objects. Reads them using `JSONDecoder` and the `object(forKey:)` method.
+    /// Convenience getter for `Codable` objects. Utilizes the passed-in decoder to decode after reading the value from the Keychain with the `object(forKey:)` method.
     ///
     /// - Parameters:
     ///   - key: A key used to retrieve the desired object from the keychain.
-    ///   - jsonDecoder: The `JSONDecoder` to use for decoding the stored data. Defaults to the default initializer.
+    ///   - decoder: The `JSONDecoder` to use for decoding the stored data. Defaults to the default initializer.
     /// - Returns: The decoded object currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError` or an error produced while trying to decode via `JSONDecoder`.
-    public func codable<T: Codable>(forKey key: String, jsonDecoder: JSONDecoder = .init()) throws -> T {
-        let jsonData = try object(forKey: key)
-        return try jsonDecoder.decode(T.self, from: jsonData)
+    public func codable<T: Codable>(forKey key: String, decoder: JSONDecoder = .init()) throws -> T {
+        let encodedData = try object(forKey: key)
+        return try decoder.decode(T.self, from: encodedData)
     }
 
     /// Convenience method name for `containsObject(forKey:)` for API completeness.
