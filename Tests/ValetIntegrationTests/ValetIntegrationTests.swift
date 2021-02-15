@@ -91,6 +91,11 @@ internal extension Valet {
 
 class ValetIntegrationTests: XCTestCase
 {
+    /// Workaround for an Xcode 11 bug with top-level `Codable` types (like `Array<String>`) to fix CI.
+    struct CodableArray: Codable, Equatable {
+        var stringArray: [String]
+    }
+
     static let sharedAccessGroupIdentifier = Valet.sharedAccessGroupIdentifier
     static let sharedAppGroupIdentifier = Valet.sharedAppGroupIdentifier
     var allPermutations: [Valet] {
@@ -112,7 +117,7 @@ class ValetIntegrationTests: XCTestCase
     let key = "key"
     let passcode = "topsecret"
     lazy var passcodeData: Data = { return Data(self.passcode.utf8) }()
-    var stringArray = ["Albus", "Percival", "Wulfric", "Brian", "Dumbledore"]
+    var stringArray = CodableArray(stringArray: ["Albus", "Percival", "Wulfric", "Brian", "Dumbledore"])
     
     // MARK: XCTestCase
 
