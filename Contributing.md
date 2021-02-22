@@ -30,7 +30,7 @@ To run macOS tests locally, you'll need to do the following in the Valet Xcode p
 1. Select the `Valet Mac Tests` target's "Signing & Capabilities" settings and change the "Team" to be your personal team.
 1. Select the  `Valet macOS Test Host App` target's "Signing & Capabilities" settings and select the "Team" to be your personal team. This will result in an error – this is expected and continuing to follow the below steps will resolve the error.
 1. Select the  `Valet macOS Test Host App` target's "Signing & Capabilities" settings and change the Bundle Identifier to be a unique bundle identifier that references your team name. Run a find and replace over the code to change all `com.squareup.Valet-macOS-Test-Host-App` strings to be your new bundle identifier.
-1. Run a find and replace over the code to change all instances of `9XUJ7M53NG` to reference your personal team ID. Your personal team ID is the same as the prefix shown in hte App Groups entitlement.  
+1. Run a find and replace over the code to change all instances of `9XUJ7M53NG` to reference your personal team ID. Your personal team ID is the same as the prefix shown in the App Groups entitlement.  
 1. Make the `_sharedAccessGroupPrefix` method of `VALLegacyValet` return your personal team ID by adding `return @"Your_Team_ID_Here";` to the first line of this method.
 1. Open `/System/Applications/Utilities/Keychain\ Access.app` and delete all entries that start with `VAL_VAL` if any exist.
 
