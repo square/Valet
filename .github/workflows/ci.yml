@@ -46,7 +46,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_11.3.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
       - name: Lint Podspec
         run: bundle exec pod lib lint --verbose --fail-fast --swift-version=5.0
   carthage:
@@ -58,7 +58,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_11.3.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
       - name: Install Carthage
         run: brew outdated carthage || brew upgrade carthage
       - name: Build Framework
@@ -76,6 +76,6 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_11.3.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
       - name: Build Framework
         run: Scripts/build.swift ${{ matrix.platforms }} spm
