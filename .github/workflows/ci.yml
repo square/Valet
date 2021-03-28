@@ -31,7 +31,7 @@ jobs:
           sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes
           sudo ln -s /Applications/Xcode_10.3.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 12.4.simruntime
           xcrun simctl list runtimes
-        if: contains(matrix.platform, 'iOS_12')
+        if: contains(matrix.platforms, 'iOS_12')
       - name: Build and Test Framework
         run: Scripts/build.swift ${{ matrix.platforms }} xcode
       - name: Upload Coverage Reports
