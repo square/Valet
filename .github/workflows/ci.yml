@@ -30,8 +30,14 @@ jobs:
         run: |
           sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes
           sudo ln -s /Applications/Xcode_10.3.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 12.4.simruntime
-          xcrun simctl list runtimes
         if: contains(matrix.platforms, 'iOS_12')
+      - name: Prepare tvOS 12 Simulator
+        run: |
+          sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes
+          sudo ln -s /Applications/Xcode_10.3.app/Contents/Developer/Platforms/AppleTVOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/tvOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/tvOS\ 12.4.simruntime
+        if: contains(matrix.platforms, 'tvOS_12')
+      - name: List Available Runtimes
+        run: xcrun simctl list runtimes
       - name: Build and Test Framework
         run: Scripts/build.swift ${{ matrix.platforms }} xcode
       - name: Upload Coverage Reports
