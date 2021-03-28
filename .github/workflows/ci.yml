@@ -14,9 +14,7 @@ jobs:
       matrix:
         platforms: [
           'iOS_13,tvOS_13,macOS_10_15,watchOS_6',
-          'iOS_12,tvOS_12,watchOS_5',
-          'iOS_11,tvOS_11,watchOS_4',
-          'iOS_10,tvOS_10,watchOS_3'
+          'iOS_12,tvOS_12,watchOS_5'
         ]
       fail-fast: false
     steps:
