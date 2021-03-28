@@ -69,7 +69,7 @@ enum Platform: String, CustomStringConvertible {
         case .watchOS_4:
             return "OS=4.0,name=Apple Watch Series 2 - 42mm"
         case .watchOS_5:
-            return "OS=5.2,name=Apple Watch Series 4 - 44mm"
+            return "OS=5.3,name=Apple Watch Series 4 - 44mm"
         case .watchOS_6:
             return "OS=6.2.1,name=Apple Watch Series 4 - 44mm"
         }
