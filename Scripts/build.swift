@@ -56,7 +56,7 @@ enum Platform: String, CustomStringConvertible {
         case .tvOS_12:
             return "platform=tvOS Simulator,OS=12.4,name=Apple TV"
         case .tvOS_13:
-            return "platform=tvOS Simulator,OS=13.7,name=Apple TV"
+            return "platform=tvOS Simulator,OS=13.4,name=Apple TV"
 
         case .macOS_10_12,
              .macOS_10_13,
@@ -71,7 +71,7 @@ enum Platform: String, CustomStringConvertible {
         case .watchOS_5:
             return "OS=5.2,name=Apple Watch Series 4 - 44mm"
         case .watchOS_6:
-            return "OS=6.0,name=Apple Watch Series 4 - 44mm"
+            return "OS=6.2,name=Apple Watch Series 4 - 44mm"
         }
     }
 
