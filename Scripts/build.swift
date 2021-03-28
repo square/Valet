@@ -47,7 +47,7 @@ enum Platform: String, CustomStringConvertible {
         case .iOS_12:
             return "platform=iOS Simulator,OS=12.4,name=iPad Pro (12.9-inch) (3rd generation)"
         case .iOS_13:
-            return "platform=iOS Simulator,OS=13.7,name=iPad Pro (12.9-inch) (3rd generation)"
+            return "platform=iOS Simulator,OS=13.7,name=iPad Pro (12.9-inch) (4th generation)"
 
         case .tvOS_10:
             return "platform=tvOS Simulator,OS=10.2,name=Apple TV 1080p"
