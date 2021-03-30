@@ -12,9 +12,8 @@ let package = Package(
         .macOS(.v10_11),
     ],
     products: [
-        .library(
-            name: "Valet",
-            targets: ["Valet"]),
+        .library(name: "Valet", targets: ["Valet"]),
+        .library(name: "Valet-Dynamic", type: .dynamic, targets: ["Valet"]),
     ],
     targets: [
         .target(
