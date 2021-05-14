@@ -44,7 +44,22 @@ internal final class Keychain {
             var secItemQuery = attributes
             secItemQuery[kSecAttrAccount as String] = canaryKey
             secItemQuery[kSecValueData as String] = Data(canaryValue.utf8)
-            try? SecItem.add(attributes: secItemQuery)
+
+            do {
+                try SecItem.add(attributes: secItemQuery)
+            } catch let error as KeychainError {
+                if error == KeychainError(status: -34018) && ProcessInfo.processInfo.isDebuggerAttached {
+                    print(
+                        """
+                        The keychain sometimes locks up when the debugger is attached. \
+                        Try restarting the device or erasing the simulator.
+                        https://stackoverflow.com/questions/27752444/
+                        """
+                    )
+                }
+            } catch {
+                // The write threw an error, but let the read below be the final judge.
+            }
             
             return isCanaryValueInKeychain()
         }
@@ -351,4 +366,39 @@ internal final class Keychain {
             }
         }
     }
+}
+
+// MARK: -
+
+extension ProcessInfo {
+
+    // Returns true if the current process is being debugged (either
+    // running under the debugger or has a debugger attached post facto).
+    // Adapted from https://developer.apple.com/library/archive/qa/qa1361/_index.html
+    fileprivate var isDebuggerAttached: Bool {
+        // Initialize the flags so that, if sysctl fails for some bizarre
+        // reason, we get a predictable result.
+        var info: kinfo_proc = .init()
+        info.kp_proc.p_flag = 0
+
+        // Initialize mib, which tells sysctl the info we want, in this case
+        // we're looking for information about a specific process ID.
+        let mibCapacity = 4
+        let mib: UnsafeMutablePointer<Int32> = .allocate(capacity: mibCapacity)
+        mib[0] = CTL_KERN
+        mib[1] = KERN_PROC
+        mib[2] = KERN_PROC_PID
+        mib[3] = getpid()
+
+        // Call sysctl.
+        var size = MemoryLayout<kinfo_proc>.size
+        let junk = sysctl(mib, UInt32(mibCapacity), &info, &size, nil, 0)
+        assert(junk == 0)
+
+        mib.deallocate()
+
+        // We're being debugged if the P_TRACED flag is set.
+        return (info.kp_proc.p_flag & P_TRACED) != 0
+    }
+
 }
