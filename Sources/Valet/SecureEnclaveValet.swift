@@ -15,7 +15,7 @@
 //
 
 import Foundation
-
+import LocalAuthentication
 
 /// Reads and writes keychain elements that are stored on the Secure Enclave using Accessibility attribute `.whenPasscodeSetThisDeviceOnly`. Accessing these keychain elements will require the user to confirm their presence via Touch ID, Face ID, or passcode entry. If no passcode is set on the device, accessing the keychain via a `SecureEnclaveValet` will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device.
 @objc(VALSecureEnclaveValet)
@@ -172,7 +172,27 @@ public final class SecureEnclaveValet: NSObject {
             try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: baseKeychainQuery)
         }
     }
-    
+
+    /// Attempts to retrieve the string at the given key, allowing a custom `fallbackTitle` to be specified to be
+    /// shown to the user in the case that the biometric authentication fails.
+    ///
+    /// - Parameters:
+    ///   - key: A key used to retrieve the desired object from the keychain.
+    ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
+    ///   - fallbackTitle:  The title of the fallback button shown to the user after 2 failed retrieval attempts.
+    ///                     If the user taps this button, an `LAError.userFallback` will be thrown.
+    /// - Returns: The string currently stored in the keychain for the provided key.
+    /// - Throws: An error of type `KeychainError` or `LAError`.
+    public func string(
+        forKey key: String,
+        withPrompt userPrompt: String,
+        withFallbackTitle fallbackTitle: String
+    ) throws -> String {
+        try execute(in: lock) {
+            try synchronouslyEvaluatePolicy(forKey: key, withPrompt: userPrompt, withFallbackTitle: fallbackTitle)
+        }
+    }
+
     /// Removes a key/object pair from the keychain.
     /// - Parameter key: A key used to remove the desired object from the keychain.
     /// - Throws: An error of type `KeychainError`.
@@ -226,12 +246,77 @@ public final class SecureEnclaveValet: NSObject {
 
     // MARK: Internal Properties
 
+    /// A provider of an `LAContext` used when needing to manually evaluate an authentication policy
+    /// prior to retrieving a value from the keychain in order to allow the evaluation prompt to show a
+    /// custom fallback button to the user.  Should always return a new instance of `LAContext` in
+    /// practice, but specified as an internal var to allow it to be overridden in tests.
+    internal var authenticationContextProvider: () -> LAContext = { LAContext() }
     internal let service: Service
 
     // MARK: Private Properties
 
     private let lock = NSLock()
     private let baseKeychainQuery: [String : AnyHashable]
+
+    // MARK: - Private Methods
+
+    /// Synchronously calls `LAContext.evaluatePolicy`, passing the evaluated context
+    /// via `kSecUseAuthenticationContext` when querying for the string at the given
+    /// key in the secure enclave.
+    private func synchronouslyEvaluatePolicy(
+        forKey key: String,
+        withPrompt userPrompt: String,
+        withFallbackTitle fallbackTitle: String
+    ) throws -> String {
+        // Use a semaphore to block the thread and perform the evaluation synchronously.
+        let semaphore = DispatchSemaphore(value: 0)
+        var result: Result<String, Error>?
+
+        let authenticationContext = authenticationContextProvider()
+        authenticationContext.localizedFallbackTitle = fallbackTitle
+        authenticationContext.evaluatePolicy(
+            accessControl.policy,
+            localizedReason: userPrompt,
+            reply: { [unowned self] success, error in
+                if success {
+                    do {
+                        var keychainQuery = baseKeychainQuery
+                        keychainQuery[kSecUseAuthenticationContext as String] = authenticationContext
+                        let string = try SecureEnclave.string(
+                            forKey: key,
+                            withPrompt: userPrompt,
+                            options: keychainQuery
+                        )
+                        result = .success(string)
+
+                    } catch {
+                        result = .failure(error)
+                    }
+                } else if let error = error {
+                    result = .failure(error)
+
+                } else {
+                    // Unexpected to get here
+                    result = .failure(KeychainError.couldNotAccessKeychain)
+                }
+
+                semaphore.signal()
+            }
+        )
+
+        semaphore.wait()
+
+        switch result {
+        case let .success(resultString):
+            return resultString
+
+        case let .failure(error):
+            throw error
+
+        case .none:
+            throw KeychainError.couldNotAccessKeychain
+        }
+    }
 
 }
 
@@ -292,6 +377,22 @@ extension SecureEnclaveValet {
             return false
         }
         return containsObject
+    }
+
+}
+
+// MARK: - Private Extensions
+
+private extension SecureEnclaveAccessControl {
+
+    /// The `LAPolicy` that the `SecureEnclaveAccessControl` corresponds to.
+    var policy: LAPolicy {
+        switch self {
+        case .userPresence, .devicePasscode:
+            return .deviceOwnerAuthentication
+        case .biometricAny, .biometricCurrentSet:
+            return .deviceOwnerAuthenticationWithBiometrics
+        }
     }
 
 }
