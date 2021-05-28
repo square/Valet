@@ -180,9 +180,9 @@ public final class SecureEnclaveValet: NSObject {
     ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     ///   - fallbackTitle:  The title of the fallback button shown to the user after 2 failed retrieval attempts.
-    ///                     If the user taps this button, an `LAError.userFallback` will be thrown.
+    ///                     If the user taps this button, an `SecureEnclaveError.userFallback` will be thrown.
     /// - Returns: The string currently stored in the keychain for the provided key.
-    /// - Throws: An error of type `KeychainError` or `LAError`.
+    /// - Throws: An error of type `KeychainError` or `SecureEnclaveError`.
     public func string(
         forKey key: String,
         withPrompt userPrompt: String,
@@ -277,10 +277,10 @@ public final class SecureEnclaveValet: NSObject {
         authenticationContext.evaluatePolicy(
             accessControl.policy,
             localizedReason: userPrompt,
-            reply: { [unowned self] success, error in
+            reply: { success, error in
                 if success {
                     do {
-                        var keychainQuery = baseKeychainQuery
+                        var keychainQuery = self.baseKeychainQuery
                         keychainQuery[kSecUseAuthenticationContext as String] = authenticationContext
                         let string = try SecureEnclave.string(
                             forKey: key,
@@ -292,12 +292,13 @@ public final class SecureEnclaveValet: NSObject {
                     } catch {
                         result = .failure(error)
                     }
+
                 } else if let error = error {
-                    result = .failure(error)
+                    result = .failure(SecureEnclaveError(error: error))
 
                 } else {
                     // Unexpected to get here
-                    result = .failure(KeychainError.couldNotAccessKeychain)
+                    result = .failure(SecureEnclaveError.internalError)
                 }
 
                 semaphore.signal()
@@ -314,7 +315,8 @@ public final class SecureEnclaveValet: NSObject {
             throw error
 
         case .none:
-            throw KeychainError.couldNotAccessKeychain
+            // Unexpected to get here
+            throw SecureEnclaveError.internalError
         }
     }
 
@@ -383,10 +385,10 @@ extension SecureEnclaveValet {
 
 // MARK: - Private Extensions
 
-private extension SecureEnclaveAccessControl {
+extension SecureEnclaveAccessControl {
 
     /// The `LAPolicy` that the `SecureEnclaveAccessControl` corresponds to.
-    var policy: LAPolicy {
+    fileprivate var policy: LAPolicy {
         switch self {
         case .userPresence, .devicePasscode:
             return .deviceOwnerAuthentication
