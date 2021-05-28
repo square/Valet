@@ -218,34 +218,30 @@ class SecureEnclaveIntegrationTests: XCTestCase
 
     // MARK: string(forKey:withPrompt:withFallbackTitle:)
 
-    func test_stringForKeyWithPromptWithFallbackTitle_usesCorrectPolicy() throws {
-        // SecureEnclaveAccessControl.userPresence should map to LAPolicy.deviceOwnerAuthentication
-        do {
-            let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .userPresence)
-            try valet.setString(passcode, forKey: key)
-            let authContext = MockLAContext(reply: (true, nil))
-            valet.authenticationContextProvider = { authContext }
-            _ = try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)
+    func test_stringForKeyWithPromptWithFallbackTitle_userPresenceUsesDeviceOwnerAuthentication() throws {
+        let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .userPresence)
+        try valet.setString(passcode, forKey: key)
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
+        valet.authenticationContextProvider = { authContext }
+        _ = try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)
 
-            XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
-            XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthentication)
-        }
+        XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
+        XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthentication)
+    }
 
-        // SecureEnclaveAccessControl.biometricCurrentSet should map to LAPolicy.deviceOwnerAuthenticationWithBiometrics
-        do {
-            let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .biometricCurrentSet)
-            try valet.setString(passcode, forKey: key)
-            let authContext = MockLAContext(reply: (true, nil))
-            valet.authenticationContextProvider = { authContext }
-            _ = try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)
+    func test_stringForKeyWithPromptWithFallbackTitle_biometricCurrentSetUsesDeviceOwnerAuthenticationWithBiometrics() throws {
+        let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .biometricCurrentSet)
+        try valet.setString(passcode, forKey: key)
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
+        valet.authenticationContextProvider = { authContext }
+        _ = try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)
 
-            XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
-            XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthenticationWithBiometrics)
-        }
+        XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
+        XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthenticationWithBiometrics)
     }
 
     func test_stringForKeyWithPromptWithFallbackTitle_throwsItemNotFoundForKeyWithNoValue() throws {
-        let authContext = MockLAContext(reply: (true, nil))
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
         valet.authenticationContextProvider = { authContext }
         XCTAssertThrowsError(try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)) { error in
             XCTAssertEqual(error as? KeychainError, .itemNotFound)
@@ -256,7 +252,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     func test_stringForKeyWithPromptWithFallbackTitle_retrievesStringForValidKey() throws {
         try valet.setString(passcode, forKey: key)
 
-        let authContext = MockLAContext(reply: (true, nil))
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
         valet.authenticationContextProvider = { authContext }
         XCTAssertEqual(passcode, try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback))
         XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
@@ -266,7 +262,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
         try valet.setString(passcode, forKey: key)
 
         let expectedError = LAError(.authenticationFailed)
-        let authContext = MockLAContext(reply: (false, expectedError))
+        let authContext = MockLAContext(evaluatePolicyReply: (false, expectedError))
         valet.authenticationContextProvider = { authContext }
 
         XCTAssertThrowsError(try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)) { error in
@@ -284,12 +280,12 @@ private final class MockLAContext: LAContext {
 
     // MARK: - Private Properties
 
-    private let replyParams: (Bool, Error?)
+    private let evaluatePolicyReply: (Bool, Error?)
 
     // MARK: - Life Cycle
 
-    init(reply: (Bool, Error?)) {
-        self.replyParams = reply
+    init(evaluatePolicyReply: (Bool, Error?)) {
+        self.evaluatePolicyReply = evaluatePolicyReply
     }
 
     // MARK: - LAContext
@@ -301,7 +297,7 @@ private final class MockLAContext: LAContext {
         reply: @escaping (Bool, Error?) -> Void
     ) {
         evaluatePolicyCalls.append(policy)
-        reply(replyParams.0, replyParams.1)
+        reply(evaluatePolicyReply.0, evaluatePolicyReply.1)
     }
 
 }
