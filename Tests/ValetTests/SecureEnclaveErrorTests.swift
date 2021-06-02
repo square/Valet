@@ -20,28 +20,6 @@ import XCTest
 
 final class SecureEnclaveErrorTests: XCTestCase {
 
-    // MARK: - Tests - Init Error Code
-
-    func test_initErrorCode_createsUserCancelledErrorFrom_userCancel() {
-        XCTAssertEqual(SecureEnclaveError(.userCancel), .userCancelled)
-    }
-
-    func test_initErrorCode_createsUserCancelledErrorFrom_systemCancel() {
-        XCTAssertEqual(SecureEnclaveError(.systemCancel), .userCancelled)
-    }
-
-    func test_initErrorCode_createsUserCancelledErrorFrom_authenticationFailed() {
-        XCTAssertEqual(SecureEnclaveError(.authenticationFailed), .userCancelled)
-    }
-
-    func test_initErrorCode_createsUserFallbackErrorFrom_userFallback() {
-        XCTAssertEqual(SecureEnclaveError(.userFallback), .userFallback)
-    }
-
-    func test_initErrorCode_createsPasscodeNotSetFrom_passcodeNotSet() {
-        XCTAssertEqual(SecureEnclaveError(.passcodeNotSet), .passcodeNotSet)
-    }
-
     // MARK: - Tests - Description
 
     func test_description_createsHumanReadableDescription() {

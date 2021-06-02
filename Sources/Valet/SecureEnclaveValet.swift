@@ -15,7 +15,9 @@
 //
 
 import Foundation
+#if !os(watchOS)
 import LocalAuthentication
+#endif
 
 /// Reads and writes keychain elements that are stored on the Secure Enclave using Accessibility attribute `.whenPasscodeSetThisDeviceOnly`. Accessing these keychain elements will require the user to confirm their presence via Touch ID, Face ID, or passcode entry. If no passcode is set on the device, accessing the keychain via a `SecureEnclaveValet` will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device.
 @objc(VALSecureEnclaveValet)
@@ -173,8 +175,11 @@ public final class SecureEnclaveValet: NSObject {
         }
     }
 
+    #if !os(watchOS)
     /// Attempts to retrieve the string at the given key, allowing a custom `fallbackTitle` to be specified to be
     /// shown to the user in the case that the biometric authentication fails.
+    ///
+    /// Not available on watchOS and only available on tvOS 10.0+
     ///
     /// - Parameters:
     ///   - key: A key used to retrieve the desired object from the keychain.
@@ -184,6 +189,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError` or `SecureEnclaveError`.
     @objc
+    @available(tvOS 10.0, *)
     public func string(
         forKey key: String,
         withPrompt userPrompt: String,
@@ -193,6 +199,7 @@ public final class SecureEnclaveValet: NSObject {
             try synchronouslyEvaluatePolicy(forKey: key, withPrompt: userPrompt, withFallbackTitle: fallbackTitle)
         }
     }
+    #endif
 
     /// Removes a key/object pair from the keychain.
     /// - Parameter key: A key used to remove the desired object from the keychain.
@@ -251,7 +258,11 @@ public final class SecureEnclaveValet: NSObject {
     /// prior to retrieving a value from the keychain in order to allow the evaluation prompt to show a
     /// custom fallback button to the user.  Should always return a new instance of `LAContext` in
     /// practice, but specified as an internal var to allow it to be overridden in tests.
-    internal var authenticationContextProvider: () -> LAContext = { LAContext() }
+    #if !os(watchOS)
+    @available(tvOS 10.0, *)
+    internal lazy var authenticationContextProvider: () -> LAContext = { LAContext() }
+    #endif
+
     internal let service: Service
 
     // MARK: Private Properties
@@ -264,6 +275,8 @@ public final class SecureEnclaveValet: NSObject {
     /// Synchronously calls `LAContext.evaluatePolicy`, passing the evaluated context
     /// via `kSecUseAuthenticationContext` when querying for the string at the given
     /// key in the secure enclave.
+    #if !os(watchOS)
+    @available(tvOS 10.0, *)
     private func synchronouslyEvaluatePolicy(
         forKey key: String,
         withPrompt userPrompt: String,
@@ -295,8 +308,14 @@ public final class SecureEnclaveValet: NSObject {
                     }
 
                 } else if let error = error as? LAError {
-                    result = .failure(SecureEnclaveError(error.code))
-
+                    let transformedError = LAErrorTransformer.transform(
+                        error: error,
+                        accessControl: self.accessControl
+                    )
+                    switch transformedError {
+                    case let .keychain(error):      result = .failure(error)
+                    case let .secureEnclave(error): result = .failure(error)
+                    }
                 }
 
                 semaphore.signal()
@@ -317,6 +336,7 @@ public final class SecureEnclaveValet: NSObject {
             throw SecureEnclaveError.internalError
         }
     }
+    #endif
 
 }
 
@@ -386,13 +406,91 @@ extension SecureEnclaveValet {
 extension SecureEnclaveAccessControl {
 
     /// The `LAPolicy` that the `SecureEnclaveAccessControl` corresponds to.
+    #if !os(watchOS)
+    @available(tvOS 10.0, *)
     fileprivate var policy: LAPolicy {
         switch self {
         case .userPresence, .devicePasscode:
             return .deviceOwnerAuthentication
         case .biometricAny, .biometricCurrentSet:
-            return .deviceOwnerAuthenticationWithBiometrics
+            if #available(macOSApplicationExtension 10.12.2, *) {
+                return .deviceOwnerAuthenticationWithBiometrics
+            } else {
+                return .deviceOwnerAuthentication
+            }
         }
     }
+    #endif
+
+}
+
+// MARK: - Internal Types
+
+/// A type that statically takes an `LAError` and a `SecureEnclaveAccessControl`
+/// and transforms it to either a `KeychainError` or `SecureEnclaveError`
+enum LAErrorTransformer {
+
+    enum TransformedError: Equatable {
+        case keychain(KeychainError)
+        case secureEnclave(SecureEnclaveError)
+    }
+
+    #if !os(watchOS)
+    @available(tvOS 10.0, *)
+    static func transform(
+        error: LAError,
+        accessControl: SecureEnclaveAccessControl
+    ) -> TransformedError {
+        switch (error.code, accessControl) {
+        case (.userCancel, _),
+             (.systemCancel, _),
+             (.authenticationFailed, _),
+             (.appCancel, _):
+            return .secureEnclave(.userCancelled)
+
+        case (.userFallback, _):
+            return .secureEnclave(.userFallback)
+
+        case (.touchIDLockout, _),
+             (.invalidContext, _),
+             (.notInteractive, _),
+             (.biometryNotPaired, _),
+             (.biometryDisconnected, _),
+             (.watchNotAvailable, _):
+            return .secureEnclave(.couldNotAccess)
+
+        // All of these errors imply that the item does not exist in the Keychain
+        // because based on the corresponding `SecureEnclaveAccessControl` type,
+        // the item would not be able to be stored in the first place without a
+        // passcode or biometry support.
+        case (.passcodeNotSet, _),
+             (.touchIDNotAvailable, .biometricAny),
+             (.touchIDNotAvailable, .biometricCurrentSet),
+             (.touchIDNotEnrolled, .biometricAny),
+             (.touchIDNotEnrolled, .biometricCurrentSet),
+             (.biometryNotAvailable, .biometricAny),
+             (.biometryNotAvailable, .biometricCurrentSet),
+             (.biometryNotEnrolled, .biometricAny),
+             (.biometryNotEnrolled, .biometricCurrentSet):
+            return .keychain(.itemNotFound)
+
+        // All of these errors with the corresponding `SecureEnclaveAccessControl`
+        // type are unexpected because we should be able to fallback to the device
+        // passcode.
+        case (.touchIDNotAvailable, .devicePasscode),
+             (.touchIDNotAvailable, .userPresence),
+             (.touchIDNotEnrolled, .devicePasscode),
+             (.touchIDNotEnrolled, .userPresence),
+             (.biometryNotAvailable, .devicePasscode),
+             (.biometryNotAvailable, .userPresence),
+             (.biometryNotEnrolled, .devicePasscode),
+             (.biometryNotEnrolled, .userPresence):
+            return .secureEnclave(.internalError)
+
+        @unknown default:
+            return .secureEnclave(.internalError)
+        }
+    }
+    #endif
 
 }
