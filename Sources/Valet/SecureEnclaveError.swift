@@ -14,7 +14,7 @@
 //  limitations under the License.
 //
 
-import LocalAuthentication
+import Foundation
 
 @objc(VALSecureEnclaveError)
 public enum SecureEnclaveError: Int, CaseIterable, CustomStringConvertible, Error, Equatable {
@@ -37,19 +37,6 @@ public enum SecureEnclaveError: Int, CaseIterable, CustomStringConvertible, Erro
     /// This error condition should never be reached – it is indicative of Apple's Objective-C API breaking its nullability contract.
     case internalError
 
-    init(_ errorCode: LAError.Code) {
-        switch errorCode {
-        case .userCancel, .systemCancel, .authenticationFailed:
-            self = .userCancelled
-        case .userFallback:
-            self = .userFallback
-        case .passcodeNotSet:
-            self = .passcodeNotSet
-        default:
-            self = .couldNotAccess
-        }
-    }
-
     // MARK: CustomStringConvertible
 
     public var description: String {
@@ -61,5 +48,5 @@ public enum SecureEnclaveError: Int, CaseIterable, CustomStringConvertible, Erro
         case .internalError: return "SecureEnclaveError.internalError"
         }
     }
-}
 
+}

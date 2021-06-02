@@ -208,10 +208,14 @@
 		371150B21E2962D8004A45D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150B01E2962D8004A45D4 /* LaunchScreen.storyboard */; };
 		AC89A3EC1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */; };
 		AC89A3EE1CC82738009A7121 /* ValetTouchIDTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3ED1CC82738009A7121 /* ValetTouchIDTestViewController.swift */; };
-		D76B790C266708E800CB52C9 /* SecureEnclaveErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B790B266708E800CB52C9 /* SecureEnclaveErrorTests.swift */; };
-		D76B790D266708E800CB52C9 /* SecureEnclaveErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B790B266708E800CB52C9 /* SecureEnclaveErrorTests.swift */; };
-		D76B790E266708E800CB52C9 /* SecureEnclaveErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B790B266708E800CB52C9 /* SecureEnclaveErrorTests.swift */; };
-		D76B790F266708E800CB52C9 /* SecureEnclaveErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B790B266708E800CB52C9 /* SecureEnclaveErrorTests.swift */; };
+		D70AAA572667EF8E00B632D2 /* SecureEnclaveErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70AAA562667EF8E00B632D2 /* SecureEnclaveErrorTests.swift */; };
+		D70AAA582667EF8E00B632D2 /* SecureEnclaveErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70AAA562667EF8E00B632D2 /* SecureEnclaveErrorTests.swift */; };
+		D70AAA592667EF8E00B632D2 /* SecureEnclaveErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70AAA562667EF8E00B632D2 /* SecureEnclaveErrorTests.swift */; };
+		D70AAA5A2667EF8E00B632D2 /* SecureEnclaveErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70AAA562667EF8E00B632D2 /* SecureEnclaveErrorTests.swift */; };
+		D76B790C266708E800CB52C9 /* LAErrorTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B790B266708E800CB52C9 /* LAErrorTransformerTests.swift */; };
+		D76B790D266708E800CB52C9 /* LAErrorTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B790B266708E800CB52C9 /* LAErrorTransformerTests.swift */; };
+		D76B790E266708E800CB52C9 /* LAErrorTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B790B266708E800CB52C9 /* LAErrorTransformerTests.swift */; };
+		D76B790F266708E800CB52C9 /* LAErrorTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B790B266708E800CB52C9 /* LAErrorTransformerTests.swift */; };
 		D78C8C0126616E2300124B40 /* SecureEnclaveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78C8C0026616E2300124B40 /* SecureEnclaveError.swift */; };
 		D78C8C0226616E2300124B40 /* SecureEnclaveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78C8C0026616E2300124B40 /* SecureEnclaveError.swift */; };
 		D78C8C0326616E2300124B40 /* SecureEnclaveError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78C8C0026616E2300124B40 /* SecureEnclaveError.swift */; };
@@ -500,7 +504,8 @@
 		AC89A3EA1CC82426009A7121 /* ValetTouchIDTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ValetTouchIDTest-Bridging-Header.h"; sourceTree = "<group>"; };
 		AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetTouchIDTestAppDelegate.swift; sourceTree = "<group>"; };
 		AC89A3ED1CC82738009A7121 /* ValetTouchIDTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValetTouchIDTestViewController.swift; sourceTree = "<group>"; };
-		D76B790B266708E800CB52C9 /* SecureEnclaveErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveErrorTests.swift; sourceTree = "<group>"; };
+		D70AAA562667EF8E00B632D2 /* SecureEnclaveErrorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureEnclaveErrorTests.swift; sourceTree = "<group>"; };
+		D76B790B266708E800CB52C9 /* LAErrorTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LAErrorTransformerTests.swift; sourceTree = "<group>"; };
 		D78C8C0026616E2300124B40 /* SecureEnclaveError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveError.swift; sourceTree = "<group>"; };
 		EA1E1F8E1A8C46090067C991 /* Valet iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Valet iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAEAA88C1B167A8700F7AA98 /* Valet Mac Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Valet Mac Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -657,7 +662,8 @@
 				1612FD0D22A9C95500FC1142 /* ValetTests.swift */,
 				167E250123D624EF00889121 /* MigrationErrorTests.swift */,
 				167E24FD23D6235000889121 /* KeychainErrorTests.swift */,
-				D76B790B266708E800CB52C9 /* SecureEnclaveErrorTests.swift */,
+				D76B790B266708E800CB52C9 /* LAErrorTransformerTests.swift */,
+				D70AAA562667EF8E00B632D2 /* SecureEnclaveErrorTests.swift */,
 			);
 			path = ValetTests;
 			sourceTree = "<group>";
@@ -1612,6 +1618,7 @@
 				32DC88952475BBA1005A9BFA /* KeychainIntegrationTests.swift in Sources */,
 				167E251223D6328E00889121 /* ConfigurationTests.swift in Sources */,
 				167E24F123D4B89800889121 /* SinglePromptSecureEnclaveIntegrationTests.swift in Sources */,
+				D70AAA592667EF8E00B632D2 /* SecureEnclaveErrorTests.swift in Sources */,
 				169E9A6C23D181DC001B69F5 /* VALValetTests.m in Sources */,
 				1612FD2B22A9C95500FC1142 /* SecureEnclaveIntegrationTests.swift in Sources */,
 				167E250023D6235000889121 /* KeychainErrorTests.swift in Sources */,
@@ -1621,7 +1628,7 @@
 				1612FD3422A9C95500FC1142 /* CloudTests.swift in Sources */,
 				167E250423D624EF00889121 /* MigrationErrorTests.swift in Sources */,
 				32E7115E2336B90800018E15 /* SinglePromptSecureEnclaveTests.swift in Sources */,
-				D76B790E266708E800CB52C9 /* SecureEnclaveErrorTests.swift in Sources */,
+				D76B790E266708E800CB52C9 /* LAErrorTransformerTests.swift in Sources */,
 				169E9A6923D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */,
 				167E250923D62CAA00889121 /* CloudAccessibilityTests.swift in Sources */,
 				169E9A6F23D181DC001B69F5 /* VALSecureEnclaveValetTests.m in Sources */,
@@ -1666,10 +1673,11 @@
 				32644C2F248313210037F517 /* SecureEnclaveTests.swift in Sources */,
 				32644C30248313210037F517 /* CloudTests.swift in Sources */,
 				32644C31248313210037F517 /* ConfigurationTests.swift in Sources */,
-				D76B790F266708E800CB52C9 /* SecureEnclaveErrorTests.swift in Sources */,
+				D76B790F266708E800CB52C9 /* LAErrorTransformerTests.swift in Sources */,
 				32644C32248313210037F517 /* ValetTests.swift in Sources */,
 				32644C33248313210037F517 /* MigrationErrorTests.swift in Sources */,
 				32644C34248313210037F517 /* KeychainErrorTests.swift in Sources */,
+				D70AAA5A2667EF8E00B632D2 /* SecureEnclaveErrorTests.swift in Sources */,
 				16DF6B07204B496800F8E0A4 /* ExtensionDelegate.swift in Sources */,
 				16DF6B05204B496800F8E0A4 /* InterfaceController.swift in Sources */,
 			);
@@ -1736,7 +1744,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D76B790C266708E800CB52C9 /* SecureEnclaveErrorTests.swift in Sources */,
+				D76B790C266708E800CB52C9 /* LAErrorTransformerTests.swift in Sources */,
 				1612FD1122A9C95500FC1142 /* SecItemTests.swift in Sources */,
 				1612FD1422A9C95500FC1142 /* CloudIntegrationTests.swift in Sources */,
 				169E9A6A23D181DC001B69F5 /* VALValetTests.m in Sources */,
@@ -1754,6 +1762,7 @@
 				32DC88932475BB9F005A9BFA /* KeychainIntegrationTests.swift in Sources */,
 				1612FD2022A9C95500FC1142 /* ValetBackwardsCompatibilityTests.swift in Sources */,
 				169E9A6D23D181DC001B69F5 /* VALSecureEnclaveValetTests.m in Sources */,
+				D70AAA572667EF8E00B632D2 /* SecureEnclaveErrorTests.swift in Sources */,
 				167E251023D6328E00889121 /* ConfigurationTests.swift in Sources */,
 				167E250723D62CAA00889121 /* CloudAccessibilityTests.swift in Sources */,
 				167E24FE23D6235000889121 /* KeychainErrorTests.swift in Sources */,
@@ -1767,6 +1776,7 @@
 			files = (
 				1612FD1222A9C95500FC1142 /* SecItemTests.swift in Sources */,
 				1612FD1522A9C95500FC1142 /* CloudIntegrationTests.swift in Sources */,
+				D70AAA582667EF8E00B632D2 /* SecureEnclaveErrorTests.swift in Sources */,
 				167E251123D6328E00889121 /* ConfigurationTests.swift in Sources */,
 				1612FD3622A9C95500FC1142 /* ValetTests.swift in Sources */,
 				1612FD2A22A9C95500FC1142 /* SecureEnclaveIntegrationTests.swift in Sources */,
@@ -1783,7 +1793,7 @@
 				169E9A6823D181DC001B69F5 /* VALSinglePromptSecureEnclaveValetTests.m in Sources */,
 				32DC88942475BBA1005A9BFA /* KeychainIntegrationTests.swift in Sources */,
 				169E9A6E23D181DC001B69F5 /* VALSecureEnclaveValetTests.m in Sources */,
-				D76B790D266708E800CB52C9 /* SecureEnclaveErrorTests.swift in Sources */,
+				D76B790D266708E800CB52C9 /* LAErrorTransformerTests.swift in Sources */,
 				169E9A6B23D181DC001B69F5 /* VALValetTests.m in Sources */,
 				1612FD2722A9C95500FC1142 /* ValetIntegrationTests.swift in Sources */,
 				1612FD2122A9C95500FC1142 /* ValetBackwardsCompatibilityTests.swift in Sources */,
