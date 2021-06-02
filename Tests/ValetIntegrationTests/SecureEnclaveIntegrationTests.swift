@@ -258,15 +258,15 @@ class SecureEnclaveIntegrationTests: XCTestCase
         XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
     }
 
-    func test_stringForKeyWithPromptWithFallbackTitle_throwsLAError() throws {
+    func test_stringForKeyWithPromptWithFallbackTitle_throwsSecureEnclaveError() throws {
         try valet.setString(passcode, forKey: key)
 
-        let expectedError = LAError(.authenticationFailed)
-        let authContext = MockLAContext(evaluatePolicyReply: (false, expectedError))
+        let evaluatePolicyError = LAError(.userFallback)
+        let authContext = MockLAContext(evaluatePolicyReply: (false, evaluatePolicyError))
         valet.authenticationContextProvider = { authContext }
 
         XCTAssertThrowsError(try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)) { error in
-            XCTAssertEqual(error as? LAError, expectedError)
+            XCTAssertEqual(error as? SecureEnclaveError, .userFallback)
             XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
         }
     }

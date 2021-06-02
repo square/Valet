@@ -14,16 +14,13 @@
 //  limitations under the License.
 //
 
-import Foundation
 import LocalAuthentication
 
+@objc(VALSecureEnclaveError)
 public enum SecureEnclaveError: Int, CaseIterable, CustomStringConvertible, Error, Equatable {
     /// Access to the secure enclave was not attempted because it was not available (due to biometrics not being available or enrolled
     /// or being locked out, or the authentication context being invalidated)
     case couldNotAccess
-
-    /// Access to the secure enclave was not attempted because the user failed to provide valid credentials.
-    case authenticationFailed
 
     /// Access to the secure enclave was not attempted because the user canceled the prompt.
     case userCancelled
@@ -32,32 +29,20 @@ public enum SecureEnclaveError: Int, CaseIterable, CustomStringConvertible, Erro
     /// Callers should handle this as a custom alternative option to satisfying authentication.
     case userFallback
 
-    /// Access to the secure enclave was not attempted because authentication was canceled by system
-    /// (e.g. another application went to foreground).
-    case systemCancel
-
     /// Access to the secure enclave was not attempted because authentication could not start because
     /// passcode is not set on the device
     case passcodeNotSet
 
     /// Access to the secure enclave was not attempted due to an unexpected internal error.
+    /// This error condition should never be reached – it is indicative of Apple's Objective-C API breaking its nullability contract.
     case internalError
 
-    init(error: Error) {
-        guard let laError = error as? LAError else {
-            self = .couldNotAccess
-            return
-        }
-
-        switch laError.code {
-        case .authenticationFailed:
-            self = .authenticationFailed
-        case .userCancel:
+    init(_ errorCode: LAError.Code) {
+        switch errorCode {
+        case .userCancel, .systemCancel, .authenticationFailed:
             self = .userCancelled
         case .userFallback:
             self = .userFallback
-        case .systemCancel:
-            self = .systemCancel
         case .passcodeNotSet:
             self = .passcodeNotSet
         default:
@@ -70,10 +55,8 @@ public enum SecureEnclaveError: Int, CaseIterable, CustomStringConvertible, Erro
     public var description: String {
         switch self {
         case .couldNotAccess: return "SecureEnclaveError.couldNotAccess"
-        case .authenticationFailed: return "SecureEnclaveError.authenticationFailed"
         case .userCancelled: return "SecureEnclaveError.userCancelled"
         case .userFallback: return "SecureEnclaveError.userFallback"
-        case .systemCancel: return "SecureEnclaveError.systemCancel"
         case .passcodeNotSet: return "SecureEnclaveError.passcodeNotSet"
         case .internalError: return "SecureEnclaveError.internalError"
         }

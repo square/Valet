@@ -183,6 +183,7 @@ public final class SecureEnclaveValet: NSObject {
     ///                     If the user taps this button, an `SecureEnclaveError.userFallback` will be thrown.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError` or `SecureEnclaveError`.
+    @objc
     public func string(
         forKey key: String,
         withPrompt userPrompt: String,
@@ -293,12 +294,9 @@ public final class SecureEnclaveValet: NSObject {
                         result = .failure(error)
                     }
 
-                } else if let error = error {
-                    result = .failure(SecureEnclaveError(error: error))
+                } else if let error = error as? LAError {
+                    result = .failure(SecureEnclaveError(error.code))
 
-                } else {
-                    // Unexpected to get here
-                    result = .failure(SecureEnclaveError.internalError)
                 }
 
                 semaphore.signal()
