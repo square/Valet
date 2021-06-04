@@ -179,9 +179,6 @@ public final class SecureEnclaveValet: NSObject {
     /// Attempts to retrieve the string at the given key, allowing a custom `fallbackTitle` to be specified to be
     /// shown to the user in the case that the biometric authentication fails.
     ///
-    /// Not available with access control `devicePasscode`, since this will always prompt for biometrics first, if available.
-    /// If called with access control `devicePasscode`, it will return `SecureEnclaveError.configurationError`
-    ///
     /// Not available on watchOS and only available on tvOS 10.0+
     ///
     /// - Parameters:
@@ -191,6 +188,8 @@ public final class SecureEnclaveValet: NSObject {
     ///                     If the user taps this button, an `SecureEnclaveError.userFallback` will be thrown.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError` or `SecureEnclaveError`.
+    /// - Warning: Not available with access control `devicePasscode`, since this will always prompt for biometrics first, if available.
+    ///            If called with access control `devicePasscode`, it will return `SecureEnclaveError.configurationError`
     @objc
     @available(tvOS 10.0, *)
     public func string(
@@ -317,8 +316,9 @@ public final class SecureEnclaveValet: NSObject {
                         accessControl: self.accessControl
                     )
                     switch transformedError {
-                    case let .keychain(error):      result = .failure(error)
-                    case let .secureEnclave(error): result = .failure(error)
+                    case let .keychain(error as Error),
+                         let .secureEnclave(error as Error):
+                        result = .failure(error)
                     }
                 }
 
@@ -462,16 +462,10 @@ enum LAErrorTransformer {
         case (.touchIDLockout, _),
              (.biometryLockout, _):
             return .keychain(.couldNotAccessKeychain)
-
         #if os(macOS)
-        case (.biometryDisconnected, _),
-             (.watchNotAvailable, _):
+        case (.biometryDisconnected, _):
             return .keychain(.couldNotAccessKeychain)
         #endif
-
-        case (.invalidContext, _),
-             (.notInteractive, _):
-            return .secureEnclave(.configurationError)
 
         // All of these errors imply that the item does not exist in the Keychain
         // because based on the corresponding `SecureEnclaveAccessControl` type,
@@ -488,7 +482,8 @@ enum LAErrorTransformer {
              (.biometryNotEnrolled, .biometricCurrentSet):
             return .keychain(.itemNotFound)
         #if os(macOS)
-        case (.biometryNotPaired, .biometricAny),
+        case (.watchNotAvailable, _),
+             (.biometryNotPaired, .biometricAny),
              (.biometryNotPaired, .biometricCurrentSet):
             return .keychain(.itemNotFound)
         #endif
@@ -510,6 +505,13 @@ enum LAErrorTransformer {
              (.biometryNotPaired, .userPresence):
             return .secureEnclave(.internalError)
         #endif
+
+        // We instantiate and use the `LAContext` internally, so we should never hit
+        // these errors because we are not invalidating the context nor disallowing
+        // interaction.
+        case (.invalidContext, _),
+             (.notInteractive, _):
+            return .secureEnclave(.internalError)
 
         @unknown default:
             return .secureEnclave(.internalError)
