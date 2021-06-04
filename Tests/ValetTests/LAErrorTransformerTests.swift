@@ -30,7 +30,7 @@ final class LAErrorTransformerTests: XCTestCase {
                     error: .init(.userCancel),
                     accessControl: $0
                 ),
-                .secureEnclave(.userCancelled)
+                .keychain(.userCancelled)
             )
         }
     }
@@ -42,7 +42,7 @@ final class LAErrorTransformerTests: XCTestCase {
                     error: .init(.systemCancel),
                     accessControl: $0
                 ),
-                .secureEnclave(.userCancelled)
+                .keychain(.userCancelled)
             )
         }
     }
@@ -54,7 +54,7 @@ final class LAErrorTransformerTests: XCTestCase {
                     error: .init(.authenticationFailed),
                     accessControl: $0
                 ),
-                .secureEnclave(.userCancelled)
+                .keychain(.userCancelled)
             )
         }
     }
@@ -66,7 +66,7 @@ final class LAErrorTransformerTests: XCTestCase {
                     error: .init(.appCancel),
                     accessControl: $0
                 ),
-                .secureEnclave(.userCancelled)
+                .keychain(.userCancelled)
             )
         }
     }
@@ -83,80 +83,80 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
-    func test_transform_returnsCouldNotAccessErrorFrom_touchIDLockout_forAllAccessControls() {
+    func test_transform_returnsCouldNotAccessKeychainErrorFrom_touchIDLockout_forAllAccessControls() {
         SecureEnclaveAccessControl.allValues().forEach {
             XCTAssertEqual(
                 LAErrorTransformer.transform(
                     error: .init(.touchIDLockout),
                     accessControl: $0
                 ),
-                .secureEnclave(.couldNotAccess)
+                .keychain(.couldNotAccessKeychain)
             )
         }
     }
 
-    func test_transform_returnsCouldNotAccessErrorFrom_invalidContext_forAllAccessControls() {
+    @available(macOS 10.13, *)
+    @available(iOS 11.0, *)
+    func test_transform_returnsCouldNotAccessKeychainErrorFrom_biometryLockout_forAllAccessControls() {
         SecureEnclaveAccessControl.allValues().forEach {
             XCTAssertEqual(
                 LAErrorTransformer.transform(
-                    error: .init(.invalidContext),
+                    error: .init(.biometryLockout),
                     accessControl: $0
                 ),
-                .secureEnclave(.couldNotAccess)
-            )
-        }
-    }
-
-    func test_transform_returnsCouldNotAccessErrorFrom_notInteractive_forAllAccessControls() {
-        SecureEnclaveAccessControl.allValues().forEach {
-            XCTAssertEqual(
-                LAErrorTransformer.transform(
-                    error: .init(.notInteractive),
-                    accessControl: $0
-                ),
-                .secureEnclave(.couldNotAccess)
+                .keychain(.couldNotAccessKeychain)
             )
         }
     }
 
     @available(macOS 11.2, *)
     @available(iOS, unavailable)
-    func test_transform_returnsCouldNotAccessErrorFrom_biometryNotPaired_forAllAccessControls() {
-        SecureEnclaveAccessControl.allValues().forEach {
-            XCTAssertEqual(
-                LAErrorTransformer.transform(
-                    error: .init(.biometryNotPaired),
-                    accessControl: $0
-                ),
-                .secureEnclave(.couldNotAccess)
-            )
-        }
-    }
-
-    @available(macOS 11.2, *)
-    @available(iOS, unavailable)
-    func test_transform_returnsCouldNotAccessErrorFrom_biometryDisconnected_forAllAccessControls() {
+    func test_transform_returnsCouldNotAccessKeychainErrorFrom_biometryDisconnected_forAllAccessControls() {
         SecureEnclaveAccessControl.allValues().forEach {
             XCTAssertEqual(
                 LAErrorTransformer.transform(
                     error: .init(.biometryDisconnected),
                     accessControl: $0
                 ),
-                .secureEnclave(.couldNotAccess)
+                .keychain(.couldNotAccessKeychain)
             )
         }
     }
 
     @available(macOS 10.15, *)
     @available(iOS, unavailable)
-    func test_transform_returnsCouldNotAccessErrorFrom_watchNotAvailable_forAllAccessControls() {
+    func test_transform_returnsCouldNotAccessKeychainErrorFrom_watchNotAvailable_forAllAccessControls() {
         SecureEnclaveAccessControl.allValues().forEach {
             XCTAssertEqual(
                 LAErrorTransformer.transform(
                     error: .init(.watchNotAvailable),
                     accessControl: $0
                 ),
-                .secureEnclave(.couldNotAccess)
+                .keychain(.couldNotAccessKeychain)
+            )
+        }
+    }
+
+    func test_transform_returnsConfigurationErrorErrorFrom_invalidContext_forAllAccessControls() {
+        SecureEnclaveAccessControl.allValues().forEach {
+            XCTAssertEqual(
+                LAErrorTransformer.transform(
+                    error: .init(.invalidContext),
+                    accessControl: $0
+                ),
+                .secureEnclave(.configurationError)
+            )
+        }
+    }
+
+    func test_transform_returnsConfigurationError_notInteractive_forAllAccessControls() {
+        SecureEnclaveAccessControl.allValues().forEach {
+            XCTAssertEqual(
+                LAErrorTransformer.transform(
+                    error: .init(.notInteractive),
+                    accessControl: $0
+                ),
+                .secureEnclave(.configurationError)
             )
         }
     }
@@ -241,6 +241,24 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
+    @available(macOS 11.2, *)
+    @available(iOS, unavailable)
+    func test_transform_returnsItemNotFoundErrorFrom_biometryNotPaired_forBiometricAccessControls() {
+        let biometricAccessControls: [SecureEnclaveAccessControl] = [
+            .biometricAny,
+            .biometricCurrentSet,
+        ]
+        biometricAccessControls.forEach {
+            XCTAssertEqual(
+                LAErrorTransformer.transform(
+                    error: .init(.biometryNotPaired),
+                    accessControl: $0
+                ),
+                .keychain(.itemNotFound)
+            )
+        }
+    }
+
     func test_transform_returnsInternalErrorErrorFrom_touchIDNotAvailable_forNonBiometricAccessControls() {
         let nonBiometricAccessControls: [SecureEnclaveAccessControl] = [
             .devicePasscode,
@@ -300,6 +318,24 @@ final class LAErrorTransformerTests: XCTestCase {
             XCTAssertEqual(
                 LAErrorTransformer.transform(
                     error: .init(.biometryNotEnrolled),
+                    accessControl: $0
+                ),
+                .secureEnclave(.internalError)
+            )
+        }
+    }
+
+    @available(macOS 11.2, *)
+    @available(iOS, unavailable)
+    func test_transform_returnsInternalErrorErrorFrom_biometryNotPaired_forNonBiometricAccessControls() {
+        let nonBiometricAccessControls: [SecureEnclaveAccessControl] = [
+            .devicePasscode,
+            .userPresence
+        ]
+        nonBiometricAccessControls.forEach {
+            XCTAssertEqual(
+                LAErrorTransformer.transform(
+                    error: .init(.biometryNotPaired),
                     accessControl: $0
                 ),
                 .secureEnclave(.internalError)
