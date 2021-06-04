@@ -23,8 +23,8 @@ public enum SecureEnclaveError: Int, CaseIterable, CustomStringConvertible, Erro
     /// Callers should handle this as a custom alternative option to satisfying authentication.
     case userFallback
 
-    /// Access to the secure enclave was not attempted due to a configuration error due to the authentication context being
-    /// invalidated or misconfigurated
+    /// Access to the secure enclave was not attempted due to a configuration error due to an unavailable access control being
+    /// set on the SecureEnclave
     case configurationError
 
     /// Access to the secure enclave was not attempted due to an unexpected internal error.
