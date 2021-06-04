@@ -179,6 +179,9 @@ public final class SecureEnclaveValet: NSObject {
     /// Attempts to retrieve the string at the given key, allowing a custom `fallbackTitle` to be specified to be
     /// shown to the user in the case that the biometric authentication fails.
     ///
+    /// Not available with access control `devicePasscode`, since this will always prompt for biometrics first, if available.
+    /// If called with access control `devicePasscode`, it will return `SecureEnclaveError.configurationError`
+    ///
     /// Not available on watchOS and only available on tvOS 10.0+
     ///
     /// - Parameters:
@@ -285,11 +288,12 @@ public final class SecureEnclaveValet: NSObject {
         // Use a semaphore to block the thread and perform the evaluation synchronously.
         let semaphore = DispatchSemaphore(value: 0)
         var result: Result<String, Error>?
+        let policy = try accessControl.getPolicy()
 
         let authenticationContext = authenticationContextProvider()
         authenticationContext.localizedFallbackTitle = fallbackTitle
         authenticationContext.evaluatePolicy(
-            accessControl.policy,
+            policy,
             localizedReason: userPrompt,
             reply: { success, error in
                 if success {
@@ -406,11 +410,15 @@ extension SecureEnclaveValet {
 extension SecureEnclaveAccessControl {
 
     /// The `LAPolicy` that the `SecureEnclaveAccessControl` corresponds to.
+    /// `SecureEnclaveAccessControl.devicePasscode` cannot be mapped to
+    /// an `LAPolicy` and will throw `SecureEnclaveError.configurationError`.
     #if !os(watchOS)
     @available(tvOS 10.0, *)
-    fileprivate var policy: LAPolicy {
+    fileprivate func getPolicy() throws -> LAPolicy {
         switch self {
-        case .userPresence, .devicePasscode:
+        case .devicePasscode:
+            throw SecureEnclaveError.configurationError
+        case .userPresence:
             return .deviceOwnerAuthentication
         case .biometricAny, .biometricCurrentSet:
             if #available(macOSApplicationExtension 10.12.2, *) {
@@ -446,18 +454,24 @@ enum LAErrorTransformer {
              (.systemCancel, _),
              (.authenticationFailed, _),
              (.appCancel, _):
-            return .secureEnclave(.userCancelled)
+            return .keychain(. userCancelled)
 
         case (.userFallback, _):
             return .secureEnclave(.userFallback)
 
         case (.touchIDLockout, _),
-             (.invalidContext, _),
-             (.notInteractive, _),
-             (.biometryNotPaired, _),
-             (.biometryDisconnected, _),
+             (.biometryLockout, _):
+            return .keychain(.couldNotAccessKeychain)
+
+        #if os(macOS)
+        case (.biometryDisconnected, _),
              (.watchNotAvailable, _):
-            return .secureEnclave(.couldNotAccess)
+            return .keychain(.couldNotAccessKeychain)
+        #endif
+
+        case (.invalidContext, _),
+             (.notInteractive, _):
+            return .secureEnclave(.configurationError)
 
         // All of these errors imply that the item does not exist in the Keychain
         // because based on the corresponding `SecureEnclaveAccessControl` type,
@@ -473,6 +487,11 @@ enum LAErrorTransformer {
              (.biometryNotEnrolled, .biometricAny),
              (.biometryNotEnrolled, .biometricCurrentSet):
             return .keychain(.itemNotFound)
+        #if os(macOS)
+        case (.biometryNotPaired, .biometricAny),
+             (.biometryNotPaired, .biometricCurrentSet):
+            return .keychain(.itemNotFound)
+        #endif
 
         // All of these errors with the corresponding `SecureEnclaveAccessControl`
         // type are unexpected because we should be able to fallback to the device
@@ -486,6 +505,11 @@ enum LAErrorTransformer {
              (.biometryNotEnrolled, .devicePasscode),
              (.biometryNotEnrolled, .userPresence):
             return .secureEnclave(.internalError)
+        #if os(macOS)
+        case (.biometryNotPaired, .devicePasscode),
+             (.biometryNotPaired, .userPresence):
+            return .secureEnclave(.internalError)
+        #endif
 
         @unknown default:
             return .secureEnclave(.internalError)

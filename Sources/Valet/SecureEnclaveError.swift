@@ -18,20 +18,14 @@ import Foundation
 
 @objc(VALSecureEnclaveError)
 public enum SecureEnclaveError: Int, CaseIterable, CustomStringConvertible, Error, Equatable {
-    /// Access to the secure enclave was not attempted because it was not available (due to biometrics not being available or enrolled
-    /// or being locked out, or the authentication context being invalidated)
-    case couldNotAccess
-
-    /// Access to the secure enclave was not attempted because the user canceled the prompt.
-    case userCancelled
 
     /// Access to the secure enclave was not attempted because the user opted to the fallback option (i.e. 'Enter Password').
     /// Callers should handle this as a custom alternative option to satisfying authentication.
     case userFallback
 
-    /// Access to the secure enclave was not attempted because authentication could not start because
-    /// passcode is not set on the device
-    case passcodeNotSet
+    /// Access to the secure enclave was not attempted due to a configuration error due to the authentication context being
+    /// invalidated or misconfigurated
+    case configurationError
 
     /// Access to the secure enclave was not attempted due to an unexpected internal error.
     /// This error condition should never be reached – it is indicative of Apple's Objective-C API breaking its nullability contract.
@@ -41,10 +35,8 @@ public enum SecureEnclaveError: Int, CaseIterable, CustomStringConvertible, Erro
 
     public var description: String {
         switch self {
-        case .couldNotAccess: return "SecureEnclaveError.couldNotAccess"
-        case .userCancelled: return "SecureEnclaveError.userCancelled"
         case .userFallback: return "SecureEnclaveError.userFallback"
-        case .passcodeNotSet: return "SecureEnclaveError.passcodeNotSet"
+        case .configurationError: return "SecureEnclaveError.configurationError"
         case .internalError: return "SecureEnclaveError.internalError"
         }
     }

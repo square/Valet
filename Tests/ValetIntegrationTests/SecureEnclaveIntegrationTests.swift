@@ -219,6 +219,19 @@ class SecureEnclaveIntegrationTests: XCTestCase
     // MARK: string(forKey:withPrompt:withFallbackTitle:)
 
     @available(tvOS 10.0, *)
+    func test_stringForKeyWithPromptWithFallbackTitle_devicePasscodeThrowsConfigurationError() throws {
+        let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .devicePasscode)
+        try valet.setString(passcode, forKey: key)
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
+        valet.authenticationContextProvider = { authContext }
+
+        XCTAssertThrowsError(try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)) { error in
+            XCTAssertEqual(error as? SecureEnclaveError, .configurationError)
+            XCTAssertEqual(authContext.evaluatePolicyCalls.count, 0)
+        }
+    }
+
+    @available(tvOS 10.0, *)
     func test_stringForKeyWithPromptWithFallbackTitle_userPresenceUsesDeviceOwnerAuthentication() throws {
         let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .userPresence)
         try valet.setString(passcode, forKey: key)
@@ -228,6 +241,18 @@ class SecureEnclaveIntegrationTests: XCTestCase
 
         XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
         XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthentication)
+    }
+
+    @available(macOS 10.12.2, tvOS 10.0, *)
+    func test_stringForKeyWithPromptWithFallbackTitle_biometricAnyUsesDeviceOwnerAuthenticationWithBiometrics() throws {
+        let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .biometricAny)
+        try valet.setString(passcode, forKey: key)
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
+        valet.authenticationContextProvider = { authContext }
+        _ = try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)
+
+        XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
+        XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthenticationWithBiometrics)
     }
 
     @available(macOS 10.12.2, tvOS 10.0, *)

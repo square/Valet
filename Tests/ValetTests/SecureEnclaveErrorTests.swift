@@ -25,14 +25,10 @@ final class SecureEnclaveErrorTests: XCTestCase {
     func test_description_createsHumanReadableDescription() {
         SecureEnclaveError.allCases.forEach {
             switch $0 {
-            case .couldNotAccess:
-                XCTAssertEqual($0.description, "SecureEnclaveError.couldNotAccess")
-            case .userCancelled:
-                XCTAssertEqual($0.description, "SecureEnclaveError.userCancelled")
             case .userFallback:
                 XCTAssertEqual($0.description, "SecureEnclaveError.userFallback")
-            case .passcodeNotSet:
-                XCTAssertEqual($0.description, "SecureEnclaveError.passcodeNotSet")
+            case .configurationError:
+                XCTAssertEqual($0.description, "SecureEnclaveError.configurationError")
             case .internalError:
                 XCTAssertEqual($0.description, "SecureEnclaveError.internalError")
             }
