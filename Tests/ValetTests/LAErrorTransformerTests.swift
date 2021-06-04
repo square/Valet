@@ -109,8 +109,8 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
+    #if !os(iOS)
     @available(macOS 11.2, *)
-    @available(iOS, unavailable)
     func test_transform_returnsCouldNotAccessKeychainErrorFrom_biometryDisconnected_forAllAccessControls() {
         SecureEnclaveAccessControl.allValues().forEach {
             XCTAssertEqual(
@@ -122,9 +122,10 @@ final class LAErrorTransformerTests: XCTestCase {
             )
         }
     }
+    #endif
 
+    #if !os(iOS)
     @available(macOS 10.15, *)
-    @available(iOS, unavailable)
     func test_transform_returnsCouldNotAccessKeychainErrorFrom_watchNotAvailable_forAllAccessControls() {
         SecureEnclaveAccessControl.allValues().forEach {
             XCTAssertEqual(
@@ -136,6 +137,7 @@ final class LAErrorTransformerTests: XCTestCase {
             )
         }
     }
+    #endif
 
     func test_transform_returnsConfigurationErrorErrorFrom_invalidContext_forAllAccessControls() {
         SecureEnclaveAccessControl.allValues().forEach {
@@ -241,8 +243,8 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
+    #if !os(iOS)
     @available(macOS 11.2, *)
-    @available(iOS, unavailable)
     func test_transform_returnsItemNotFoundErrorFrom_biometryNotPaired_forBiometricAccessControls() {
         let biometricAccessControls: [SecureEnclaveAccessControl] = [
             .biometricAny,
@@ -258,6 +260,7 @@ final class LAErrorTransformerTests: XCTestCase {
             )
         }
     }
+    #endif
 
     func test_transform_returnsInternalErrorErrorFrom_touchIDNotAvailable_forNonBiometricAccessControls() {
         let nonBiometricAccessControls: [SecureEnclaveAccessControl] = [
@@ -325,8 +328,8 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
+    #if !os(iOS)
     @available(macOS 11.2, *)
-    @available(iOS, unavailable)
     func test_transform_returnsInternalErrorErrorFrom_biometryNotPaired_forNonBiometricAccessControls() {
         let nonBiometricAccessControls: [SecureEnclaveAccessControl] = [
             .devicePasscode,
@@ -342,5 +345,6 @@ final class LAErrorTransformerTests: XCTestCase {
             )
         }
     }
+    #endif
 
 }
