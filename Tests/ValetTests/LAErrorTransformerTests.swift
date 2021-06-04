@@ -124,45 +124,6 @@ final class LAErrorTransformerTests: XCTestCase {
     }
     #endif
 
-    #if !os(iOS)
-    @available(macOS 10.15, *)
-    func test_transform_returnsCouldNotAccessKeychainErrorFrom_watchNotAvailable_forAllAccessControls() {
-        SecureEnclaveAccessControl.allValues().forEach {
-            XCTAssertEqual(
-                LAErrorTransformer.transform(
-                    error: .init(.watchNotAvailable),
-                    accessControl: $0
-                ),
-                .keychain(.couldNotAccessKeychain)
-            )
-        }
-    }
-    #endif
-
-    func test_transform_returnsConfigurationErrorErrorFrom_invalidContext_forAllAccessControls() {
-        SecureEnclaveAccessControl.allValues().forEach {
-            XCTAssertEqual(
-                LAErrorTransformer.transform(
-                    error: .init(.invalidContext),
-                    accessControl: $0
-                ),
-                .secureEnclave(.configurationError)
-            )
-        }
-    }
-
-    func test_transform_returnsConfigurationError_notInteractive_forAllAccessControls() {
-        SecureEnclaveAccessControl.allValues().forEach {
-            XCTAssertEqual(
-                LAErrorTransformer.transform(
-                    error: .init(.notInteractive),
-                    accessControl: $0
-                ),
-                .secureEnclave(.configurationError)
-            )
-        }
-    }
-
     func test_transform_returnsItemNotFoundErrorFrom_passcodeNotSet_forAllAccessControls() {
         SecureEnclaveAccessControl.allValues().forEach {
             XCTAssertEqual(
@@ -244,6 +205,19 @@ final class LAErrorTransformerTests: XCTestCase {
     }
 
     #if !os(iOS)
+    @available(macOS 10.15, *)
+    func test_transform_returnsItemNotFoundErrorFrom_watchNotAvailable_forAllAccessControls() {
+        SecureEnclaveAccessControl.allValues().forEach {
+            XCTAssertEqual(
+                LAErrorTransformer.transform(
+                    error: .init(.watchNotAvailable),
+                    accessControl: $0
+                ),
+                .keychain(.itemNotFound)
+            )
+        }
+    }
+
     @available(macOS 11.2, *)
     func test_transform_returnsItemNotFoundErrorFrom_biometryNotPaired_forBiometricAccessControls() {
         let biometricAccessControls: [SecureEnclaveAccessControl] = [
@@ -346,5 +320,29 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
     #endif
+
+    func test_transform_returnsInternalErrorErrorFrom_invalidContext_forAllAccessControls() {
+        SecureEnclaveAccessControl.allValues().forEach {
+            XCTAssertEqual(
+                LAErrorTransformer.transform(
+                    error: .init(.invalidContext),
+                    accessControl: $0
+                ),
+                .secureEnclave(.internalError)
+            )
+        }
+    }
+
+    func test_transform_returnsInternalErrorError_notInteractive_forAllAccessControls() {
+        SecureEnclaveAccessControl.allValues().forEach {
+            XCTAssertEqual(
+                LAErrorTransformer.transform(
+                    error: .init(.notInteractive),
+                    accessControl: $0
+                ),
+                .secureEnclave(.internalError)
+            )
+        }
+    }
 
 }
