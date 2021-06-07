@@ -75,7 +75,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         }
         
         try valet().setString(passcode, forKey: key)
-        let equivalentValet = SecureEnclaveValet.valet(with: valet().identifier, accessControl: .devicePasscode)
+        let equivalentValet = SinglePromptSecureEnclaveValet.valet(with: valet().identifier, accessControl: .devicePasscode)
         XCTAssertNotEqual(valet(), equivalentValet)
         XCTAssertEqual(passcode, try valet().string(forKey: key, withPrompt: ""))
         XCTAssertThrowsError(try equivalentValet.string(forKey: key, withPrompt: "")) { error in
