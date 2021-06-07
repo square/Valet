@@ -62,10 +62,10 @@ class SecureEnclaveIntegrationTests: XCTestCase
         }
         
         try valet.setString(passcode, forKey: key)
-        let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
-        XCTAssertNotEqual(valet, equivalentValet)
+        let similarValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
+        XCTAssertNotEqual(valet, similarValet)
         XCTAssertEqual(passcode, try valet.string(forKey: key, withPrompt: ""))
-        XCTAssertThrowsError(try equivalentValet.string(forKey: key, withPrompt: "")) { error in
+        XCTAssertThrowsError(try similarValet.string(forKey: key, withPrompt: "")) { error in
             XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
     }
