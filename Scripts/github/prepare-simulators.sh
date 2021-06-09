@@ -10,6 +10,9 @@ if [[ ${PLATFORMS[*]} =~ 'iOS_12' ]]; then
 fi
 
 if [[ ${PLATFORMS[*]} =~ 'iOS_11' ]]; then
+	find /Applications/Xcode_9.4.1.app/Contents -iname iOS.simruntime
+	find /Applications/Xcode_9.4.1.app/Contents -iname watchOS.simruntime
+	find /Applications/Xcode_9.4.1.app/Contents -iname tvOS.simruntime
 	sudo ln -s /Applications/Xcode_9.4.1.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 11.4.simruntime
 fi
 
