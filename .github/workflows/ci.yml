@@ -65,7 +65,8 @@ jobs:
       matrix:
         platforms: [
           'iOS_14,tvOS_14,watchOS_7',
-          'iOS_13,tvOS_13,macOS_10_15,watchOS_6'
+          'iOS_13,tvOS_13,watchOS_6',
+          'macOS_10_15'
         ]
       fail-fast: false
     steps:
@@ -75,6 +76,10 @@ jobs:
         run: bundle install
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        if: ${{ matrix.platforms != 'macOS_10_15' }}
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        if: ${{ matrix.platforms == 'macOS_10_15' }}
       - name: Prepare Simulator Runtimes
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
       - name: Build Framework
