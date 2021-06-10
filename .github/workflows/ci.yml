@@ -31,29 +31,6 @@ jobs:
       - name: Upload Coverage Reports
         if: success()
         run: Scripts/upload-coverage-reports.sh ${{ matrix.platforms }}
-  xcode-build-legacy:
-    name: Xcode Build
-    runs-on: macOS-10.14
-    strategy:
-      matrix:
-        platforms: [
-          'iOS_11,tvOS_11,watchOS_4,macOS_10_15'
-        ]
-      fail-fast: false
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-      - name: Bundle Install
-        run: bundle install
-      - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_11.3.1.app/Contents/Developer
-      - name: Prepare Simulator Runtimes
-        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
-      - name: Build and Test Framework
-        run: Scripts/build.swift ${{ matrix.platforms }} xcode
-      - name: Upload Coverage Reports
-        if: success()
-        run: Scripts/upload-coverage-reports.sh ${{ matrix.platforms }}
   pod-lint:
     name: Pod Lint
     runs-on: macOS-10.15
