@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         platforms: [
-          'iOS_14,tvOS_14,watchOS_7',
+          'iOS_14,watchOS_7',
           'iOS_13,tvOS_13,watchOS_6',
           'iOS_12,tvOS_12,watchOS_5'
         ]
