@@ -78,7 +78,7 @@ jobs:
         run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
         if: ${{ matrix.platforms != 'macOS_10_15' }}
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
         if: ${{ matrix.platforms == 'macOS_10_15' }}
       - name: Prepare Simulator Runtimes
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
