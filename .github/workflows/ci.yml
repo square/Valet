@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+
+jobs:
+  xcode-build:
+    name: Xcode Build
+    runs-on: macOS-10.15
+    strategy:
+      matrix:
+        platforms: [
+          'iOS_14,watchOS_7',
+          'iOS_13,tvOS_13,watchOS_6',
+          'iOS_12,tvOS_12,watchOS_5'
+        ]
+      fail-fast: false
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Bundle Install
+        run: bundle install
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+      - name: Prepare Simulator Runtimes
+        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
+      - name: Build and Test Framework
+        run: Scripts/build.swift ${{ matrix.platforms }} xcode
+      - name: Upload Coverage Reports
+        if: success()
+        run: Scripts/upload-coverage-reports.sh ${{ matrix.platforms }}
+  pod-lint:
+    name: Pod Lint
+    runs-on: macOS-10.15
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Bundle Install
+        run: bundle install
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
+      - name: Lint Podspec
+        run: bundle exec pod lib lint --verbose --fail-fast --swift-version=5.0
+  carthage:
+    name: Carthage
+    runs-on: macOS-10.15
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Bundle Install
+        run: bundle install
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
+      - name: Install Carthage
+        run: brew outdated carthage || brew upgrade carthage
+      - name: Build Framework
+        run: carthage build --verbose --no-skip-current
+  spm:
+    name: SPM Build
+    runs-on: macOS-10.15
+    strategy:
+      matrix:
+        platforms: [
+          'iOS_14,tvOS_14,watchOS_7',
+          'iOS_13,tvOS_13,watchOS_6',
+          'macOS_10_15'
+        ]
+      fail-fast: false
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Bundle Install
+        run: bundle install
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        if: ${{ matrix.platforms != 'macOS_10_15' }}
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
+        if: ${{ matrix.platforms == 'macOS_10_15' }}
+      - name: Prepare Simulator Runtimes
+        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
+      - name: Build Framework
+        run: Scripts/build.swift ${{ matrix.platforms }} spm
