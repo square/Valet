@@ -836,7 +836,9 @@
 				EA1E1F841A8C46080067C991 /* Products */,
 				168909331F7199B50057F636 /* Frameworks */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
 		};
 		EA1E1F841A8C46080067C991 /* Products */ = {
 			isa = PBXGroup;

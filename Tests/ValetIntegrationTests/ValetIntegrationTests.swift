@@ -91,6 +91,11 @@ internal extension Valet {
 
 class ValetIntegrationTests: XCTestCase
 {
+    /// Workaround for an Xcode 11 bug with top-level `Codable` types (like `Array<String>`) to fix CI.
+    struct CodableArray: Codable, Equatable {
+        var stringArray: [String]
+    }
+
     static let sharedAccessGroupIdentifier = Valet.sharedAccessGroupIdentifier
     static let sharedAppGroupIdentifier = Valet.sharedAppGroupIdentifier
     var allPermutations: [Valet] {
@@ -112,6 +117,7 @@ class ValetIntegrationTests: XCTestCase
     let key = "key"
     let passcode = "topsecret"
     lazy var passcodeData: Data = { return Data(self.passcode.utf8) }()
+    var stringArray = CodableArray(stringArray: ["Albus", "Percival", "Wulfric", "Brian", "Dumbledore"])
     
     // MARK: XCTestCase
 
@@ -451,7 +457,7 @@ class ValetIntegrationTests: XCTestCase
         }
     }
     
-    // MARK: set(object:forKey:)
+    // MARK: setObject(:forKey:)
 
     func test_setObjectForKey_successfullyUpdatesExistingKey() throws {
         try allPermutations.forEach { valet in
@@ -479,6 +485,57 @@ class ValetIntegrationTests: XCTestCase
             XCTAssertThrowsError(try valet.setObject(emptyData, forKey: key)) { error in
                 XCTAssertEqual(error as? KeychainError, .emptyValue)
             }
+        }
+    }
+
+    // MARK: codable(forKey:)
+
+    func test_codableForKey_succeedsForValidKey() throws {
+        try allPermutations.forEach { valet in
+            try valet.setCodable(stringArray, forKey: key)
+            XCTAssertEqual(stringArray, try valet.codable(forKey: key))
+        }
+    }
+
+    func test_codableForKey_throwsDecoderErrorOnInvalidType() throws {
+        try allPermutations.forEach { valet in
+            try valet.setCodable(stringArray, forKey: key)
+            XCTAssertThrowsError(try valet.codable(forKey: key) as [Int]) { error in
+                switch error {
+                case DecodingError.typeMismatch:
+                    break // expected
+
+                default:
+                    XCTFail("Unexpected error: \(error)")
+                }
+            }
+        }
+    }
+
+    // MARK: setCodable(:forKey:)
+
+    func test_setCodableForKey_throwsEmptyKeyOnInvalidKey() throws {
+        try allPermutations.forEach { valet in
+            XCTAssertThrowsError(try valet.setCodable(stringArray, forKey: "")) { error in
+                XCTAssertEqual(error as? KeychainError, .emptyKey)
+            }
+        }
+    }
+
+    func test_setCodableForKey_utilizesPassedInCoder() throws {
+        try allPermutations.forEach { valet in
+            let date = Date(timeIntervalSince1970: 1_000_000_000)
+
+            let customEncoder = JSONEncoder()
+            customEncoder.dateEncodingStrategy = .secondsSince1970
+            try valet.setCodable(date, forKey: key, encoder: customEncoder)
+
+            // default decoding strategy is `.millisecondsSince1970`, thus decoding will succeed but be different
+            XCTAssertNotEqual(date, try valet.codable(forKey: key))
+
+            let customDecoder = JSONDecoder()
+            customDecoder.dateDecodingStrategy = .secondsSince1970
+            XCTAssertEqual(date, try valet.codable(forKey: key, decoder: customDecoder))
         }
     }
     
