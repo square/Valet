@@ -218,7 +218,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
 
     // MARK: string(forKey:withPrompt:withFallbackTitle:)
 
-    @available(tvOS 10.0, *)
+    @available(tvOS 11.0, macOS 11.2, *)
     func test_stringForKeyWithPromptWithFallbackTitle_devicePasscodeThrowsConfigurationError() throws {
         let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .devicePasscode)
         try valet.setString(passcode, forKey: key)
@@ -231,7 +231,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
         }
     }
 
-    @available(tvOS 10.0, *)
+    @available(tvOS 11.0, macOS 11.2, *)
     func test_stringForKeyWithPromptWithFallbackTitle_userPresenceUsesDeviceOwnerAuthentication() throws {
         let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .userPresence)
         try valet.setString(passcode, forKey: key)
@@ -243,7 +243,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
         XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthentication)
     }
 
-    @available(macOS 10.12.2, tvOS 10.0, *)
+    @available(tvOS 11.0, macOS 11.2, *)
     func test_stringForKeyWithPromptWithFallbackTitle_biometricAnyUsesDeviceOwnerAuthenticationWithBiometrics() throws {
         let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .biometricAny)
         try valet.setString(passcode, forKey: key)
@@ -255,7 +255,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
         XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthenticationWithBiometrics)
     }
 
-    @available(macOS 10.12.2, tvOS 10.0, *)
+    @available(tvOS 11.0, macOS 11.2, *)
     func test_stringForKeyWithPromptWithFallbackTitle_biometricCurrentSetUsesDeviceOwnerAuthenticationWithBiometrics() throws {
         let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .biometricCurrentSet)
         try valet.setString(passcode, forKey: key)
@@ -267,7 +267,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
         XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthenticationWithBiometrics)
     }
 
-    @available(tvOS 10.0, *)
+    @available(tvOS 11.0, macOS 11.2, *)
     func test_stringForKeyWithPromptWithFallbackTitle_throwsItemNotFoundForKeyWithNoValue() throws {
         let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
         valet.authenticationContextProvider = { authContext }
@@ -277,7 +277,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
         }
     }
 
-    @available(tvOS 10.0, *)
+    @available(tvOS 11.0, macOS 11.2, *)
     func test_stringForKeyWithPromptWithFallbackTitle_retrievesStringForValidKey() throws {
         try valet.setString(passcode, forKey: key)
 
@@ -287,7 +287,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
         XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
     }
 
-    @available(tvOS 10.0, *)
+    @available(tvOS 11.0, macOS 11.2, *)
     func test_stringForKeyWithPromptWithFallbackTitle_throwsSecureEnclaveError() throws {
         try valet.setString(passcode, forKey: key)
 

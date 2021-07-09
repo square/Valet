@@ -179,7 +179,7 @@ public final class SecureEnclaveValet: NSObject {
     /// Attempts to retrieve the string at the given key, allowing a custom `fallbackTitle` to be specified to be
     /// shown to the user in the case that the biometric authentication fails.
     ///
-    /// Not available on watchOS and only available on tvOS 10.0+
+    /// Not available on watchOS and only available on tvOS 11.0+, macOS 11.2+
     ///
     /// - Parameters:
     ///   - key: A key used to retrieve the desired object from the keychain.
@@ -191,7 +191,7 @@ public final class SecureEnclaveValet: NSObject {
     /// - Warning: Not available with access control `devicePasscode`, since this will always prompt for biometrics first, if available.
     ///            If called with access control `devicePasscode`, it will return `SecureEnclaveError.configurationError`
     @objc
-    @available(tvOS 10.0, *)
+    @available(tvOS 11.0, macOS 11.2, *)
     public func string(
         forKey key: String,
         withPrompt userPrompt: String,
@@ -261,7 +261,7 @@ public final class SecureEnclaveValet: NSObject {
     /// custom fallback button to the user.  Should always return a new instance of `LAContext` in
     /// practice, but specified as an internal var to allow it to be overridden in tests.
     #if !os(watchOS)
-    @available(tvOS 10.0, *)
+    @available(tvOS 11.0, *)
     internal lazy var authenticationContextProvider: () -> LAContext = { LAContext() }
     #endif
 
@@ -278,7 +278,7 @@ public final class SecureEnclaveValet: NSObject {
     /// via `kSecUseAuthenticationContext` when querying for the string at the given
     /// key in the secure enclave.
     #if !os(watchOS)
-    @available(tvOS 10.0, *)
+    @available(tvOS 11.0, macOS 11.2, *)
     private func synchronouslyEvaluatePolicy(
         forKey key: String,
         withPrompt userPrompt: String,
@@ -421,7 +421,7 @@ extension SecureEnclaveAccessControl {
         case .userPresence:
             return .deviceOwnerAuthentication
         case .biometricAny, .biometricCurrentSet:
-            if #available(macOSApplicationExtension 10.12.2, *) {
+            if #available(macOS 10.12.2, *) {
                 return .deviceOwnerAuthenticationWithBiometrics
             } else {
                 return .deviceOwnerAuthentication
@@ -444,7 +444,7 @@ enum LAErrorTransformer {
     }
 
     #if !os(watchOS)
-    @available(tvOS 10.0, *)
+    @available(tvOS 11.0, macOS 11.2, *)
     static func transform(
         error: LAError,
         accessControl: SecureEnclaveAccessControl

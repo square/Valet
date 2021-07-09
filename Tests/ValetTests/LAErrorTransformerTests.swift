@@ -18,7 +18,7 @@ import XCTest
 
 @testable import Valet
 
-@available(tvOS 10.0, *)
+@available(tvOS 11.0, macOS 11.2, *)
 final class LAErrorTransformerTests: XCTestCase {
 
     // MARK: - Tests
@@ -95,7 +95,6 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
-    @available(macOS 10.13, *)
     @available(iOS 11.0, *)
     func test_transform_returnsCouldNotAccessKeychainErrorFrom_biometryLockout_forAllAccessControls() {
         SecureEnclaveAccessControl.allValues().forEach {
@@ -109,8 +108,7 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
-    #if !os(iOS)
-    @available(macOS 11.2, *)
+    #if os(macOS)
     func test_transform_returnsCouldNotAccessKeychainErrorFrom_biometryDisconnected_forAllAccessControls() {
         SecureEnclaveAccessControl.allValues().forEach {
             XCTAssertEqual(
@@ -136,7 +134,6 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
-    @available(macOS 10.12.1, *)
     func test_transform_returnsItemNotFoundErrorFrom_touchIDNotAvailable_forBiometricAccessControls() {
         let biometricAccessControls: [SecureEnclaveAccessControl] = [
             .biometricAny,
@@ -153,7 +150,6 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
-    @available(macOS 10.12.1, *)
     func test_transform_returnsItemNotFoundErrorFrom_touchIDNotEnrolled_forBiometricAccessControls() {
         let biometricAccessControls: [SecureEnclaveAccessControl] = [
             .biometricAny,
@@ -170,7 +166,7 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
-    @available(iOS 11.0, macOS 10.13, tvOS 11.0, *)
+    @available(iOS 11.0, *)
     func test_transform_returnsItemNotFoundErrorFrom_biometryNotAvailable_forBiometricAccessControls() {
         let biometricAccessControls: [SecureEnclaveAccessControl] = [
             .biometricAny,
@@ -187,7 +183,7 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
-    @available(iOS 11.0, macOS 10.13, tvOS 11.0, *)
+    @available(iOS 11.0, *)
     func test_transform_returnsItemNotFoundErrorFrom_biometryNotEnrolled_forBiometricAccessControls() {
         let biometricAccessControls: [SecureEnclaveAccessControl] = [
             .biometricAny,
@@ -204,8 +200,7 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
-    #if !os(iOS)
-    @available(macOS 10.15, *)
+    #if os(macOS)
     func test_transform_returnsItemNotFoundErrorFrom_watchNotAvailable_forAllAccessControls() {
         SecureEnclaveAccessControl.allValues().forEach {
             XCTAssertEqual(
@@ -217,8 +212,9 @@ final class LAErrorTransformerTests: XCTestCase {
             )
         }
     }
+    #endif
 
-    @available(macOS 11.2, *)
+    #if os(macOS)
     func test_transform_returnsItemNotFoundErrorFrom_biometryNotPaired_forBiometricAccessControls() {
         let biometricAccessControls: [SecureEnclaveAccessControl] = [
             .biometricAny,
@@ -268,7 +264,7 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
-    @available(iOS 11.0, macOS 10.13, tvOS 11.0, *)
+    @available(iOS 11.0, *)
     func test_transform_returnsInternalErrorErrorFrom_biometryNotAvailable_forNonBiometricAccessControls() {
         let nonBiometricAccessControls: [SecureEnclaveAccessControl] = [
             .devicePasscode,
@@ -285,7 +281,7 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
-    @available(iOS 11.0, macOS 10.13, tvOS 11.0, *)
+    @available(iOS 11.0, *)
     func test_transform_returnsInternalErrorErrorFrom_biometryNotEnrolled_forNonBiometricAccessControls() {
         let nonBiometricAccessControls: [SecureEnclaveAccessControl] = [
             .devicePasscode,
@@ -302,8 +298,7 @@ final class LAErrorTransformerTests: XCTestCase {
         }
     }
 
-    #if !os(iOS)
-    @available(macOS 11.2, *)
+    #if os(macOS)
     func test_transform_returnsInternalErrorErrorFrom_biometryNotPaired_forNonBiometricAccessControls() {
         let nonBiometricAccessControls: [SecureEnclaveAccessControl] = [
             .devicePasscode,
