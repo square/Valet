@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import LocalAuthentication
 import XCTest
 
 @testable import Valet
@@ -24,9 +25,11 @@ class SecureEnclaveIntegrationTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
     let valet = SecureEnclaveValet.valet(with: identifier, accessControl: .userPresence)
+    let fallback = "fallback"
     let key = "key"
     let passcode = "topsecret"
-    
+    let prompt = "prompt"
+
     override func setUp()
     {
         super.setUp()
@@ -199,4 +202,133 @@ class SecureEnclaveIntegrationTests: XCTestCase
             XCTAssertEqual(try otherValet.string(forKey: key), value)
         }
     }
+
+    // MARK: string(forKey:withPrompt:)
+
+    func test_stringForKeyWithPrompt_throwsItemNotFoundForKeyWithNoValue() throws {
+        XCTAssertThrowsError(try valet.string(forKey: key, withPrompt: prompt)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+    }
+
+    func test_stringForKeyWithPrompt_retrievesStringForValidKey() throws {
+        try valet.setString(passcode, forKey: key)
+        XCTAssertEqual(passcode, try valet.string(forKey: key, withPrompt: prompt))
+    }
+
+    // MARK: string(forKey:withPrompt:withFallbackTitle:)
+
+    @available(tvOS 11.0, macOS 11.2, *)
+    func test_stringForKeyWithPromptWithFallbackTitle_devicePasscodeThrowsConfigurationError() throws {
+        let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .devicePasscode)
+        try valet.setString(passcode, forKey: key)
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
+        valet.authenticationContextProvider = { authContext }
+
+        XCTAssertThrowsError(try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)) { error in
+            XCTAssertEqual(error as? SecureEnclaveError, .configurationError)
+            XCTAssertEqual(authContext.evaluatePolicyCalls.count, 0)
+        }
+    }
+
+    @available(tvOS 11.0, macOS 11.2, *)
+    func test_stringForKeyWithPromptWithFallbackTitle_userPresenceUsesDeviceOwnerAuthentication() throws {
+        let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .userPresence)
+        try valet.setString(passcode, forKey: key)
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
+        valet.authenticationContextProvider = { authContext }
+        _ = try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)
+
+        XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
+        XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthentication)
+    }
+
+    @available(tvOS 11.0, macOS 11.2, *)
+    func test_stringForKeyWithPromptWithFallbackTitle_biometricAnyUsesDeviceOwnerAuthenticationWithBiometrics() throws {
+        let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .biometricAny)
+        try valet.setString(passcode, forKey: key)
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
+        valet.authenticationContextProvider = { authContext }
+        _ = try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)
+
+        XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
+        XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthenticationWithBiometrics)
+    }
+
+    @available(tvOS 11.0, macOS 11.2, *)
+    func test_stringForKeyWithPromptWithFallbackTitle_biometricCurrentSetUsesDeviceOwnerAuthenticationWithBiometrics() throws {
+        let valet = SecureEnclaveValet.valet(with: type(of: self).identifier, accessControl: .biometricCurrentSet)
+        try valet.setString(passcode, forKey: key)
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
+        valet.authenticationContextProvider = { authContext }
+        _ = try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)
+
+        XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
+        XCTAssertEqual(authContext.evaluatePolicyCalls.first, .deviceOwnerAuthenticationWithBiometrics)
+    }
+
+    @available(tvOS 11.0, macOS 11.2, *)
+    func test_stringForKeyWithPromptWithFallbackTitle_throwsItemNotFoundForKeyWithNoValue() throws {
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
+        valet.authenticationContextProvider = { authContext }
+        XCTAssertThrowsError(try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
+        }
+    }
+
+    @available(tvOS 11.0, macOS 11.2, *)
+    func test_stringForKeyWithPromptWithFallbackTitle_retrievesStringForValidKey() throws {
+        try valet.setString(passcode, forKey: key)
+
+        let authContext = MockLAContext(evaluatePolicyReply: (true, nil))
+        valet.authenticationContextProvider = { authContext }
+        XCTAssertEqual(passcode, try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback))
+        XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
+    }
+
+    @available(tvOS 11.0, macOS 11.2, *)
+    func test_stringForKeyWithPromptWithFallbackTitle_throwsSecureEnclaveError() throws {
+        try valet.setString(passcode, forKey: key)
+
+        let evaluatePolicyError = LAError(.userFallback)
+        let authContext = MockLAContext(evaluatePolicyReply: (false, evaluatePolicyError))
+        valet.authenticationContextProvider = { authContext }
+
+        XCTAssertThrowsError(try valet.string(forKey: key, withPrompt: prompt, withFallbackTitle: fallback)) { error in
+            XCTAssertEqual(error as? SecureEnclaveError, .userFallback)
+            XCTAssertEqual(authContext.evaluatePolicyCalls.count, 1)
+        }
+    }
+
+}
+
+// MARK: -
+
+/// A class faking biometric user verification
+@available(tvOS 10.0, *)
+private final class MockLAContext: LAContext {
+
+    // MARK: - Private Properties
+
+    private let evaluatePolicyReply: (Bool, Error?)
+
+    // MARK: - Life Cycle
+
+    init(evaluatePolicyReply: (Bool, Error?)) {
+        self.evaluatePolicyReply = evaluatePolicyReply
+    }
+
+    // MARK: - LAContext
+
+    private(set) var evaluatePolicyCalls = [LAPolicy]()
+    override func evaluatePolicy(
+        _ policy: LAPolicy,
+        localizedReason: String,
+        reply: @escaping (Bool, Error?) -> Void
+    ) {
+        evaluatePolicyCalls.append(policy)
+        reply(evaluatePolicyReply.0, evaluatePolicyReply.1)
+    }
+
 }
