@@ -23,7 +23,7 @@ jobs:
           python3 -m pip install mkdocs-material
       
       - name: Generate docs
-        run: ./copy-docs.sh
+        run: ./copy_docs.sh
 
       - name: Build site
         run: mkdocs build
