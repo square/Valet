@@ -1,0 +1,50 @@
+# Project info
+site_name: Valet
+site_url: https://square.github.io/valet
+site_description: "Valet lets you securely store data in the iOS, tvOS, or macOS Keychain without knowing a thing about how the Keychain works. It’s easy. We promise."
+site_author: Square, Inc.
+remote_branch: gh-pages
+docs_dir: docs-gen
+edit_uri: "edit/main/docs/"
+copyright: 'Copyright &copy; 2015 Square, Inc.'
+
+# Repository
+repo_name: Valet
+repo_url: https://github.com/square/Valet
+
+# Navigation
+nav:
+  - 'Overview': 'index.md'
+  - 'Usage': 'usage.md'
+  - 'Requirements': 'requirements.md'
+  - 'Contributing': 'contributing.md'
+  - 'Bug Bounty': 'bug-bounty.md'
+
+# Plugins
+plugins:
+  - search
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - attr_list
+  - codehilite:
+      guess_lang: false
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.betterem
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.details
+
+# Configuration
+theme:
+  name: 'material'
+  palette:
+    primary: orange
+    accent: deep-orange
+
+# Extra theme
+extra_css:
+  - css/app.css
