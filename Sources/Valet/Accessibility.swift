@@ -28,7 +28,7 @@ public enum Accessibility: Int, CaseIterable, CustomStringConvertible, Equatable
     case whenPasscodeSetThisDeviceOnly = 4
     /// Valet data can only be accessed while the device is unlocked. This is recommended for data that only needs to be accessible while the application is in the foreground. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
     case whenUnlockedThisDeviceOnly = 5
-    /// Valet data cannot be accessed after a restart until the device has been unlocked once; data is accessible until the device is next rebooted. This attribute is recommended for data that needs to be accessible by background applications. Valet data with this attribute will migrate to a new device when using encrypted backups.
+    /// Valet data cannot be accessed after a restart until the device has been unlocked once; data is accessible until the device is next rebooted. This attribute is recommended for data that needs to be accessible by background applications. Valet data with this attribute will never migrate to a new device, so these items will be missing after a backup is restored to a new device.
     case afterFirstUnlockThisDeviceOnly = 6
 
     // MARK: CustomStringConvertible
