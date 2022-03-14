@@ -1,6 +1,5 @@
 # Valet
 
-[![CI Status](https://travis-ci.org/square/Valet.svg?branch=master)](https://travis-ci.org/square/Valet)
 [![Carthage Compatibility](https://img.shields.io/badge/carthage-✓-e2c245.svg)](https://github.com/Carthage/Carthage/)
 [![Version](https://img.shields.io/cocoapods/v/Valet.svg)](https://cocoapods.org/pods/Valet)
 [![License](https://img.shields.io/cocoapods/l/Valet.svg)](https://cocoapods.org/pods/Valet)
