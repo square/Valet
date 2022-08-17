@@ -14,8 +14,8 @@
 //  limitations under the License.
 //
 
-#if !os(tvOS)
-#if canImport(LocalAuthentication)
+// Xcode 13 and prior incorrectly say that LocalAuthentication is available on tvOS, so we have to check both as long as Xcode 13 and prior are supported.
+#if !os(tvOS) && canImport(LocalAuthentication)
 
 import Foundation
 @testable import Valet
@@ -57,5 +57,4 @@ class SinglePromptSecureEnclaveTests: XCTestCase
     }
 }
 
-#endif
 #endif

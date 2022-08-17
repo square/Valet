@@ -16,9 +16,7 @@
 #import <Valet/Valet.h>
 #import <XCTest/XCTest.h>
 
-#if TARGET_OS_TV
-
-#else
+#if !TARGET_OS_TV
 
 @interface VALSinglePromptSecureEnclaveValetTests : XCTestCase
 @end

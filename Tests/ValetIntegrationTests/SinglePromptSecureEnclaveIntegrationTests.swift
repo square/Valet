@@ -18,8 +18,8 @@ import Foundation
 @testable import Valet
 import XCTest
 
-#if !os(tvOS)
-#if canImport(LocalAuthentication)
+// Xcode 13 and prior incorrectly say that LocalAuthentication is available on tvOS, so we have to check both as long as Xcode 13 and prior are supported.
+#if !os(tvOS) && canImport(LocalAuthentication)
 
 class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
 {
@@ -235,5 +235,4 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
 }
 
-#endif
 #endif
