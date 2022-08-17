@@ -38,12 +38,18 @@ func testEnvironmentIsSigned() -> Bool {
 
 func testEnvironmentSupportsWhenPasscodeSet() -> Bool {
     if let simulatorVersionInfo = ProcessInfo.processInfo.environment["SIMULATOR_VERSION_INFO"],
-        simulatorVersionInfo.contains("iOS 13") || simulatorVersionInfo.contains("tvOS 13")
+        simulatorVersionInfo.contains("iOS 13")
+        || simulatorVersionInfo.contains("tvOS 13")
+        || simulatorVersionInfo.contains("iOS 14")
+        || simulatorVersionInfo.contains("tvOS 14")
+        || simulatorVersionInfo.contains("iOS 15")
+        || simulatorVersionInfo.contains("tvOS 15")
     {
-        // iOS and tvOS 13 simulators fail to store items in a Valet that has a
+        // iOS and tvOS 13, 14, and 15 simulators fail to store items in a Valet that has a
         // kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly flag. The documentation for this flag says:
         // "No items can be stored in this class on devices without a passcode". I currently do not
         // understand why prior simulators work with this flag, given that no simulators have a passcode.
+        // Tests that fail this check must be run on device.
         return false
 
     } else {
