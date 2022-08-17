@@ -18,13 +18,13 @@ import Foundation
 @testable import Valet
 import XCTest
 
-#if canImport(LocalAuthentication)
+// Xcode 13 and prior incorrectly say that LocalAuthentication is available on tvOS, so we have to check both as long as Xcode 13 and prior are supported.
+#if !os(tvOS) && canImport(LocalAuthentication)
 
 class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
 {
     static let identifier = Identifier(nonEmpty: "valet_testing")!
 
-    @available(tvOS 11.0, *)
     func valet() -> SinglePromptSecureEnclaveValet {
         .valet(with: SinglePromptSecureEnclaveTests.identifier, accessControl: .userPresence)
     }
@@ -35,9 +35,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     {
         super.setUp()
 
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -52,9 +49,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         
     func test_SinglePromptSecureEnclaveValetsWithEqualConfiguration_canAccessSameData() throws
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
@@ -67,9 +61,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_SinglePromptSecureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData() throws
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
@@ -87,9 +78,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_allKeys() throws
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
@@ -107,9 +95,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_allKeys_doesNotReflectValetImplementationDetails() throws {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
@@ -123,9 +108,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_canAccessKeychain()
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -140,9 +122,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_canAccessKeychain_sharedAccessGroup() {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -159,9 +138,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     #if !os(macOS)
     // We can't test app groups on macOS without a paid developer account, which we don't have.
     func test_canAccessKeychain_sharedAppGroup() {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -180,9 +156,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsMatchingQuery_failsForBadQuery()
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
         guard testEnvironmentIsSigned() else {
             return
         }
@@ -198,9 +171,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave() throws
     {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
@@ -239,9 +209,6 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() throws {
-        guard #available(tvOS 11.0, *) else {
-            return
-        }
         guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
