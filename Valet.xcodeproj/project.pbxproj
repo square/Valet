@@ -206,6 +206,16 @@
 		371150AD1E2962D8004A45D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150AB1E2962D8004A45D4 /* Main.storyboard */; };
 		371150AF1E2962D8004A45D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 371150AE1E2962D8004A45D4 /* Assets.xcassets */; };
 		371150B21E2962D8004A45D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371150B01E2962D8004A45D4 /* LaunchScreen.storyboard */; };
+		373E0A1E28AD3CCC00024F8F /* LegacyValet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1612FDD322A9CB2200FC1142 /* LegacyValet.framework */; };
+		373E0A1F28AD3CCC00024F8F /* LegacyValet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1612FDD322A9CB2200FC1142 /* LegacyValet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		373E0A2228AD3CCC00024F8F /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; };
+		373E0A2328AD3CCC00024F8F /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6827C1BA8B3F900EFF4EA /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		373E0A2728AD3CDE00024F8F /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6828A1BA8B4B200EFF4EA /* Valet.framework */; };
+		373E0A2828AD3CDE00024F8F /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 26E6828A1BA8B4B200EFF4EA /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		373E0A2B28AD3CEC00024F8F /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16C3B06D204B1DB800B4D0B4 /* Valet.framework */; };
+		373E0A2C28AD3CEC00024F8F /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16C3B06D204B1DB800B4D0B4 /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		373E0A2F28AD3CF900024F8F /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; };
+		373E0A3028AD3CF900024F8F /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AC89A3EC1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3EB1CC82426009A7121 /* ValetTouchIDTestAppDelegate.swift */; };
 		AC89A3EE1CC82738009A7121 /* ValetTouchIDTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC89A3ED1CC82738009A7121 /* ValetTouchIDTestViewController.swift */; };
 		EAF894841B053E0500EDAD6C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAF894831B053E0500EDAD6C /* Images.xcassets */; };
@@ -305,6 +315,41 @@
 			remoteGlobalIDString = 371150A41E2962D8004A45D4;
 			remoteInfo = "Valet iOS Test Host App";
 		};
+		373E0A2028AD3CCC00024F8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1612FDD222A9CB2200FC1142;
+			remoteInfo = "LegacyValet iOS";
+		};
+		373E0A2428AD3CCC00024F8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 26E6827B1BA8B3F900EFF4EA;
+			remoteInfo = "Valet iOS";
+		};
+		373E0A2928AD3CDE00024F8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 26E682891BA8B4B200EFF4EA;
+			remoteInfo = "Valet Mac";
+		};
+		373E0A2D28AD3CEC00024F8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 16C3B06C204B1DB800B4D0B4;
+			remoteInfo = "Valet tvOS";
+		};
+		373E0A3128AD3CF900024F8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 16DF6AD9204B45EB00F8E0A4;
+			remoteInfo = "Valet watchOS";
+		};
 		AC80E0A01F6DABB80091D04D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA1E1F7B1A8C46080067C991 /* Project object */;
@@ -328,6 +373,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				373E0A2C28AD3CEC00024F8F /* Valet.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,6 +385,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				1612FE1022A9CC3E00FC1142 /* LegacyValet.framework in Embed Frameworks */,
+				373E0A2828AD3CDE00024F8F /* Valet.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,6 +434,29 @@
 				16DF6B0D204B496800F8E0A4 /* Valet watchOS Test Host App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		373E0A2628AD3CCC00024F8F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				373E0A1F28AD3CCC00024F8F /* LegacyValet.framework in Embed Frameworks */,
+				373E0A2328AD3CCC00024F8F /* Valet.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		373E0A3428AD3CF900024F8F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				373E0A3028AD3CF900024F8F /* Valet.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -519,6 +589,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				373E0A2B28AD3CEC00024F8F /* Valet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,6 +598,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1612FE0F22A9CC3E00FC1142 /* LegacyValet.framework in Frameworks */,
+				373E0A2728AD3CDE00024F8F /* Valet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,6 +651,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				373E0A1E28AD3CCC00024F8F /* LegacyValet.framework in Frameworks */,
+				373E0A2228AD3CCC00024F8F /* Valet.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		373E0A3328AD3CF900024F8F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				373E0A2F28AD3CF900024F8F /* Valet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1004,6 +1086,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				373E0A2E28AD3CEC00024F8F /* PBXTargetDependency */,
 			);
 			name = "Valet tvOS Test Host App";
 			productName = "Valet tvOS Test Host App";
@@ -1023,6 +1106,7 @@
 			);
 			dependencies = (
 				1612FE0E22A9CC3E00FC1142 /* PBXTargetDependency */,
+				373E0A2A28AD3CDE00024F8F /* PBXTargetDependency */,
 			);
 			name = "Valet macOS Test Host App";
 			productName = "Valet macOS Test Host App";
@@ -1033,9 +1117,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16C3B072204B1DB800B4D0B4 /* Build configuration list for PBXNativeTarget "Valet tvOS" */;
 			buildPhases = (
+				16C3B06A204B1DB800B4D0B4 /* Headers */,
 				16C3B068204B1DB800B4D0B4 /* Sources */,
 				16C3B069204B1DB800B4D0B4 /* Frameworks */,
-				16C3B06A204B1DB800B4D0B4 /* Headers */,
 				16C3B06B204B1DB800B4D0B4 /* Resources */,
 			);
 			buildRules = (
@@ -1070,9 +1154,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16DF6ADF204B45EB00F8E0A4 /* Build configuration list for PBXNativeTarget "Valet watchOS" */;
 			buildPhases = (
+				16DF6AD7204B45EB00F8E0A4 /* Headers */,
 				16DF6AD5204B45EB00F8E0A4 /* Sources */,
 				16DF6AD6204B45EB00F8E0A4 /* Frameworks */,
-				16DF6AD7204B45EB00F8E0A4 /* Headers */,
 				16DF6AD8204B45EB00F8E0A4 /* Resources */,
 			);
 			buildRules = (
@@ -1090,11 +1174,14 @@
 			buildPhases = (
 				16DF6AF1204B496800F8E0A4 /* Resources */,
 				16DF6B11204B496800F8E0A4 /* Embed App Extensions */,
+				373E0A3328AD3CF900024F8F /* Frameworks */,
+				373E0A3428AD3CF900024F8F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				16DF6B02204B496800F8E0A4 /* PBXTargetDependency */,
+				373E0A3228AD3CF900024F8F /* PBXTargetDependency */,
 			);
 			name = "Valet watchOS Test Host App";
 			productName = "Valet watchOS Test Host App";
@@ -1125,9 +1212,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 26E682831BA8B3F900EFF4EA /* Build configuration list for PBXNativeTarget "Valet iOS" */;
 			buildPhases = (
+				26E682791BA8B3F900EFF4EA /* Headers */,
 				26E682771BA8B3F900EFF4EA /* Sources */,
 				26E682781BA8B3F900EFF4EA /* Frameworks */,
-				26E682791BA8B3F900EFF4EA /* Headers */,
 				26E6827A1BA8B3F900EFF4EA /* Resources */,
 			);
 			buildRules = (
@@ -1143,9 +1230,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 26E6828F1BA8B4B200EFF4EA /* Build configuration list for PBXNativeTarget "Valet Mac" */;
 			buildPhases = (
+				26E682871BA8B4B200EFF4EA /* Headers */,
 				26E682851BA8B4B200EFF4EA /* Sources */,
 				26E682861BA8B4B200EFF4EA /* Frameworks */,
-				26E682871BA8B4B200EFF4EA /* Headers */,
 				26E682881BA8B4B200EFF4EA /* Resources */,
 			);
 			buildRules = (
@@ -1164,10 +1251,13 @@
 				371150A11E2962D8004A45D4 /* Sources */,
 				371150A21E2962D8004A45D4 /* Frameworks */,
 				371150A31E2962D8004A45D4 /* Resources */,
+				373E0A2628AD3CCC00024F8F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				373E0A2128AD3CCC00024F8F /* PBXTargetDependency */,
+				373E0A2528AD3CCC00024F8F /* PBXTargetDependency */,
 			);
 			name = "Valet iOS Test Host App";
 			productName = "Valet iOS Test Host App";
@@ -1843,6 +1933,31 @@
 			target = 371150A41E2962D8004A45D4 /* Valet iOS Test Host App */;
 			targetProxy = 371150B81E2962FC004A45D4 /* PBXContainerItemProxy */;
 		};
+		373E0A2128AD3CCC00024F8F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1612FDD222A9CB2200FC1142 /* LegacyValet iOS */;
+			targetProxy = 373E0A2028AD3CCC00024F8F /* PBXContainerItemProxy */;
+		};
+		373E0A2528AD3CCC00024F8F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 26E6827B1BA8B3F900EFF4EA /* Valet iOS */;
+			targetProxy = 373E0A2428AD3CCC00024F8F /* PBXContainerItemProxy */;
+		};
+		373E0A2A28AD3CDE00024F8F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 26E682891BA8B4B200EFF4EA /* Valet Mac */;
+			targetProxy = 373E0A2928AD3CDE00024F8F /* PBXContainerItemProxy */;
+		};
+		373E0A2E28AD3CEC00024F8F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 16C3B06C204B1DB800B4D0B4 /* Valet tvOS */;
+			targetProxy = 373E0A2D28AD3CEC00024F8F /* PBXContainerItemProxy */;
+		};
+		373E0A3228AD3CF900024F8F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 16DF6AD9204B45EB00F8E0A4 /* Valet watchOS */;
+			targetProxy = 373E0A3128AD3CF900024F8F /* PBXContainerItemProxy */;
+		};
 		AC80E0A11F6DABB80091D04D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 26E6827B1BA8B3F900EFF4EA /* Valet iOS */;
@@ -2408,6 +2523,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				IBSC_MODULE = Valet_watchOS_Test_Host_App_Extension;
 				INFOPLIST_FILE = "Valet watchOS Test Host App/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTestApp.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2439,6 +2555,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				IBSC_MODULE = Valet_watchOS_Test_Host_App_Extension;
 				INFOPLIST_FILE = "Valet watchOS Test Host App/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.ValetTouchIDTestApp.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
