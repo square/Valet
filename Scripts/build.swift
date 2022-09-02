@@ -21,126 +21,91 @@ enum TaskError: Error {
 }
 
 enum Platform: String, CustomStringConvertible {
-    case iOS_10
-    case iOS_11
-    case iOS_12
     case iOS_13
     case iOS_14
-    case tvOS_10
-    case tvOS_11
-    case tvOS_12
+    case iOS_15
     case tvOS_13
     case tvOS_14
-    case macOS_10_12
-    case macOS_10_13
-    case macOS_10_14
+    case tvOS_15
     case macOS_10_15
-    case watchOS_3
-    case watchOS_4
-    case watchOS_5
+    case macOS_11
+    case macOS_12
     case watchOS_6
     case watchOS_7
+    case watchOS_8
 
     var destination: String {
         switch self {
-        case .iOS_10:
-            return "platform=iOS Simulator,OS=10.3.1,name=iPad Pro (12.9 inch)"
-        case .iOS_11:
-            return "platform=iOS Simulator,OS=11.4,name=iPad Pro (12.9-inch) (2nd generation)"
-        case .iOS_12:
-            return "platform=iOS Simulator,OS=12.4,name=iPad Pro (12.9-inch) (3rd generation)"
         case .iOS_13:
             return "platform=iOS Simulator,OS=13.7,name=iPad Pro (12.9-inch) (4th generation)"
         case .iOS_14:
             return "platform=iOS Simulator,OS=14.4,name=iPad Pro (12.9-inch) (4th generation)"
+        case .iOS_15:
+            return "platform=iOS Simulator,OS=15.5,name=iPad Pro (12.9-inch) (5th generation)"
 
-        case .tvOS_10:
-            return "platform=tvOS Simulator,OS=10.2,name=Apple TV 1080p"
-        case .tvOS_11:
-            return "platform=tvOS Simulator,OS=11.4,name=Apple TV"
-        case .tvOS_12:
-            return "platform=tvOS Simulator,OS=12.4,name=Apple TV"
         case .tvOS_13:
             return "platform=tvOS Simulator,OS=13.4,name=Apple TV"
         case .tvOS_14:
             return "platform=tvOS Simulator,OS=14.3,name=Apple TV"
+        case .tvOS_15:
+            return "platform=tvOS Simulator,OS=15.4,name=Apple TV"
 
-        case .macOS_10_12,
-             .macOS_10_13,
-             .macOS_10_14,
-             .macOS_10_15:
+        case .macOS_10_15,
+             .macOS_11,
+             .macOS_12:
             return "platform=OS X"
 
-        case .watchOS_3:
-            return "OS=3.2,name=Apple Watch Series 2 - 42mm"
-        case .watchOS_4:
-            return "OS=4.3,name=Apple Watch Series 2 - 42mm"
-        case .watchOS_5:
-            return "OS=5.3,name=Apple Watch Series 4 - 44mm"
         case .watchOS_6:
             return "OS=6.2.1,name=Apple Watch Series 4 - 44mm"
         case .watchOS_7:
             return "OS=7.2,name=Apple Watch Series 6 - 44mm"
+        case .watchOS_8:
+            return "OS=8.5,name=Apple Watch Series 6 - 44mm"
         }
     }
 
     var sdk: String {
         switch self {
-        case .iOS_10,
-             .iOS_11,
-             .iOS_12,
-             .iOS_13,
-             .iOS_14:
+        case .iOS_13,
+             .iOS_14,
+             .iOS_15:
             return "iphonesimulator"
 
-        case .tvOS_10,
-             .tvOS_11,
-             .tvOS_12,
-             .tvOS_13,
-             .tvOS_14:
+        case .tvOS_13,
+             .tvOS_14,
+             .tvOS_15:
             return "appletvsimulator"
 
-        case .macOS_10_12:
-            return "macosx10.12"
-        case .macOS_10_13:
-            return "macosx10.13"
-        case .macOS_10_14:
-            return "macosx10.14"
         case .macOS_10_15:
             return "macosx10.15"
+        case .macOS_11:
+            return "macosx11.1"
+        case .macOS_12:
+            return "macosx12.3"
 
-        case .watchOS_3,
-             .watchOS_4,
-             .watchOS_5,
-             .watchOS_6,
-             .watchOS_7:
+        case .watchOS_6,
+             .watchOS_7,
+             .watchOS_8:
             return "watchsimulator"
         }
     }
 
     var shouldTest: Bool {
         switch self {
-        case .iOS_10,
-             .iOS_11,
-             .iOS_12,
-             .iOS_13,
+        case .iOS_13,
              .iOS_14,
-             .tvOS_10,
-             .tvOS_11,
-             .tvOS_12,
+             .iOS_15,
              .tvOS_13,
              .tvOS_14,
-             .macOS_10_12,
-             .macOS_10_13,
-             .macOS_10_14,
-             .macOS_10_15:
+             .tvOS_15,
+             .macOS_10_15,
+             .macOS_11,
+             .macOS_12:
             return true
 
-        case .watchOS_3,
-             .watchOS_4,
-             .watchOS_5,
-             .watchOS_6,
-             .watchOS_7:
+        case .watchOS_6,
+             .watchOS_7,
+             .watchOS_8:
             // watchOS does not support unit testing (yet?).
             return false
         }
@@ -152,31 +117,24 @@ enum Platform: String, CustomStringConvertible {
 
     var scheme: String {
         switch self {
-        case .iOS_10,
-             .iOS_11,
-             .iOS_12,
-             .iOS_13,
-             .iOS_14:
+        case .iOS_13,
+             .iOS_14,
+             .iOS_15:
             return "Valet iOS"
 
-        case .tvOS_10,
-             .tvOS_11,
-             .tvOS_12,
-             .tvOS_13,
-             .tvOS_14:
+        case .tvOS_13,
+             .tvOS_14,
+             .tvOS_15:
             return "Valet tvOS"
 
-        case .macOS_10_12,
-             .macOS_10_13,
-             .macOS_10_14,
-             .macOS_10_15:
+        case .macOS_10_15,
+             .macOS_11,
+             .macOS_12:
             return "Valet Mac"
 
-        case .watchOS_3,
-             .watchOS_4,
-             .watchOS_5,
-             .watchOS_6,
-             .watchOS_7:
+        case .watchOS_6,
+             .watchOS_7,
+             .watchOS_8:
             return "Valet watchOS"
         }
     }
@@ -266,7 +224,7 @@ guard let task = Task(rawValue: rawTask) else {
 }
 
 if task.shouldGenerateXcodeProject {
-    try execute(commandPath: "/usr/bin/swift", arguments: ["package", "generate-xcodeproj", "--output=generated/"])
+    try execute(commandPath: "/usr/bin/xcrun", arguments: ["/usr/bin/swift", "package", "generate-xcodeproj", "--output=generated/"])
 }
 
 
