@@ -224,7 +224,7 @@ guard let task = Task(rawValue: rawTask) else {
 }
 
 if task.shouldGenerateXcodeProject {
-    try execute(commandPath: "/usr/bin/swift", arguments: ["package", "generate-xcodeproj", "--output=generated/"])
+    try execute(commandPath: "/usr/bin/xcrun", arguments: ["/usr/bin/swift", "package", "generate-xcodeproj", "--output=generated/"])
 }
 
 
