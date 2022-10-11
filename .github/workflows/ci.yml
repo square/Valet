@@ -23,7 +23,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: xcversion select 12.4
+        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
       - name: Prepare Simulator Runtimes
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
       - name: Build and Test Framework
@@ -46,7 +46,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: xcversion select 13.4.1
+        run: sudo xcode-select --switch /Applications/Xcode_13.4.1.app/Contents/Developer
       - name: Build and Test Framework
         run: Scripts/build.swift ${{ matrix.platforms }} xcode
       - name: Upload Coverage Reports
@@ -61,7 +61,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: xcversion select 11.7
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
       - name: Lint Podspec
         run: bundle exec pod lib lint --verbose --fail-fast --swift-version=5.0
   carthage:
@@ -73,7 +73,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: xcversion select 11.7
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
       - name: Install Carthage
         run: brew outdated carthage || brew upgrade carthage
       - name: Build Framework
@@ -96,16 +96,16 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: xcversion select 12.4
+        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
         if: ${{ matrix.platforms == 'iOS_14,tvOS_14,watchOS_7' }}
       - name: Select Xcode Version
-        run: xcversion select 12.4
+        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
         if: ${{ matrix.platforms == 'iOS_13,tvOS_13,watchOS_6' }}
       - name: Select Xcode Version
-        run: xcversion select 12.4
+        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
         if: ${{ matrix.platforms == 'macOS_11' }}
       - name: Select Xcode Version
-        run: xcversion select 11.7
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
         if: ${{ matrix.platforms == 'macOS_10_15' }}
       - name: Prepare Simulator Runtimes
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
@@ -127,7 +127,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: xcversion select 13.4.1
+        run: sudo xcode-select --switch /Applications/Xcode_13.4.1.app/Contents/Developer
       - name: Prepare Simulator Runtimes
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
       - name: Build Framework
