@@ -72,6 +72,8 @@ Or manually checkout the submodule with `git submodule add git@github.com:Square
 
 ## Usage
 
+Prefer to learn via watching a video? Check out [this video tutorial](https://www.youtube.com/watch?v=E2Z8BBARlvs&list=PL_csAAO9PQ8Z9QxzfRxpN1YrVHXmncTSU&index=3).
+
 ### Basic Initialization
 
 ```swift
