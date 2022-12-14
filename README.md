@@ -1,6 +1,8 @@
 # Valet
 
-[![Carthage Compatibility](https://img.shields.io/badge/carthage-✓-e2c245.svg)](https://github.com/Carthage/Carthage/)
+[![CI Status](https://img.shields.io/github/workflow/status/square/valet/CI/master)](https://github.com/square/valet/actions?query=workflow%3ACI+branch%3Amaster)
+[![Swift Package Manager compatible](https://img.shields.io/badge/SPM-✓-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
+[![Carthage Compatibility](https://img.shields.io/badge/carthage-✓-4BC51D.svg)](https://github.com/Carthage/Carthage/)
 [![codecov](https://codecov.io/gh/square/Valet/branch/master/graph/badge.svg)](https://codecov.io/gh/square/Valet)
 [![Version](https://img.shields.io/cocoapods/v/Valet.svg)](https://cocoapods.org/pods/Valet)
 [![License](https://img.shields.io/cocoapods/l/Valet.svg)](https://cocoapods.org/pods/Valet)
