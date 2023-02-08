@@ -17,8 +17,8 @@
 import Foundation
 
 
-@objc(VALKeychainError)
-public enum KeychainError: Int, CaseIterable, CustomStringConvertible, Error, Equatable {
+public enum KeychainError: CustomStringConvertible, Error, Equatable, LocalizedError {
+
     /// The keychain could not be accessed.
     case couldNotAccessKeychain
     /// User dismissed the user-presence prompt.
@@ -33,6 +33,8 @@ public enum KeychainError: Int, CaseIterable, CustomStringConvertible, Error, Eq
     case emptyKey
     /// The value provided is empty.
     case emptyValue
+    /// The value provided is empty.
+    case genericError(status: OSStatus)
 
     init(status: OSStatus) {
         switch status {
@@ -44,7 +46,7 @@ public enum KeychainError: Int, CaseIterable, CustomStringConvertible, Error, Eq
         case errSecMissingEntitlement:
             self = .missingEntitlement
         default:
-            self = .couldNotAccessKeychain
+            self = .genericError(status: status)
         }
     }
 
@@ -58,7 +60,11 @@ public enum KeychainError: Int, CaseIterable, CustomStringConvertible, Error, Eq
         case .itemNotFound: return "KeychainError.itemNotFound"
         case .missingEntitlement: return "KeychainError.missingEntitlement"
         case .userCancelled: return "KeychainError.userCancelled"
+        case .genericError(let status): return "KeychainError.genericError: \(status)"
         }
     }
 
+    public var errorDescription: String? {
+        return description
+    }
 }

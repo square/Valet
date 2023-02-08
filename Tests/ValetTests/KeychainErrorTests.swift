@@ -37,28 +37,17 @@ final class KeychainErrorTests: XCTestCase {
     func test_initStatus_createsMissingEntitlementFrom_errSecMissingEntitlement() {
         XCTAssertEqual(KeychainError(status: errSecMissingEntitlement), KeychainError.missingEntitlement)
     }
-
+    
     func test_initStatus_createsCouldNotAccessKeychainFrom_errSecNotAvailable() {
-        XCTAssertEqual(KeychainError(status: errSecNotAvailable), KeychainError.couldNotAccessKeychain)
+        XCTAssertEqual(KeychainError(status: errSecNotAvailable), KeychainError.genericError(status: errSecNotAvailable))
     }
-
+    
     func test_description_createsHumanReadableDescription() {
-        KeychainError.allCases.forEach {
-            switch $0 {
-            case .couldNotAccessKeychain:
-                XCTAssertEqual($0.description, "KeychainError.couldNotAccessKeychain")
-            case .emptyKey:
-                XCTAssertEqual($0.description, "KeychainError.emptyKey")
-            case .emptyValue:
-                XCTAssertEqual($0.description, "KeychainError.emptyValue")
-            case .itemNotFound:
-                XCTAssertEqual($0.description, "KeychainError.itemNotFound")
-            case .missingEntitlement:
-                XCTAssertEqual($0.description, "KeychainError.missingEntitlement")
-            case .userCancelled:
-                XCTAssertEqual($0.description, "KeychainError.userCancelled")
-            }
-
-        }
+        XCTAssertEqual(KeychainError.couldNotAccessKeychain.description, "KeychainError.couldNotAccessKeychain")
+        XCTAssertEqual(KeychainError.emptyKey.description, "KeychainError.emptyKey")
+        XCTAssertEqual(KeychainError.emptyValue.description, "KeychainError.emptyValue")
+        XCTAssertEqual(KeychainError.itemNotFound.description, "KeychainError.itemNotFound")
+        XCTAssertEqual(KeychainError.missingEntitlement.description, "KeychainError.missingEntitlement")
+        XCTAssertEqual(KeychainError.userCancelled.description, "KeychainError.userCancelled")
     }
 }

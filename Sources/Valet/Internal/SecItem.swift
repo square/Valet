@@ -135,6 +135,8 @@ internal final class SecItem {
             switch KeychainError(status: status) {
             case .couldNotAccessKeychain:
                 throw KeychainError.couldNotAccessKeychain
+            case .genericError:
+                throw KeychainError.genericError(status: status)
 
             case .missingEntitlement:
                 throw KeychainError.missingEntitlement
