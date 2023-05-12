@@ -38,8 +38,8 @@ public final class SecureEnclave {
         case let .sharedGroupOverride(identifier, _):
             noPromptValet = .sharedGroupValet(withExplicitlySet: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         #endif
-        case let .sharedGroup(identifier, _):
-            noPromptValet = .sharedGroupValet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
+        case let .sharedGroup(groupIdentifier, identifier, _):
+            noPromptValet = .sharedGroupValet(with: groupIdentifier, identifier: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         }
         
         return noPromptValet.canAccessKeychain()

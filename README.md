@@ -169,6 +169,8 @@ VALValet *const mySharedValet = [VALValet sharedGroupValetWithGroupPrefix:@"grou
 
 This instance can be used to store and retrieve data securely across any app written by the same developer that has `group.Druidia` set as a value for the `com.apple.security.application-groups` key in the app’s `Entitlements`. This Valet is accessible when the device is unlocked. Note that `myValet` and `mySharedValet` cannot read or modify one another’s values because the two Valets were created with different initializers. All Valet types can share secrets across applications written by the same developer by using the `sharedGroupValet` initializer. Note that on macOS, the `groupPrefix` [must be the App ID prefix](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_application-groups#discussion).
 
+As with Valets, shared iCloud Valets can be created with an additional identifier, allowing multiple independently sandboxed keychains to exist within the same shared group.
+
 ### Sharing Secrets Across Devices with iCloud
 
 ```swift
@@ -180,6 +182,8 @@ VALValet *const myCloudValet = [VALValet iCloudValetWithIdentifier:@"Druidia" ac
 ```
 
 This instance can be used to store and retrieve data that can be retrieved by this app on other devices logged into the same iCloud account with iCloud Keychain enabled. If iCloud Keychain is not enabled on this device, secrets can still be read and written, but will not sync to other devices. Note that  `myCloudValet` can not read or modify values in either `myValet` or `mySharedValet` because `myCloudValet` was created a different initializer.
+
+Shared iCloud Valets can be created with an additional identifier, allowing multiple independently sandboxed keychains to exist within the same iCloud shared group.
 
 ### Protecting Secrets with Face ID, Touch ID, or device Passcode
 

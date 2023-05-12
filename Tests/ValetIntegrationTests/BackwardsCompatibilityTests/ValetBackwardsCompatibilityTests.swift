@@ -27,7 +27,7 @@ internal extension Valet {
 
     var legacyIdentifier: String {
         switch service {
-        case let .sharedGroup(sharedAccessGroupIdentifier, _):
+        case let .sharedGroup(sharedAccessGroupIdentifier, _, _):
             return sharedAccessGroupIdentifier.groupIdentifier
         case let .standard(identifier, _):
             return identifier.description

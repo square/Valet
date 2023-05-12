@@ -69,6 +69,24 @@ class SecureEnclaveIntegrationTests: XCTestCase
             XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
     }
+
+    func test_secureEnclaveSharedGroupValetsWithDifferingIdentifiers_canNotAccessSameData() throws
+    {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+            return
+        }
+
+        let valet1 = SecureEnclaveValet.sharedGroupValet(with: Valet.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1"), accessControl: .devicePasscode)
+        let valet2 = SecureEnclaveValet.sharedGroupValet(with: Valet.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2"), accessControl: .devicePasscode)
+
+        try valet1.setString(passcode, forKey: key)
+
+        XCTAssertNotEqual(valet1, valet2)
+        XCTAssertEqual(passcode, try valet1.string(forKey: key, withPrompt: ""))
+        XCTAssertThrowsError(try valet2.string(forKey: key, withPrompt: "")) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+    }
         
     // MARK: canAccessKeychain
     

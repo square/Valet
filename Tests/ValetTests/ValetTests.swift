@@ -41,7 +41,17 @@ class ValetTests: XCTestCase
 
         Accessibility.allCases.forEach { accessibility in
             let backingService = Valet.sharedGroupValet(with: identifier, accessibility: accessibility).service
-            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .valet(accessibility)))
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, nil, .valet(accessibility)))
+        }
+    }
+
+    func test_init_createsCorrectBackingService_sharedAccess_withIdentifier() {
+        let groupIdentifier = Valet.sharedAccessGroupIdentifier
+        let identifier = Identifier(nonEmpty: "UniquenessIdentifier")
+
+        Accessibility.allCases.forEach { accessibility in
+            let backingService = Valet.sharedGroupValet(with: groupIdentifier, identifier: identifier, accessibility: accessibility).service
+            XCTAssertEqual(backingService, Service.sharedGroup(groupIdentifier, identifier, .valet(accessibility)))
         }
     }
 
@@ -59,7 +69,7 @@ class ValetTests: XCTestCase
 
         CloudAccessibility.allCases.forEach { accessibility in
             let backingService = Valet.iCloudSharedGroupValet(with: identifier, accessibility: accessibility).service
-            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .iCloud(accessibility)))
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, nil, .iCloud(accessibility)))
         }
     }
 

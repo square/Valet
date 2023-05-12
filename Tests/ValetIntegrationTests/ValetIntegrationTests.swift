@@ -74,6 +74,20 @@ internal extension Valet {
         #endif
     }()
 
+    static var sharedAccessGroupIdentifier2: SharedGroupIdentifier = {
+        #if os(iOS)
+        return SharedGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-iOS-Test-Host-App2")!
+        #elseif os(macOS)
+        return SharedGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-macOS-Test-Host-App2")!
+        #elseif os(tvOS)
+        return SharedGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-tvOS-Test-Host-App2")!
+        #elseif os(watchOS)
+        return SharedGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension2")!
+        #else
+        XCTFail()
+        #endif
+    }()
+
     // MARK: Shared App Group
 
     static var sharedAppGroupIdentifier: SharedGroupIdentifier = {
@@ -96,9 +110,11 @@ internal extension Valet {
 class ValetIntegrationTests: XCTestCase
 {
     static let sharedAccessGroupIdentifier = Valet.sharedAccessGroupIdentifier
+    static let sharedAccessGroupIdentifier2 = Valet.sharedAccessGroupIdentifier2
     static let sharedAppGroupIdentifier = Valet.sharedAppGroupIdentifier
     var allPermutations: [Valet] {
         var signedPermutations = Valet.permutations(with: ValetIntegrationTests.sharedAccessGroupIdentifier)
+        signedPermutations += Valet.permutations(with: ValetIntegrationTests.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "UniquenessIdentifier"))
         #if !os(macOS)
         // We can't test app groups on macOS without a paid developer account, which we don't have.
         signedPermutations += Valet.permutations(with: ValetIntegrationTests.sharedAppGroupIdentifier)
@@ -157,7 +173,17 @@ class ValetIntegrationTests: XCTestCase
 
         Accessibility.allCases.forEach { accessibility in
             let backingService = Valet.sharedGroupValet(with: identifier, accessibility: accessibility).service
-            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .valet(accessibility)))
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, nil, .valet(accessibility)))
+        }
+    }
+
+    func test_init_createsCorrectBackingService_sharedAccess_withIdentifier() {
+        let sharedIdentifier = Valet.sharedAccessGroupIdentifier
+        let identifier = Identifier(nonEmpty: "id")
+
+        Accessibility.allCases.forEach { accessibility in
+            let backingService = Valet.sharedGroupValet(with: sharedIdentifier, identifier: identifier, accessibility: accessibility).service
+            XCTAssertEqual(backingService, Service.sharedGroup(sharedIdentifier, identifier, .valet(accessibility)))
         }
     }
 
@@ -175,7 +201,17 @@ class ValetIntegrationTests: XCTestCase
 
         CloudAccessibility.allCases.forEach { accessibility in
             let backingService = Valet.iCloudSharedGroupValet(with: identifier, accessibility: accessibility).service
-            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .iCloud(accessibility)))
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, nil, .iCloud(accessibility)))
+        }
+    }
+
+    func test_init_createsCorrectBackingService_cloudSharedAccess_withIdentifier() {
+        let groupIdentifier = Valet.sharedAccessGroupIdentifier
+        let identifier = Identifier(nonEmpty: "id")
+
+        CloudAccessibility.allCases.forEach { accessibility in
+            let backingService = Valet.iCloudSharedGroupValet(with: groupIdentifier, identifier: identifier, accessibility: accessibility).service
+            XCTAssertEqual(backingService, Service.sharedGroup(groupIdentifier, identifier, .iCloud(accessibility)))
         }
     }
 
@@ -317,6 +353,45 @@ class ValetIntegrationTests: XCTestCase
         }
     }
 
+    func test_stringForKey_withDifferingIdentifierInSameAccessGroup_throwsItemNotFound() throws
+    {
+        let valet1 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: vanillaValet.accessibility)
+        let valet2 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: vanillaValet.accessibility)
+
+        try valet1.setString(passcode, forKey: key)
+        XCTAssertEqual(passcode, try valet1.string(forKey: key))
+
+        XCTAssertThrowsError(try valet2.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+    }
+
+    func test_stringForKey_withSameIdentifierInDifferentAccessGroup_throwsItemNotFound() throws
+    {
+        let valet1 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: vanillaValet.accessibility)
+        let valet2 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier2, identifier: Identifier(nonEmpty: "valet1")!, accessibility: vanillaValet.accessibility)
+
+        try valet1.setString(passcode, forKey: key)
+        XCTAssertEqual(passcode, try valet1.string(forKey: key))
+
+        XCTAssertThrowsError(try valet2.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+    }
+
+    func test_stringForKey_withDifferingIdentifierInSameiCloudGroup_throwsItemNotFound() throws
+    {
+        let valet1 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: .afterFirstUnlock)
+        let valet2 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: .afterFirstUnlock)
+
+        try valet1.setString(passcode, forKey: key)
+        XCTAssertEqual(passcode, try valet1.string(forKey: key))
+
+        XCTAssertThrowsError(try valet2.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+    }
+
     func test_stringForKey_withDifferingAccessibility_throwsItemNotFound() throws
     {
         try vanillaValet.setString(passcode, forKey: key)
@@ -429,6 +504,32 @@ class ValetIntegrationTests: XCTestCase
             XCTAssertThrowsError(try differingIdentifier.object(forKey: key)) { error in
                 XCTAssertEqual(error as? KeychainError, .itemNotFound)
             }
+        }
+    }
+
+    func test_objectForKey_withDifferingIdentifierInSameAccessGroup_throwsItemNotFound() throws
+    {
+        let valet1 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: vanillaValet.accessibility)
+        let valet2 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: vanillaValet.accessibility)
+
+        try valet1.setObject(passcodeData, forKey: key)
+        XCTAssertEqual(passcodeData, try valet1.object(forKey: key))
+
+        XCTAssertThrowsError(try valet2.object(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+    }
+
+    func test_objectForKey_withDifferingIdentifierInSameiCloudGroup_throwsItemNotFound() throws
+    {
+        let valet1 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: .afterFirstUnlock)
+        let valet2 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: .afterFirstUnlock)
+
+        try valet1.setObject(passcodeData, forKey: key)
+        XCTAssertEqual(passcodeData, try valet1.object(forKey: key))
+
+        XCTAssertThrowsError(try valet2.object(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
     }
     
@@ -648,6 +749,38 @@ class ValetIntegrationTests: XCTestCase
         try differingIdentifier.removeObject(forKey: key)
 
         XCTAssertEqual(passcode, try vanillaValet.string(forKey: key))
+    }
+
+    func test_removeObjectForKey_isDistinctForDifferingIdentifierInSameAccessGroup() throws
+    {
+        let valet1 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: vanillaValet.accessibility)
+        let valet2 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: vanillaValet.accessibility)
+
+        try valet1.setString(passcode, forKey: key)
+        try valet2.setString(passcode, forKey: key)
+
+        try valet2.removeObject(forKey: key)
+
+        XCTAssertEqual(passcode, try valet1.string(forKey: key))
+        XCTAssertThrowsError(try valet2.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+    }
+
+    func test_removeObjectForKey_isDistinctForDifferingIdentifierInSameiCloudGroup() throws
+    {
+        let valet1 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: .afterFirstUnlock)
+        let valet2 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: .afterFirstUnlock)
+
+        try valet1.setString(passcode, forKey: key)
+        try valet2.setString(passcode, forKey: key)
+
+        try valet2.removeObject(forKey: key)
+
+        XCTAssertEqual(passcode, try valet1.string(forKey: key))
+        XCTAssertThrowsError(try valet2.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
     }
 
     func test_removeObjectForKey_isDistinctForDifferingClasses() throws

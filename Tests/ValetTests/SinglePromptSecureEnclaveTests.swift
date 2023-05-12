@@ -43,7 +43,7 @@ class SinglePromptSecureEnclaveTests: XCTestCase
 
         SecureEnclaveAccessControl.allValues().forEach { accessControl in
             let backingService = SinglePromptSecureEnclaveValet.sharedGroupValet(with: identifier, accessControl: accessControl).service
-            XCTAssertEqual(backingService, Service.sharedGroup(identifier, .singlePromptSecureEnclave(accessControl)))
+            XCTAssertEqual(backingService, Service.sharedGroup(identifier, nil, .singlePromptSecureEnclave(accessControl)))
         }
     }
 

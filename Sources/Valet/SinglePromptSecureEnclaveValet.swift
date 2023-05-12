@@ -47,13 +47,13 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
     ///   - identifier: A non-empty identifier that must correspond with the value for keychain-access-groups in your Entitlements file.
     ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    public class func sharedGroupValet(with identifier: SharedGroupIdentifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
-        let key = Service.sharedGroup(identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
+    public class func sharedGroupValet(with groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
+        let key = Service.sharedGroup(groupIdentifier, identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
         } else {
-            let valet = SinglePromptSecureEnclaveValet(sharedAccess: identifier, accessControl: accessControl)
+            let valet = SinglePromptSecureEnclaveValet(sharedAccess: groupIdentifier, identifier: identifier, accessControl: accessControl)
             identifierToValetMap.setObject(valet, forKey: key)
             return valet
         }
@@ -84,10 +84,10 @@ public final class SinglePromptSecureEnclaveValet: NSObject {
             accessControl: accessControl)
     }
     
-    private convenience init(sharedAccess groupIdentifier: SharedGroupIdentifier, accessControl: SecureEnclaveAccessControl) {
+    private convenience init(sharedAccess groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessControl: SecureEnclaveAccessControl) {
         self.init(
-            identifier: groupIdentifier.asIdentifier,
-            service: .sharedGroup(groupIdentifier, .singlePromptSecureEnclave(accessControl)),
+            identifier: identifier ?? groupIdentifier.asIdentifier,
+            service: .sharedGroup(groupIdentifier, identifier, .singlePromptSecureEnclave(accessControl)),
             accessControl: accessControl)
     }
 
