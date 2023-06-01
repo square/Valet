@@ -48,7 +48,7 @@ jobs:
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_13.4.1.app/Contents/Developer
       - name: Build and Test Framework
-        run: Scripts/build.swift ${{ matrix.platforms }} xcode
+        run: /usr/bin/env swift Scripts/build.swift ${{ matrix.platforms }} xcode
       - name: Upload Coverage Reports
         if: success()
         run: Scripts/upload-coverage-reports.sh ${{ matrix.platforms }}

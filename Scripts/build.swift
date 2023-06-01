@@ -211,6 +211,8 @@ enum Task: String, CustomStringConvertible {
     }
 }
 
+print("Starting build")
+
 guard CommandLine.arguments.count > 2 else {
     print("Usage: build.swift platforms [spm|xcode]")
     throw TaskError.code(1)
@@ -218,15 +220,17 @@ guard CommandLine.arguments.count > 2 else {
 let rawPlatforms = CommandLine.arguments[1].components(separatedBy: ",")
 let rawTask = CommandLine.arguments[2]
 
+print("Raw task: \(rawTask) \(rawPlatforms.joined(separator: " "))")
+
 guard let task = Task(rawValue: rawTask) else {
     print("Received unknown task \(rawTask)")
     throw TaskError.code(1)
 }
 
 if task.shouldGenerateXcodeProject {
+    print("Generating Xcode proj")
     try execute(commandPath: "/usr/bin/xcrun", arguments: ["/usr/bin/swift", "package", "generate-xcodeproj", "--output=generated/"])
 }
-
 
 for rawPlatform in rawPlatforms {
     guard let platform = Platform(rawValue: rawPlatform) else {
@@ -258,6 +262,8 @@ for rawPlatform in rawPlatforms {
     if shouldTest {
         xcodeBuildArguments.append("test")
     }
+
+    print("Launching command 1: /usr/bin/xcodebuild \(xcodeBuildArguments.joined(separator: " "))")
 
     try execute(commandPath: "/usr/bin/xcodebuild", arguments: xcodeBuildArguments)
 }
