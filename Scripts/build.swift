@@ -24,15 +24,19 @@ enum Platform: String, CustomStringConvertible {
     case iOS_13
     case iOS_14
     case iOS_15
+    case iOS_16
     case tvOS_13
     case tvOS_14
     case tvOS_15
+    case tvOS_16
     case macOS_10_15
     case macOS_11
     case macOS_12
+    case macOS_13
     case watchOS_6
     case watchOS_7
     case watchOS_8
+    case watchOS_9
 
     var destination: String {
         switch self {
@@ -42,6 +46,8 @@ enum Platform: String, CustomStringConvertible {
             return "platform=iOS Simulator,OS=14.4,name=iPad Pro (12.9-inch) (4th generation)"
         case .iOS_15:
             return "platform=iOS Simulator,OS=15.5,name=iPad Pro (12.9-inch) (5th generation)"
+        case .iOS_16:
+            return "platform=iOS Simulator,OS=16.4,name=iPad Pro (12.9-inch) (6th generation)"
 
         case .tvOS_13:
             return "platform=tvOS Simulator,OS=13.4,name=Apple TV"
@@ -49,10 +55,13 @@ enum Platform: String, CustomStringConvertible {
             return "platform=tvOS Simulator,OS=14.3,name=Apple TV"
         case .tvOS_15:
             return "platform=tvOS Simulator,OS=15.4,name=Apple TV"
+        case .tvOS_16:
+            return "platform=tvOS Simulator,OS=16.4,name=Apple TV"
 
         case .macOS_10_15,
              .macOS_11,
-             .macOS_12:
+             .macOS_12,
+             .macOS_13:
             return "platform=OS X"
 
         case .watchOS_6:
@@ -61,6 +70,8 @@ enum Platform: String, CustomStringConvertible {
             return "OS=7.2,name=Apple Watch Series 6 - 44mm"
         case .watchOS_8:
             return "OS=8.5,name=Apple Watch Series 6 - 44mm"
+        case .watchOS_9:
+            return "OS=9.4,name=Apple Watch Series 6 - 44mm"
         }
     }
 
@@ -68,12 +79,14 @@ enum Platform: String, CustomStringConvertible {
         switch self {
         case .iOS_13,
              .iOS_14,
-             .iOS_15:
+             .iOS_15,
+             .iOS_16:
             return "iphonesimulator"
 
         case .tvOS_13,
              .tvOS_14,
-             .tvOS_15:
+             .tvOS_15,
+             .tvOS_16:
             return "appletvsimulator"
 
         case .macOS_10_15:
@@ -82,10 +95,13 @@ enum Platform: String, CustomStringConvertible {
             return "macosx11.1"
         case .macOS_12:
             return "macosx12.3"
+        case .macOS_13:
+            return "macosx13.3"
 
         case .watchOS_6,
              .watchOS_7,
-             .watchOS_8:
+             .watchOS_8,
+             .watchOS_9:
             return "watchsimulator"
         }
     }
@@ -95,17 +111,21 @@ enum Platform: String, CustomStringConvertible {
         case .iOS_13,
              .iOS_14,
              .iOS_15,
+             .iOS_16,
              .tvOS_13,
              .tvOS_14,
              .tvOS_15,
+             .tvOS_16,
              .macOS_10_15,
              .macOS_11,
-             .macOS_12:
+             .macOS_12,
+             .macOS_13:
             return true
 
         case .watchOS_6,
              .watchOS_7,
-             .watchOS_8:
+             .watchOS_8,
+             .watchOS_9:
             // watchOS does not support unit testing (yet?).
             return false
         }
@@ -119,22 +139,26 @@ enum Platform: String, CustomStringConvertible {
         switch self {
         case .iOS_13,
              .iOS_14,
-             .iOS_15:
+             .iOS_15,
+             .iOS_16:
             return "Valet iOS"
 
         case .tvOS_13,
              .tvOS_14,
-             .tvOS_15:
+             .tvOS_15,
+             .tvOS_16:
             return "Valet tvOS"
 
         case .macOS_10_15,
              .macOS_11,
-             .macOS_12:
+             .macOS_12,
+             .macOS_13:
             return "Valet Mac"
 
         case .watchOS_6,
              .watchOS_7,
-             .watchOS_8:
+             .watchOS_8,
+             .watchOS_9:
             return "Valet watchOS"
         }
     }
@@ -203,7 +227,7 @@ enum Task: String, CustomStringConvertible {
     func shouldTest(on platform: Platform) -> Bool {
         switch self {
         case .spm:
-            // Our Package isn't set up with unit test targets, becuase SPM can't run unit tests in a codesigned environment.
+            // Our Package isn't set up with unit test targets, because SPM can't run unit tests in a codesigned environment.
             return false
         case .xcode:
             return platform.shouldTest

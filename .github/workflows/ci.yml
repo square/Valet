@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -42,11 +42,32 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_13.4.1.app/Contents/Developer
+      - name: Build and Test Framework
+        run: Scripts/build.swift ${{ matrix.platforms }} xcode
+      - name: Upload Coverage Reports
+        if: success()
+        run: Scripts/upload-coverage-reports.sh ${{ matrix.platforms }}
+  xcode-build-14:
+    name: Xcode 14 Build
+    runs-on: macOS-13
+    strategy:
+      matrix:
+        platforms: [
+          'iOS_16,tvOS_16,watchOS_9',
+        ]
+      fail-fast: false
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Bundle Install
+        run: bundle install
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app/Contents/Developer
       - name: Build and Test Framework
         run: Scripts/build.swift ${{ matrix.platforms }} xcode
       - name: Upload Coverage Reports
@@ -57,7 +78,7 @@ jobs:
     runs-on: macOS-11
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -69,7 +90,7 @@ jobs:
     runs-on: macOS-11
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -92,7 +113,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -123,7 +144,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version

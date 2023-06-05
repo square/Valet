@@ -264,6 +264,8 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
     return keyAlreadyInKeychain;
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreturn-type"
 - (nonnull NSSet *)allKeys;
 {
     VALCheckCondition(NO, [NSSet new], @"%s is not supported on %@", __PRETTY_FUNCTION__, NSStringFromClass([self class]));
@@ -273,6 +275,7 @@ NSString *__nonnull VALStringForAccessControl(VALAccessControl accessControl)
 {
     VALCheckCondition(NO, NO, @"%s is not supported on %@", __PRETTY_FUNCTION__, NSStringFromClass([self class]));
 }
+#pragma clang diagnostic pop
 
 - (nullable NSError *)migrateObjectsMatchingQuery:(nonnull NSDictionary *)secItemQuery removeOnCompletion:(BOOL)remove;
 {
