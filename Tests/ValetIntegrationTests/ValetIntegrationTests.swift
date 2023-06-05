@@ -42,6 +42,8 @@ func testEnvironmentSupportsWhenPasscodeSet() -> Bool {
         || simulatorVersionInfo.contains("tvOS 13")
         || simulatorVersionInfo.contains("iOS 15")
         || simulatorVersionInfo.contains("tvOS 15")
+        || simulatorVersionInfo.contains("iOS 16")
+        || simulatorVersionInfo.contains("tvOS 16")
     {
         // iOS 13, tvOS 13, iOS 15, and tvOS 15 simulators fail to store items in a Valet that has a
         // kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly flag. The documentation for this flag says:
