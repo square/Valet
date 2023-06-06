@@ -98,7 +98,7 @@ enum Platform: String, CustomStringConvertible {
         case .tvOS_13,
              .tvOS_14,
              .tvOS_15,
-             .tvOS_16
+             .tvOS_16,
              .tvOS_17:
             return "appletvsimulator"
 
