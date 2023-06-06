@@ -6,6 +6,10 @@ on:
     - master
   pull_request:
 
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   xcode-build-12:
     name: Xcode 12 Build
@@ -149,6 +153,27 @@ jobs:
         run: bundle install
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_13.4.1.app/Contents/Developer
+      - name: Prepare Simulator Runtimes
+        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
+      - name: Build Framework
+        run: Scripts/build.swift ${{ matrix.platforms }} spm
+  spm-13:
+    name: SPM Build macOS 13
+    runs-on: macOS-13
+    strategy:
+      matrix:
+        platforms: [
+          'iOS_16,tvOS_16,watchOS_9',
+          'macOS_13',
+        ]
+      fail-fast: false
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Bundle Install
+        run: bundle install
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app/Contents/Developer
       - name: Prepare Simulator Runtimes
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
       - name: Build Framework
