@@ -24,6 +24,12 @@ import XCTest
 /// - The Valet Mac Tests target is left without a host app on master. Mac test host app signing requires CI to have the Developer team credentials down in keychain, which we can't easily accomplish.
 /// - Note: In order to test changes locally, set the Valet Mac Tests host to Valet macOS Test Host App, delete all VAL_* keychain items in your keychain via Keychain Access.app, and run Mac tests.
 func testEnvironmentIsSigned() -> Bool {
+    #if targetEnvironment(simulator)
+    if #available(iOS 16, tvOS 16, macOS 13, watchOS 9, *) {
+        return false
+    }
+    #endif
+    
     // Our test host apps for iOS and Mac are both signed, so testing for a custom bundle identifier is analogous to testing signing.
     guard Bundle.main.bundleIdentifier != nil && Bundle.main.bundleIdentifier != "com.apple.dt.xctest.tool" else {
         #if os(iOS) || os(tvOS)
@@ -44,8 +50,10 @@ func testEnvironmentSupportsWhenPasscodeSet() -> Bool {
         || simulatorVersionInfo.contains("tvOS 15")
         || simulatorVersionInfo.contains("iOS 16")
         || simulatorVersionInfo.contains("tvOS 16")
+        || simulatorVersionInfo.contains("iOS 17")
+        || simulatorVersionInfo.contains("tvOS 17")
     {
-        // iOS 13, tvOS 13, iOS 15, and tvOS 15 simulators fail to store items in a Valet that has a
+        // iOS 13, tvOS 13, iOS 15, tvOS 15, and later simulators fail to store items in a Valet that has a
         // kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly flag. The documentation for this flag says:
         // "No items can be stored in this class on devices without a passcode". I currently do not
         // understand why prior simulators work with this flag, given that no simulators have a passcode.
