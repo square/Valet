@@ -107,7 +107,7 @@ jobs:
       - name: Install Carthage
         run: brew outdated carthage || brew upgrade carthage
       - name: Build Framework
-        run: carthage build --verbose --no-skip-current
+        run: carthage build --verbose --no-skip-current --use-xcframework
   spm-11:
     name: SPM Build macOS 11
     runs-on: macOS-11
