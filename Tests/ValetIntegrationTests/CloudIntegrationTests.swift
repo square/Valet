@@ -25,7 +25,7 @@ class CloudIntegrationTests: XCTestCase
     static let identifier = Valet.sharedAccessGroupIdentifier
     static let accessibility = CloudAccessibility.whenUnlocked
     var allPermutations: [Valet] {
-        return (testEnvironmentIsSigned()
+        return (testEnvironmentIsSignedOrDoesNotRequireEntitlement()
             ? Valet.iCloudPermutations(with: CloudIntegrationTests.identifier.asIdentifier) + Valet.iCloudPermutations(with: CloudIntegrationTests.identifier)
             : [])
     }
@@ -47,7 +47,7 @@ class CloudIntegrationTests: XCTestCase
     
     func test_synchronizableValet_isDistinctFromVanillaValetWithEqualConfiguration() throws
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 

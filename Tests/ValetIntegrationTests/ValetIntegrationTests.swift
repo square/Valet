@@ -20,10 +20,10 @@ import XCTest
 @testable import Valet
 
 
-/// - Returns: `true` when the test environment is signed.
+/// - Returns: `true` when the test environment is signed and does not require entitlement.
 /// - The Valet Mac Tests target is left without a host app on master. Mac test host app signing requires CI to have the Developer team credentials down in keychain, which we can't easily accomplish.
 /// - Note: In order to test changes locally, set the Valet Mac Tests host to Valet macOS Test Host App, delete all VAL_* keychain items in your keychain via Keychain Access.app, and run Mac tests.
-func testEnvironmentIsSigned() -> Bool {
+func testEnvironmentIsSignedOrDoesNotRequireEntitlement() -> Bool {
     #if targetEnvironment(simulator)
     if #available(iOS 16, tvOS 16, macOS 13, watchOS 9, *) {
         return false
@@ -114,7 +114,7 @@ class ValetIntegrationTests: XCTestCase
         signedPermutations += Valet.permutations(with: ValetIntegrationTests.sharedAppGroupIdentifier)
         #endif
         return Valet.permutations(with: ValetIntegrationTests.sharedAccessGroupIdentifier.asIdentifier)
-            + (testEnvironmentIsSigned()
+            + (testEnvironmentIsSignedOrDoesNotRequireEntitlement()
                 ? signedPermutations
                 : [])
     }
@@ -134,7 +134,7 @@ class ValetIntegrationTests: XCTestCase
         super.setUp()
 
         let permutations: [Valet]
-        if testEnvironmentIsSigned() {
+        if testEnvironmentIsSignedOrDoesNotRequireEntitlement() {
             permutations = [vanillaValet, anotherFlavor] + allPermutations
         } else {
             permutations = [vanillaValet] + allPermutations
@@ -200,7 +200,7 @@ class ValetIntegrationTests: XCTestCase
     
     func test_canAccessKeychain_sharedAccessGroup()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -213,7 +213,7 @@ class ValetIntegrationTests: XCTestCase
     // We can't test app groups on macOS without a paid developer account, which we don't have.
     func test_canAccessKeychain_sharedAppGroup()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -340,7 +340,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_stringForKey_withEquivalentConfigurationButDifferingFlavor_throwsItemNotFound() throws
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         
@@ -453,7 +453,7 @@ class ValetIntegrationTests: XCTestCase
     }
     
     func test_objectForKey_withEquivalentConfigurationButDifferingFlavor_throwsItemNotFound() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         
@@ -662,7 +662,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_removeObjectForKey_isDistinctForDifferingClasses() throws
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         
@@ -681,7 +681,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_migrateObjectsMatching_failsIfQueryHasNoInputClass() throws
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -710,7 +710,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_migrateObjectsMatching_failsIfNoItemsMatchQuery() throws
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -782,7 +782,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_migrateObjectsMatchingCompactMap_successfullyMigratesTransformedKey() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -805,7 +805,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_migrateObjectsMatchingCompactMap_successfullyMigratesTransformedValue() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -828,7 +828,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_migrateObjectsMatchingCompactMap_returningNilDoesNotMigratePair() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -862,7 +862,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_migrateObjectsMatchingCompactMap_throwingErrorPreventsAllMigration() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -897,7 +897,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_migrateObjectsMatchingCompactMap_thrownErrorFromCompactMapIsRethrown() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -931,7 +931,7 @@ class ValetIntegrationTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSingleKeyValuePairSuccessfully() throws
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         
@@ -943,7 +943,7 @@ class ValetIntegrationTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesMultipleKeyValuePairsSuccessfully() throws
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         
@@ -971,7 +971,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_migrateObjectsFromValet_removesOnCompletionWhenRequested() throws
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         
@@ -1001,7 +1001,7 @@ class ValetIntegrationTests: XCTestCase
 
     func test_migrateObjectsFromValet_leavesKeychainUntouchedWhenConflictsExist() throws
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         
@@ -1058,7 +1058,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_migrateObjectsFromValetCompactMap_successfullyMigratesTransformedKey() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -1078,7 +1078,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_migrateObjectsFromValetCompactMap_successfullyMigratesTransformedValue() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -1098,7 +1098,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_migrateObjectsFromValetCompactMap_returningNilDoesNotMigratePair() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -1129,7 +1129,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_migrateObjectsFromValetCompactMap_throwingErrorPreventsAllMigration() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -1161,7 +1161,7 @@ class ValetIntegrationTests: XCTestCase
     }
 
     func test_migrateObjectsFromValetCompactMap_thrownErrorFromCompactMapIsRethrown() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 

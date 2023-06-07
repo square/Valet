@@ -110,7 +110,7 @@ class ValetMacTests: XCTestCase
             XCTAssertEqual($0.baseKeychainQuery[kSecAttrService as String], explicitlySetIdentifier.description)
         }
 
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -124,7 +124,7 @@ class ValetMacTests: XCTestCase
     }
 
     func test_withExplicitlySet_canAccessKeychain() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -156,7 +156,7 @@ class ValetMacTests: XCTestCase
     }
 
     func test_withExplicitlySet_canReadWrittenString() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 

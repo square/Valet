@@ -25,7 +25,7 @@ extension CloudIntegrationTests {
     // MARK: Backwards Compatibility
 
     func test_backwardsCompatibility_withLegacyValet() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -39,7 +39,7 @@ extension CloudIntegrationTests {
     }
 
     func test_backwardsCompatibility_withSharedAccessGroupLegacyValet() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 

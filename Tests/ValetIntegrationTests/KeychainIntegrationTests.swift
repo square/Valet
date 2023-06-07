@@ -23,7 +23,7 @@ import XCTest
 final class KeychainIntegrationTests: XCTestCase {
 
     func test_revertMigration_removesAllMigratedKeys() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
