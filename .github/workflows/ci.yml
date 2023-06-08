@@ -28,7 +28,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
       - name: Prepare Simulator Runtimes
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
       - name: Build and Test Framework
@@ -127,13 +127,13 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
         if: ${{ matrix.platforms == 'iOS_14,tvOS_14,watchOS_7' }}
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
         if: ${{ matrix.platforms == 'iOS_13,tvOS_13,watchOS_6' }}
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
         if: ${{ matrix.platforms == 'macOS_11' }}
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
