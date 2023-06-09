@@ -293,7 +293,7 @@ guard let task = Task(rawValue: rawTask) else {
     exit(0)
 }
 
-let platforms = rawPlatforms.map { rawPlatform in
+let platforms = rawPlatforms.map { rawPlatform -> Platform in
     guard let platform = Platform(rawValue: rawPlatform) else {
         print("Received unknown platform type \(rawPlatform)")
         exit(0)
