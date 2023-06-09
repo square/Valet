@@ -151,7 +151,8 @@ enum Platform: String, CustomStringConvertible {
         }
     }
 
-    var requiresUpdatedSPMIntegration: Bool {
+    /// Whether the platform's Xcode version requires modern SPM integration in xcodebuild, given the removal of generate-xcodeproj.
+    var requiresModernSPMIntegration: Bool {
         switch self {
         case .iOS_16, .tvOS_16, .watchOS_9, .macOS_13,
             .iOS_17, .tvOS_17, .watchOS_10, .macOS_14:
@@ -211,7 +212,7 @@ enum Task: String, CustomStringConvertible {
     }
 
     func project(for platform: Platform) -> String? {
-        if platform.requiresUpdatedSPMIntegration {
+        if platform.requiresModernSPMIntegration {
             return nil
         } else {
             switch self {
@@ -224,7 +225,7 @@ enum Task: String, CustomStringConvertible {
     }
 
     func shouldGenerateXcodeProject(for platform: Platform) -> Bool {
-        if platform.requiresUpdatedSPMIntegration {
+        if platform.requiresModernSPMIntegration {
             return false
         } else {
             switch self {
@@ -260,7 +261,7 @@ enum Task: String, CustomStringConvertible {
     func scheme(for platform: Platform) -> String {
         switch self {
         case .spm:
-            if platform.requiresUpdatedSPMIntegration {
+            if platform.requiresModernSPMIntegration {
                 return "Valet"
             } else {
                 return "Valet-Package"
@@ -302,14 +303,17 @@ let platforms = rawPlatforms.map { rawPlatform -> Platform in
     return platform
 }
 
-if task == .spm && platforms.map({ task.shouldGenerateXcodeProject(for: $0) }).contains(true) {
+// Only generate xcodeproj for SPM on platforms that require it.
+let shouldGenerateXcodeproj = task == .spm && platforms.map { task.shouldGenerateXcodeProject(for: $0) }.contains(true)
+if shouldGenerateXcodeproj {
     try execute(commandPath: "/usr/bin/xcrun", arguments: ["/usr/bin/swift", "package", "generate-xcodeproj", "--output=generated/"])
 }
 
 for platform in platforms {
     var deletedXcodeproj = false
     var xcodeBuildArguments: [String] = []
-    if task == .spm && platform.requiresUpdatedSPMIntegration {
+    // If necessary, delete Valet.xcodeproj, otherwise xcodebuild won't generate the SPM scheme.
+    if task == .spm && platform.requiresModernSPMIntegration {
         do {
             print("Deleting Valet.xcodeproj, any uncommitted changes will be lost.")
             try execute(commandPath: "/bin/rm", arguments: ["-r", "Valet.xcodeproj"])
