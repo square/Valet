@@ -313,6 +313,7 @@ for platform in platforms {
     var deletedXcodeproj = false
     var xcodeBuildArguments: [String] = []
     // If necessary, delete Valet.xcodeproj, otherwise xcodebuild won't generate the SPM scheme.
+    // If deleted, the xcodeproj will be restored by git at the end of the loop.
     if task == .spm && platform.requiresModernSPMIntegration {
         do {
             print("Deleting Valet.xcodeproj, any uncommitted changes will be lost.")
