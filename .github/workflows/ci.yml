@@ -6,6 +6,10 @@ on:
     - master
   pull_request:
 
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   xcode-build-12:
     name: Xcode 12 Build
@@ -14,16 +18,18 @@ jobs:
       matrix:
         platforms: [
           'iOS_14,tvOS_14,watchOS_7',
-          'iOS_13,tvOS_13,watchOS_6',
+           # TODO: add iOS_13 back once https://github.com/actions/runner-images/issues/7687 is resolved
+          'tvOS_13,watchOS_6',
         ]
       fail-fast: false
+    timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
       - name: Prepare Simulator Runtimes
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
       - name: Build and Test Framework
@@ -40,9 +46,10 @@ jobs:
           'iOS_15,tvOS_15,watchOS_8',
         ]
       fail-fast: false
+    timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -52,35 +59,60 @@ jobs:
       - name: Upload Coverage Reports
         if: success()
         run: Scripts/upload-coverage-reports.sh ${{ matrix.platforms }}
-  pod-lint:
-    name: Pod Lint
-    runs-on: macOS-11
+  xcode-build-14:
+    name: Xcode 14 Build
+    runs-on: macOS-13
+    strategy:
+      matrix:
+        platforms: [
+          'iOS_16,tvOS_16,watchOS_9',
+        ]
+      fail-fast: false
+    timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_14.3.app/Contents/Developer
+      - name: Build and Test Framework
+        run: Scripts/build.swift ${{ matrix.platforms }} xcode
+      - name: Upload Coverage Reports
+        if: success()
+        run: Scripts/upload-coverage-reports.sh ${{ matrix.platforms }}
+  pod-lint:
+    name: Pod Lint
+    runs-on: macOS-13
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Bundle Install
+        run: bundle install
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_14.3.app/Contents/Developer
       - name: Lint Podspec
         run: bundle exec pod lib lint --verbose --fail-fast --swift-version=5.0
   carthage:
     name: Carthage
-    runs-on: macOS-11
+    runs-on: macOS-13
+    timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_14.3.app/Contents/Developer
       - name: Install Carthage
         run: brew outdated carthage || brew upgrade carthage
       - name: Build Framework
-        run: carthage build --verbose --no-skip-current
+        run: carthage build --verbose --no-skip-current --use-xcframeworks
   spm-11:
     name: SPM Build macOS 11
     runs-on: macOS-11
+    timeout-minutes: 30
     strategy:
       matrix:
         platforms: [
@@ -92,17 +124,17 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
         if: ${{ matrix.platforms == 'iOS_14,tvOS_14,watchOS_7' }}
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
         if: ${{ matrix.platforms == 'iOS_13,tvOS_13,watchOS_6' }}
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
         if: ${{ matrix.platforms == 'macOS_11' }}
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
@@ -121,13 +153,36 @@ jobs:
           'macOS_12',
         ]
       fail-fast: false
+    timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_13.4.1.app/Contents/Developer
+      - name: Prepare Simulator Runtimes
+        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
+      - name: Build Framework
+        run: Scripts/build.swift ${{ matrix.platforms }} spm
+  spm-13:
+    name: SPM Build macOS 13
+    runs-on: macOS-13
+    strategy:
+      matrix:
+        platforms: [
+          'iOS_16,tvOS_16,watchOS_9',
+          'macOS_13',
+        ]
+      fail-fast: false
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Bundle Install
+        run: bundle install
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_14.3.app/Contents/Developer
       - name: Prepare Simulator Runtimes
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
       - name: Build Framework
