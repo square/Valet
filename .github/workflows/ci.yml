@@ -18,6 +18,7 @@ jobs:
       matrix:
         platforms: [
           'iOS_14,tvOS_14,watchOS_7',
+           # TODO: add iOS_13 back once https://github.com/actions/runner-images/issues/7687 is resolved
           'tvOS_13,watchOS_6',
         ]
       fail-fast: false
