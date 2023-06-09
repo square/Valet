@@ -9,6 +9,7 @@
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension</string>
+		<string>$(AppIdentifierPrefix)com.squareup.ValetTouchIDTestApp.watchkitapp.watchkitextension2</string>
 	</array>
 </dict>
 </plist>

@@ -19,7 +19,7 @@ import Foundation
 
 internal enum Service: CustomStringConvertible, Equatable {
     case standard(Identifier, Configuration)
-    case sharedGroup(SharedGroupIdentifier, Configuration)
+    case sharedGroup(SharedGroupIdentifier, Identifier?, Configuration)
 
     #if os(macOS)
     case standardOverride(service: Identifier, Configuration)
@@ -44,8 +44,12 @@ internal enum Service: CustomStringConvertible, Equatable {
         "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
     }
 
-    internal static func sharedGroup(with configuration: Configuration, identifier: SharedGroupIdentifier, accessibilityDescription: String) -> String {
-        "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier.groupIdentifier)_\(accessibilityDescription)"
+    internal static func sharedGroup(with configuration: Configuration, groupIdentifier: SharedGroupIdentifier, identifier: Identifier?, accessibilityDescription: String) -> String {
+        if let identifier = identifier {
+            return "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(groupIdentifier.groupIdentifier)_\(identifier)_\(accessibilityDescription)"
+        } else {
+            return "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(groupIdentifier.groupIdentifier)_\(accessibilityDescription)"
+        }
     }
 
     internal static func sharedGroup(with configuration: Configuration, explicitlySetIdentifier identifier: Identifier, accessibilityDescription: String) -> String {
@@ -69,8 +73,8 @@ internal enum Service: CustomStringConvertible, Equatable {
         case let .standard(_, desiredConfiguration):
             configuration = desiredConfiguration
             
-        case let .sharedGroup(identifier, desiredConfiguration):
-            baseQuery[kSecAttrAccessGroup as String] = identifier.description
+        case let .sharedGroup(groupIdentifier, _, desiredConfiguration):
+            baseQuery[kSecAttrAccessGroup as String] = groupIdentifier.description
             configuration = desiredConfiguration
 
         #if os(macOS)
@@ -107,8 +111,8 @@ internal enum Service: CustomStringConvertible, Equatable {
         switch self {
         case let .standard(identifier, configuration):
             service = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
-        case let .sharedGroup(identifier, configuration):
-            service = Service.sharedGroup(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
+        case let .sharedGroup(groupIdentifier, identifier, configuration):
+            service = Service.sharedGroup(with: configuration, groupIdentifier: groupIdentifier, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
         #if os(macOS)
         case let .standardOverride(identifier, _):
             service = identifier.description
@@ -119,7 +123,7 @@ internal enum Service: CustomStringConvertible, Equatable {
 
         switch self {
         case let .standard(_, configuration),
-             let .sharedGroup(_, configuration):
+             let .sharedGroup(_, _, configuration):
             switch configuration {
             case .valet, .iCloud:
                 // Nothing to do here.

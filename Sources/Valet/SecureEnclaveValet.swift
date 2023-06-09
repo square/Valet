@@ -43,13 +43,13 @@ public final class SecureEnclaveValet: NSObject {
     ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
     ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
-    public class func sharedGroupValet(with identifier: SharedGroupIdentifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
-        let key = Service.sharedGroup(identifier, .secureEnclave(accessControl)).description as NSString
+    public class func sharedGroupValet(with groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
+        let key = Service.sharedGroup(groupIdentifier, identifier, .secureEnclave(accessControl)).description as NSString
         if let existingValet = identifierToValetMap.object(forKey: key) {
             return existingValet
             
         } else {
-            let valet = SecureEnclaveValet(sharedAccess: identifier, accessControl: accessControl)
+            let valet = SecureEnclaveValet(sharedAccess: groupIdentifier, identifier: identifier, accessControl: accessControl)
             identifierToValetMap.setObject(valet, forKey: key)
             return valet
         }
@@ -80,11 +80,12 @@ public final class SecureEnclaveValet: NSObject {
             accessControl: accessControl)
     }
     
-    private convenience init(sharedAccess groupIdentifier: SharedGroupIdentifier, accessControl: SecureEnclaveAccessControl) {
+    private convenience init(sharedAccess groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessControl: SecureEnclaveAccessControl) {
         self.init(
-            identifier: groupIdentifier.asIdentifier,
-            service: .sharedGroup(groupIdentifier, .secureEnclave(accessControl)),
-            accessControl: accessControl)
+            identifier: identifier ?? groupIdentifier.asIdentifier,
+            service: .sharedGroup(groupIdentifier, identifier, .secureEnclave(accessControl)),
+            accessControl: accessControl
+        )
     }
 
     private init(identifier: Identifier, service: Service, accessControl: SecureEnclaveAccessControl) {

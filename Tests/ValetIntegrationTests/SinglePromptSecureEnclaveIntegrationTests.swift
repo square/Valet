@@ -74,6 +74,24 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
         }
     }
 
+    func test_SinglePromptSecureEnclaveValetsWithDifferingIdentifiers_canNotAccessSameData() throws
+    {
+        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+            return
+        }
+
+        let valet1 = SinglePromptSecureEnclaveValet.sharedGroupValet(with: Valet.sharedAppGroupIdentifier, identifier: Identifier(nonEmpty: "valet1"), accessControl: .devicePasscode)
+        let valet2 = SinglePromptSecureEnclaveValet.sharedGroupValet(with: Valet.sharedAppGroupIdentifier, identifier: Identifier(nonEmpty: "valet2"), accessControl: .devicePasscode)
+
+        try valet1.setString(passcode, forKey: key)
+
+        XCTAssertNotEqual(valet1, valet2)
+        XCTAssertEqual(passcode, try valet1.string(forKey: key, withPrompt: ""))
+        XCTAssertThrowsError(try valet2.string(forKey: key, withPrompt: "")) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+    }
+
     // MARK: allKeys
     
     func test_allKeys() throws

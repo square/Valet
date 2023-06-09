@@ -1,7 +1,4 @@
 GEM
-  specs:
-
-GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (3.0.6)
@@ -94,7 +91,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  cocoapods (~> 1.11.0)!
+  cocoapods (~> 1.11.0)
 
 BUNDLED WITH
    2.3.7
