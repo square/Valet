@@ -151,6 +151,16 @@ enum Platform: String, CustomStringConvertible {
         }
     }
 
+    var requiresUpdatedSPMIntegration: Bool {
+        switch self {
+        case .iOS_16, .tvOS_16, .watchOS_9, .macOS_13,
+            .iOS_17, .tvOS_17, .watchOS_10, .macOS_14:
+            return true
+        default:
+            return false
+        }
+    }
+
     var derivedDataPath: String {
         ".build/derivedData/" + description
     }
@@ -200,21 +210,29 @@ enum Task: String, CustomStringConvertible {
         rawValue
     }
 
-    var project: String {
-        switch self {
-        case .spm:
-            return "generated/Valet.xcodeproj"
-        case .xcode:
-            return "Valet.xcodeproj"
+    func project(for platform: Platform) -> String? {
+        if platform.requiresUpdatedSPMIntegration {
+            return nil
+        } else {
+            switch self {
+            case .spm:
+                return "generated/Valet.xcodeproj"
+            case .xcode:
+                return "Valet.xcodeproj"
+            }
         }
     }
 
-    var shouldGenerateXcodeProject: Bool {
-        switch self {
-        case .spm:
-            return true
-        case .xcode:
+    func shouldGenerateXcodeProject(for platform: Platform) -> Bool {
+        if platform.requiresUpdatedSPMIntegration {
             return false
+        } else {
+            switch self {
+            case .spm:
+                return true
+            case .xcode:
+                return false
+            }
         }
     }
 
@@ -242,7 +260,11 @@ enum Task: String, CustomStringConvertible {
     func scheme(for platform: Platform) -> String {
         switch self {
         case .spm:
-            return "Valet-Package"
+            if platform.requiresUpdatedSPMIntegration {
+                return "Valet"
+            } else {
+                return "Valet-Package"
+            }
         case .xcode:
             return platform.scheme
         }
@@ -271,23 +293,44 @@ guard let task = Task(rawValue: rawTask) else {
     exit(0)
 }
 
-if task.shouldGenerateXcodeProject {
-    try execute(commandPath: "/usr/bin/xcrun", arguments: ["/usr/bin/swift", "package", "generate-xcodeproj", "--output=generated/"])
-}
-
-
-for rawPlatform in rawPlatforms {
+let platforms = rawPlatforms.map { rawPlatform in
     guard let platform = Platform(rawValue: rawPlatform) else {
         print("Received unknown platform type \(rawPlatform)")
         exit(0)
     }
-    var xcodeBuildArguments = [
-        "-project", task.project,
+
+    return platform
+}
+
+if task == .spm && platforms.map({ task.shouldGenerateXcodeProject(for: $0) }).contains(true) {
+    try execute(commandPath: "/usr/bin/xcrun", arguments: ["/usr/bin/swift", "package", "generate-xcodeproj", "--output=generated/"])
+}
+
+for platform in platforms {
+    var deletedXcodeproj = false
+    var xcodeBuildArguments: [String] = []
+    if task == .spm && platform.requiresUpdatedSPMIntegration {
+        do {
+            print("Deleting Valet.xcodeproj, any uncommitted changes will be lost.")
+            try execute(commandPath: "/bin/rm", arguments: ["-r", "Valet.xcodeproj"])
+            deletedXcodeproj = true
+        } catch {
+            print("Could not delete Valet.xcodeproj due to error: \(error)")
+            exit(0)
+        }
+    }
+
+    if let project = task.project(for: platform) {
+        xcodeBuildArguments.append("-project")
+        xcodeBuildArguments.append(project)
+    }
+
+    xcodeBuildArguments.append(contentsOf: [
         "-scheme", task.scheme(for: platform),
         "-sdk", platform.sdk,
         "-configuration", task.configuration,
         "-PBXBuildsContinueAfterErrors=0",
-    ]
+    ])
     if !platform.destination.isEmpty {
         xcodeBuildArguments.append("-destination")
         xcodeBuildArguments.append(platform.destination)
@@ -311,5 +354,14 @@ for rawPlatform in rawPlatforms {
         try execute(commandPath: "/usr/bin/xcodebuild", arguments: xcodeBuildArguments)
     } catch {
         print("xcodebuild failed with error: \(error)")
+    }
+
+    if deletedXcodeproj {
+        do {
+            print("Restoring Valet.xcodeproj")
+            try execute(commandPath: "/usr/bin/git", arguments: ["restore", "Valet.xcodeproj"])
+        } catch {
+            print("Failed to reset Valet.xcodeproj to last committed version due to error: \(error)")
+        }
     }
 }
