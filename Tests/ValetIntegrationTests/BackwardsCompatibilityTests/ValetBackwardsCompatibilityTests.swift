@@ -130,7 +130,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
     }
 
     func test_backwardsCompatibility_withLegacySharedAccessGroupValet() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         try Valet.currentAndLegacyPermutations(with: Valet.sharedAccessGroupIdentifier).forEach { permutation, legacyValet in
@@ -165,7 +165,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
     }
 
     func test_migrateObjectsFromAlwaysAccessibleValet_forwardsCompatibility_withLegacySharedAccessGroupValet() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.groupIdentifier, accessibility: .always)!
@@ -177,7 +177,7 @@ class ValetBackwardsCompatibilityIntegrationTests: ValetIntegrationTests {
     }
 
     func test_migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet_forwardsCompatibility_withLegacySharedAccessGroupValet() throws {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         let alwaysAccessibleLegacyValet = VALLegacyValet(sharedAccessGroupIdentifier: Valet.sharedAccessGroupIdentifier.groupIdentifier, accessibility: .alwaysThisDeviceOnly)!

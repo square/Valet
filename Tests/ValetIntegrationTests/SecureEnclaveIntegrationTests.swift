@@ -31,7 +31,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     {
         super.setUp()
 
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         do {
@@ -45,7 +45,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     
     func test_secureEnclaveValetsWithEqualConfiguration_canAccessSameData() throws
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -57,7 +57,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     
     func test_secureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData() throws
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -92,7 +92,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     
     func test_canAccessKeychain()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -106,7 +106,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_canAccessKeychain_sharedAccessGroup() {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -122,7 +122,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     #if !os(macOS)
     // We can't test app groups on macOS without a paid developer account, which we don't have.
     func test_canAccessKeychain_sharedAppGroup() {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
 
@@ -140,7 +140,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsMatchingQuery_failsForBadQuery()
     {
-        guard testEnvironmentIsSigned() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
             return
         }
         
@@ -155,7 +155,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     
     func test_migrateObjectsFromValet_migratesSuccessfullyToSecureEnclave() throws
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
@@ -193,7 +193,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
     }
     
     func test_migrateObjectsFromValet_migratesSuccessfullyAfterCanAccessKeychainCalls() throws {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
         
