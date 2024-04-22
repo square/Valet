@@ -17,7 +17,7 @@
 import Foundation
 
 
-public struct Identifier: CustomStringConvertible {
+public struct Identifier: CustomStringConvertible, Sendable {
     
     // MARK: Initialization
     

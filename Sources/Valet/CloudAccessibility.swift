@@ -18,7 +18,7 @@ import Foundation
 
 
 @objc(VALCloudAccessibility)
-public enum CloudAccessibility: Int, CaseIterable, CustomStringConvertible, Equatable {
+public enum CloudAccessibility: Int, CaseIterable, CustomStringConvertible, Equatable, Sendable {
     /// Valet data can only be accessed while the device is unlocked. This attribute is recommended for data that only needs to be accessible while the application is in the foreground. Valet data with this attribute will migrate to a new device when using encrypted backups.
     case whenUnlocked = 1
     /// Valet data cannot be accessed after a restart until the device has been unlocked once; data is accessible until the device is next rebooted. This attribute is recommended for data that needs to be accessible by background applications. Valet data with this attribute will migrate to a new device when using encrypted backups.

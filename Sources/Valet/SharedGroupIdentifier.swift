@@ -17,7 +17,7 @@
 import Foundation
 
 
-public struct SharedGroupIdentifier: CustomStringConvertible {
+public struct SharedGroupIdentifier: CustomStringConvertible, Sendable {
 
     // MARK: Initialization
 

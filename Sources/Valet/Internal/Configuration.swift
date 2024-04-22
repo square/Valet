@@ -17,7 +17,7 @@
 import Foundation
 
 
-internal enum Configuration: CustomStringConvertible {
+internal enum Configuration: CustomStringConvertible, Sendable {
     case valet(Accessibility)
     case iCloud(CloudAccessibility)
     case secureEnclave(SecureEnclaveAccessControl)

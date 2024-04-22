@@ -19,7 +19,7 @@ import Foundation
 
 /// Reads and writes keychain elements.
 @objc(VALValet)
-public final class Valet: NSObject {
+public final class Valet: NSObject, Sendable {
 
     // MARK: Public Class Methods
 
@@ -198,7 +198,6 @@ public final class Valet: NSObject {
         self.configuration = configuration
         self.service = service
         accessibility = configuration.accessibility
-        baseKeychainQuery = service.generateBaseQuery()
     }
 
     #if os(macOS)
@@ -207,7 +206,6 @@ public final class Valet: NSObject {
         self.configuration = configuration
         service = .standardOverride(service: identifier, configuration)
         accessibility = configuration.accessibility
-        baseKeychainQuery = service.generateBaseQuery()
     }
 
     private init(overrideSharedAccess identifier: SharedGroupIdentifier, configuration: Configuration) {
@@ -215,7 +213,6 @@ public final class Valet: NSObject {
         self.configuration = configuration
         service = .sharedGroupOverride(service: identifier, configuration)
         accessibility = configuration.accessibility
-        baseKeychainQuery = service.generateBaseQuery()
     }
     #endif
 
@@ -483,7 +480,9 @@ public final class Valet: NSObject {
 
     internal let configuration: Configuration
     internal let service: Service
-    internal let baseKeychainQuery: [String : AnyHashable]
+    internal var baseKeychainQuery: [String : AnyHashable] {
+        return service.generateBaseQuery()
+    }
 
     // MARK: Private Properties
 
