@@ -349,11 +349,7 @@ for platform in platforms {
         xcodeBuildArguments.append("test")
     }
 
-    do {
-        try execute(commandPath: "/usr/bin/xcodebuild", arguments: xcodeBuildArguments)
-    } catch {
-        print("xcodebuild failed with error: \(error)")
-    }
+    try execute(commandPath: "/usr/bin/xcodebuild", arguments: xcodeBuildArguments)
 
     if deletedXcodeproj {
         do {
