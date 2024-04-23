@@ -204,3 +204,25 @@ jobs:
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
       - name: Build Framework
         run: Scripts/build.swift ${{ matrix.platforms }} spm
+  spm-14:
+    name: SPM Build macOS 14
+    runs-on: macOS-14
+    strategy:
+      matrix:
+        platforms: [
+          'iOS_17,tvOS_17,watchOS_10',
+          'macOS_14',
+        ]
+      fail-fast: false
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Bundle Install
+        run: bundle install
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_15.3.app/Contents/Developer
+      - name: Prepare Simulator Runtimes
+        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
+      - name: Build Framework
+        run: Scripts/build.swift ${{ matrix.platforms }} spm
