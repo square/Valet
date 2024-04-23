@@ -72,7 +72,7 @@ class SecureEnclaveIntegrationTests: XCTestCase
 
     func test_secureEnclaveSharedGroupValetsWithDifferingIdentifiers_canNotAccessSameData() throws
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
 
