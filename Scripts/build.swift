@@ -278,20 +278,20 @@ enum Task: String, CustomStringConvertible {
 
 guard CommandLine.arguments.count > 2 else {
     print("Usage: build.swift platforms [spm|xcode]")
-    exit(0)
+    throw TaskError.code(1)
 }
 let rawPlatforms = CommandLine.arguments[1].components(separatedBy: ",")
 let rawTask = CommandLine.arguments[2]
 
 guard let task = Task(rawValue: rawTask) else {
     print("Received unknown task \(rawTask)")
-    exit(0)
+    throw TaskError.code(1)
 }
 
 let platforms = rawPlatforms.map { rawPlatform -> Platform in
     guard let platform = Platform(rawValue: rawPlatform) else {
         print("Received unknown platform type \(rawPlatform)")
-        exit(0)
+        throw TaskError.code(1)
     }
 
     return platform
@@ -315,7 +315,7 @@ for platform in platforms {
             deletedXcodeproj = true
         } catch {
             print("Could not delete Valet.xcodeproj due to error: \(error)")
-            exit(0)
+            throw TaskError.code(1)
         }
     }
 
