@@ -52,7 +52,7 @@ enum Platform: String, CustomStringConvertible {
         case .iOS_16:
             return "platform=iOS Simulator,OS=16.4,name=iPad Pro (12.9-inch) (6th generation)"
         case .iOS_17:
-            return "platform=iOS Simulator,OS=17.0,name=iPad Pro (12.9-inch) (6th generation)"
+            return "platform=iOS Simulator,OS=17.4,name=iPad Pro (12.9-inch) (6th generation)"
 
         case .tvOS_13:
             return "platform=tvOS Simulator,OS=13.4,name=Apple TV"
@@ -63,7 +63,7 @@ enum Platform: String, CustomStringConvertible {
         case .tvOS_16:
             return "platform=tvOS Simulator,OS=16.4,name=Apple TV"
         case .tvOS_17:
-            return "platform=tvOS Simulator,OS=17.0,name=Apple TV"
+            return "platform=tvOS Simulator,OS=17.4,name=Apple TV"
 
         case .macOS_11,
              .macOS_12,
@@ -80,7 +80,7 @@ enum Platform: String, CustomStringConvertible {
         case .watchOS_9:
             return "OS=9.4,name=Apple Watch Series 6 - 44mm"
         case .watchOS_10:
-            return "OS=10.0,name=Apple Watch Series 6 - 44mm"
+            return "OS=10.4,name=Apple Watch Series 6 - 44mm"
         }
     }
 

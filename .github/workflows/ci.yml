@@ -24,7 +24,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -48,7 +48,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -58,23 +58,24 @@ jobs:
       - name: Upload Coverage Reports
         if: success()
         run: Scripts/upload-coverage-reports.sh ${{ matrix.platforms }}
-  xcode-build-14:
-    name: Xcode 14 Build
-    runs-on: macOS-13
+  xcode-build-15:
+    name: Xcode 15 Build
+    runs-on: macOS-14
     strategy:
       matrix:
         platforms: [
           'iOS_16,tvOS_16,watchOS_9',
+          'iOS_17,tvOS_17,watchOS_10',
         ]
       fail-fast: false
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_14.3.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_15.3.app/Contents/Developer
       - name: Build and Test Framework
         run: Scripts/build.swift ${{ matrix.platforms }} xcode
       - name: Upload Coverage Reports
@@ -86,7 +87,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -95,15 +96,15 @@ jobs:
         run: bundle exec pod lib lint --verbose --fail-fast --swift-version=5.4
   carthage:
     name: Carthage
-    runs-on: macOS-13
+    runs-on: macOS-14
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_14.3.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_15.3.app/Contents/Developer
       - name: Install Carthage
         run: brew outdated carthage || brew upgrade carthage
       - name: Build Framework
@@ -122,7 +123,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -151,7 +152,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -173,11 +174,33 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_14.3.app/Contents/Developer
+      - name: Prepare Simulator Runtimes
+        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
+      - name: Build Framework
+        run: Scripts/build.swift ${{ matrix.platforms }} spm
+  spm-14:
+    name: SPM Build macOS 14
+    runs-on: macOS-14
+    strategy:
+      matrix:
+        platforms: [
+          'iOS_17,tvOS_17,watchOS_10',
+          'macOS_14',
+        ]
+      fail-fast: false
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Bundle Install
+        run: bundle install
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_15.3.app/Contents/Developer
       - name: Prepare Simulator Runtimes
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
       - name: Build Framework
