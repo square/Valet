@@ -365,6 +365,10 @@ class ValetIntegrationTests: XCTestCase
 
     func test_stringForKey_withDifferingIdentifierInSameAccessGroup_throwsItemNotFound() throws
     {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
+            return
+        }
+
         let valet1 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: vanillaValet.accessibility)
         let valet2 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: vanillaValet.accessibility)
 
@@ -378,6 +382,10 @@ class ValetIntegrationTests: XCTestCase
 
     func test_stringForKey_withSameIdentifierInDifferentAccessGroup_throwsItemNotFound() throws
     {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
+            return
+        }
+
         let valet1 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: vanillaValet.accessibility)
         let valet2 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier2, identifier: Identifier(nonEmpty: "valet1")!, accessibility: vanillaValet.accessibility)
 
@@ -391,6 +399,10 @@ class ValetIntegrationTests: XCTestCase
 
     func test_stringForKey_withDifferingIdentifierInSameiCloudGroup_throwsItemNotFound() throws
     {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
+            return
+        }
+
         let valet1 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: .afterFirstUnlock)
         let valet2 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: .afterFirstUnlock)
 
@@ -519,6 +531,10 @@ class ValetIntegrationTests: XCTestCase
 
     func test_objectForKey_withDifferingIdentifierInSameAccessGroup_throwsItemNotFound() throws
     {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
+            return
+        }
+
         let valet1 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: vanillaValet.accessibility)
         let valet2 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: vanillaValet.accessibility)
 
@@ -532,6 +548,10 @@ class ValetIntegrationTests: XCTestCase
 
     func test_objectForKey_withDifferingIdentifierInSameiCloudGroup_throwsItemNotFound() throws
     {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
+            return
+        }
+
         let valet1 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: .afterFirstUnlock)
         let valet2 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: .afterFirstUnlock)
 
@@ -763,6 +783,10 @@ class ValetIntegrationTests: XCTestCase
 
     func test_removeObjectForKey_isDistinctForDifferingIdentifierInSameAccessGroup() throws
     {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
+            return
+        }
+
         let valet1 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: vanillaValet.accessibility)
         let valet2 = Valet.sharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: vanillaValet.accessibility)
 
@@ -779,6 +803,10 @@ class ValetIntegrationTests: XCTestCase
 
     func test_removeObjectForKey_isDistinctForDifferingIdentifierInSameiCloudGroup() throws
     {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() else {
+            return
+        }
+
         let valet1 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet1")!, accessibility: .afterFirstUnlock)
         let valet2 = Valet.iCloudSharedGroupValet(with: Self.sharedAccessGroupIdentifier, identifier: Identifier(nonEmpty: "valet2")!, accessibility: .afterFirstUnlock)
 
