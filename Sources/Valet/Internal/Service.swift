@@ -17,7 +17,7 @@
 import Foundation
 
 
-internal enum Service: CustomStringConvertible, Equatable {
+internal enum Service: CustomStringConvertible, Equatable, Sendable {
     case standard(Identifier, Configuration)
     case sharedGroup(SharedGroupIdentifier, Identifier?, Configuration)
 

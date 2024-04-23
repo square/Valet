@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
   s.name     = 'Valet'
-  s.version  = '4.2.0'
+  s.version  = '4.3.0'
   s.license  = 'Apache License, Version 2.0'
   s.summary  = 'Securely store data on iOS, tvOS, watchOS, or macOS without knowing a thing about how the Keychain works. It\'s easy. We promise.'
   s.homepage = 'https://github.com/square/Valet'
   s.authors  = 'Square'
   s.source   = { :git => 'https://github.com/square/Valet.git', :tag => s.version }
-  s.swift_version = '5.0'
+  s.swift_version = '5.4'
   s.source_files = 'Sources/Valet/**/*.{swift,h}'
   s.public_header_files = 'Sources/Valet/*.h'
   s.frameworks = 'Security'

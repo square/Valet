@@ -17,7 +17,7 @@
 import Foundation
 
 
-public final class SecureEnclave {
+public final class SecureEnclave: Sendable {
         
     // MARK: Internal Methods
 

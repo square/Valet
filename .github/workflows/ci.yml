@@ -92,7 +92,7 @@ jobs:
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_14.3.app/Contents/Developer
       - name: Lint Podspec
-        run: bundle exec pod lib lint --verbose --fail-fast --swift-version=5.0
+        run: bundle exec pod lib lint --verbose --fail-fast --swift-version=5.4
   carthage:
     name: Carthage
     runs-on: macOS-13
@@ -118,7 +118,6 @@ jobs:
           'iOS_14,tvOS_14,watchOS_7',
           'iOS_13,tvOS_13,watchOS_6',
           'macOS_11',
-          'macOS_10_15',
         ]
       fail-fast: false
     steps:
@@ -135,9 +134,6 @@ jobs:
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
         if: ${{ matrix.platforms == 'macOS_11' }}
-      - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
-        if: ${{ matrix.platforms == 'macOS_10_15' }}
       - name: Prepare Simulator Runtimes
         run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
       - name: Build Framework

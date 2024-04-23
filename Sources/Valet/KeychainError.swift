@@ -18,7 +18,7 @@ import Foundation
 
 
 @objc(VALKeychainError)
-public enum KeychainError: Int, CaseIterable, CustomStringConvertible, Error, Equatable {
+public enum KeychainError: Int, CaseIterable, CustomStringConvertible, Error, Equatable, Sendable {
     /// The keychain could not be accessed.
     case couldNotAccessKeychain
     /// User dismissed the user-presence prompt.

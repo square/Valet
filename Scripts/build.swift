@@ -31,7 +31,6 @@ enum Platform: String, CustomStringConvertible {
     case tvOS_15
     case tvOS_16
     case tvOS_17
-    case macOS_10_15
     case macOS_11
     case macOS_12
     case macOS_13
@@ -66,8 +65,7 @@ enum Platform: String, CustomStringConvertible {
         case .tvOS_17:
             return "platform=tvOS Simulator,OS=17.0,name=Apple TV"
 
-        case .macOS_10_15,
-             .macOS_11,
+        case .macOS_11,
              .macOS_12,
              .macOS_13,
              .macOS_14:
@@ -102,8 +100,6 @@ enum Platform: String, CustomStringConvertible {
              .tvOS_17:
             return "appletvsimulator"
 
-        case .macOS_10_15:
-            return "macosx10.15"
         case .macOS_11:
             return "macosx11.1"
         case .macOS_12:
@@ -134,7 +130,6 @@ enum Platform: String, CustomStringConvertible {
              .tvOS_15,
              .tvOS_16,
              .tvOS_17,
-             .macOS_10_15,
              .macOS_11,
              .macOS_12,
              .macOS_13,
@@ -182,8 +177,7 @@ enum Platform: String, CustomStringConvertible {
              .tvOS_17:
             return "Valet tvOS"
 
-        case .macOS_10_15,
-             .macOS_11,
+        case .macOS_11,
              .macOS_12,
              .macOS_13,
              .macOS_14:

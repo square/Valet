@@ -18,7 +18,7 @@ import Foundation
 
 
 @objc(VALMigrationResult)
-public enum MigrationError: Int, CaseIterable, CustomStringConvertible, Error, Equatable {
+public enum MigrationError: Int, CaseIterable, CustomStringConvertible, Error, Equatable, Sendable {
     /// Migration failed because the keychain query was not valid.
     case invalidQuery
     /// Migration failed because a key staged for migration was invalid.
