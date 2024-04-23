@@ -133,15 +133,15 @@ enum Platform: String, CustomStringConvertible {
              .macOS_11,
              .macOS_12,
              .macOS_13,
-             .macOS_14:
-            return true
-
-        case .watchOS_6,
-             .watchOS_7,
+             .macOS_14,
              .watchOS_8,
              .watchOS_9,
              .watchOS_10:
-            // watchOS does not support unit testing (yet?).
+            return true
+
+        case .watchOS_6,
+             .watchOS_7:
+            // watchOS did not support unit testing prior to Xcode 12.5.
             return false
         }
     }
