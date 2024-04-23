@@ -922,7 +922,7 @@ class ValetIntegrationTests: XCTestCase
         let identifier = "Keychain_With_Account_Name_As_NSData"
         
         // kSecAttrAccount entry is expected to be a CFString, but a CFDataRef can also be stored as a value.
-        let keychainData = [
+        let keychainData: CFDictionary = [
             kSecAttrService: identifier,
             kSecClass : kSecClassGenericPassword,
             kSecAttrAccount: passcodeData,
