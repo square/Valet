@@ -19,7 +19,6 @@ jobs:
         platforms: [
           'iOS_15',
           'tvOS_15',
-          'watchOS_8',
         ]
       fail-fast: false
     timeout-minutes: 30
