@@ -190,7 +190,6 @@
 		321C3FAB2BD77F6600AB3952 /* MigrationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167E250123D624EF00889121 /* MigrationErrorTests.swift */; };
 		321C3FAC2BD77F6600AB3952 /* KeychainErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167E24FD23D6235000889121 /* KeychainErrorTests.swift */; };
 		322CF5242BD77E6500B1F0D0 /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; };
-		322CF5252BD77E6500B1F0D0 /* Valet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16DF6ADA204B45EB00F8E0A4 /* Valet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		32DC88852475111D005A9BFA /* MigratableKeyValuePair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DC88842475111D005A9BFA /* MigratableKeyValuePair.swift */; };
 		32DC88862475111D005A9BFA /* MigratableKeyValuePair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DC88842475111D005A9BFA /* MigratableKeyValuePair.swift */; };
 		32DC88872475111D005A9BFA /* MigratableKeyValuePair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DC88842475111D005A9BFA /* MigratableKeyValuePair.swift */; };
@@ -448,17 +447,6 @@
 				16DF6B0D204B496800F8E0A4 /* Valet watchOS Test Host App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		322CF5282BD77E6500B1F0D0 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				322CF5252BD77E6500B1F0D0 /* Valet.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		373E0A2628AD3CCC00024F8F /* Embed Frameworks */ = {
@@ -1286,7 +1274,6 @@
 				322CF5142BD77E1300B1F0D0 /* Sources */,
 				322CF5152BD77E1300B1F0D0 /* Frameworks */,
 				322CF5162BD77E1300B1F0D0 /* Resources */,
-				322CF5282BD77E6500B1F0D0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
