@@ -1,5 +1,5 @@
-//  Created by Dan Federman on 3/3/18.
-//  Copyright © 2018 Square, Inc.
+//  Created by Dan Federman on 4/23/24.
+//  Copyright © 2024 Block, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -14,8 +14,13 @@
 //  limitations under the License.
 //
 
-import WatchKit
-import Foundation
+import SwiftUI
 
-
-class InterfaceController: WKInterfaceController {}
+@main
+struct Valet_watchOS_Test_Host_App_Watch_AppApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}

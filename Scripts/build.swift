@@ -21,32 +21,21 @@ enum TaskError: Error {
 }
 
 enum Platform: String, CustomStringConvertible {
-    case iOS_13
-    case iOS_14
     case iOS_15
     case iOS_16
     case iOS_17
-    case tvOS_13
-    case tvOS_14
     case tvOS_15
     case tvOS_16
     case tvOS_17
-    case macOS_11
     case macOS_12
     case macOS_13
     case macOS_14
-    case watchOS_6
-    case watchOS_7
     case watchOS_8
     case watchOS_9
     case watchOS_10
 
     var destination: String {
         switch self {
-        case .iOS_13:
-            return "platform=iOS Simulator,OS=13.7,name=iPad Pro (12.9-inch) (4th generation)"
-        case .iOS_14:
-            return "platform=iOS Simulator,OS=14.4,name=iPad Pro (12.9-inch) (4th generation)"
         case .iOS_15:
             return "platform=iOS Simulator,OS=15.5,name=iPad Pro (12.9-inch) (5th generation)"
         case .iOS_16:
@@ -54,10 +43,6 @@ enum Platform: String, CustomStringConvertible {
         case .iOS_17:
             return "platform=iOS Simulator,OS=17.4,name=iPad Pro (12.9-inch) (6th generation)"
 
-        case .tvOS_13:
-            return "platform=tvOS Simulator,OS=13.4,name=Apple TV"
-        case .tvOS_14:
-            return "platform=tvOS Simulator,OS=14.3,name=Apple TV"
         case .tvOS_15:
             return "platform=tvOS Simulator,OS=15.4,name=Apple TV"
         case .tvOS_16:
@@ -65,84 +50,43 @@ enum Platform: String, CustomStringConvertible {
         case .tvOS_17:
             return "platform=tvOS Simulator,OS=17.4,name=Apple TV"
 
-        case .macOS_11,
-             .macOS_12,
+        case .macOS_12,
              .macOS_13,
              .macOS_14:
             return "platform=OS X"
 
-        case .watchOS_6:
-            return "OS=6.2.1,name=Apple Watch Series 4 - 44mm"
-        case .watchOS_7:
-            return "OS=7.2,name=Apple Watch Series 6 - 44mm"
         case .watchOS_8:
             return "OS=8.5,name=Apple Watch Series 6 - 44mm"
         case .watchOS_9:
-            return "OS=9.4,name=Apple Watch Series 6 - 44mm"
+            return "OS=9.4,name=Apple Watch Series 6 (44mm)"
         case .watchOS_10:
-            return "OS=10.4,name=Apple Watch Series 6 - 44mm"
+            return "OS=10.4,name=Apple Watch Series 9 (45mm)"
         }
     }
 
     var sdk: String {
         switch self {
-        case .iOS_13,
-             .iOS_14,
-             .iOS_15,
+        case .iOS_15,
              .iOS_16,
              .iOS_17:
             return "iphonesimulator"
 
-        case .tvOS_13,
-             .tvOS_14,
-             .tvOS_15,
+        case .tvOS_15,
              .tvOS_16,
              .tvOS_17:
             return "appletvsimulator"
 
-        case .macOS_11:
-            return "macosx11.1"
         case .macOS_12:
             return "macosx12.3"
         case .macOS_13:
             return "macosx13.3"
         case .macOS_14:
-            return "macosx14.0"
+            return "macosx14.4"
 
-        case .watchOS_6,
-             .watchOS_7,
-             .watchOS_8,
+        case .watchOS_8,
              .watchOS_9,
              .watchOS_10:
             return "watchsimulator"
-        }
-    }
-
-    var shouldTest: Bool {
-        switch self {
-        case .iOS_13,
-             .iOS_14,
-             .iOS_15,
-             .iOS_16,
-             .iOS_17,
-             .tvOS_13,
-             .tvOS_14,
-             .tvOS_15,
-             .tvOS_16,
-             .tvOS_17,
-             .macOS_11,
-             .macOS_12,
-             .macOS_13,
-             .macOS_14:
-            return true
-
-        case .watchOS_6,
-             .watchOS_7,
-             .watchOS_8,
-             .watchOS_9,
-             .watchOS_10:
-            // watchOS does not support unit testing (yet?).
-            return false
         }
     }
 
@@ -163,29 +107,22 @@ enum Platform: String, CustomStringConvertible {
 
     var scheme: String {
         switch self {
-        case .iOS_13,
-             .iOS_14,
-             .iOS_15,
+        case .iOS_15,
              .iOS_16,
              .iOS_17:
             return "Valet iOS"
 
-        case .tvOS_13,
-             .tvOS_14,
-             .tvOS_15,
+        case .tvOS_15,
              .tvOS_16,
              .tvOS_17:
             return "Valet tvOS"
 
-        case .macOS_11,
-             .macOS_12,
+        case .macOS_12,
              .macOS_13,
              .macOS_14:
             return "Valet Mac"
 
-        case .watchOS_6,
-             .watchOS_7,
-             .watchOS_8,
+        case .watchOS_8,
              .watchOS_9,
              .watchOS_10:
             return "Valet watchOS"
@@ -271,27 +208,27 @@ enum Task: String, CustomStringConvertible {
             // Our Package isn't set up with unit test targets, because SPM can't run unit tests in a codesigned environment.
             return false
         case .xcode:
-            return platform.shouldTest
+            return true
         }
     }
 }
 
 guard CommandLine.arguments.count > 2 else {
     print("Usage: build.swift platforms [spm|xcode]")
-    exit(0)
+    throw TaskError.code(1)
 }
 let rawPlatforms = CommandLine.arguments[1].components(separatedBy: ",")
 let rawTask = CommandLine.arguments[2]
 
 guard let task = Task(rawValue: rawTask) else {
     print("Received unknown task \(rawTask)")
-    exit(0)
+    throw TaskError.code(1)
 }
 
-let platforms = rawPlatforms.map { rawPlatform -> Platform in
+let platforms = try rawPlatforms.map { rawPlatform -> Platform in
     guard let platform = Platform(rawValue: rawPlatform) else {
         print("Received unknown platform type \(rawPlatform)")
-        exit(0)
+        throw TaskError.code(1)
     }
 
     return platform
@@ -315,7 +252,7 @@ for platform in platforms {
             deletedXcodeproj = true
         } catch {
             print("Could not delete Valet.xcodeproj due to error: \(error)")
-            exit(0)
+            throw TaskError.code(1)
         }
     }
 
@@ -349,11 +286,7 @@ for platform in platforms {
         xcodeBuildArguments.append("test")
     }
 
-    do {
-        try execute(commandPath: "/usr/bin/xcodebuild", arguments: xcodeBuildArguments)
-    } catch {
-        print("xcodebuild failed with error: \(error)")
-    }
+    try execute(commandPath: "/usr/bin/xcodebuild", arguments: xcodeBuildArguments)
 
     if deletedXcodeproj {
         do {

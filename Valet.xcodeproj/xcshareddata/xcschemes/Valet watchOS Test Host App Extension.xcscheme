@@ -42,7 +42,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "16DF6AF2204B496800F8E0A4"
+               BlueprintIdentifier = "321C3FAE2BD796D500AB3952"
                BuildableName = "Valet watchOS Test Host App.app"
                BlueprintName = "Valet watchOS Test Host App"
                ReferencedContainer = "container:Valet.xcodeproj">

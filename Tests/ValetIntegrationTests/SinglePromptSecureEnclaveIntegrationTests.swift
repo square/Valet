@@ -76,7 +76,7 @@ class SinglePromptSecureEnclaveIntegrationTests: XCTestCase
 
     func test_SinglePromptSecureEnclaveValetsWithDifferingIdentifiers_canNotAccessSameData() throws
     {
-        guard testEnvironmentIsSigned() && testEnvironmentSupportsWhenPasscodeSet() else {
+        guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() && testEnvironmentSupportsWhenPasscodeSet() else {
             return
         }
 
