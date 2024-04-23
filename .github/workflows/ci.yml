@@ -17,8 +17,12 @@ jobs:
     strategy:
       matrix:
         platforms: [
-          'iOS_14,tvOS_14,watchOS_7',
-          'iOS_13,tvOS_13,watchOS_6',
+          'iOS_14',
+          'tvOS_14',
+          'watchOS_7',
+          'iOS_13',
+          'tvOS_13',
+          'watchOS_6',
         ]
       fail-fast: false
     timeout-minutes: 30
@@ -42,7 +46,9 @@ jobs:
     strategy:
       matrix:
         platforms: [
-          'iOS_15,tvOS_15,watchOS_8',
+          'iOS_15',
+          'tvOS_15',
+          'watchOS_8',
         ]
       fail-fast: false
     timeout-minutes: 30
@@ -64,8 +70,12 @@ jobs:
     strategy:
       matrix:
         platforms: [
-          'iOS_16,tvOS_16,watchOS_9',
-          'iOS_17,tvOS_17,watchOS_10',
+          'iOS_16',
+          'tvOS_16',
+          'watchOS_9',
+          'iOS_17',
+          'tvOS_17',
+          'watchOS_10',
         ]
       fail-fast: false
     timeout-minutes: 30
@@ -116,8 +126,12 @@ jobs:
     strategy:
       matrix:
         platforms: [
-          'iOS_14,tvOS_14,watchOS_7',
-          'iOS_13,tvOS_13,watchOS_6',
+          'iOS_14',
+          'tvOS_14',
+          'watchOS_7',
+          'iOS_13',
+          'tvOS_13',
+          'watchOS_6',
           'macOS_11',
         ]
       fail-fast: false
@@ -145,7 +159,9 @@ jobs:
     strategy:
       matrix:
         platforms: [
-          'iOS_15,tvOS_15,watchOS_8',
+          'iOS_15',
+          'tvOS_15',
+          'watchOS_8',
           'macOS_12',
         ]
       fail-fast: false
@@ -167,7 +183,9 @@ jobs:
     strategy:
       matrix:
         platforms: [
-          'iOS_16,tvOS_16,watchOS_9',
+          'iOS_16',
+          'tvOS_16',
+          'watchOS_9',
           'macOS_13',
         ]
       fail-fast: false
@@ -189,7 +207,9 @@ jobs:
     strategy:
       matrix:
         platforms: [
-          'iOS_17,tvOS_17,watchOS_10',
+          'iOS_17',
+          'tvOS_17',
+          'watchOS_10',
           'macOS_14',
         ]
       fail-fast: false
