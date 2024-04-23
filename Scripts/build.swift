@@ -81,7 +81,7 @@ enum Platform: String, CustomStringConvertible {
         case .macOS_13:
             return "macosx13.3"
         case .macOS_14:
-            return "macosx14.0"
+            return "macosx14.4"
 
         case .watchOS_8,
              .watchOS_9,
