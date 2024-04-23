@@ -11,35 +11,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  xcode-build-12:
-    name: Xcode 12 Build
-    runs-on: macOS-11
-    strategy:
-      matrix:
-        platforms: [
-          'iOS_14',
-          'tvOS_14',
-          'watchOS_7',
-          'iOS_13',
-          'tvOS_13',
-          'watchOS_6',
-        ]
-      fail-fast: false
-    timeout-minutes: 30
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-      - name: Bundle Install
-        run: bundle install
-      - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
-      - name: Prepare Simulator Runtimes
-        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
-      - name: Build and Test Framework
-        run: Scripts/build.swift ${{ matrix.platforms }} xcode
-      - name: Upload Coverage Reports
-        if: success()
-        run: Scripts/upload-coverage-reports.sh ${{ matrix.platforms }}
   xcode-build-13:
     name: Xcode 13 Build
     runs-on: macOS-12
@@ -119,40 +90,6 @@ jobs:
         run: brew outdated carthage || brew upgrade carthage
       - name: Build Framework
         run: carthage build --verbose --no-skip-current --use-xcframeworks
-  spm-11:
-    name: SPM Build macOS 11
-    runs-on: macOS-11
-    timeout-minutes: 30
-    strategy:
-      matrix:
-        platforms: [
-          'iOS_14',
-          'tvOS_14',
-          'watchOS_7',
-          'iOS_13',
-          'tvOS_13',
-          'watchOS_6',
-          'macOS_11',
-        ]
-      fail-fast: false
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-      - name: Bundle Install
-        run: bundle install
-      - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
-        if: ${{ matrix.platforms == 'iOS_14,tvOS_14,watchOS_7' }}
-      - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
-        if: ${{ matrix.platforms == 'iOS_13,tvOS_13,watchOS_6' }}
-      - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_12.5.1.app/Contents/Developer
-        if: ${{ matrix.platforms == 'macOS_11' }}
-      - name: Prepare Simulator Runtimes
-        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
-      - name: Build Framework
-        run: Scripts/build.swift ${{ matrix.platforms }} spm
   spm-12:
     name: SPM Build macOS 12
     runs-on: macOS-12
