@@ -16,19 +16,6 @@
 
 import WatchKit
 import Foundation
-import XCTest
 
 
-class InterfaceController: WKInterfaceController {
-
-    override func didAppear() {
-        super.didAppear()
-
-        if XCTestCase.runAllTests() {
-            setTitle("Success!")
-        } else {
-            setTitle("Failure!")
-        }
-    }
-
-}
+class InterfaceController: WKInterfaceController {}
