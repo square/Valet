@@ -5,3 +5,7 @@ comment:
   layout: "reach,diff,flags,tree"
   behavior: default
   require_changes: no
+
+ignore:
+  # This package is not shipped.
+  - "Tests"
