@@ -70,7 +70,7 @@ internal extension Valet {
 
     // MARK: Shared Access Group
 
-    static var sharedAccessGroupIdentifier: SharedGroupIdentifier = {
+    static let sharedAccessGroupIdentifier: SharedGroupIdentifier = {
         #if os(iOS)
         return SharedGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-iOS-Test-Host-App")!
         #elseif os(macOS)
@@ -84,7 +84,7 @@ internal extension Valet {
         #endif
     }()
 
-    static var sharedAccessGroupIdentifier2: SharedGroupIdentifier = {
+    static let sharedAccessGroupIdentifier2: SharedGroupIdentifier = {
         #if os(iOS)
         return SharedGroupIdentifier(appIDPrefix: "9XUJ7M53NG", nonEmptyGroup: "com.squareup.Valet-iOS-Test-Host-App2")!
         #elseif os(macOS)
@@ -100,7 +100,7 @@ internal extension Valet {
 
     // MARK: Shared App Group
 
-    static var sharedAppGroupIdentifier: SharedGroupIdentifier = {
+    static let sharedAppGroupIdentifier: SharedGroupIdentifier = {
         #if os(iOS)
         return SharedGroupIdentifier(groupPrefix: "group", nonEmptyGroup: "valet.test")!
         #elseif os(macOS)
@@ -145,9 +145,9 @@ class ValetIntegrationTests: XCTestCase
     
     // MARK: XCTestCase
 
-    override func setUp()
+    override func setUp() async throws
     {
-        super.setUp()
+        try await super.setUp()
 
         let permutations: [Valet]
         if testEnvironmentIsSignedOrDoesNotRequireEntitlement() {
@@ -646,22 +646,22 @@ class ValetIntegrationTests: XCTestCase
 
     // MARK: Concurrency
 
-    func test_concurrentSetAndRemoveOperations()
+    func test_concurrentSetAndRemoveOperations() async
     {
         let setQueue = DispatchQueue(label: "Set String Queue", attributes: .concurrent)
         let removeQueue = DispatchQueue(label: "Remove Object Queue", attributes: .concurrent)
 
         for _ in 1...50 {
-            setQueue.async {
+            setQueue.async { [vanillaValet, passcode, key] in
                 do {
-                    try self.vanillaValet.setString(self.passcode, forKey: self.key)
+                    try vanillaValet.setString(passcode, forKey: key)
                 } catch {
                     XCTFail("Threw \(error) trying to write value")
                 }
             }
-            removeQueue.async {
+            removeQueue.async { [vanillaValet, key] in
                 do {
-                    try self.vanillaValet.removeObject(forKey: self.key)
+                    try vanillaValet.removeObject(forKey: key)
                 } catch {
                     XCTFail("Threw \(error) trying to remove value")
                 }
@@ -677,28 +677,31 @@ class ValetIntegrationTests: XCTestCase
         removeQueue.async(flags: .barrier) {
             removeQueueExpectation.fulfill()
         }
-        
-        waitForExpectations(timeout: 10.0, handler: nil)
+
+        await fulfillment(of: [
+            setQueueExpectation,
+            removeQueueExpectation,
+        ])
     }
 
-    func test_stringForKey_canReadDataWrittenOnAnotherThread()
+    func test_stringForKey_canReadDataWrittenOnAnotherThread() async
     {
         let setStringQueue = DispatchQueue(label: "Set String Queue", attributes: .concurrent)
         let stringForKeyQueue = DispatchQueue(label: "String For Key Queue", attributes: .concurrent)
 
         let expectation = self.expectation(description: #function)
 
-        setStringQueue.async {
+        setStringQueue.async { [vanillaValet, passcode, key] in
             do {
-                try self.vanillaValet.setString(self.passcode, forKey: self.key)
+                try vanillaValet.setString(passcode, forKey: key)
             } catch {
                 XCTFail("Threw \(error) trying to set value")
             }
 
-            stringForKeyQueue.async {
+            stringForKeyQueue.async { [vanillaValet, passcode, key] in
                 do {
-                    let stringForKey = try self.vanillaValet.string(forKey: self.key)
-                    XCTAssertEqual(stringForKey, self.passcode)
+                    let stringForKey = try vanillaValet.string(forKey: key)
+                    XCTAssertEqual(stringForKey, passcode)
                 } catch {
                     XCTFail("Threw \(error) trying to read value")
                 }
@@ -707,10 +710,12 @@ class ValetIntegrationTests: XCTestCase
             }
         }
 
-        waitForExpectations(timeout: 5.0, handler: nil)
+        await fulfillment(of: [
+            expectation,
+        ])
     }
 
-    func test_stringForKey_canReadDataWrittenToValetAllocatedOnDifferentThread()
+    func test_stringForKey_canReadDataWrittenToValetAllocatedOnDifferentThread() async
     {
         let setStringQueue = DispatchQueue(label: "Set String Queue", attributes: .concurrent)
         let stringForKeyQueue = DispatchQueue(label: "String For Key Queue", attributes: .concurrent)
@@ -718,17 +723,17 @@ class ValetIntegrationTests: XCTestCase
         let backgroundIdentifier = Identifier(nonEmpty: "valet_background_testing")!
         let expectation = self.expectation(description: #function)
 
-        setStringQueue.async {
+        setStringQueue.async { [key, passcode] in
             let backgroundValet = Valet.valet(with: backgroundIdentifier, accessibility: .whenUnlocked)
             do {
-                try backgroundValet.setString(self.passcode, forKey: self.key)
+                try backgroundValet.setString(passcode, forKey: key)
             } catch {
                 XCTFail("Threw \(error) trying to write value")
             }
-            stringForKeyQueue.async {
+            stringForKeyQueue.async { [key, passcode] in
                 do {
-                    let stringForKey = try backgroundValet.string(forKey: self.key)
-                    XCTAssertEqual(stringForKey, self.passcode)
+                    let stringForKey = try backgroundValet.string(forKey: key)
+                    XCTAssertEqual(stringForKey, passcode)
                     expectation.fulfill()
                 } catch {
                     XCTFail("Threw \(error) trying to read value")
@@ -737,7 +742,9 @@ class ValetIntegrationTests: XCTestCase
             }
         }
 
-        waitForExpectations(timeout: 5.0, handler: nil)
+        await fulfillment(of: [
+            expectation,
+        ])
     }
 
     // MARK: Removal
