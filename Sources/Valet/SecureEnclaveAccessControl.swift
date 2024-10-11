@@ -67,46 +67,30 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable,
     internal var secAccessControl: SecAccessControlCreateFlags {
         switch self {
         case .userPresence:
-            return .userPresence
+            .userPresence
         case .biometricAny:
-            if #available(iOS 11.3, tvOS 11.3, watchOS 4.3, macOS 10.13.4, *) {
-                return .biometryAny
-            } else if #available(macOS 10.12.1, *) {
-                return .touchIDAny
+            if #available(watchOS 4.3, macOS 10.13.4, *) {
+                .biometryAny
             } else {
-                assertionFailure(".biometricAny requires macOS 10.12.1.")
-                return .userPresence
+                .touchIDAny
             }
         case .biometricCurrentSet:
-            if #available(iOS 11.3, tvOS 11.3, watchOS 4.3, macOS 10.13.4, *) {
-                return .biometryCurrentSet
-            } else if #available(macOS 10.12.1, *) {
-                return .touchIDCurrentSet
+            if #available(watchOS 4.3, macOS 10.13.4, *) {
+                .biometryCurrentSet
             } else {
-                assertionFailure(".biometricCurrentSet requires macOS 10.12.1.")
-                return .userPresence
+                .touchIDCurrentSet
             }
         case .devicePasscode:
-            if #available(macOS 10.11, *) {
-                return .devicePasscode
-            } else {
-                assertionFailure(".devicePasscode requires macOS 10.11.")
-                return .userPresence
-            }
+            .devicePasscode
         }
     }
 
     internal static func allValues() -> [SecureEnclaveAccessControl] {
-        var values: [SecureEnclaveAccessControl] = [
+        [
             .userPresence,
-            .devicePasscode
+            .devicePasscode,
+            .biometricAny,
+            .biometricCurrentSet,
         ]
-        if #available(macOS 10.12.1, *) {
-            values += [
-                .biometricAny,
-                .biometricCurrentSet,
-            ]
-        }
-        return values
     }
 }
