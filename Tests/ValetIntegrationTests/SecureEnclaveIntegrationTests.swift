@@ -52,7 +52,11 @@ class SecureEnclaveIntegrationTests: XCTestCase
         try valet.setString(passcode, forKey: key)
         let equivalentValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: valet.accessControl)
         XCTAssertEqual(valet, equivalentValet)
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
         XCTAssertEqual(passcode, try equivalentValet.string(forKey: key, withPrompt: ""))
+#else
+        XCTAssertEqual(passcode, try equivalentValet.string(forKey: key))
+#endif
     }
     
     func test_secureEnclaveValetsWithDifferingAccessControl_canNotAccessSameData() throws
@@ -64,10 +68,17 @@ class SecureEnclaveIntegrationTests: XCTestCase
         try valet.setString(passcode, forKey: key)
         let similarValet = SecureEnclaveValet.valet(with: valet.identifier, accessControl: .devicePasscode)
         XCTAssertNotEqual(valet, similarValet)
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
         XCTAssertEqual(passcode, try valet.string(forKey: key, withPrompt: ""))
         XCTAssertThrowsError(try similarValet.string(forKey: key, withPrompt: "")) { error in
             XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
+#else
+        XCTAssertEqual(passcode, try valet.string(forKey: key))
+        XCTAssertThrowsError(try similarValet.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+#endif
     }
 
     func test_secureEnclaveSharedGroupValetsWithDifferingIdentifiers_canNotAccessSameData() throws
@@ -82,10 +93,17 @@ class SecureEnclaveIntegrationTests: XCTestCase
         try valet1.setString(passcode, forKey: key)
 
         XCTAssertNotEqual(valet1, valet2)
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
         XCTAssertEqual(passcode, try valet1.string(forKey: key, withPrompt: ""))
         XCTAssertThrowsError(try valet2.string(forKey: key, withPrompt: "")) { error in
             XCTAssertEqual(error as? KeychainError, .itemNotFound)
         }
+#else
+        XCTAssertEqual(passcode, try valet1.string(forKey: key))
+        XCTAssertThrowsError(try valet2.string(forKey: key)) { error in
+            XCTAssertEqual(error as? KeychainError, .itemNotFound)
+        }
+#endif
     }
         
     // MARK: canAccessKeychain
@@ -180,10 +198,17 @@ class SecureEnclaveIntegrationTests: XCTestCase
         try valet.migrateObjects(from: plainOldValet, removeOnCompletion: true)
         
         for (key, value) in keyValuePairs {
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
             XCTAssertEqual(value, try valet.string(forKey: key, withPrompt: ""))
             XCTAssertThrowsError(try plainOldValet.string(forKey: key)) { error in
                 XCTAssertEqual(error as? KeychainError, .itemNotFound)
             }
+#else
+            XCTAssertEqual(value, try valet.string(forKey: key))
+            XCTAssertThrowsError(try plainOldValet.string(forKey: key)) { error in
+                XCTAssertEqual(error as? KeychainError, .itemNotFound)
+            }
+#endif
         }
         
         // Clean up items for the next test run (allKeys and removeAllObjects are unsupported in VALSecureEnclaveValet).
@@ -213,7 +238,11 @@ class SecureEnclaveIntegrationTests: XCTestCase
         try valet.migrateObjects(from: otherValet, removeOnCompletion: false)
         
         for (key, value) in keyStringPairToMigrateMap {
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
             XCTAssertEqual(try valet.string(forKey: key, withPrompt: ""), value)
+#else
+            XCTAssertEqual(try valet.string(forKey: key), value)
+#endif
             XCTAssertEqual(try otherValet.string(forKey: key), value)
         }
     }

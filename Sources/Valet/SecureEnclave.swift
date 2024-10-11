@@ -14,6 +14,9 @@
 //  limitations under the License.
 //
 
+#if !os(tvOS) && canImport(LocalAuthentication)
+import LocalAuthentication
+#endif
 import Foundation
 
 
@@ -50,7 +53,7 @@ public final class SecureEnclave: Sendable {
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Throws: An error of type `KeychainError`.
-    internal static func setObject(_ object: Data, forKey key: String, options: [String : AnyHashable]) throws {
+    internal static func setObject(_ object: Data, forKey key: String, options: [String : AnyHashable]) throws(KeychainError) {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         try Keychain.removeObject(forKey: key, options: options)
         
@@ -63,23 +66,30 @@ public final class SecureEnclave: Sendable {
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    internal static func object(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws -> Data {
+    internal static func object(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws(KeychainError) -> Data {
         var secItemQuery = options
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
         if !userPrompt.isEmpty {
-            secItemQuery[kSecUseOperationPrompt as String] = userPrompt
+            let context = LAContext()
+            context.localizedReason = userPrompt
+            secItemQuery[kSecUseAuthenticationContext as String] = context
         }
-        
+#endif
+
         return try Keychain.object(forKey: key, options: secItemQuery)
     }
 
+#if !os(tvOS) && canImport(LocalAuthentication)
     /// - Parameters:
     ///   - key: The key to look up in the keychain.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
     /// - Throws: An error of type `KeychainError`.
-    internal static func containsObject(forKey key: String, options: [String : AnyHashable]) throws -> Bool {
+    internal static func containsObject(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) -> Bool {
         var secItemQuery = options
-        secItemQuery[kSecUseAuthenticationUI as String] = kSecUseAuthenticationUIFail
+        let context = LAContext()
+        context.interactionNotAllowed = true
+        secItemQuery[kSecUseAuthenticationContext as String] = context
 
         let status = Keychain.performCopy(forKey: key, options: secItemQuery)
         switch status {
@@ -93,13 +103,14 @@ public final class SecureEnclave: Sendable {
             throw KeychainError(status: status)
         }
     }
+#endif
 
     /// - Parameters:
     ///   - string: A String value to be inserted into the keychain.
     ///   - key: A key that can be used to retrieve the `string` from the keychain.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Throws: An error of type `KeychainError`.
-    internal static func setString(_ string: String, forKey key: String, options: [String : AnyHashable]) throws {
+    internal static func setString(_ string: String, forKey key: String, options: [String : AnyHashable]) throws(KeychainError) {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         try Keychain.removeObject(forKey: key, options: options)
         
@@ -112,11 +123,15 @@ public final class SecureEnclave: Sendable {
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    internal static func string(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws -> String {
+    internal static func string(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws(KeychainError) -> String {
         var secItemQuery = options
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
         if !userPrompt.isEmpty {
-            secItemQuery[kSecUseOperationPrompt as String] = userPrompt
+            let context = LAContext()
+            context.localizedReason = userPrompt
+            secItemQuery[kSecUseAuthenticationContext as String] = context
         }
+#endif
 
         return try Keychain.string(forKey: key, options: secItemQuery)
     }

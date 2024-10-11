@@ -23,7 +23,7 @@ import XCTest
 @available(tvOS 11.0, *)
 extension SinglePromptSecureEnclaveIntegrationTests {
 
-    @available (*, deprecated)
+    @available(*, deprecated)
     func test_backwardsCompatibility_withLegacyValet() throws
     {
         guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() && testEnvironmentSupportsWhenPasscodeSet() else {

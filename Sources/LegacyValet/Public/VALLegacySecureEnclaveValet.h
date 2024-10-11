@@ -14,7 +14,7 @@
 //  limitations under the License.
 //
 
-#import "VALLegacyValet.h"
+#import <LegacyValet/VALLegacyValet.h>
 
 
 /// Compiler flag for building against an SDK where Secure Enclave is available.

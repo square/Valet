@@ -52,7 +52,7 @@ internal final class Keychain {
     
     // MARK: Getters
     
-    internal static func string(forKey key: String, options: [String : AnyHashable]) throws -> String {
+    internal static func string(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) -> String {
         let data = try object(forKey: key, options: options)
         if let string = String(data: data, encoding: .utf8) {
             return string
@@ -61,7 +61,7 @@ internal final class Keychain {
         }
     }
     
-    internal static func object(forKey key: String, options: [String : AnyHashable]) throws -> Data {
+    internal static func object(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) -> Data {
         guard !key.isEmpty else {
             throw KeychainError.emptyKey
         }
@@ -76,7 +76,7 @@ internal final class Keychain {
     
     // MARK: Setters
     
-    internal static func setString(_ string: String, forKey key: String, options: [String: AnyHashable]) throws {
+    internal static func setString(_ string: String, forKey key: String, options: [String: AnyHashable]) throws(KeychainError) {
         let data = Data(string.utf8)
         try setObject(data, forKey: key, options: options)
     }
@@ -110,7 +110,7 @@ internal final class Keychain {
     
     // MARK: Removal
     
-    internal static func removeObject(forKey key: String, options: [String : AnyHashable]) throws {
+    internal static func removeObject(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) {
         guard !key.isEmpty else {
             throw KeychainError.emptyKey
         }
@@ -121,7 +121,7 @@ internal final class Keychain {
         try SecItem.deleteItems(matching: secItemQuery)
     }
     
-    internal static func removeAllObjects(matching options: [String : AnyHashable]) throws {
+    internal static func removeAllObjects(matching options: [String : AnyHashable]) throws(KeychainError) {
         try SecItem.deleteItems(matching: options)
     }
     
@@ -140,7 +140,7 @@ internal final class Keychain {
     
     // MARK: AllObjects
     
-    internal static func allKeys(options: [String: AnyHashable]) throws -> Set<String> {
+    internal static func allKeys(options: [String: AnyHashable]) throws(KeychainError) -> Set<String> {
         var secItemQuery = options
         secItemQuery[kSecMatchLimit as String] = kSecMatchLimitAll
         secItemQuery[kSecReturnAttributes as String] = true

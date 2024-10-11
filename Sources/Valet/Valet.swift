@@ -251,36 +251,42 @@ public final class Valet: NSObject, Sendable {
     /// - Throws: An error of type `KeychainError`.
     /// - Important: Inserted data should be no larger than 4kb.
     @objc
-    public func setObject(_ object: Data, forKey key: String) throws {
-        try execute(in: lock) {
-            try Keychain.setObject(object, forKey: key, options: baseKeychainQuery)
+    public func setObject(_ object: Data, forKey key: String) throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.setObject(object, forKey: key, options: baseKeychainQuery)
     }
 
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func object(forKey key: String) throws -> Data {
-        try execute(in: lock) {
-            try Keychain.object(forKey: key, options: baseKeychainQuery)
+    public func object(forKey key: String) throws(KeychainError) -> Data {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.object(forKey: key, options: baseKeychainQuery)
     }
 
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
     /// - Throws: An error of type `KeychainError`.
-    public func containsObject(forKey key: String) throws -> Bool {
-        try execute(in: lock) {
-            let status = Keychain.performCopy(forKey: key, options: baseKeychainQuery)
-            switch status {
-            case errSecSuccess:
-                return true
-            case errSecItemNotFound:
-                return false
-            default:
-                throw KeychainError(status: status)
-            }
+    public func containsObject(forKey key: String) throws(KeychainError) -> Bool {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        let status = Keychain.performCopy(forKey: key, options: baseKeychainQuery)
+        switch status {
+        case errSecSuccess:
+            return true
+        case errSecItemNotFound:
+            return false
+        default:
+            throw KeychainError(status: status)
         }
     }
 
@@ -290,29 +296,35 @@ public final class Valet: NSObject, Sendable {
     /// - Throws: An error of type `KeychainError`.
     /// - Important: Inserted data should be no larger than 4kb.
     @objc
-    public func setString(_ string: String, forKey key: String) throws {
-        try execute(in: lock) {
-            try Keychain.setString(string, forKey: key, options: baseKeychainQuery)
+    public func setString(_ string: String, forKey key: String) throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.setString(string, forKey: key, options: baseKeychainQuery)
     }
 
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func string(forKey key: String) throws -> String {
-        try execute(in: lock) {
-            try Keychain.string(forKey: key, options: baseKeychainQuery)
+    public func string(forKey key: String) throws(KeychainError) -> String {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.string(forKey: key, options: baseKeychainQuery)
     }
     
     /// - Returns: The set of all (String) keys currently stored in this Valet instance. If no items are found, will return an empty set.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func allKeys() throws -> Set<String> {
-        try execute(in: lock) {
-            try Keychain.allKeys(options: baseKeychainQuery)
+    public func allKeys() throws(KeychainError) -> Set<String> {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.allKeys(options: baseKeychainQuery)
     }
     
     /// Removes a key/object pair from the keychain.
@@ -320,19 +332,23 @@ public final class Valet: NSObject, Sendable {
     /// - Throws: An error of type `KeychainError`.
     /// - Note: No error is thrown if the `key` is not found in the keychain.
     @objc
-    public func removeObject(forKey key: String) throws {
-        try execute(in: lock) {
-            try Keychain.removeObject(forKey: key, options: baseKeychainQuery)
+    public func removeObject(forKey key: String) throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.removeObject(forKey: key, options: baseKeychainQuery)
     }
     
     /// Removes all key/object pairs accessible by this Valet instance from the keychain.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func removeAllObjects() throws {
-        try execute(in: lock) {
-            try Keychain.removeAllObjects(matching: baseKeychainQuery)
+    public func removeAllObjects() throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.removeAllObjects(matching: baseKeychainQuery)
     }
 
     /// Migrates objects matching the input query into the receiving Valet instance.

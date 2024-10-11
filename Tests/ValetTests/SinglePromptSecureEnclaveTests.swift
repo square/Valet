@@ -14,8 +14,7 @@
 //  limitations under the License.
 //
 
-// Xcode 13 and prior incorrectly say that LocalAuthentication is available on tvOS, so we have to check both as long as Xcode 13 and prior are supported.
-#if !os(tvOS) && canImport(LocalAuthentication)
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
 
 import Foundation
 @testable import Valet

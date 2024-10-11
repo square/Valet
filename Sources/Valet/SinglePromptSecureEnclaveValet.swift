@@ -14,9 +14,7 @@
 //  limitations under the License.
 //
 
-// Xcode 13 and prior incorrectly say that LocalAuthentication is available on tvOS, so we have to check both as long as Xcode 13 and prior are supported.
-// Xcode 14 moved the LAContext availability to watchOS 3, so only that version is explicitly annotated.
-#if !os(tvOS) && canImport(LocalAuthentication)
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
 
 import LocalAuthentication
 import Foundation
@@ -196,7 +194,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
         try execute(in: lock) {
             var secItemQuery = try continuedAuthenticationKeychainQuery()
             if !userPrompt.isEmpty {
-                secItemQuery[kSecUseOperationPrompt as String] = userPrompt
+                let context = LAContext()
+                context.localizedReason = userPrompt
+                secItemQuery[kSecUseAuthenticationContext as String] = context
             }
             
             return try Keychain.allKeys(options: secItemQuery)

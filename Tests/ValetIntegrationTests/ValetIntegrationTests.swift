@@ -629,7 +629,7 @@ class ValetIntegrationTests: XCTestCase
     func test_stringForKey_failsForDataNotBackedByString() throws {
         try allPermutations.forEach { valet in
             let dictionary = [ "that's no" : "moon" ]
-            let nonStringData = NSKeyedArchiver.archivedData(withRootObject: dictionary)
+            let nonStringData = try NSKeyedArchiver.archivedData(withRootObject: dictionary, requiringSecureCoding: false)
             try valet.setObject(nonStringData, forKey: key)
             XCTAssertThrowsError(try valet.string(forKey: key)) { error in
                 XCTAssertEqual(error as? KeychainError, .itemNotFound)
@@ -724,7 +724,6 @@ class ValetIntegrationTests: XCTestCase
                 try backgroundValet.setString(self.passcode, forKey: self.key)
             } catch {
                 XCTFail("Threw \(error) trying to write value")
-                expectation.fulfill()
             }
             stringForKeyQueue.async {
                 do {

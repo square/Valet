@@ -22,7 +22,7 @@ import XCTest
 
 extension SecureEnclaveIntegrationTests {
 
-    @available (*, deprecated)
+    @available(*, deprecated)
     func test_backwardsCompatibility_withLegacyValet() throws
     {
         guard testEnvironmentIsSignedOrDoesNotRequireEntitlement() && testEnvironmentSupportsWhenPasscodeSet() else {
