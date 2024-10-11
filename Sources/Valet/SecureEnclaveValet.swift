@@ -141,7 +141,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
         defer {
             lock.unlock()
         }
-        return try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: baseKeychainQuery)
+        return try SecureEnclave.object(forKey: key, withPrompt: userPrompt, context: nil, options: baseKeychainQuery)
     }
 #else
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
@@ -153,7 +153,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
         defer {
             lock.unlock()
         }
-        return try SecureEnclave.object(forKey: key, withPrompt: "", options: baseKeychainQuery)
+        return try SecureEnclave.object(forKey: key, options: baseKeychainQuery)
     }
 #endif
 
@@ -197,7 +197,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
         defer {
             lock.unlock()
         }
-        return try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: baseKeychainQuery)
+        return try SecureEnclave.string(forKey: key, withPrompt: userPrompt, context: nil, options: baseKeychainQuery)
     }
 #else
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
@@ -209,7 +209,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
         defer {
             lock.unlock()
         }
-        return try SecureEnclave.string(forKey: key, withPrompt: "", options: baseKeychainQuery)
+        return try SecureEnclave.string(forKey: key, options: baseKeychainQuery)
     }
 #endif
 

@@ -60,24 +60,41 @@ public final class SecureEnclave: Sendable {
         try Keychain.setObject(object, forKey: key, options: options)
     }
 
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
     /// - Parameters:
     ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
+    ///   - context: The context to use for the query.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    internal static func object(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws(KeychainError) -> Data {
+    internal static func object(
+        forKey key: String,
+        withPrompt userPrompt: String,
+        context: LAContext?,
+        options: [String : AnyHashable]
+    ) throws(KeychainError) -> Data {
         var secItemQuery = options
-#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
         if !userPrompt.isEmpty {
-            let context = LAContext()
+            let context = context ?? LAContext()
             context.localizedReason = userPrompt
             secItemQuery[kSecUseAuthenticationContext as String] = context
         }
-#endif
-
         return try Keychain.object(forKey: key, options: secItemQuery)
     }
+#else
+    /// - Parameters:
+    ///   - key: A key used to retrieve the desired object from the keychain.
+    ///   - options: A base query used to scope the calls in the keychain.
+    /// - Returns: The data currently stored in the keychain for the provided key.
+    /// - Throws: An error of type `KeychainError`.
+    internal static func object(
+        forKey key: String,
+        options: [String : AnyHashable]
+    ) throws(KeychainError) -> Data {
+        try Keychain.object(forKey: key, options: options)
+    }
+#endif
 
 #if !os(tvOS) && canImport(LocalAuthentication)
     /// - Parameters:
@@ -117,22 +134,40 @@ public final class SecureEnclave: Sendable {
         try Keychain.setString(string, forKey: key, options: options)
     }
 
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
     /// - Parameters:
     ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
+    ///   - context: The context to use for the query.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    internal static func string(forKey key: String, withPrompt userPrompt: String, options: [String : AnyHashable]) throws(KeychainError) -> String {
+    internal static func string(
+        forKey key: String,
+        withPrompt userPrompt: String,
+        context: LAContext?,
+        options: [String : AnyHashable]
+    ) throws(KeychainError) -> String {
         var secItemQuery = options
-#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
         if !userPrompt.isEmpty {
-            let context = LAContext()
+            let context = context ?? LAContext()
             context.localizedReason = userPrompt
             secItemQuery[kSecUseAuthenticationContext as String] = context
         }
-#endif
-
         return try Keychain.string(forKey: key, options: secItemQuery)
     }
+#else
+    /// - Parameters:
+    ///   - key: A key used to retrieve the desired object from the keychain.
+    ///   - options: A base query used to scope the calls in the keychain.
+    /// - Returns: The string currently stored in the keychain for the provided key.
+    /// - Throws: An error of type `KeychainError`.
+    internal static func string(
+        forKey key: String,
+        options: [String : AnyHashable]
+    ) throws(KeychainError) -> String {
+        try Keychain.string(forKey: key, options: options)
+    }
+
+#endif
 }

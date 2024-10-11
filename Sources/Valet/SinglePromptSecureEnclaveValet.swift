@@ -139,7 +139,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
     @objc
     public func object(forKey key: String, withPrompt userPrompt: String) throws -> Data {
         try execute(in: lock) {
-            try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: try continuedAuthenticationKeychainQuery())
+            try SecureEnclave.object(forKey: key, withPrompt: userPrompt, context: localAuthenticationContext, options: try continuedAuthenticationKeychainQuery())
         }
     }
 
@@ -173,7 +173,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
     @objc
     public func string(forKey key: String, withPrompt userPrompt: String) throws -> String {
         try execute(in: lock) {
-            try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: try continuedAuthenticationKeychainQuery())
+            try SecureEnclave.string(forKey: key, withPrompt: userPrompt, context: localAuthenticationContext, options: try continuedAuthenticationKeychainQuery())
         }
     }
     
