@@ -19,7 +19,7 @@ Install with [CocoaPods](http://cocoapods.org) by adding the following to your `
 on iOS:
 
 ```
-platform :ios, '9.0'
+platform :ios, '12.0'
 use_frameworks!
 pod 'Valet'
 ```
@@ -27,7 +27,7 @@ pod 'Valet'
 on tvOS:
 
 ```
-platform :tvos, '9.0'
+platform :tvos, '12.0'
 use_frameworks!
 pod 'Valet'
 ```
@@ -35,7 +35,7 @@ pod 'Valet'
 on watchOS:
 
 ```
-platform :watchos, '2.0'
+platform :watchos, '4.0'
 use_frameworks!
 pod 'Valet'
 ```
@@ -43,7 +43,7 @@ pod 'Valet'
 on macOS:
 
 ```
-platform :osx, '10.11'
+platform :osx, '10.13'
 use_frameworks!
 pod 'Valet'
 ```
@@ -64,7 +64,7 @@ Install with [Swift Package Manager](https://github.com/apple/swift-package-mana
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Square/Valet", from: "4.0.0"),
+    .package(url: "https://github.com/Square/Valet", from: "5.0.0"),
 ],
 ```
 
@@ -239,11 +239,11 @@ Valet guarantees that reading and writing operations will succeed as long as wri
 
 ## Requirements
 
-* Xcode 13.0 or later.
-* iOS 9 or later.
-* tvOS 9 or later.
-* watchOS 2 or later.
-* macOS 10.11 or later.
+* Xcode 16.0 or later.
+* iOS 12 or later.
+* tvOS 12 or later.
+* watchOS 4 or later.
+* macOS 10.13 or later.
 
 ## Migrating from prior Valet versions
 

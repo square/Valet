@@ -11,38 +11,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  xcode-build-13:
-    name: Xcode 13 Build
-    runs-on: macOS-12
-    strategy:
-      matrix:
-        platforms: [
-          'iOS_15',
-          'tvOS_15',
-        ]
-      fail-fast: false
-    timeout-minutes: 30
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-      - name: Bundle Install
-        run: bundle install
-      - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_13.4.1.app/Contents/Developer
-      - name: Build and Test Framework
-        run: Scripts/build.swift ${{ matrix.platforms }} xcode
-      - name: Upload Coverage Reports
-        if: success()
-        run: Scripts/upload-coverage-reports.sh ${{ matrix.platforms }}
-  xcode-build-14:
-    name: Xcode 14 Build
+  xcode-build-16:
+    name: Xcode 16 Build
     runs-on: macOS-14
     strategy:
       matrix:
         platforms: [
-          'iOS_16',
-          'tvOS_16',
-          'watchOS_9',
+          'iOS_18',
+          'tvOS_18',
+          'watchOS_11',
         ]
       fail-fast: false
     timeout-minutes: 30
@@ -52,31 +29,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app/Contents/Developer
-      - name: Build and Test Framework
-        run: Scripts/build.swift ${{ matrix.platforms }} xcode
-      - name: Upload Coverage Reports
-        if: success()
-        run: Scripts/upload-coverage-reports.sh ${{ matrix.platforms }}
-  xcode-build-15:
-    name: Xcode 15 Build
-    runs-on: macOS-14
-    strategy:
-      matrix:
-        platforms: [
-          'iOS_17',
-          'tvOS_17',
-          'watchOS_10',
-        ]
-      fail-fast: false
-    timeout-minutes: 30
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-      - name: Bundle Install
-        run: bundle install
-      - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_15.3.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_16.app/Contents/Developer
       - name: Build and Test Framework
         run: Scripts/build.swift ${{ matrix.platforms }} xcode
       - name: Upload Coverage Reports
@@ -92,9 +45,9 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_15.3.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_16.app/Contents/Developer
       - name: Lint Podspec
-        run: bundle exec pod lib lint --verbose --fail-fast --swift-version=5.4
+        run: bundle exec pod lib lint --verbose --fail-fast --swift-version=6
   carthage:
     name: Carthage
     runs-on: macOS-14
@@ -105,69 +58,21 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_15.3.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_16.app/Contents/Developer
       - name: Install Carthage
         run: brew outdated carthage || brew upgrade carthage
       - name: Build Framework
         run: carthage build --verbose --no-skip-current --use-xcframeworks
-  spm-12:
-    name: SPM Build macOS 12
-    runs-on: macOS-12
-    strategy:
-      matrix:
-        platforms: [
-          'iOS_15',
-          'tvOS_15',
-          'watchOS_8',
-          'macOS_12',
-        ]
-      fail-fast: false
-    timeout-minutes: 30
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-      - name: Bundle Install
-        run: bundle install
-      - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_13.4.1.app/Contents/Developer
-      - name: Prepare Simulator Runtimes
-        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
-      - name: Build Framework
-        run: Scripts/build.swift ${{ matrix.platforms }} spm
-  spm-13:
-    name: SPM Build macOS 13
-    runs-on: macOS-13
-    strategy:
-      matrix:
-        platforms: [
-          'iOS_16',
-          'tvOS_16',
-          'watchOS_9',
-          'macOS_13',
-        ]
-      fail-fast: false
-    timeout-minutes: 30
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-      - name: Bundle Install
-        run: bundle install
-      - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_14.3.1.app/Contents/Developer
-      - name: Prepare Simulator Runtimes
-        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
-      - name: Build Framework
-        run: Scripts/build.swift ${{ matrix.platforms }} spm
   spm-14:
     name: SPM Build macOS 14
     runs-on: macOS-14
     strategy:
       matrix:
         platforms: [
-          'iOS_17',
-          'tvOS_17',
-          'watchOS_10',
-          'macOS_14',
+          'iOS_18',
+          'tvOS_18',
+          'watchOS_11',
+          'macOS_15',
         ]
       fail-fast: false
     timeout-minutes: 30
@@ -177,8 +82,6 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_15.3.app/Contents/Developer
-      - name: Prepare Simulator Runtimes
-        run: Scripts/github/prepare-simulators.sh ${{ matrix.platforms }}
+        run: sudo xcode-select --switch /Applications/Xcode_16.app/Contents/Developer
       - name: Build Framework
         run: Scripts/build.swift ${{ matrix.platforms }} spm

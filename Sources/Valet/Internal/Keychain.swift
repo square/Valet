@@ -81,7 +81,7 @@ internal final class Keychain {
         try setObject(data, forKey: key, options: options)
     }
     
-    internal static func setObject(_ object: Data, forKey key: String, options: [String: AnyHashable]) throws {
+    internal static func setObject(_ object: Data, forKey key: String, options: [String: AnyHashable]) throws(KeychainError) {
         guard !key.isEmpty else {
             throw KeychainError.emptyKey
         }

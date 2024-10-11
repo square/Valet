@@ -34,13 +34,13 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
     ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
-        let key = Service.standard(identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = Service.standard(identifier, .singlePromptSecureEnclave(accessControl)).description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
             
         } else {
             let valet = SinglePromptSecureEnclaveValet(identifier: identifier, accessControl: accessControl)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
@@ -50,13 +50,13 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
     ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedGroupValet(with groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
-        let key = Service.sharedGroup(groupIdentifier, identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = Service.sharedGroup(groupIdentifier, identifier, .singlePromptSecureEnclave(accessControl)).description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
             
         } else {
             let valet = SinglePromptSecureEnclaveValet(sharedAccess: groupIdentifier, identifier: identifier, accessControl: accessControl)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
@@ -70,8 +70,8 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
     
     // MARK: Private Class Properties
     
-    private static let identifierToValetMap = NSMapTable<NSString, SinglePromptSecureEnclaveValet>.strongToWeakObjects()
-    
+    private static let identifierToValetMap = WeakStorage<SinglePromptSecureEnclaveValet>()
+
     // MARK: Initialization
     
     @available(*, unavailable)

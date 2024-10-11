@@ -112,32 +112,32 @@ public final class Valet: NSObject, Sendable {
     
     // MARK: Private Class Properties
     
-    private static let identifierToValetMap = NSMapTable<NSString, Valet>.strongToWeakObjects()
+    private static let identifierToValetMap = WeakStorage<Valet>()
 
     // MARK: Private Class Functions
 
     private class func findOrCreate(_ identifier: Identifier, configuration: Configuration) -> Valet {
         let service: Service = .standard(identifier, configuration)
-        let key = service.description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = service.description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
 
         } else {
             let valet = Valet(identifier: identifier, configuration: configuration)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
 
     private class func findOrCreate(_ groupIdentifier: SharedGroupIdentifier, identifier: Identifier?, configuration: Configuration) -> Valet {
         let service: Service = .sharedGroup(groupIdentifier, identifier, configuration)
-        let key = service.description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = service.description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
 
         } else {
             let valet = Valet(sharedAccess: groupIdentifier, identifier: identifier, configuration: configuration)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
@@ -146,26 +146,26 @@ public final class Valet: NSObject, Sendable {
     #if os(macOS)
     private class func findOrCreate(explicitlySet identifier: Identifier, configuration: Configuration) -> Valet {
         let service: Service = .standardOverride(service: identifier, configuration)
-        let key = service.description + configuration.description + configuration.accessibility.description + identifier.description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = service.description + configuration.description + configuration.accessibility.description + identifier.description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
 
         } else {
             let valet = Valet(overrideIdentifier: identifier, configuration: configuration)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
 
     private class func findOrCreate(explicitlySet identifier: SharedGroupIdentifier, configuration: Configuration) -> Valet {
         let service: Service = .sharedGroupOverride(service: identifier, configuration)
-        let key = service.description + configuration.description + configuration.accessibility.description + identifier.description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = service.description + configuration.description + configuration.accessibility.description + identifier.description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
 
         } else {
             let valet = Valet(overrideSharedAccess: identifier, configuration: configuration)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }

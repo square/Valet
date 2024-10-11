@@ -28,13 +28,13 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
-        let key = Service.standard(identifier, .secureEnclave(accessControl)).description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = Service.standard(identifier, .secureEnclave(accessControl)).description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
             
         } else {
             let valet = SecureEnclaveValet(identifier: identifier, accessControl: accessControl)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
@@ -44,13 +44,13 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedGroupValet(with groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
-        let key = Service.sharedGroup(groupIdentifier, identifier, .secureEnclave(accessControl)).description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = Service.sharedGroup(groupIdentifier, identifier, .secureEnclave(accessControl)).description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
             
         } else {
             let valet = SecureEnclaveValet(sharedAccess: groupIdentifier, identifier: identifier, accessControl: accessControl)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
@@ -64,8 +64,8 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     
     // MARK: Private Class Properties
     
-    private static let identifierToValetMap = NSMapTable<NSString, SecureEnclaveValet>.strongToWeakObjects()
-    
+    private static let identifierToValetMap = WeakStorage<SecureEnclaveValet>()
+
     // MARK: Initialization
     
     @available(*, unavailable)

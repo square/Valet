@@ -21,83 +21,40 @@ enum TaskError: Error {
 }
 
 enum Platform: String, CustomStringConvertible {
-    case iOS_15
-    case iOS_16
-    case iOS_17
-    case tvOS_15
-    case tvOS_16
-    case tvOS_17
-    case macOS_12
-    case macOS_13
-    case macOS_14
-    case watchOS_8
-    case watchOS_9
-    case watchOS_10
+    case iOS_18
+    case tvOS_18
+    case macOS_15
+    case watchOS_11
 
     var destination: String {
         switch self {
-        case .iOS_15:
-            return "platform=iOS Simulator,OS=15.5,name=iPad Pro (12.9-inch) (5th generation)"
-        case .iOS_16:
-            return "platform=iOS Simulator,OS=16.4,name=iPad Pro (12.9-inch) (6th generation)"
-        case .iOS_17:
-            return "platform=iOS Simulator,OS=17.4,name=iPad Pro (12.9-inch) (6th generation)"
+        case .iOS_18:
+            "platform=iOS Simulator,OS=18.0,name=iPad Pro (12.9-inch) (6th generation)"
 
-        case .tvOS_15:
-            return "platform=tvOS Simulator,OS=15.4,name=Apple TV"
-        case .tvOS_16:
-            return "platform=tvOS Simulator,OS=16.4,name=Apple TV"
-        case .tvOS_17:
-            return "platform=tvOS Simulator,OS=17.4,name=Apple TV"
+        case .tvOS_18:
+            "platform=tvOS Simulator,OS=18.0,name=Apple TV"
 
-        case .macOS_12,
-             .macOS_13,
-             .macOS_14:
-            return "platform=OS X"
+        case .macOS_15:
+            "platform=OS X"
 
-        case .watchOS_8:
-            return "OS=8.5,name=Apple Watch Series 6 - 44mm"
-        case .watchOS_9:
-            return "OS=9.4,name=Apple Watch Series 6 (44mm)"
-        case .watchOS_10:
-            return "OS=10.4,name=Apple Watch Series 9 (45mm)"
+        case .watchOS_11:
+            "OS=11.0,name=Apple Watch Series 9 (45mm)"
         }
     }
 
     var sdk: String {
         switch self {
-        case .iOS_15,
-             .iOS_16,
-             .iOS_17:
-            return "iphonesimulator"
+        case .iOS_18:
+            "iphonesimulator"
 
-        case .tvOS_15,
-             .tvOS_16,
-             .tvOS_17:
-            return "appletvsimulator"
+        case .tvOS_18:
+            "appletvsimulator"
 
-        case .macOS_12:
-            return "macosx12.3"
-        case .macOS_13:
-            return "macosx13.3"
-        case .macOS_14:
-            return "macosx14.4"
+        case .macOS_15:
+            "macosx15.0"
 
-        case .watchOS_8,
-             .watchOS_9,
-             .watchOS_10:
-            return "watchsimulator"
-        }
-    }
-
-    /// Whether the platform's Xcode version requires modern SPM integration in xcodebuild, given the removal of generate-xcodeproj.
-    var requiresModernSPMIntegration: Bool {
-        switch self {
-        case .iOS_16, .tvOS_16, .watchOS_9, .macOS_13,
-            .iOS_17, .tvOS_17, .watchOS_10, .macOS_14:
-            return true
-        default:
-            return false
+        case .watchOS_11:
+            "watchsimulator"
         }
     }
 
@@ -107,25 +64,17 @@ enum Platform: String, CustomStringConvertible {
 
     var scheme: String {
         switch self {
-        case .iOS_15,
-             .iOS_16,
-             .iOS_17:
-            return "Valet iOS"
+        case .iOS_18:
+            "Valet iOS"
 
-        case .tvOS_15,
-             .tvOS_16,
-             .tvOS_17:
-            return "Valet tvOS"
+        case .tvOS_18:
+            "Valet tvOS"
 
-        case .macOS_12,
-             .macOS_13,
-             .macOS_14:
-            return "Valet Mac"
+        case .macOS_15:
+            "Valet Mac"
 
-        case .watchOS_8,
-             .watchOS_9,
-             .watchOS_10:
-            return "Valet watchOS"
+        case .watchOS_11:
+            "Valet watchOS"
         }
     }
 
@@ -142,63 +91,33 @@ enum Task: String, CustomStringConvertible {
         rawValue
     }
 
-    func project(for platform: Platform) -> String? {
-        if platform.requiresModernSPMIntegration {
-            return nil
-        } else {
-            switch self {
-            case .spm:
-                return "generated/Valet.xcodeproj"
-            case .xcode:
-                return "Valet.xcodeproj"
-            }
-        }
-    }
-
-    func shouldGenerateXcodeProject(for platform: Platform) -> Bool {
-        if platform.requiresModernSPMIntegration {
-            return false
-        } else {
-            switch self {
-            case .spm:
-                return true
-            case .xcode:
-                return false
-            }
-        }
-    }
-
     var shouldUseLegacyBuildSystem: Bool {
         switch self {
         case .spm:
-            return false
+            false
         case .xcode:
             // The new build system choked on our XCTest framework.
             // Once this project compiles with the new build system,
             // we can change this to false.
-            return true
+            true
         }
     }
 
     var configuration: String {
         switch self {
         case .spm:
-            return "Release"
+            "Release"
         case .xcode:
-            return "Debug"
+            "Debug"
         }
     }
 
     func scheme(for platform: Platform) -> String {
         switch self {
         case .spm:
-            if platform.requiresModernSPMIntegration {
-                return "Valet"
-            } else {
-                return "Valet-Package"
-            }
+            "Valet"
         case .xcode:
-            return platform.scheme
+            platform.scheme
         }
     }
 
@@ -206,9 +125,9 @@ enum Task: String, CustomStringConvertible {
         switch self {
         case .spm:
             // Our Package isn't set up with unit test targets, because SPM can't run unit tests in a codesigned environment.
-            return false
+            false
         case .xcode:
-            return true
+            true
         }
     }
 }
@@ -234,18 +153,12 @@ let platforms = try rawPlatforms.map { rawPlatform -> Platform in
     return platform
 }
 
-// Only generate xcodeproj for SPM on platforms that require it.
-let shouldGenerateXcodeproj = task == .spm && platforms.map { task.shouldGenerateXcodeProject(for: $0) }.contains(true)
-if shouldGenerateXcodeproj {
-    try execute(commandPath: "/usr/bin/xcrun", arguments: ["/usr/bin/swift", "package", "generate-xcodeproj", "--output=generated/"])
-}
-
 for platform in platforms {
     var deletedXcodeproj = false
     var xcodeBuildArguments: [String] = []
     // If necessary, delete Valet.xcodeproj, otherwise xcodebuild won't generate the SPM scheme.
     // If deleted, the xcodeproj will be restored by git at the end of the loop.
-    if task == .spm && platform.requiresModernSPMIntegration {
+    if task == .spm {
         do {
             print("Deleting Valet.xcodeproj, any uncommitted changes will be lost.")
             try execute(commandPath: "/bin/rm", arguments: ["-r", "Valet.xcodeproj"])
@@ -254,11 +167,6 @@ for platform in platforms {
             print("Could not delete Valet.xcodeproj due to error: \(error)")
             throw TaskError.code(1)
         }
-    }
-
-    if let project = task.project(for: platform) {
-        xcodeBuildArguments.append("-project")
-        xcodeBuildArguments.append(project)
     }
 
     xcodeBuildArguments.append(contentsOf: [
