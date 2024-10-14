@@ -272,7 +272,7 @@ You'll also need to continue reading through the [migration from Valet 3](#migra
 
 1. Most `throw`ing methods now utilize [typed throws](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0413-typed-throws.md), which may render certain `catch` statements obsolete.
 1. `SecureEnclaveValet`'s `withPrompt` API were removed on tvOS and watchOS, as recent API updates revealed that this API never actually showed a prompt on device. New API were added to perform the same actions without a custom prompt.
-1. `SinglePromptSecureEnclaveValet` was removed from watchOS, as recent API updates revealed this API did not work as intended on watchOS. If you were previously deploying a ``SinglePromptSecureEnclaveValet`` on watchOS, use the method TODO ADD MIGRATION METHOD HERE on a `SecureEnclaveValet` to migrate your key:value pairs to a `SecureEnclaveValet`.
+1. `SinglePromptSecureEnclaveValet` was removed from watchOS, as recent API updates revealed this API did not work as intended on watchOS. If you were previously deploying a ``SinglePromptSecureEnclaveValet`` on watchOS, use the method `migrateObjectsFromSinglePromptSecureEnclaveValet(removeOnCompletion:)` on a `SecureEnclaveValet` with the same identifiers and access control to migrate your existing key:value pairs.
 
 ## Contributing
 

@@ -260,6 +260,26 @@ public final class SecureEnclaveValet: NSObject, Sendable {
         try migrateObjects(matching: valet.baseKeychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
+#if os(watchOS)
+    /// Call this method to migrate from a `SinglePromptSecureEnclaveValet` used on watchOS.
+    /// This method migrates objects set on a `SinglePromptSecureEnclaveValet` with the same identifier and access control to the receiver.
+    /// - Parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
+    /// - Throws: An error of type `KeychainError` or `MigrationError`.
+    /// - Note: The keychain is not modified if an error is thrown.
+    @objc
+    public func migrateObjectsFromSinglePromptSecureEnclaveValet(removeOnCompletion: Bool) throws {
+        try execute(in: lock) {
+            try Keychain.migrateObjects(
+                matching: service
+                    .asSinglePromptSecureEnclave(withAccessControl: accessControl)
+                    .generateBaseQuery(),
+                into: baseKeychainQuery,
+                removeOnCompletion: removeOnCompletion
+            )
+        }
+    }
+#endif
+
     // MARK: Internal Properties
 
     internal let service: Service
@@ -335,3 +355,17 @@ extension SecureEnclaveValet {
 #endif
 
 }
+
+
+#if os(watchOS)
+extension Service {
+    func asSinglePromptSecureEnclave(withAccessControl accessControl: SecureEnclaveAccessControl) -> Service {
+        switch self {
+        case let .standard(identifier, _):
+            .standard(identifier, .singlePromptSecureEnclave(accessControl))
+        case let .sharedGroup(sharedGroupIdentifier, identifier, _):
+            .sharedGroup(sharedGroupIdentifier, identifier, .singlePromptSecureEnclave(accessControl))
+        }
+    }
+}
+#endif
