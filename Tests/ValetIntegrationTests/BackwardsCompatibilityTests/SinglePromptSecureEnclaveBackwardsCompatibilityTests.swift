@@ -20,7 +20,6 @@ import LegacyValet
 import XCTest
 
 
-@available(tvOS 11.0, *)
 extension SinglePromptSecureEnclaveIntegrationTests {
 
     @available(*, deprecated)
