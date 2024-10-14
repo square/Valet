@@ -245,14 +245,6 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
         try migrateObjects(matching: valet.baseKeychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
-    // MARK: Renamed Methods
-    
-    @available(*, unavailable, renamed: "setObject(_:forKey:)")
-    public func set(object: Data, forKey key: String) -> Bool { fatalError() }
-    
-    @available(*, unavailable, renamed: "setString(_:forKey:)")
-    public func set(string: String, forKey key: String) -> Bool { fatalError() }
-
     // MARK: Internal Properties
 
     internal let service: Service
