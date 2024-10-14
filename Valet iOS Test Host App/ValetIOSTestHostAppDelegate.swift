@@ -17,7 +17,7 @@
 import UIKit
 
 
-@UIApplicationMain
+@main
 final class ValetIOSTestHostAppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 }

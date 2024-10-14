@@ -50,7 +50,8 @@ public final class Valet: NSObject, Sendable {
     }
 
     /// - Parameters:
-    ///   - identifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - groupIdentifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: An optional additional uniqueness identifier. Using this identifier allows for the creation of separate, sandboxed Valets within the same shared access group.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func iCloudSharedGroupValet(with groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessibility: CloudAccessibility) -> Valet {
@@ -112,32 +113,32 @@ public final class Valet: NSObject, Sendable {
     
     // MARK: Private Class Properties
     
-    private static let identifierToValetMap = NSMapTable<NSString, Valet>.strongToWeakObjects()
+    private static let identifierToValetMap = WeakStorage<Valet>()
 
     // MARK: Private Class Functions
 
     private class func findOrCreate(_ identifier: Identifier, configuration: Configuration) -> Valet {
         let service: Service = .standard(identifier, configuration)
-        let key = service.description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = service.description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
 
         } else {
             let valet = Valet(identifier: identifier, configuration: configuration)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
 
     private class func findOrCreate(_ groupIdentifier: SharedGroupIdentifier, identifier: Identifier?, configuration: Configuration) -> Valet {
         let service: Service = .sharedGroup(groupIdentifier, identifier, configuration)
-        let key = service.description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = service.description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
 
         } else {
             let valet = Valet(sharedAccess: groupIdentifier, identifier: identifier, configuration: configuration)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
@@ -146,26 +147,26 @@ public final class Valet: NSObject, Sendable {
     #if os(macOS)
     private class func findOrCreate(explicitlySet identifier: Identifier, configuration: Configuration) -> Valet {
         let service: Service = .standardOverride(service: identifier, configuration)
-        let key = service.description + configuration.description + configuration.accessibility.description + identifier.description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = service.description + configuration.description + configuration.accessibility.description + identifier.description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
 
         } else {
             let valet = Valet(overrideIdentifier: identifier, configuration: configuration)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
 
     private class func findOrCreate(explicitlySet identifier: SharedGroupIdentifier, configuration: Configuration) -> Valet {
         let service: Service = .sharedGroupOverride(service: identifier, configuration)
-        let key = service.description + configuration.description + configuration.accessibility.description + identifier.description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = service.description + configuration.description + configuration.accessibility.description + identifier.description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
 
         } else {
             let valet = Valet(overrideSharedAccess: identifier, configuration: configuration)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
@@ -251,36 +252,42 @@ public final class Valet: NSObject, Sendable {
     /// - Throws: An error of type `KeychainError`.
     /// - Important: Inserted data should be no larger than 4kb.
     @objc
-    public func setObject(_ object: Data, forKey key: String) throws {
-        try execute(in: lock) {
-            try Keychain.setObject(object, forKey: key, options: baseKeychainQuery)
+    public func setObject(_ object: Data, forKey key: String) throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.setObject(object, forKey: key, options: baseKeychainQuery)
     }
 
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func object(forKey key: String) throws -> Data {
-        try execute(in: lock) {
-            try Keychain.object(forKey: key, options: baseKeychainQuery)
+    public func object(forKey key: String) throws(KeychainError) -> Data {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.object(forKey: key, options: baseKeychainQuery)
     }
 
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
     /// - Throws: An error of type `KeychainError`.
-    public func containsObject(forKey key: String) throws -> Bool {
-        try execute(in: lock) {
-            let status = Keychain.performCopy(forKey: key, options: baseKeychainQuery)
-            switch status {
-            case errSecSuccess:
-                return true
-            case errSecItemNotFound:
-                return false
-            default:
-                throw KeychainError(status: status)
-            }
+    public func containsObject(forKey key: String) throws(KeychainError) -> Bool {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        let status = Keychain.performCopy(forKey: key, options: baseKeychainQuery)
+        switch status {
+        case errSecSuccess:
+            return true
+        case errSecItemNotFound:
+            return false
+        default:
+            throw KeychainError(status: status)
         }
     }
 
@@ -290,29 +297,35 @@ public final class Valet: NSObject, Sendable {
     /// - Throws: An error of type `KeychainError`.
     /// - Important: Inserted data should be no larger than 4kb.
     @objc
-    public func setString(_ string: String, forKey key: String) throws {
-        try execute(in: lock) {
-            try Keychain.setString(string, forKey: key, options: baseKeychainQuery)
+    public func setString(_ string: String, forKey key: String) throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.setString(string, forKey: key, options: baseKeychainQuery)
     }
 
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func string(forKey key: String) throws -> String {
-        try execute(in: lock) {
-            try Keychain.string(forKey: key, options: baseKeychainQuery)
+    public func string(forKey key: String) throws(KeychainError) -> String {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.string(forKey: key, options: baseKeychainQuery)
     }
     
     /// - Returns: The set of all (String) keys currently stored in this Valet instance. If no items are found, will return an empty set.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func allKeys() throws -> Set<String> {
-        try execute(in: lock) {
-            try Keychain.allKeys(options: baseKeychainQuery)
+    public func allKeys() throws(KeychainError) -> Set<String> {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.allKeys(options: baseKeychainQuery)
     }
     
     /// Removes a key/object pair from the keychain.
@@ -320,19 +333,23 @@ public final class Valet: NSObject, Sendable {
     /// - Throws: An error of type `KeychainError`.
     /// - Note: No error is thrown if the `key` is not found in the keychain.
     @objc
-    public func removeObject(forKey key: String) throws {
-        try execute(in: lock) {
-            try Keychain.removeObject(forKey: key, options: baseKeychainQuery)
+    public func removeObject(forKey key: String) throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.removeObject(forKey: key, options: baseKeychainQuery)
     }
     
     /// Removes all key/object pairs accessible by this Valet instance from the keychain.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func removeAllObjects() throws {
-        try execute(in: lock) {
-            try Keychain.removeAllObjects(matching: baseKeychainQuery)
+    public func removeAllObjects() throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.removeAllObjects(matching: baseKeychainQuery)
     }
 
     /// Migrates objects matching the input query into the receiving Valet instance.
@@ -467,14 +484,6 @@ public final class Valet: NSObject, Sendable {
         try migrateObjects(matching: keychainQuery, removeOnCompletion: false)
     }
     #endif
-
-    // MARK: Renamed Methods
-    
-    @available(*, unavailable, renamed: "setObject(_:forKey:)")
-    public func set(object: Data, forKey key: String) -> Bool { fatalError() }
-    
-    @available(*, unavailable, renamed: "setString(_:forKey:)")
-    public func set(string: String, forKey key: String) -> Bool { fatalError() }
 
     // MARK: Internal Properties
 

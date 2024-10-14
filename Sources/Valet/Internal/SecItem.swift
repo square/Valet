@@ -30,7 +30,7 @@ internal final class SecItem {
         
     // MARK: Internal Class Methods
     
-    internal static func copy<DesiredType>(matching query: [String : AnyHashable]) throws -> DesiredType {
+    internal static func copy<DesiredType>(matching query: [String : AnyHashable]) throws(KeychainError) -> DesiredType {
         if query.isEmpty {
             assertionFailure("Must provide a query with at least one item")
         }
@@ -70,7 +70,7 @@ internal final class SecItem {
         return status
     }
     
-    internal static func add(attributes: [String : AnyHashable]) throws {
+    internal static func add(attributes: [String : AnyHashable]) throws(KeychainError) {
         if attributes.isEmpty {
             assertionFailure("Must provide attributes with at least one item")
         }
@@ -90,7 +90,7 @@ internal final class SecItem {
         }
     }
     
-    internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) throws {
+    internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) throws(KeychainError) {
         if attributes.isEmpty {
             assertionFailure("Must provide attributes with at least one item")
         }
@@ -113,7 +113,7 @@ internal final class SecItem {
         }
     }
     
-    internal static func deleteItems(matching query: [String : AnyHashable]) throws {
+    internal static func deleteItems(matching query: [String : AnyHashable]) throws(KeychainError) {
         if query.isEmpty {
             assertionFailure("Must provide a query with at least one item")
         }

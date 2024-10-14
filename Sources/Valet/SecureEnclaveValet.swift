@@ -28,29 +28,30 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
-        let key = Service.standard(identifier, .secureEnclave(accessControl)).description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = Service.standard(identifier, .secureEnclave(accessControl)).description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
             
         } else {
             let valet = SecureEnclaveValet(identifier: identifier, accessControl: accessControl)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
 
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - groupIdentifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: An optional additional uniqueness identifier. Using this identifier allows for the creation of separate, sandboxed Valets within the same shared access group.
     ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedGroupValet(with groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
-        let key = Service.sharedGroup(groupIdentifier, identifier, .secureEnclave(accessControl)).description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = Service.sharedGroup(groupIdentifier, identifier, .secureEnclave(accessControl)).description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
             
         } else {
             let valet = SecureEnclaveValet(sharedAccess: groupIdentifier, identifier: identifier, accessControl: accessControl)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
@@ -64,8 +65,8 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     
     // MARK: Private Class Properties
     
-    private static let identifierToValetMap = NSMapTable<NSString, SecureEnclaveValet>.strongToWeakObjects()
-    
+    private static let identifierToValetMap = WeakStorage<SecureEnclaveValet>()
+
     // MARK: Initialization
     
     @available(*, unavailable)
@@ -121,33 +122,55 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     /// - Throws: An error of type `KeychainError`.
     /// - Important: Inserted data should be no larger than 4kb.
     @objc
-    public func setObject(_ object: Data, forKey key: String) throws {
-        try execute(in: lock) {
-            try SecureEnclave.setObject(object, forKey: key, options: baseKeychainQuery)
+    public func setObject(_ object: Data, forKey key: String) throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try SecureEnclave.setObject(object, forKey: key, options: baseKeychainQuery)
     }
 
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
     /// - Parameters:
     ///   - key: A key used to retrieve the desired object from the keychain.
     ///   -  userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func object(forKey key: String, withPrompt userPrompt: String) throws -> Data {
-        try execute(in: lock) {
-            try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: baseKeychainQuery)
+    public func object(forKey key: String, withPrompt userPrompt: String) throws(KeychainError) -> Data {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try SecureEnclave.object(forKey: key, withPrompt: userPrompt, context: nil, options: baseKeychainQuery)
     }
+#else
+    /// - Parameter key: A key used to retrieve the desired object from the keychain.
+    /// - Returns: The data currently stored in the keychain for the provided key.
+    /// - Throws: An error of type `KeychainError`.
+    @objc
+    public func object(forKey key: String) throws(KeychainError) -> Data {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        return try SecureEnclave.object(forKey: key, options: baseKeychainQuery)
+    }
+#endif
 
+#if !os(tvOS) && canImport(LocalAuthentication)
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
     /// - Throws: An error of type `KeychainError`.
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
-    public func containsObject(forKey key: String) throws -> Bool {
-        try execute(in: lock) {
-            try SecureEnclave.containsObject(forKey: key, options: baseKeychainQuery)
+    public func containsObject(forKey key: String) throws(KeychainError) -> Bool {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try SecureEnclave.containsObject(forKey: key, options: baseKeychainQuery)
     }
+#endif
 
     /// - Parameters:
     ///   - string: A String value to be inserted into the keychain.
@@ -155,41 +178,63 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     /// - Throws: An error of type `KeychainError`.
     /// - Important: Inserted data should be no larger than 4kb.
     @objc
-    public func setString(_ string: String, forKey key: String) throws {
-        try execute(in: lock) {
-            try SecureEnclave.setString(string, forKey: key, options: baseKeychainQuery)
+    public func setString(_ string: String, forKey key: String) throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try SecureEnclave.setString(string, forKey: key, options: baseKeychainQuery)
     }
 
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
     /// - Parameters:
     ///   - key: A key used to retrieve the desired object from the keychain.
     ///   - userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func string(forKey key: String, withPrompt userPrompt: String) throws -> String {
-        try execute(in: lock) {
-            try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: baseKeychainQuery)
+    public func string(forKey key: String, withPrompt userPrompt: String) throws(KeychainError) -> String {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try SecureEnclave.string(forKey: key, withPrompt: userPrompt, context: nil, options: baseKeychainQuery)
     }
-    
+#else
+    /// - Parameter key: A key used to retrieve the desired object from the keychain.
+    /// - Returns: The string currently stored in the keychain for the provided key.
+    /// - Throws: An error of type `KeychainError`.
+    @objc
+    public func string(forKey key: String) throws(KeychainError) -> String {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        return try SecureEnclave.string(forKey: key, options: baseKeychainQuery)
+    }
+#endif
+
     /// Removes a key/object pair from the keychain.
     /// - Parameter key: A key used to remove the desired object from the keychain.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func removeObject(forKey key: String) throws {
-        try execute(in: lock) {
-            try Keychain.removeObject(forKey: key, options: baseKeychainQuery)
+    public func removeObject(forKey key: String) throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.removeObject(forKey: key, options: baseKeychainQuery)
     }
     
     /// Removes all key/object pairs accessible by this Valet instance from the keychain.
     /// - Throws: An error of type `KeychainError`.
     @objc
-    public func removeAllObjects() throws {
-        try execute(in: lock) {
-            try Keychain.removeAllObjects(matching: baseKeychainQuery)
+    public func removeAllObjects() throws(KeychainError) {
+        lock.lock()
+        defer {
+            lock.unlock()
         }
+        return try Keychain.removeAllObjects(matching: baseKeychainQuery)
     }
     
     /// Migrates objects matching the input query into the receiving SecureEnclaveValet instance.
@@ -216,13 +261,25 @@ public final class SecureEnclaveValet: NSObject, Sendable {
         try migrateObjects(matching: valet.baseKeychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
-    // MARK: Renamed Methods
-    
-    @available(*, unavailable, renamed: "setObject(_:forKey:)")
-    public func set(object: Data, forKey key: String) -> Bool { fatalError() }
-    
-    @available(*, unavailable, renamed: "setString(_:forKey:)")
-    public func set(string: String, forKey key: String) -> Bool { fatalError() }
+#if os(watchOS)
+    /// Call this method to migrate from a `SinglePromptSecureEnclaveValet` used on watchOS.
+    /// This method migrates objects set on a `SinglePromptSecureEnclaveValet` with the same identifier and access control to the receiver.
+    /// - Parameter removeOnCompletion: If `true`, the migrated data will be removed from the keychain if the migration succeeds.
+    /// - Throws: An error of type `KeychainError` or `MigrationError`.
+    /// - Note: The keychain is not modified if an error is thrown.
+    @objc
+    public func migrateObjectsFromSinglePromptSecureEnclaveValet(removeOnCompletion: Bool) throws {
+        try execute(in: lock) {
+            try Keychain.migrateObjects(
+                matching: service
+                    .asSinglePromptSecureEnclave(withAccessControl: accessControl)
+                    .generateBaseQuery(),
+                into: baseKeychainQuery,
+                removeOnCompletion: removeOnCompletion
+            )
+        }
+    }
+#endif
 
     // MARK: Internal Properties
 
@@ -284,6 +341,7 @@ extension SecureEnclaveValet {
         return sharedGroupValet(with: identifier, accessControl: accessControl)
     }
 
+#if !os(tvOS) && canImport(LocalAuthentication)
     /// - Parameter key: The key to look up in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise. Will return `false` if the keychain is not accessible.
     /// - Note: Will never prompt the user for Face ID, Touch ID, or password.
@@ -295,5 +353,20 @@ extension SecureEnclaveValet {
         }
         return containsObject
     }
+#endif
 
 }
+
+
+#if os(watchOS)
+extension Service {
+    func asSinglePromptSecureEnclave(withAccessControl accessControl: SecureEnclaveAccessControl) -> Service {
+        switch self {
+        case let .standard(identifier, _):
+            .standard(identifier, .singlePromptSecureEnclave(accessControl))
+        case let .sharedGroup(sharedGroupIdentifier, identifier, _):
+            .sharedGroup(sharedGroupIdentifier, identifier, .singlePromptSecureEnclave(accessControl))
+        }
+    }
+}
+#endif
