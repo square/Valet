@@ -145,9 +145,9 @@ class ValetIntegrationTests: XCTestCase
     
     // MARK: XCTestCase
 
-    override func setUp() async throws
+    override func setUp()
     {
-        try await super.setUp()
+        super.setUp()
 
         let permutations: [Valet]
         if testEnvironmentIsSignedOrDoesNotRequireEntitlement() {
