@@ -40,7 +40,8 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     }
 
     /// - Parameters:
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - groupIdentifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: An optional additional uniqueness identifier. Using this identifier allows for the creation of separate, sandboxed Valets within the same shared access group.
     ///   - accessControl: The desired access control for the SecureEnclaveValet.
     /// - Returns: A SecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedGroupValet(with groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessControl: SecureEnclaveAccessControl) -> SecureEnclaveValet {
