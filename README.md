@@ -247,7 +247,7 @@ Valet guarantees that reading and writing operations will succeed as long as wri
 
 ## Migrating from prior Valet versions
 
-The good news: most Valet configurations do _not_ have to migrate keychain data when upgrading from an older version of Valet. All Valet objects are backwards compatible with their counterparts from prior versions. We have exhaustive unit tests to prove it (search for `test_backwardsCompatibility`). Valets that have had their configurations deprecated by Apple will need to migrate stored data.
+The good news: most Valet configurations do _not_ have to migrate keychain data when upgrading from an older version of Valet. All Valet objects are backwards compatible with their counterparts from prior versions. Valets that have had their configurations deprecated by Apple will need to migrate stored data.
 
 The bad news: there are multiple source-breaking API changes from prior versions.
 
@@ -267,6 +267,12 @@ You'll also need to continue reading through the [migration from Valet 3](#migra
 1. The accessibility values `always` and `alwaysThisDeviceOnly` have been removed from Valet, because Apple has deprecated their counterparts (see the documentation for [kSecAttrAccessibleAlways](https://developer.apple.com/documentation/security/ksecattraccessiblealways) and [kSecAttrAccessibleAlwaysThisDeviceOnly](https://developer.apple.com/documentation/security/ksecattraccessiblealwaysthisdeviceonly)). To migrate values stored with `always` accessibility, use the method `migrateObjectsFromAlwaysAccessibleValet(removeOnCompletion:)` on a Valet with your new preferred accessibility. To migrate values stored with `alwaysThisDeviceOnly` accessibility, use the method `migrateObjectsFromAlwaysAccessibleThisDeviceOnlyValet(removeOnCompletion:)` on a Valet with your new preferred accessibility.
 1. Most APIs that returned optionals or `Bool` values have been migrated to returning a nonoptional and throwing if an error is encountered. Ignoring the error that can be thrown by each API will keep your code flow behaving the same as it did before. Walking through one example: in Swift, `let secret: String? = myValet.string(forKey: myKey)` becomes `let secret: String? = try? myValet.string(forKey: myKey)`. In Objective-C, `NSString *const secret = [myValet stringForKey:myKey];` becomes `NSString *const secret = [myValet stringForKey:myKey error:nil];`. If you're interested in the reason data wasn't returned, use a [do-catch](https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html#ID541) statement in Swift, or pass in an `NSError` to each API call and inspect the output in Objective-C. Each method clearly documents the `Error` type it can `throw`. [See examples above](#reading-and-writing).
 1. The class method used to create a Valet that can share secrets between applications using keychain shared access groups has changed. In order to prevent the incorrect detection of the App ID prefix [in rare circumstances](https://github.com/square/Valet/pull/218), the App ID prefix must now be explicitly passed into these methods. To create a shared access groups Valet, you'll need to create a `SharedGroupIdentifier(appIDPrefix:nonEmptyGroup:)`. [See examples above](#sharing-secrets-among-multiple-applications-using-an-app-groups-entitlement).
+
+### Migrating from Valet 4
+
+1. Most `throw`ing methods now utilize [typed throws](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0413-typed-throws.md), which may render certain `catch` statements obsolete.
+1. `SecureEnclaveValet`'s `withPrompt` API were removed on tvOS and watchOS, as recent API updates revealed that this API never actually showed a prompt on device. New API were added to perform the same actions without a custom prompt.
+1. `SinglePromptSecureEnclaveValet` was removed from watchOS, as recent API updates revealed this API did not work as intended on watchOS. If you were previously deploying a ``SinglePromptSecureEnclaveValet`` on watchOS, use the method TODO ADD MIGRATION METHOD HERE on a `SecureEnclaveValet` to migrate your key:value pairs to a `SecureEnclaveValet`.
 
 ## Contributing
 
