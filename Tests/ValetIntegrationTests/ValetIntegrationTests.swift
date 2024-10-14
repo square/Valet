@@ -681,7 +681,7 @@ class ValetIntegrationTests: XCTestCase
         await fulfillment(of: [
             setQueueExpectation,
             removeQueueExpectation,
-        ])
+        ], timeout: 10.0)
     }
 
     func test_stringForKey_canReadDataWrittenOnAnotherThread() async
@@ -712,7 +712,7 @@ class ValetIntegrationTests: XCTestCase
 
         await fulfillment(of: [
             expectation,
-        ])
+        ], timeout: 10.0)
     }
 
     func test_stringForKey_canReadDataWrittenToValetAllocatedOnDifferentThread() async
@@ -744,7 +744,7 @@ class ValetIntegrationTests: XCTestCase
 
         await fulfillment(of: [
             expectation,
-        ])
+        ], timeout: 10.0)
     }
 
     // MARK: Removal
