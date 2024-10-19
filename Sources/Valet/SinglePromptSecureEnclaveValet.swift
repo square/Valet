@@ -14,9 +14,7 @@
 //  limitations under the License.
 //
 
-// Xcode 13 and prior incorrectly say that LocalAuthentication is available on tvOS, so we have to check both as long as Xcode 13 and prior are supported.
-// Xcode 14 moved the LAContext availability to watchOS 3, so only that version is explicitly annotated.
-#if !os(tvOS) && canImport(LocalAuthentication)
+#if !os(tvOS) && !os(watchOS) && canImport(LocalAuthentication)
 
 import LocalAuthentication
 import Foundation
@@ -24,7 +22,6 @@ import Foundation
 
 /// Reads and writes keychain elements that are stored on the Secure Enclave using Accessibility attribute `.whenPasscodeSetThisDeviceOnly`. The first access of these keychain elements will require the user to confirm their presence via Touch ID, Face ID, or passcode entry. If no passcode is set on the device, accessing the keychain via a `SinglePromptSecureEnclaveValet` will fail. Data is removed from the Secure Enclave when the user removes a passcode from the device.
 @objc(VALSinglePromptSecureEnclaveValet)
-@available(watchOS 3, *)
 public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable {
 
     // MARK: Public Class Methods
@@ -34,29 +31,30 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
     ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements with the desired flavor.
     public class func valet(with identifier: Identifier, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
-        let key = Service.standard(identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = Service.standard(identifier, .singlePromptSecureEnclave(accessControl)).description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
             
         } else {
             let valet = SinglePromptSecureEnclaveValet(identifier: identifier, accessControl: accessControl)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
 
     /// - Parameters:
-    ///   - identifier: A non-empty identifier that must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - groupIdentifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: An optional additional uniqueness identifier. Using this identifier allows for the creation of separate, sandboxed Valets within the same shared access group.
     ///   - accessControl: The desired access control for the SinglePromptSecureEnclaveValet.
     /// - Returns: A SinglePromptSecureEnclaveValet that reads/writes keychain elements that can be shared across applications written by the same development team.
     public class func sharedGroupValet(with groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessControl: SecureEnclaveAccessControl) -> SinglePromptSecureEnclaveValet {
-        let key = Service.sharedGroup(groupIdentifier, identifier, .singlePromptSecureEnclave(accessControl)).description as NSString
-        if let existingValet = identifierToValetMap.object(forKey: key) {
+        let key = Service.sharedGroup(groupIdentifier, identifier, .singlePromptSecureEnclave(accessControl)).description
+        if let existingValet = identifierToValetMap[key] {
             return existingValet
             
         } else {
             let valet = SinglePromptSecureEnclaveValet(sharedAccess: groupIdentifier, identifier: identifier, accessControl: accessControl)
-            identifierToValetMap.setObject(valet, forKey: key)
+            identifierToValetMap[key] = valet
             return valet
         }
     }
@@ -70,8 +68,8 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
     
     // MARK: Private Class Properties
     
-    private static let identifierToValetMap = NSMapTable<NSString, SinglePromptSecureEnclaveValet>.strongToWeakObjects()
-    
+    private static let identifierToValetMap = WeakStorage<SinglePromptSecureEnclaveValet>()
+
     // MARK: Initialization
     
     @available(*, unavailable)
@@ -141,7 +139,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
     @objc
     public func object(forKey key: String, withPrompt userPrompt: String) throws -> Data {
         try execute(in: lock) {
-            try SecureEnclave.object(forKey: key, withPrompt: userPrompt, options: try continuedAuthenticationKeychainQuery())
+            try SecureEnclave.object(forKey: key, withPrompt: userPrompt, context: localAuthenticationContext, options: try continuedAuthenticationKeychainQuery())
         }
     }
 
@@ -175,7 +173,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
     @objc
     public func string(forKey key: String, withPrompt userPrompt: String) throws -> String {
         try execute(in: lock) {
-            try SecureEnclave.string(forKey: key, withPrompt: userPrompt, options: try continuedAuthenticationKeychainQuery())
+            try SecureEnclave.string(forKey: key, withPrompt: userPrompt, context: localAuthenticationContext, options: try continuedAuthenticationKeychainQuery())
         }
     }
     
@@ -196,7 +194,9 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
         try execute(in: lock) {
             var secItemQuery = try continuedAuthenticationKeychainQuery()
             if !userPrompt.isEmpty {
-                secItemQuery[kSecUseOperationPrompt as String] = userPrompt
+                let context = LAContext()
+                context.localizedReason = userPrompt
+                secItemQuery[kSecUseAuthenticationContext as String] = context
             }
             
             return try Keychain.allKeys(options: secItemQuery)
@@ -246,14 +246,6 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
         try migrateObjects(matching: valet.baseKeychainQuery, removeOnCompletion: removeOnCompletion)
     }
 
-    // MARK: Renamed Methods
-    
-    @available(*, unavailable, renamed: "setObject(_:forKey:)")
-    public func set(object: Data, forKey key: String) -> Bool { fatalError() }
-    
-    @available(*, unavailable, renamed: "setString(_:forKey:)")
-    public func set(string: String, forKey key: String) -> Bool { fatalError() }
-
     // MARK: Internal Properties
 
     internal let service: Service
@@ -279,7 +271,6 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
 // MARK: - Objective-C Compatibility
 
 
-@available(watchOS 3, *)
 extension SinglePromptSecureEnclaveValet {
     
     // MARK: Public Class Methods
