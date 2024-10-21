@@ -12,40 +12,22 @@ Valet lets you securely store data in the iOS, tvOS, watchOS, or macOS Keychain 
 
 ## Getting Started
 
+### Swift Package Manager
+
+Install with [Swift Package Manager](https://github.com/apple/swift-package-manager) by adding the following to your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/Square/Valet", from: "5.0.0"),
+],
+```
+
 ### CocoaPods
 
 Install with [CocoaPods](http://cocoapods.org) by adding the following to your `Podfile`:
 
-on iOS:
-
 ```
-platform :ios, '12.0'
-use_frameworks!
-pod 'Valet'
-```
-
-on tvOS:
-
-```
-platform :tvos, '12.0'
-use_frameworks!
-pod 'Valet'
-```
-
-on watchOS:
-
-```
-platform :watchos, '4.0'
-use_frameworks!
-pod 'Valet'
-```
-
-on macOS:
-
-```
-platform :osx, '10.13'
-use_frameworks!
-pod 'Valet'
+pod 'Valet', '~> 5.0.0'
 ```
 
 ### Carthage
@@ -58,23 +40,13 @@ github "Square/Valet"
 
 Run `carthage` to build the framework and drag the built `Valet.framework` into your Xcode project.
 
-### Swift Package Manager
-
-Install with [Swift Package Manager](https://github.com/apple/swift-package-manager) by adding the following to your `Package.swift`:
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/Square/Valet", from: "5.0.0"),
-],
-```
-
 ### Submodules
 
 Or manually checkout the submodule with `git submodule add git@github.com:Square/Valet.git`, drag Valet.xcodeproj to your project, and add Valet as a build dependency.
 
 ## Usage
 
-Prefer to learn via watching a video? Check out [this video tutorial](https://www.youtube.com/watch?v=E2Z8BBARlvs&list=PL_csAAO9PQ8Z9QxzfRxpN1YrVHXmncTSU&index=3).
+Prefer to learn via watching a video? Check out [this video tutorial](https://www.youtube.com/watch?v=E2Z8BBARlvs&list=PL_csAAO9PQ8Z9QxzfRxpN1YrVHXmncTSU&index=3). Note that this video was recorded during the Valet 4 release.
 
 ### Basic Initialization
 
