@@ -21,7 +21,7 @@ import XCTest
 
 
 /// - Returns: `true` when the test environment is signed and does not require entitlement.
-/// - The Valet Mac Tests target is left without a host app on master. Mac test host app signing requires CI to have the Developer team credentials down in keychain, which we can't easily accomplish.
+/// - The Valet Mac Tests target is left without a host app on main. Mac test host app signing requires CI to have the Developer team credentials down in keychain, which we can't easily accomplish.
 /// - Note: In order to test changes locally, set the Valet Mac Tests host to Valet macOS Test Host App, delete all VAL_* keychain items in your keychain via Keychain Access.app, and run Mac tests.
 func testEnvironmentIsSignedOrDoesNotRequireEntitlement() -> Bool {
     #if targetEnvironment(simulator)

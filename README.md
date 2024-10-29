@@ -1,9 +1,9 @@
 # Valet
 
-[![CI Status](https://img.shields.io/github/actions/workflow/status/square/valet/ci.yml?branch=master)](https://github.com/square/valet/actions?query=workflow%3ACI+branch%3Amaster)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/square/valet/ci.yml?branch=main)](https://github.com/square/valet/actions?query=workflow%3ACI+branch%3Amain)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-✓-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Carthage Compatibility](https://img.shields.io/badge/carthage-✓-4BC51D.svg)](https://github.com/Carthage/Carthage/)
-[![codecov](https://codecov.io/gh/square/Valet/branch/master/graph/badge.svg)](https://codecov.io/gh/square/Valet)
+[![codecov](https://codecov.io/gh/square/Valet/branch/main/graph/badge.svg)](https://codecov.io/gh/square/Valet)
 [![Swift Version Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fsquare%2FValet%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/square/Valet)
 [![License](https://img.shields.io/cocoapods/l/Valet.svg)](https://cocoapods.org/pods/Valet)
 [![Platform](https://img.shields.io/cocoapods/p/Valet.svg)](https://cocoapods.org/pods/Valet)
