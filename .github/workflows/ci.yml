@@ -47,7 +47,7 @@ jobs:
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_16.app/Contents/Developer
       - name: Lint Podspec
-        run: bundle exec pod lib lint --verbose --fail-fast --swift-version=6.0
+        run: bundle exec pod lib lint --verbose --fail-fast --swift-version=6.0 --allow-warnings # Cocoapods v1.6 now warns about potential naming colisions. We can fix this in the next breaking change.
   carthage:
     name: Carthage
     runs-on: macOS-15
