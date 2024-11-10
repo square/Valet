@@ -92,4 +92,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
       - name: Validate Markdown
-        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        uses: umbrelladocs/action-linkspector@v1
+        with:
+          reporter: github-check
+          fail_on_error: true
