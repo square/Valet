@@ -91,8 +91,5 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-      - name: Validate Markdown
-        uses: umbrelladocs/action-linkspector@v1
-        with:
-          reporter: github-check
-          fail_on_error: true
+      - name: Link Checker
+        uses: AlexanderDokuchaev/md-dead-link-check@v1.0.1
