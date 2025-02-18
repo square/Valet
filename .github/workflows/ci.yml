@@ -4,6 +4,9 @@ on:
   push:
     branches:
     - main
+  schedule:
+    # Runs at 00:00 UTC every Monday to ensure that CI does not bitrot.
+    - cron: '0 0 * * 1'
   pull_request:
 
 concurrency:
