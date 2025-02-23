@@ -6,10 +6,10 @@ import Foundation
 
 func execute(commandPath: String, arguments: [String]) throws {
     let task = Process()
-    task.launchPath = commandPath
+    task.executableURL = .init(filePath: commandPath)
     task.arguments = arguments
     print("Launching command: \(commandPath) \(arguments.joined(separator: " "))")
-    task.launch()
+    try task.run()
     task.waitUntilExit()
     guard task.terminationStatus == 0 else {
         throw TaskError.code(task.terminationStatus)
