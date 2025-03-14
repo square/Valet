@@ -490,7 +490,7 @@ public final class Valet: NSObject, Sendable {
     let configuration: Configuration
     let service: Service
     var baseKeychainQuery: [String : AnyHashable] {
-        return service.generateBaseQuery()
+        service.generateBaseQuery()
     }
 
     // MARK: Private Properties

@@ -32,7 +32,7 @@ public struct Identifier: CustomStringConvertible, Sendable {
     // MARK: CustomStringConvertible
     
     public var description: String {
-        return backingString
+        backingString
     }
     
     // MARK: Private Properties
