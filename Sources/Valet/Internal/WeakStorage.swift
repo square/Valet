@@ -17,8 +17,8 @@
 import Foundation
 
 
-internal final class WeakStorage<T: AnyObject>: @unchecked Sendable {
-    internal subscript(_ key: String) -> T? {
+final class WeakStorage<T: AnyObject>: @unchecked Sendable {
+    subscript(_ key: String) -> T? {
         get {
             lock.withLock {
                 identifierToValetMap.object(forKey: key as NSString)

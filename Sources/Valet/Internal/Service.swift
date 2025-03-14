@@ -17,7 +17,7 @@
 import Foundation
 
 
-internal enum Service: CustomStringConvertible, Equatable, Sendable {
+enum Service: CustomStringConvertible, Equatable, Sendable {
     case standard(Identifier, Configuration)
     case sharedGroup(SharedGroupIdentifier, Identifier?, Configuration)
 
@@ -28,23 +28,23 @@ internal enum Service: CustomStringConvertible, Equatable, Sendable {
 
     // MARK: Equatable
     
-    internal static func ==(lhs: Service, rhs: Service) -> Bool {
+    static func ==(lhs: Service, rhs: Service) -> Bool {
         lhs.description == rhs.description
     }
 
     // MARK: CustomStringConvertible
     
-    internal var description: String {
+    var description: String {
         secService
     }
 
     // MARK: Internal Static Methods
 
-    internal static func standard(with configuration: Configuration, identifier: Identifier, accessibilityDescription: String) -> String {
+    static func standard(with configuration: Configuration, identifier: Identifier, accessibilityDescription: String) -> String {
         "VAL_\(configuration.description)_initWithIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
     }
 
-    internal static func sharedGroup(with configuration: Configuration, groupIdentifier: SharedGroupIdentifier, identifier: Identifier?, accessibilityDescription: String) -> String {
+    static func sharedGroup(with configuration: Configuration, groupIdentifier: SharedGroupIdentifier, identifier: Identifier?, accessibilityDescription: String) -> String {
         if let identifier = identifier {
             return "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(groupIdentifier.groupIdentifier)_\(identifier)_\(accessibilityDescription)"
         } else {
@@ -52,13 +52,13 @@ internal enum Service: CustomStringConvertible, Equatable, Sendable {
         }
     }
 
-    internal static func sharedGroup(with configuration: Configuration, explicitlySetIdentifier identifier: Identifier, accessibilityDescription: String) -> String {
+    static func sharedGroup(with configuration: Configuration, explicitlySetIdentifier identifier: Identifier, accessibilityDescription: String) -> String {
         "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
     }
 
     // MARK: Internal Methods
     
-    internal func generateBaseQuery() -> [String : AnyHashable] {
+    func generateBaseQuery() -> [String : AnyHashable] {
         var baseQuery: [String : AnyHashable] = [
             kSecClass as String : kSecClassGenericPassword as String,
             kSecAttrService as String : secService,

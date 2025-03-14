@@ -54,7 +54,7 @@ public final class ObjectiveCCompatibilityMigratableKeyValuePairInput: NSObject 
 
     // MARK: Initialization
 
-    internal init(key: Any, value: Data) {
+    init(key: Any, value: Data) {
         self.key = key
         self.value = value
     }
@@ -116,7 +116,7 @@ public class ObjectiveCCompatibilityMigratableKeyValuePairOutput: NSObject {
 
     // MARK: Internal
 
-    internal fileprivate(set) var preventMigration: Bool
+    fileprivate(set) var preventMigration: Bool
 
 }
 

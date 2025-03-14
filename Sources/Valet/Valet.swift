@@ -487,9 +487,9 @@ public final class Valet: NSObject, Sendable {
 
     // MARK: Internal Properties
 
-    internal let configuration: Configuration
-    internal let service: Service
-    internal var baseKeychainQuery: [String : AnyHashable] {
+    let configuration: Configuration
+    let service: Service
+    var baseKeychainQuery: [String : AnyHashable] {
         return service.generateBaseQuery()
     }
 
@@ -723,7 +723,7 @@ extension Valet {
 
 // MARK: - Testing
 
-internal extension Valet {
+extension Valet {
 
     // MARK: Permutations
 

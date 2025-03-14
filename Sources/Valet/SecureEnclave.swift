@@ -27,7 +27,7 @@ public final class SecureEnclave: Sendable {
     /// - Parameter service: The service of the keychain slice we want to check if we can access.
     /// - Returns: `true` if the keychain is accessible for reading and writing, `false` otherwise.
     /// - Note: Determined by writing a value to the keychain and then reading it back out.
-    internal static func canAccessKeychain(with service: Service) -> Bool {
+    static func canAccessKeychain(with service: Service) -> Bool {
         // To avoid prompting the user for Touch ID or passcode, create a Valet with our identifier and accessibility and ask it if it can access the keychain.
         let noPromptValet: Valet
         switch service {
@@ -53,7 +53,7 @@ public final class SecureEnclave: Sendable {
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Throws: An error of type `KeychainError`.
-    internal static func setObject(_ object: Data, forKey key: String, options: [String : AnyHashable]) throws(KeychainError) {
+    static func setObject(_ object: Data, forKey key: String, options: [String : AnyHashable]) throws(KeychainError) {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         try Keychain.removeObject(forKey: key, options: options)
         
@@ -68,7 +68,7 @@ public final class SecureEnclave: Sendable {
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    internal static func object(
+    static func object(
         forKey key: String,
         withPrompt userPrompt: String,
         context: LAContext?,
@@ -88,7 +88,7 @@ public final class SecureEnclave: Sendable {
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    internal static func object(
+    static func object(
         forKey key: String,
         options: [String : AnyHashable]
     ) throws(KeychainError) -> Data {
@@ -102,7 +102,7 @@ public final class SecureEnclave: Sendable {
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: `true` if a value has been set for the given key, `false` otherwise.
     /// - Throws: An error of type `KeychainError`.
-    internal static func containsObject(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) -> Bool {
+    static func containsObject(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) -> Bool {
         var secItemQuery = options
         let context = LAContext()
         context.interactionNotAllowed = true
@@ -127,7 +127,7 @@ public final class SecureEnclave: Sendable {
     ///   - key: A key that can be used to retrieve the `string` from the keychain.
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Throws: An error of type `KeychainError`.
-    internal static func setString(_ string: String, forKey key: String, options: [String : AnyHashable]) throws(KeychainError) {
+    static func setString(_ string: String, forKey key: String, options: [String : AnyHashable]) throws(KeychainError) {
         // Remove the key before trying to set it. This will prevent us from calling SecItemUpdate on an item stored on the Secure Enclave, which would cause iOS to prompt the user for authentication.
         try Keychain.removeObject(forKey: key, options: options)
         
@@ -142,7 +142,7 @@ public final class SecureEnclave: Sendable {
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    internal static func string(
+    static func string(
         forKey key: String,
         withPrompt userPrompt: String,
         context: LAContext?,
@@ -162,7 +162,7 @@ public final class SecureEnclave: Sendable {
     ///   - options: A base query used to scope the calls in the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    internal static func string(
+    static func string(
         forKey key: String,
         options: [String : AnyHashable]
     ) throws(KeychainError) -> String {

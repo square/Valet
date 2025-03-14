@@ -248,7 +248,7 @@ public final class SinglePromptSecureEnclaveValet: NSObject, @unchecked Sendable
 
     // MARK: Internal Properties
 
-    internal let service: Service
+    let service: Service
 
     // MARK: Private Properties
 
