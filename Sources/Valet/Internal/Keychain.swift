@@ -17,7 +17,7 @@
 import Foundation
 
 
-internal final class Keychain {
+final class Keychain {
     
     // MARK: Private Static Properties
     
@@ -26,7 +26,7 @@ internal final class Keychain {
     
     // MARK: Keychain Accessibility
     
-    internal static func canAccess(attributes: [String : AnyHashable]) -> Bool {
+    static func canAccess(attributes: [String : AnyHashable]) -> Bool {
         func isCanaryValueInKeychain() -> Bool {
             do {
                 let retrievedCanaryValue = try string(forKey: canaryKey, options: attributes)
@@ -52,7 +52,7 @@ internal final class Keychain {
     
     // MARK: Getters
     
-    internal static func string(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) -> String {
+    static func string(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) -> String {
         let data = try object(forKey: key, options: options)
         if let string = String(data: data, encoding: .utf8) {
             return string
@@ -61,7 +61,7 @@ internal final class Keychain {
         }
     }
     
-    internal static func object(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) -> Data {
+    static func object(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) -> Data {
         guard !key.isEmpty else {
             throw KeychainError.emptyKey
         }
@@ -76,12 +76,12 @@ internal final class Keychain {
     
     // MARK: Setters
     
-    internal static func setString(_ string: String, forKey key: String, options: [String: AnyHashable]) throws(KeychainError) {
+    static func setString(_ string: String, forKey key: String, options: [String: AnyHashable]) throws(KeychainError) {
         let data = Data(string.utf8)
         try setObject(data, forKey: key, options: options)
     }
     
-    internal static func setObject(_ object: Data, forKey key: String, options: [String: AnyHashable]) throws(KeychainError) {
+    static func setObject(_ object: Data, forKey key: String, options: [String: AnyHashable]) throws(KeychainError) {
         guard !key.isEmpty else {
             throw KeychainError.emptyKey
         }
@@ -110,7 +110,7 @@ internal final class Keychain {
     
     // MARK: Removal
     
-    internal static func removeObject(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) {
+    static func removeObject(forKey key: String, options: [String : AnyHashable]) throws(KeychainError) {
         guard !key.isEmpty else {
             throw KeychainError.emptyKey
         }
@@ -121,13 +121,13 @@ internal final class Keychain {
         try SecItem.deleteItems(matching: secItemQuery)
     }
     
-    internal static func removeAllObjects(matching options: [String : AnyHashable]) throws(KeychainError) {
+    static func removeAllObjects(matching options: [String : AnyHashable]) throws(KeychainError) {
         try SecItem.deleteItems(matching: options)
     }
     
     // MARK: Contains
     
-    internal static func performCopy(forKey key: String, options: [String : AnyHashable]) -> OSStatus {
+    static func performCopy(forKey key: String, options: [String : AnyHashable]) -> OSStatus {
         guard !key.isEmpty else {
             return errSecParam
         }
@@ -140,7 +140,7 @@ internal final class Keychain {
     
     // MARK: AllObjects
     
-    internal static func allKeys(options: [String: AnyHashable]) throws(KeychainError) -> Set<String> {
+    static func allKeys(options: [String: AnyHashable]) throws(KeychainError) -> Set<String> {
         var secItemQuery = options
         secItemQuery[kSecMatchLimit as String] = kSecMatchLimitAll
         secItemQuery[kSecReturnAttributes as String] = true
@@ -171,7 +171,7 @@ internal final class Keychain {
     
     // MARK: Migration
 
-    internal static func migrateObjects(matching query: [String : AnyHashable], into destinationAttributes: [String : AnyHashable], compactMap: (MigratableKeyValuePair<AnyHashable>) throws -> MigratableKeyValuePair<String>?) throws {
+    static func migrateObjects(matching query: [String : AnyHashable], into destinationAttributes: [String : AnyHashable], compactMap: (MigratableKeyValuePair<AnyHashable>) throws -> MigratableKeyValuePair<String>?) throws {
         guard !query.isEmpty else {
             // Migration requires secItemQuery to contain values.
             throw MigrationError.invalidQuery
@@ -317,7 +317,7 @@ internal final class Keychain {
         }
     }
 
-    internal static func migrateObjects(matching query: [String : AnyHashable], into destinationAttributes: [String : AnyHashable], removeOnCompletion: Bool) throws {
+    static func migrateObjects(matching query: [String : AnyHashable], into destinationAttributes: [String : AnyHashable], removeOnCompletion: Bool) throws {
         // Capture the keys in the destination prior to migration beginning.
         let keysInKeychainPreMigration = Set(try Keychain.allKeys(options: destinationAttributes))
 
@@ -343,7 +343,7 @@ internal final class Keychain {
         }
     }
 
-    internal static func revertMigration(into destinationAttributes: [String : AnyHashable], keysInKeychainPreMigration: Set<String>) {
+    static func revertMigration(into destinationAttributes: [String : AnyHashable], keysInKeychainPreMigration: Set<String>) {
         if let allKeysPostPotentiallyPartialMigration = try? Keychain.allKeys(options: destinationAttributes) {
             let migratedKeys = allKeysPostPotentiallyPartialMigration.subtracting(keysInKeychainPreMigration)
             migratedKeys.forEach { migratedKey in

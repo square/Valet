@@ -17,7 +17,7 @@
 import Foundation
 
 
-internal enum Configuration: CustomStringConvertible, Sendable {
+enum Configuration: CustomStringConvertible, Sendable {
     case valet(Accessibility)
     case iCloud(CloudAccessibility)
     case secureEnclave(SecureEnclaveAccessControl)
@@ -25,7 +25,7 @@ internal enum Configuration: CustomStringConvertible, Sendable {
 
     // MARK: CustomStringConvertible
     
-    internal var description: String {
+    var description: String {
         switch self {
         case .valet:
             return "VALValet"
@@ -40,7 +40,7 @@ internal enum Configuration: CustomStringConvertible, Sendable {
     
     // MARK: Internal Properties
     
-    internal var accessibility: Accessibility {
+    var accessibility: Accessibility {
         switch self {
         case let .valet(accessibility):
             return accessibility
@@ -51,7 +51,7 @@ internal enum Configuration: CustomStringConvertible, Sendable {
         }
     }
     
-    internal var prettyDescription: String {
+    var prettyDescription: String {
         let configurationDescription: String = {
             switch self {
             case .valet:

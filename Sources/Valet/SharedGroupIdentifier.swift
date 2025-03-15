@@ -63,10 +63,10 @@ public struct SharedGroupIdentifier: CustomStringConvertible, Sendable {
 
     // MARK: Internal Properties
 
-    internal let prefix: String
-    internal let groupIdentifier: String
+    let prefix: String
+    let groupIdentifier: String
 
-    internal var asIdentifier: Identifier {
+    var asIdentifier: Identifier {
         // It is safe to force unwrap because we've already validated that our description is non-empty.
         Identifier(nonEmpty: description)!
     }

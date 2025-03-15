@@ -52,7 +52,7 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable,
     
     // MARK: Internal Properties
     
-    internal var secAccessControl: SecAccessControlCreateFlags {
+    var secAccessControl: SecAccessControlCreateFlags {
         switch self {
         case .userPresence:
             .userPresence
@@ -73,7 +73,7 @@ public enum SecureEnclaveAccessControl: Int, CustomStringConvertible, Equatable,
         }
     }
 
-    internal static func allValues() -> [SecureEnclaveAccessControl] {
+    static func allValues() -> [SecureEnclaveAccessControl] {
         [
             .userPresence,
             .devicePasscode,

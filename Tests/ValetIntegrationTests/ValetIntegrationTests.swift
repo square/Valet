@@ -66,7 +66,7 @@ func testEnvironmentSupportsWhenPasscodeSet() -> Bool {
 }
 
 
-internal extension Valet {
+extension Valet {
 
     // MARK: Shared Access Group
 

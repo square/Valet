@@ -17,7 +17,7 @@
 import Foundation
 
 
-internal func execute<ReturnType>(in lock: NSLock, block: () throws -> ReturnType) rethrows -> ReturnType {
+func execute<ReturnType>(in lock: NSLock, block: () throws -> ReturnType) rethrows -> ReturnType {
     lock.lock()
     defer {
         lock.unlock()
@@ -26,11 +26,11 @@ internal func execute<ReturnType>(in lock: NSLock, block: () throws -> ReturnTyp
 }
 
 
-internal final class SecItem {
+final class SecItem {
         
     // MARK: Internal Class Methods
     
-    internal static func copy<DesiredType>(matching query: [String : AnyHashable]) throws(KeychainError) -> DesiredType {
+    static func copy<DesiredType>(matching query: [String : AnyHashable]) throws(KeychainError) -> DesiredType {
         if query.isEmpty {
             assertionFailure("Must provide a query with at least one item")
         }
@@ -56,7 +56,7 @@ internal final class SecItem {
         }
     }
     
-    internal static func performCopy(matching query: [String : AnyHashable]) -> OSStatus {
+    static func performCopy(matching query: [String : AnyHashable]) -> OSStatus {
         guard !query.isEmpty else {
             // Must provide a query with at least one item
             return errSecParam
@@ -70,7 +70,7 @@ internal final class SecItem {
         return status
     }
     
-    internal static func add(attributes: [String : AnyHashable]) throws(KeychainError) {
+    static func add(attributes: [String : AnyHashable]) throws(KeychainError) {
         if attributes.isEmpty {
             assertionFailure("Must provide attributes with at least one item")
         }
@@ -90,7 +90,7 @@ internal final class SecItem {
         }
     }
     
-    internal static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) throws(KeychainError) {
+    static func update(attributes: [String : AnyHashable], forItemsMatching query: [String : AnyHashable]) throws(KeychainError) {
         if attributes.isEmpty {
             assertionFailure("Must provide attributes with at least one item")
         }
@@ -113,7 +113,7 @@ internal final class SecItem {
         }
     }
     
-    internal static func deleteItems(matching query: [String : AnyHashable]) throws(KeychainError) {
+    static func deleteItems(matching query: [String : AnyHashable]) throws(KeychainError) {
         if query.isEmpty {
             assertionFailure("Must provide a query with at least one item")
         }

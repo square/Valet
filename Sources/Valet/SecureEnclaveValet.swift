@@ -283,7 +283,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
 
     // MARK: Internal Properties
 
-    internal let service: Service
+    let service: Service
 
     // MARK: Private Properties
 
