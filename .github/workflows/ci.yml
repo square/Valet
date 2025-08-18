@@ -28,10 +28,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
+        uses: actions/checkout@v5
         with:
           permissions:
             contents: read
-        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -47,10 +47,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
+        uses: actions/checkout@v5
         with:
           permissions:
             contents: read
-        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -63,10 +63,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
+        uses: actions/checkout@v5
         with:
           permissions:
             contents: read
-        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -90,10 +90,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
+        uses: actions/checkout@v5
         with:
           permissions:
             contents: read
-        uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -105,9 +105,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
+        uses: actions/checkout@v5
         with:
           permissions:
             contents: read
-        uses: actions/checkout@v4
       - name: Link Checker
         uses: AlexanderDokuchaev/md-dead-link-check@d5a37e0b14e5918605d22b34562532762ccb2e47 # v1.2.0
