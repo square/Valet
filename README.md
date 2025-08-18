@@ -1,13 +1,10 @@
 # Valet
 
-[![CI Status](https://img.shields.io/github/actions/workflow/status/square/valet/ci.yml?branch=main)](https://github.com/square/valet/actions?query=workflow%3ACI+branch%3Amain)
-[![Swift Package Manager compatible](https://img.shields.io/badge/SPM-✓-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
-[![Carthage Compatibility](https://img.shields.io/badge/carthage-✓-4BC51D.svg)](https://github.com/Carthage/Carthage/)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/square/Valet/ci.yml?branch=main)](https://github.com/square/Valet/actions?query=workflow%3ACI+branch%3Amain)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fsquare%2FValet%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/square/Valet)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fsquare%2FValet%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/square/Valet)
 [![codecov](https://codecov.io/gh/square/Valet/branch/master/graph/badge.svg)](https://codecov.io/gh/square/Valet)
-[![Swift Version Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fsquare%2FValet%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/square/Valet)
-[![License](https://img.shields.io/cocoapods/l/Valet.svg)](https://cocoapods.org/pods/Valet)
-[![Platform](https://img.shields.io/cocoapods/p/Valet.svg)](https://cocoapods.org/pods/Valet)
-[![Version](https://img.shields.io/cocoapods/v/Valet.svg)](https://cocoapods.org/pods/Valet)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://spdx.org/licenses/Apache-2.0.html)
 
 Valet lets you securely store data in the iOS, tvOS, watchOS, or macOS Keychain without knowing a thing about how the Keychain works. It’s easy. We promise.
 
