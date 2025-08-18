@@ -26,9 +26,11 @@ jobs:
         ]
       fail-fast: false
     timeout-minutes: 30
+    permissions:
+      contents: read
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -42,9 +44,11 @@ jobs:
     name: Pod Lint
     runs-on: macOS-15
     timeout-minutes: 30
+    permissions:
+      contents: read
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -55,9 +59,11 @@ jobs:
     name: Carthage
     runs-on: macOS-15
     timeout-minutes: 30
+    permissions:
+      contents: read
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -79,9 +85,11 @@ jobs:
         ]
       fail-fast: false
     timeout-minutes: 30
+    permissions:
+      contents: read
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
@@ -91,8 +99,10 @@ jobs:
   readme-validation:
     name: Check Markdown links
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Link Checker
-        uses: AlexanderDokuchaev/md-dead-link-check@v1.0.1
+        uses: AlexanderDokuchaev/md-dead-link-check@d5a37e0b14e5918605d22b34562532762ccb2e47 # v1.2.0
