@@ -28,8 +28,9 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        permissions:
-          contents: read
+        with:
+          permissions:
+            contents: read
         uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
@@ -46,8 +47,9 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        permissions:
-          contents: read
+        with:
+          permissions:
+            contents: read
         uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
@@ -61,8 +63,9 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        permissions:
-          contents: read
+        with:
+          permissions:
+            contents: read
         uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
@@ -87,8 +90,9 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repo
-        permissions:
-          contents: read
+        with:
+          permissions:
+            contents: read
         uses: actions/checkout@v4
       - name: Bundle Install
         run: bundle install
@@ -101,8 +105,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        permissions:
-          contents: read
+        with:
+          permissions:
+            contents: read
         uses: actions/checkout@v4
       - name: Link Checker
         uses: AlexanderDokuchaev/md-dead-link-check@d5a37e0b14e5918605d22b34562532762ccb2e47 # v1.2.0
