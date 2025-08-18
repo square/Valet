@@ -12,7 +12,7 @@ If you want to add a feature, please file an [Issue](https://github.com/square/V
 
 ### Backwards compatibility
 
-Respect the minimum deployment target. If you are adding code that uses new APIs, make sure to prevent older clients from crashing or misbehaving. Our CI runs against our minimum deployment targets, so you will not get a green build unless your code is backwards compatible. 
+Respect the minimum deployment target. If you are adding code that uses new APIs, make sure to prevent older clients from crashing or misbehaving.
 
 ### Forwards compatibility
 
