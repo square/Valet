@@ -20,11 +20,8 @@ import Foundation
 enum Service: CustomStringConvertible, Equatable, Sendable {
     case standard(Identifier, Configuration)
     case sharedGroup(SharedGroupIdentifier, Identifier?, Configuration)
-
-    #if os(macOS)
     case standardOverride(service: Identifier, Configuration)
     case sharedGroupOverride(service: SharedGroupIdentifier, Configuration)
-    #endif
 
     // MARK: Equatable
     
@@ -77,14 +74,12 @@ enum Service: CustomStringConvertible, Equatable, Sendable {
             baseQuery[kSecAttrAccessGroup as String] = groupIdentifier.description
             configuration = desiredConfiguration
 
-        #if os(macOS)
         case let .standardOverride(_, desiredConfiguration):
             configuration = desiredConfiguration
 
         case let .sharedGroupOverride(identifier, desiredConfiguration):
             baseQuery[kSecAttrAccessGroup as String] = identifier.description
             configuration = desiredConfiguration
-        #endif
         }
         
         switch configuration {
@@ -113,12 +108,10 @@ enum Service: CustomStringConvertible, Equatable, Sendable {
             service = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
         case let .sharedGroup(groupIdentifier, identifier, configuration):
             service = Service.sharedGroup(with: configuration, groupIdentifier: groupIdentifier, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
-        #if os(macOS)
         case let .standardOverride(identifier, _):
             service = identifier.description
         case let .sharedGroupOverride(identifier, _):
             service = identifier.groupIdentifier
-        #endif
         }
 
         switch self {
@@ -136,11 +129,9 @@ enum Service: CustomStringConvertible, Equatable, Sendable {
 
             return service
 
-        #if os(macOS)
         case .standardOverride,
              .sharedGroupOverride:
             return service
-        #endif
         }
     }
 }
