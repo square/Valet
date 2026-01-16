@@ -366,6 +366,10 @@ extension Service {
             .standard(identifier, .singlePromptSecureEnclave(accessControl))
         case let .sharedGroup(sharedGroupIdentifier, identifier, _):
             .sharedGroup(sharedGroupIdentifier, identifier, .singlePromptSecureEnclave(accessControl))
+        case let .standardOverride(identifier, _):
+                .standard(identifier, .singlePromptSecureEnclave(accessControl))
+        case let .sharedGroupOverride(sharedGroupIdentifier, _):
+                .sharedGroupOverride(service: sharedGroupIdentifier, .singlePromptSecureEnclave(accessControl))
         }
     }
 }

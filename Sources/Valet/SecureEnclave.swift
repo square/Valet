@@ -31,16 +31,12 @@ public final class SecureEnclave: Sendable {
         // To avoid prompting the user for Touch ID or passcode, create a Valet with our identifier and accessibility and ask it if it can access the keychain.
         let noPromptValet: Valet
         switch service {
-        #if os(macOS)
         case let .standardOverride(identifier, _):
             noPromptValet = .valet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
-        #endif
         case let .standard(identifier, _):
             noPromptValet = .valet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
-        #if os(macOS)
         case let .sharedGroupOverride(identifier, _):
             noPromptValet = .sharedGroupValet(withExplicitlySet: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
-        #endif
         case let .sharedGroup(groupIdentifier, identifier, _):
             noPromptValet = .sharedGroupValet(with: groupIdentifier, identifier: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         }
