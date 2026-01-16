@@ -35,6 +35,24 @@ jobs:
         run: bundle install
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app/Contents/Developer
+      - name: Download iOS
+        if: matrix.platforms == 'iOS_18'
+        run: |
+          sudo xcodebuild -runFirstLaunch
+          sudo xcrun simctl list
+          sudo xcodebuild -downloadPlatform iOS -buildVersion 22E238
+      - name: Download tvOS
+        if: matrix.platforms == 'tvOS_18'
+        run: |
+          sudo xcodebuild -runFirstLaunch
+          sudo xcrun simctl list
+          sudo xcodebuild -downloadPlatform tvOS -buildVersion 22K154
+      - name: Download watchOS
+        if: matrix.platforms == 'watchOS_11'
+        run: |
+          sudo xcodebuild -runFirstLaunch
+          sudo xcrun simctl list
+          sudo xcodebuild -downloadPlatform watchOS -buildVersion 22S99
       - name: Build and Test Framework
         run: Scripts/build.swift ${{ matrix.platforms }} xcode
       - name: Upload Coverage Reports
@@ -94,6 +112,24 @@ jobs:
         run: bundle install
       - name: Select Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app/Contents/Developer
+      - name: Download iOS
+        if: matrix.platforms == 'iOS_18'
+        run: |
+          sudo xcodebuild -runFirstLaunch
+          sudo xcrun simctl list
+          sudo xcodebuild -downloadPlatform iOS -buildVersion 22E238
+      - name: Download tvOS
+        if: matrix.platforms == 'tvOS_18'
+        run: |
+          sudo xcodebuild -runFirstLaunch
+          sudo xcrun simctl list
+          sudo xcodebuild -downloadPlatform tvOS -buildVersion 22K154
+      - name: Download watchOS
+        if: matrix.platforms == 'watchOS_11'
+        run: |
+          sudo xcodebuild -runFirstLaunch
+          sudo xcrun simctl list
+          sudo xcodebuild -downloadPlatform watchOS -buildVersion 22S99
       - name: Build Framework
         run: Scripts/build.swift ${{ matrix.platforms }} spm
   readme-validation:
