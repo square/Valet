@@ -134,7 +134,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
     /// - Throws: An error of type `KeychainError`.
     /// - Important: Inserted data should be no larger than 4kb.
-    @available(*, unavailable)
+    @available(swift, obsoleted: 1.0)
     @objc(setObject:forKey:error:)
     public func objc_setObject(_ object: Data, forKey key: String) throws {
         try setObject(object, forKey: key)
@@ -159,7 +159,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     ///   -  userPrompt: The prompt displayed to the user in Apple's Face ID, Touch ID, or passcode entry UI.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    @available(*, unavailable)
+    @available(swift, obsoleted: 1.0)
     @objc(objectForKey:withPrompt:error:)
     public func objc_object(forKey key: String, withPrompt userPrompt: String) throws -> Data {
         try object(forKey: key, withPrompt: userPrompt)
@@ -179,7 +179,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    @available(*, unavailable)
+    @available(swift, obsoleted: 1.0)
     @objc(objectForKey:error:)
     public func objc_object(forKey key: String) throws -> Data {
         try object(forKey: key)
@@ -218,7 +218,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     ///   - key: A key that can be used to retrieve the `string` from the keychain.
     /// - Throws: An error of type `KeychainError`.
     /// - Important: Inserted data should be no larger than 4kb.
-    @available(*, unavailable)
+    @available(swift, obsoleted: 1.0)
     @objc(setString:forKey:error:)
     public func objc_setString(_ string: String, forKey key: String) throws {
         try setString(string, forKey: key)
@@ -237,7 +237,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
         return try SecureEnclave.string(forKey: key, withPrompt: userPrompt, context: nil, options: baseKeychainQuery)
     }
 
-    @available(*, unavailable)
+    @available(swift, obsoleted: 1.0)
     @objc(stringForKey:withPrompt:error:)
     public func objc_string(forKey key: String, withPrompt userPrompt: String) throws -> String {
         try string(forKey: key, withPrompt: userPrompt)
@@ -257,7 +257,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    @available(*, unavailable)
+    @available(swift, obsoleted: 1.0)
     @objc(stringForKey:error:)
     public func objc_string(forKey key: String) throws -> String {
         try string(forKey: key)
@@ -278,7 +278,7 @@ public final class SecureEnclaveValet: NSObject, Sendable {
     /// Removes a key/object pair from the keychain.
     /// - Parameter key: A key used to remove the desired object from the keychain.
     /// - Throws: An error of type `KeychainError`.
-    @available(*, unavailable)
+    @available(swift, obsoleted: 1.0)
     @objc(removeObjectForKey:error:)
     public func objc_removeObject(forKey key: String) throws {
         try removeObject(forKey: key)
@@ -296,8 +296,8 @@ public final class SecureEnclaveValet: NSObject, Sendable {
 
     /// Removes all key/object pairs accessible by this Valet instance from the keychain.
     /// - Throws: An error of type `KeychainError`.
-    @available(*, unavailable)
-    @objc(removeAllObjectsWithError:)
+    @available(swift, obsoleted: 1.0)
+    @objc(removeAllObjectsAndReturnError:)
     public func objc_removeAllObjects() throws {
         try removeAllObjects()
     }
