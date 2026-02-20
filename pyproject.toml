@@ -1,0 +1,2 @@
+[tool.md_dead_link_check]
+exclude_links = ["*cocoapods.org*"]

@@ -245,7 +245,6 @@ public final class Valet: NSObject, Sendable {
     ///   - key: A key that can be used to retrieve the `object` from the keychain.
     /// - Throws: An error of type `KeychainError`.
     /// - Important: Inserted data should be no larger than 4kb.
-    @objc
     public func setObject(_ object: Data, forKey key: String) throws(KeychainError) {
         lock.lock()
         defer {
@@ -254,16 +253,35 @@ public final class Valet: NSObject, Sendable {
         return try Keychain.setObject(object, forKey: key, options: baseKeychainQuery)
     }
 
+    /// - Parameters:
+    ///   - object: A Data value to be inserted into the keychain.
+    ///   - key: A key that can be used to retrieve the `object` from the keychain.
+    /// - Throws: An error of type `KeychainError`.
+    /// - Important: Inserted data should be no larger than 4kb.
+    @available(swift, obsoleted: 1.0)
+    @objc(setObject:forKey:error:)
+    public func objc_setObject(_ object: Data, forKey key: String) throws {
+        try setObject(object, forKey: key)
+    }
+
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The data currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    @objc
     public func object(forKey key: String) throws(KeychainError) -> Data {
         lock.lock()
         defer {
             lock.unlock()
         }
         return try Keychain.object(forKey: key, options: baseKeychainQuery)
+    }
+
+    /// - Parameter key: A key used to retrieve the desired object from the keychain.
+    /// - Returns: The data currently stored in the keychain for the provided key.
+    /// - Throws: An error of type `KeychainError`.
+    @available(swift, obsoleted: 1.0)
+    @objc(objectForKey:error:)
+    public func objc_object(forKey key: String) throws -> Data {
+        try object(forKey: key)
     }
 
     /// - Parameter key: The key to look up in the keychain.
@@ -290,7 +308,6 @@ public final class Valet: NSObject, Sendable {
     ///   - key: A key that can be used to retrieve the `string` from the keychain.
     /// - Throws: An error of type `KeychainError`.
     /// - Important: Inserted data should be no larger than 4kb.
-    @objc
     public func setString(_ string: String, forKey key: String) throws(KeychainError) {
         lock.lock()
         defer {
@@ -299,10 +316,20 @@ public final class Valet: NSObject, Sendable {
         return try Keychain.setString(string, forKey: key, options: baseKeychainQuery)
     }
 
+    /// - Parameters:
+    ///   - string: A String value to be inserted into the keychain.
+    ///   - key: A key that can be used to retrieve the `string` from the keychain.
+    /// - Throws: An error of type `KeychainError`.
+    /// - Important: Inserted data should be no larger than 4kb.
+    @available(swift, obsoleted: 1.0)
+    @objc(setString:forKey:error:)
+    public func objc_setString(_ string: String, forKey key: String) throws {
+        try setString(string, forKey: key)
+    }
+
     /// - Parameter key: A key used to retrieve the desired object from the keychain.
     /// - Returns: The string currently stored in the keychain for the provided key.
     /// - Throws: An error of type `KeychainError`.
-    @objc
     public func string(forKey key: String) throws(KeychainError) -> String {
         lock.lock()
         defer {
@@ -310,10 +337,17 @@ public final class Valet: NSObject, Sendable {
         }
         return try Keychain.string(forKey: key, options: baseKeychainQuery)
     }
+
+    /// - Parameter key: A key used to retrieve the desired object from the keychain.
+    /// - Returns: The string currently stored in the keychain for the provided key.
+    /// - Throws: An error of type `KeychainError`.
+    @objc(stringForKey:error:)
+    public func objc_string(forKey key: String) throws -> String {
+        try string(forKey: key)
+    }
     
     /// - Returns: The set of all (String) keys currently stored in this Valet instance. If no items are found, will return an empty set.
     /// - Throws: An error of type `KeychainError`.
-    @objc
     public func allKeys() throws(KeychainError) -> Set<String> {
         lock.lock()
         defer {
@@ -321,12 +355,19 @@ public final class Valet: NSObject, Sendable {
         }
         return try Keychain.allKeys(options: baseKeychainQuery)
     }
-    
+
+    /// - Returns: The set of all (String) keys currently stored in this Valet instance. If no items are found, will return an empty set.
+    /// - Throws: An error of type `KeychainError`.
+    @available(swift, obsoleted: 1.0)
+    @objc(allKeysWithError:)
+    public func objc_allKeys() throws -> Set<String> {
+        try allKeys()
+    }
+
     /// Removes a key/object pair from the keychain.
     /// - Parameter key: A key used to remove the desired object from the keychain.
     /// - Throws: An error of type `KeychainError`.
     /// - Note: No error is thrown if the `key` is not found in the keychain.
-    @objc
     public func removeObject(forKey key: String) throws(KeychainError) {
         lock.lock()
         defer {
@@ -334,16 +375,33 @@ public final class Valet: NSObject, Sendable {
         }
         return try Keychain.removeObject(forKey: key, options: baseKeychainQuery)
     }
+
+    /// Removes a key/object pair from the keychain.
+    /// - Parameter key: A key used to remove the desired object from the keychain.
+    /// - Throws: An error of type `KeychainError`.
+    /// - Note: No error is thrown if the `key` is not found in the keychain.
+    @available(swift, obsoleted: 1.0)
+    @objc(removeObjectForKey:error:)
+    public func objc_removeObject(forKey key: String) throws {
+        try removeObject(forKey: key)
+    }
     
     /// Removes all key/object pairs accessible by this Valet instance from the keychain.
     /// - Throws: An error of type `KeychainError`.
-    @objc
     public func removeAllObjects() throws(KeychainError) {
         lock.lock()
         defer {
             lock.unlock()
         }
         return try Keychain.removeAllObjects(matching: baseKeychainQuery)
+    }
+
+    /// Removes all key/object pairs accessible by this Valet instance from the keychain.
+    /// - Throws: An error of type `KeychainError`.
+    @available(swift, obsoleted: 1.0)
+    @objc(removeAllObjectsAndReturnError:)
+    public func objc_removeAllObjects() throws {
+        try removeAllObjects()
     }
 
     /// Migrates objects matching the input query into the receiving Valet instance.
