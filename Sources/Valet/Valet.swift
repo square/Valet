@@ -58,8 +58,7 @@ public final class Valet: NSObject, Sendable {
         findOrCreate(groupIdentifier, identifier: identifier, configuration: .iCloud(accessibility))
     }
 
-    #if os(macOS)
-    /// Creates a Valet with an explicitly set kSecAttrService.
+    /// Creates a Valet with an explicitly set kSecAttrService. This API is intended for use with macOS applications where service identifiers can be user-facing.
     /// - Parameters:
     ///   - identifier: A non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
@@ -70,7 +69,7 @@ public final class Valet: NSObject, Sendable {
         findOrCreate(explicitlySet: identifier, configuration: .valet(accessibility))
     }
 
-    /// Creates an iCloud Valet with an explicitly set kSecAttrService.
+    /// Creates an iCloud Valet with an explicitly set kSecAttrService. This API is intended for use with macOS applications where service identifiers can be user-facing.
     /// - Parameters:
     ///   - identifier: A non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
@@ -81,7 +80,7 @@ public final class Valet: NSObject, Sendable {
         findOrCreate(explicitlySet: identifier, configuration: .iCloud(accessibility))
     }
 
-    /// Creates a shared-access-group Valet with an explicitly set kSecAttrService.
+    /// Creates a shared-access-group Valet with an explicitly set kSecAttrService. This API is intended for use with macOS applications where service identifiers can be user-facing.
     /// - Parameters:
     ///   - identifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
@@ -92,7 +91,7 @@ public final class Valet: NSObject, Sendable {
         findOrCreate(explicitlySet: identifier, configuration: .valet(accessibility))
     }
 
-    /// Creates an iCloud-shared-access-group Valet with an explicitly set kSecAttrService.
+    /// Creates an iCloud-shared-access-group Valet with an explicitly set kSecAttrService. This API is intended for use with macOS applications where service identifiers can be user-facing.
     /// - Parameters:
     ///   - identifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
@@ -102,8 +101,7 @@ public final class Valet: NSObject, Sendable {
     public class func iCloudSharedGroupValet(withExplicitlySet identifier: SharedGroupIdentifier, accessibility: CloudAccessibility) -> Valet {
         findOrCreate(explicitlySet: identifier, configuration: .iCloud(accessibility))
     }
-    #endif
-    
+
     // MARK: Equatable
     
     /// - Returns: `true` if lhs and rhs both read from and write to the same sandbox within the keychain.
@@ -144,7 +142,6 @@ public final class Valet: NSObject, Sendable {
     }
 
 
-    #if os(macOS)
     private class func findOrCreate(explicitlySet identifier: Identifier, configuration: Configuration) -> Valet {
         let service: Service = .standardOverride(service: identifier, configuration)
         let key = service.description + configuration.description + configuration.accessibility.description + identifier.description
@@ -171,8 +168,7 @@ public final class Valet: NSObject, Sendable {
         }
     }
 
-    #endif
-    
+
     // MARK: Initialization
 
     @available(*, unavailable)
@@ -201,7 +197,6 @@ public final class Valet: NSObject, Sendable {
         accessibility = configuration.accessibility
     }
 
-    #if os(macOS)
     private init(overrideIdentifier: Identifier, configuration: Configuration) {
         self.identifier = overrideIdentifier
         self.configuration = configuration
@@ -215,7 +210,6 @@ public final class Valet: NSObject, Sendable {
         service = .sharedGroupOverride(service: identifier, configuration)
         accessibility = configuration.accessibility
     }
-    #endif
 
     // MARK: CustomStringConvertible
 
@@ -482,12 +476,10 @@ public final class Valet: NSObject, Sendable {
             serviceAttribute = Service.sharedGroup(with: configuration, groupIdentifier: sharedGroupIdentifier, identifier: identifier, accessibilityDescription: accessibilityDescription)
         case .standard:
             serviceAttribute = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
-        #if os(macOS)
         case let .sharedGroupOverride(sharedGroupIdentifier, _):
             serviceAttribute = sharedGroupIdentifier.description
         case .standardOverride:
             serviceAttribute = identifier.description
-        #endif
         }
         keychainQuery[kSecAttrService as String] = serviceAttribute
         try migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
@@ -517,12 +509,10 @@ public final class Valet: NSObject, Sendable {
             serviceAttribute = Service.sharedGroup(with: configuration, groupIdentifier: groupIdentifier, identifier: identifier, accessibilityDescription: accessibilityDescription)
         case .standard:
             serviceAttribute = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
-        #if os(macOS)
         case .sharedGroupOverride:
             serviceAttribute = Service.sharedGroup(with: configuration, explicitlySetIdentifier: identifier, accessibilityDescription: accessibilityDescription)
         case .standardOverride:
             serviceAttribute = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
-        #endif
         }
         keychainQuery[kSecAttrService as String] = serviceAttribute
         try migrateObjects(matching: keychainQuery, removeOnCompletion: removeOnCompletion)
@@ -648,7 +638,6 @@ extension Valet {
         return iCloudSharedGroupValet(with: identifier, accessibility: accessibility)
     }
 
-    #if os(macOS)
     /// Creates a Valet with an explicitly set kSecAttrService.
     /// - Parameters:
     ///   - identifier: A non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
@@ -716,7 +705,6 @@ extension Valet {
         }
         return findOrCreate(explicitlySet: identifier, configuration: .iCloud(accessibility))
     }
-    #endif
 
     // MARK: Public Methods
 
@@ -809,7 +797,6 @@ extension Valet {
         }
     }
 
-    #if os(macOS)
     class func permutations(withExplictlySet identifier: Identifier, shared: Bool = false) -> [Valet] {
         Accessibility.allCases.map { accessibility in
             .valet(withExplicitlySet: identifier, accessibility: accessibility)
@@ -833,6 +820,5 @@ extension Valet {
             .iCloudSharedGroupValet(withExplicitlySet: identifier, accessibility: cloudAccessibility)
         }
     }
-    #endif
 
 }
