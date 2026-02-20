@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'Valet'
-  s.version  = '5.0.1'
+  s.version  = '5.1.0'
   s.license  = 'Apache License, Version 2.0'
   s.summary  = 'Securely store data on iOS, tvOS, watchOS, or macOS without knowing a thing about how the Keychain works. It\'s easy. We promise.'
   s.homepage = 'https://github.com/square/Valet'
