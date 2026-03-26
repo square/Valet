@@ -845,7 +845,7 @@ extension Valet {
 
     class func permutations(withExplictlySet identifier: SharedGroupIdentifier) -> [Valet] {
         Accessibility.allCases.map { accessibility in
-                .sharedGroupValet(withExplicitlySet: identifier, identifier: nil,  accessibility: accessibility)
+            .sharedGroupValet(withExplicitlySet: identifier, identifier: nil, accessibility: accessibility)
         }
     }
 
