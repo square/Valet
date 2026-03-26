@@ -433,8 +433,8 @@ extension Service {
             .sharedGroup(sharedGroupIdentifier, identifier, .singlePromptSecureEnclave(accessControl))
         case let .standardOverride(identifier, _):
                 .standard(identifier, .singlePromptSecureEnclave(accessControl))
-        case let .sharedGroupOverride(sharedGroupIdentifier, _):
-                .sharedGroupOverride(service: sharedGroupIdentifier, .singlePromptSecureEnclave(accessControl))
+        case let .sharedGroupOverride(sharedGroupIdentifier, identifier, _):
+                .sharedGroupOverride(sharedGroupIdentifier, identifier, .singlePromptSecureEnclave(accessControl))
         }
     }
 }
