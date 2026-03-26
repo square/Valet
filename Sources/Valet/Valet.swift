@@ -82,7 +82,8 @@ public final class Valet: NSObject, Sendable {
 
     /// Creates a shared-access-group Valet with an explicitly set kSecAttrService. This API is intended for use with macOS applications where service identifiers can be user-facing.
     /// - Parameters:
-    ///   - identifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    ///   - groupIdentifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: An optional non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
@@ -93,7 +94,8 @@ public final class Valet: NSObject, Sendable {
 
     /// Creates an iCloud-shared-access-group Valet with an explicitly set kSecAttrService. This API is intended for use with macOS applications where service identifiers can be user-facing.
     /// - Parameters:
-    ///   - identifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    ///   - groupIdentifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: An optional non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
