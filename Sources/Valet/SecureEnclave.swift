@@ -35,8 +35,8 @@ public final class SecureEnclave: Sendable {
             noPromptValet = .valet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         case let .standard(identifier, _):
             noPromptValet = .valet(with: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
-        case let .sharedGroupOverride(identifier, _):
-            noPromptValet = .sharedGroupValet(withExplicitlySet: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
+        case let .sharedGroupOverride(groupIdentifier, identifier, _):
+            noPromptValet = .sharedGroupValet(withExplicitlySet: groupIdentifier, identifier: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         case let .sharedGroup(groupIdentifier, identifier, _):
             noPromptValet = .sharedGroupValet(with: groupIdentifier, identifier: identifier, accessibility: .whenPasscodeSetThisDeviceOnly)
         }
