@@ -20,8 +20,8 @@ import Foundation
 enum Service: CustomStringConvertible, Equatable, Sendable {
     case standard(Identifier, Configuration)
     case sharedGroup(SharedGroupIdentifier, Identifier?, Configuration)
-    case standardOverride(service: Identifier, Configuration)
-    case sharedGroupOverride(service: SharedGroupIdentifier, Configuration)
+    case standardOverride(Identifier, Configuration)
+    case sharedGroupOverride(SharedGroupIdentifier, Identifier?, Configuration)
 
     // MARK: Equatable
     
@@ -49,10 +49,6 @@ enum Service: CustomStringConvertible, Equatable, Sendable {
         }
     }
 
-    static func sharedGroup(with configuration: Configuration, explicitlySetIdentifier identifier: Identifier, accessibilityDescription: String) -> String {
-        "VAL_\(configuration.description)_initWithSharedAccessGroupIdentifier:accessibility:_\(identifier)_\(accessibilityDescription)"
-    }
-
     // MARK: Internal Methods
     
     func generateBaseQuery() -> [String : AnyHashable] {
@@ -77,8 +73,8 @@ enum Service: CustomStringConvertible, Equatable, Sendable {
         case let .standardOverride(_, desiredConfiguration):
             configuration = desiredConfiguration
 
-        case let .sharedGroupOverride(identifier, desiredConfiguration):
-            baseQuery[kSecAttrAccessGroup as String] = identifier.description
+        case let .sharedGroupOverride(groupIdentifier, _, desiredConfiguration):
+            baseQuery[kSecAttrAccessGroup as String] = groupIdentifier.description
             configuration = desiredConfiguration
         }
         
@@ -110,8 +106,8 @@ enum Service: CustomStringConvertible, Equatable, Sendable {
             service = Service.sharedGroup(with: configuration, groupIdentifier: groupIdentifier, identifier: identifier, accessibilityDescription: configuration.accessibility.description)
         case let .standardOverride(identifier, _):
             service = identifier.description
-        case let .sharedGroupOverride(identifier, _):
-            service = identifier.groupIdentifier
+        case let .sharedGroupOverride(groupIdentifier, identifier, _):
+            service = identifier?.description ?? groupIdentifier.groupIdentifier
         }
 
         switch self {

@@ -82,24 +82,26 @@ public final class Valet: NSObject, Sendable {
 
     /// Creates a shared-access-group Valet with an explicitly set kSecAttrService. This API is intended for use with macOS applications where service identifiers can be user-facing.
     /// - Parameters:
-    ///   - identifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    ///   - groupIdentifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: An optional non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
     /// - SeeAlso: https://github.com/square/Valet/issues/140
-    public class func sharedGroupValet(withExplicitlySet identifier: SharedGroupIdentifier, accessibility: Accessibility) -> Valet {
-        findOrCreate(explicitlySet: identifier, configuration: .valet(accessibility))
+    public class func sharedGroupValet(withExplicitlySet groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessibility: Accessibility) -> Valet {
+        findOrCreate(explicitlySet: groupIdentifier, identifier: identifier, configuration: .valet(accessibility))
     }
 
     /// Creates an iCloud-shared-access-group Valet with an explicitly set kSecAttrService. This API is intended for use with macOS applications where service identifiers can be user-facing.
     /// - Parameters:
-    ///   - identifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    ///   - groupIdentifier: The identifier for the Valet's shared access group. Must correspond with the value for keychain-access-groups in your Entitlements file.
+    ///   - identifier: An optional non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
     /// - SeeAlso: https://github.com/square/Valet/issues/140
-    public class func iCloudSharedGroupValet(withExplicitlySet identifier: SharedGroupIdentifier, accessibility: CloudAccessibility) -> Valet {
-        findOrCreate(explicitlySet: identifier, configuration: .iCloud(accessibility))
+    public class func iCloudSharedGroupValet(withExplicitlySet groupIdentifier: SharedGroupIdentifier, identifier: Identifier? = nil, accessibility: CloudAccessibility) -> Valet {
+        findOrCreate(explicitlySet: groupIdentifier, identifier: identifier, configuration: .iCloud(accessibility))
     }
 
     // MARK: Equatable
@@ -143,7 +145,7 @@ public final class Valet: NSObject, Sendable {
 
 
     private class func findOrCreate(explicitlySet identifier: Identifier, configuration: Configuration) -> Valet {
-        let service: Service = .standardOverride(service: identifier, configuration)
+        let service: Service = .standardOverride(identifier, configuration)
         let key = service.description + configuration.description + configuration.accessibility.description + identifier.description
         if let existingValet = identifierToValetMap[key] {
             return existingValet
@@ -155,14 +157,14 @@ public final class Valet: NSObject, Sendable {
         }
     }
 
-    private class func findOrCreate(explicitlySet identifier: SharedGroupIdentifier, configuration: Configuration) -> Valet {
-        let service: Service = .sharedGroupOverride(service: identifier, configuration)
-        let key = service.description + configuration.description + configuration.accessibility.description + identifier.description
+    private class func findOrCreate(explicitlySet groupIdentifier: SharedGroupIdentifier, identifier: Identifier?, configuration: Configuration) -> Valet {
+        let service: Service = .sharedGroupOverride(groupIdentifier, identifier, configuration)
+        let key = service.description + configuration.description + configuration.accessibility.description + groupIdentifier.description
         if let existingValet = identifierToValetMap[key] {
             return existingValet
 
         } else {
-            let valet = Valet(overrideSharedAccess: identifier, configuration: configuration)
+            let valet = Valet(overrideSharedAccess: groupIdentifier, identifier: identifier, configuration: configuration)
             identifierToValetMap[key] = valet
             return valet
         }
@@ -200,14 +202,14 @@ public final class Valet: NSObject, Sendable {
     private init(overrideIdentifier: Identifier, configuration: Configuration) {
         self.identifier = overrideIdentifier
         self.configuration = configuration
-        service = .standardOverride(service: identifier, configuration)
+        service = .standardOverride(identifier, configuration)
         accessibility = configuration.accessibility
     }
 
-    private init(overrideSharedAccess identifier: SharedGroupIdentifier, configuration: Configuration) {
-        self.identifier = identifier.asIdentifier
+    private init(overrideSharedAccess groupIdentifier: SharedGroupIdentifier, identifier: Identifier?, configuration: Configuration) {
+        self.identifier = identifier ?? groupIdentifier.asIdentifier
         self.configuration = configuration
-        service = .sharedGroupOverride(service: identifier, configuration)
+        service = .sharedGroupOverride(groupIdentifier, identifier, configuration)
         accessibility = configuration.accessibility
     }
 
@@ -476,8 +478,8 @@ public final class Valet: NSObject, Sendable {
             serviceAttribute = Service.sharedGroup(with: configuration, groupIdentifier: sharedGroupIdentifier, identifier: identifier, accessibilityDescription: accessibilityDescription)
         case .standard:
             serviceAttribute = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
-        case let .sharedGroupOverride(sharedGroupIdentifier, _):
-            serviceAttribute = sharedGroupIdentifier.description
+        case let .sharedGroupOverride(groupIdentifier, identifier, _):
+            serviceAttribute = identifier?.description ?? groupIdentifier.description
         case .standardOverride:
             serviceAttribute = identifier.description
         }
@@ -509,8 +511,8 @@ public final class Valet: NSObject, Sendable {
             serviceAttribute = Service.sharedGroup(with: configuration, groupIdentifier: groupIdentifier, identifier: identifier, accessibilityDescription: accessibilityDescription)
         case .standard:
             serviceAttribute = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
-        case .sharedGroupOverride:
-            serviceAttribute = Service.sharedGroup(with: configuration, explicitlySetIdentifier: identifier, accessibilityDescription: accessibilityDescription)
+        case let .sharedGroupOverride(groupIdentifier, identifier, _):
+            serviceAttribute = Service.sharedGroup(with: configuration, groupIdentifier: groupIdentifier, identifier: identifier, accessibilityDescription: accessibilityDescription)
         case .standardOverride:
             serviceAttribute = Service.standard(with: configuration, identifier: identifier, accessibilityDescription: accessibilityDescription)
         }
@@ -673,7 +675,7 @@ extension Valet {
     /// Creates a shared-access-group Valet with an explicitly set kSecAttrService.
     /// - Parameters:
     ///   - appIDPrefix: The application's App ID prefix. This string can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    ///   - groupIdentifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
@@ -681,17 +683,36 @@ extension Valet {
     /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
     @available(swift, obsoleted: 1.0)
     @objc(valetWithAppIDPrefix:explicitlySetSharedGroupIdentifier:accessibility:)
-    public class func 🚫swift_sharedGroupValet(appIDPrefix: String, withExplicitlySet identifier: String, accessibility: Accessibility) -> Valet? {
-        guard let identifier = SharedGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: identifier) else {
+    public class func 🚫swift_sharedGroupValet(appIDPrefix: String, withExplicitlySet groupIdentifier: String?, accessibility: Accessibility) -> Valet? {
+        guard let groupIdentifier = SharedGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: groupIdentifier) else {
             return nil
         }
-        return findOrCreate(explicitlySet: identifier, configuration: .valet(accessibility))
+        return findOrCreate(explicitlySet: groupIdentifier, identifier: nil, configuration: .valet(accessibility))
+    }
+
+    /// Creates a shared-access-group Valet with an explicitly set kSecAttrService.
+    /// - Parameters:
+    ///   - appIDPrefix: The application's App ID prefix. This string can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
+    ///   - groupIdentifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    ///   - identifier: A non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
+    ///   - accessibility: The desired accessibility for the Valet.
+    /// - Returns: A Valet that reads/writes keychain elements that can be shared across applications written by the same development team.
+    /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
+    /// - SeeAlso: https://github.com/square/Valet/issues/140
+    /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
+    @available(swift, obsoleted: 1.0)
+    @objc(valetWithAppIDPrefix:explicitlySetSharedGroupIdentifier:identifier:accessibility:)
+    public class func 🚫swift_sharedGroupValet(appIDPrefix: String, withExplicitlySet groupIdentifier: String?, identifier: String?, accessibility: Accessibility) -> Valet? {
+        guard let groupIdentifier = SharedGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: groupIdentifier) else {
+            return nil
+        }
+        return findOrCreate(explicitlySet: groupIdentifier, identifier: Identifier(nonEmpty: identifier), configuration: .valet(accessibility))
     }
 
     /// Creates an iCloud-shared-access-group Valet with an explicitly set kSecAttrService.
     /// - Parameters:
     ///   - appIDPrefix: The application's App ID prefix. This string can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
-    ///   - identifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    ///   - groupIdentifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
     ///   - accessibility: The desired accessibility for the Valet.
     /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
     /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
@@ -699,11 +720,30 @@ extension Valet {
     /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
     @available(swift, obsoleted: 1.0)
     @objc(iCloudValetWithAppIDPrefix:explicitlySetSharedGroupIdentifier:accessibility:)
-    public class func 🚫swift_iCloudSharedGroupValet(appIDPrefix: String, withExplicitlySet identifier: String, accessibility: CloudAccessibility) -> Valet? {
-        guard let identifier = SharedGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: identifier) else {
+    public class func 🚫swift_iCloudSharedGroupValet(appIDPrefix: String, withExplicitlySet groupIdentifier: String, accessibility: CloudAccessibility) -> Valet? {
+        guard let groupIdentifier = SharedGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: groupIdentifier) else {
             return nil
         }
-        return findOrCreate(explicitlySet: identifier, configuration: .iCloud(accessibility))
+        return findOrCreate(explicitlySet: groupIdentifier, identifier: nil, configuration: .iCloud(accessibility))
+    }
+
+    /// Creates an iCloud-shared-access-group Valet with an explicitly set kSecAttrService.
+    /// - Parameters:
+    ///   - appIDPrefix: The application's App ID prefix. This string can be found by inspecting the application's provisioning profile, or viewing the application's App ID Configuration on developer.apple.com. This string must not be empty.
+    ///   - groupIdentifier: A non-empty string that must correspond with the value for keychain-access-groups in your Entitlements file. Must be unique relative to other Valet identifiers.
+    ///   - identifier: A non-empty string that uniquely identifies a Valet. Must be unique relative to other Valet identifiers.
+    ///   - accessibility: The desired accessibility for the Valet.
+    /// - Returns: A Valet (synchronized with iCloud) that reads/writes keychain elements that can be shared across applications written by the same development team.
+    /// - Warning: Using an explicitly set kSecAttrService bypasses this project’s guarantee that one Valet type will not have access to one another type’s key:value pairs. To maintain this guarantee, ensure that each Valet’s identifier is globally unique.
+    /// - SeeAlso: https://github.com/square/Valet/issues/140
+    /// - SeeAlso: https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
+    @available(swift, obsoleted: 1.0)
+    @objc(iCloudValetWithAppIDPrefix:explicitlySetSharedGroupIdentifier:identifier:accessibility:)
+    public class func 🚫swift_iCloudSharedGroupValet(appIDPrefix: String, withExplicitlySet groupIdentifier: String, identifier: String?, accessibility: CloudAccessibility) -> Valet? {
+        guard let groupIdentifier = SharedGroupIdentifier(appIDPrefix: appIDPrefix, nonEmptyGroup: groupIdentifier) else {
+            return nil
+        }
+        return findOrCreate(explicitlySet: groupIdentifier, identifier: Identifier(nonEmpty: identifier), configuration: .iCloud(accessibility))
     }
 
     // MARK: Public Methods
@@ -805,7 +845,7 @@ extension Valet {
 
     class func permutations(withExplictlySet identifier: SharedGroupIdentifier) -> [Valet] {
         Accessibility.allCases.map { accessibility in
-            .sharedGroupValet(withExplicitlySet: identifier, accessibility: accessibility)
+            .sharedGroupValet(withExplicitlySet: identifier, identifier: nil, accessibility: accessibility)
         }
     }
 
@@ -817,7 +857,7 @@ extension Valet {
 
     class func iCloudPermutations(withExplictlySet identifier: SharedGroupIdentifier) -> [Valet] {
         CloudAccessibility.allCases.map { cloudAccessibility in
-            .iCloudSharedGroupValet(withExplicitlySet: identifier, accessibility: cloudAccessibility)
+            .iCloudSharedGroupValet(withExplicitlySet: identifier, identifier: nil, accessibility: cloudAccessibility)
         }
     }
 
