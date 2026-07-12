@@ -212,7 +212,7 @@ Valet guarantees that reading and writing operations will succeed as long as wri
 * Xcode 16.0 or later.
 * iOS 12 or later.
 * tvOS 12 or later.
-* watchOS 4 or later.
+* watchOS 5 or later.
 * macOS 10.13 or later.
 
 ## Migrating from prior Valet versions

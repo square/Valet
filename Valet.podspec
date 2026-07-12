@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.frameworks = 'Security'
   s.ios.deployment_target = '12.0'
   s.tvos.deployment_target = '12.0'
-  s.watchos.deployment_target = '4.0'
+  s.watchos.deployment_target = '5.0'
   s.macos.deployment_target = '10.13'
 
   s.tvos.exclude_files = 'Sources/Valet/SinglePromptSecureEnclaveValet.swift'
