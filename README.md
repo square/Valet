@@ -207,14 +207,6 @@ Valet guarantees that reading and writing operations will succeed as long as wri
 1. Running your app or unit tests without the application-identifier entitlement. Xcode 8 introduced a requirement that all schemes must be signed with the application-identifier entitlement to access the keychain. To satisfy this requirement when running unit tests, your unit tests must be run inside of a host application.
 1. Attempting to write data larger than 4kb. The Keychain is built to securely store small secrets – writing large blobs is not supported by Apple's Security daemon.
 
-## Requirements
-
-* Xcode 16.0 or later.
-* iOS 12 or later.
-* tvOS 12 or later.
-* watchOS 5 or later.
-* macOS 10.13 or later.
-
 ## Migrating from prior Valet versions
 
 The good news: most Valet configurations do _not_ have to migrate keychain data when upgrading from an older version of Valet. All Valet objects are backwards compatible with their counterparts from prior versions. Valets that have had their configurations deprecated by Apple will need to migrate stored data.
