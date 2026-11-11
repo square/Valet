@@ -22,11 +22,7 @@ dependencies: [
 
 ### CocoaPods
 
-Install with [CocoaPods](http://cocoapods.org) by adding the following to your `Podfile`:
-
-```
-pod 'Valet', '~> 5.0.0'
-```
+Valet 5.1.0 and earlier remain available on CocoaPods. Newer releases are not published there, so use one of the other installation methods on this page.
 
 ### Carthage
 
