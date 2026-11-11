@@ -32,7 +32,7 @@ Install with [Carthage](https://github.com/Carthage/Carthage) by adding the foll
 github "Square/Valet"
 ```
 
-Run `carthage` to build the framework and drag the built `Valet.framework` into your Xcode project.
+Run `carthage update --use-xcframeworks` to build the framework and drag the built `Valet.xcframework` from `Carthage/Build` into your Xcode project.
 
 ### Submodules
 
