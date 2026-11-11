@@ -22,11 +22,7 @@ dependencies: [
 
 ### CocoaPods
 
-Install with [CocoaPods](http://cocoapods.org) by adding the following to your `Podfile`:
-
-```
-pod 'Valet', '~> 5.0.0'
-```
+Valet 5.1.0 and earlier remain available on CocoaPods. Newer releases are not published there, so use one of the other installation methods on this page.
 
 ### Carthage
 
@@ -36,7 +32,7 @@ Install with [Carthage](https://github.com/Carthage/Carthage) by adding the foll
 github "Square/Valet"
 ```
 
-Run `carthage` to build the framework and drag the built `Valet.framework` into your Xcode project.
+Run `carthage update --use-xcframeworks` to build the framework and drag the built `Valet.xcframework` from `Carthage/Build` into your Xcode project.
 
 ### Submodules
 
